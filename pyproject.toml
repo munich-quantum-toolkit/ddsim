@@ -48,7 +48,7 @@ classifiers = [
 requires-python = ">=3.9"
 dependencies = [
     "mqt.core[qiskit]>=3.0.0",
-    "qiskit>=1.1",
+    "qiskit>=2.0",
 ]
 dynamic = ["version"]
 
