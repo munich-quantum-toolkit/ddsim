@@ -27,7 +27,7 @@ DDSIM provides its own version of these Qiskit primitives that leverage the defa
 
 +++
 
-The [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) is an extension of Qiskit's [`StatevectorSampler`](#qiskit.*.StatevectorSampler). It takes a list of `QuantumCircuit` objects and simulates them using the `QasmSimulatorBackend` from MQT DDSIM. It then computes the quasi-probability distributions of the circuits in the list and encapsulates the results, along with the job's metadata, within a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object.
+The [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) is an extension of Qiskit's [`BaseSamplerV2`](#qiskit.*.BaseSamplerV2). It takes a list of `QuantumCircuit` objects and simulates them using the `QasmSimulatorBackend` from MQT DDSIM. It then computes the quasi-probability distributions of the circuits in the list and encapsulates the results, along with the job's metadata, within a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object.
 
 Furthermore, it also handles compilation and parameter binding when working with parametrized circuits.
 
@@ -55,7 +55,7 @@ circ.draw("mpl")
 sampler = Sampler()
 ```
 
-The `run()` method accecpts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see also [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not, the default value is 1024.
+The `run()` method accecpts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see Qiskit's [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not, the default value is 1024.
 
 ```{code-cell} ipython3
 pubs = [(circ, [np.pi])]
@@ -173,7 +173,7 @@ plot_distribution(probabilities)
 
 +++
 
-The [`Estimator`](#mqt.ddsim.primitives.estimator.Estimator) calculates the expectation value of an observable with respect to a certain quantum state (described by a quantum circuit). It is an extension of Qiskit's [`StatevectorEstimator`](#qiskit.*.StatevectorEstimator). However, in contrast to Qiskit's estimator, the DDSIM version exactly computes the expectation value using its simulator based on decision diagrams instead of sampling.
+The [`Estimator`](#mqt.ddsim.primitives.estimator.Estimator) calculates the expectation value of an observable with respect to a certain quantum state (described by a quantum circuit). It is an extension of Qiskit's [`BaseEstimatorV2`](#qiskit.*.BaseEstimatorV2). However, in contrast to Qiskit's estimator, the DDSIM version exactly computes the expectation value using its simulator based on decision diagrams instead of sampling.
 
 The [`Estimator`](#mqt.ddsim.primitives.estimator.Estimator) also handles parameter binding when dealing with parametrized circuits.
 
@@ -210,7 +210,7 @@ circ.draw("mpl")
 estimator = Estimator()
 ```
 
-The next step involves running the estimation using the `run()` method. Just like the `run()` method of the [`Sampler`](#mqt.ddsim.primitives.estimator.Sampler), it accecpts an iterable of PUB-like objects. In the example below, the `QuantumCircuit` object representing the quantum state and an array of [`SparsePauliOp`](#qiskit.*.SparsePauliOp) objects representing the observable. If the circuit is parametrized, we would also pass an array of parameters. For more information, see also [`StatevectorEstimator.run()`](#qiskit.*.StatevectorEstimator.run).
+The next step involves running the estimation using the `run()` method. Just like the `run()` method of the [`Sampler`](#mqt.ddsim.primitives.estimator.Sampler), it accecpts an iterable of PUB-like objects. In the example below, the `QuantumCircuit` object representing the quantum state and an array of [`SparsePauliOp`](#qiskit.*.SparsePauliOp) objects representing the observable. If the circuit is parametrized, we would also pass an array of parameters. For more information, see Qiskit's [`StatevectorEstimator.run()`](#qiskit.*.StatevectorEstimator.run).
 
 ```{code-cell} ipython3
 # Enter observable and circuit as a sequence

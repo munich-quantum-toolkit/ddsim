@@ -13,34 +13,68 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from qiskit.primitives import BitArray, DataBin, StatevectorSampler
-from qiskit.primitives.containers import SamplerPubResult
+from qiskit.primitives.base import BaseSamplerV2
+from qiskit.primitives.containers import (
+    BitArray,
+    DataBin,
+    PrimitiveResult,
+    SamplerPubLike,
+    SamplerPubResult,
+)
+from qiskit.primitives.containers.sampler_pub import SamplerPub
+from qiskit.primitives.primitive_job import PrimitiveJob
 
 from mqt.ddsim.qasmsimulator import QasmSimulatorBackend
 
 if TYPE_CHECKING:
-    from qiskit.primitives.containers import SamplerPub
+    from collections.abc import Iterable
 
 
-class Sampler(StatevectorSampler):  # type: ignore[misc]
-    """DDSIM implementation of Qiskit's sampler."""
+class Sampler(BaseSamplerV2):  # type: ignore[misc]
+    """DDSIM implementation of Qiskit's sampler.
+
+    The implementation is adapted from Qiskit's `StatevectorSampler`.
+    """
 
     _BACKEND = QasmSimulatorBackend()
 
-    def __init__(self, *, default_shots: int = 1024, seed: np.random.Generator | int | None = None) -> None:
+    def __init__(self, *, default_shots: int = 1024) -> None:
         """Create a new DDSIM sampler."""
-        super().__init__(default_shots=default_shots, seed=seed)
+        self._default_shots = default_shots
 
     @property
     def backend(self) -> QasmSimulatorBackend:
         """The backend used by the sampler."""
         return self._BACKEND
 
-    def _run_pub(self, pub: SamplerPub) -> SamplerPubResult:
-        """Run a primitive unified block (PUB) on the QasmSimulatorBackend.
+    @property
+    def default_shots(self) -> int:
+        """Return the default shots."""
+        return self._default_shots
 
-        Adapted from Qiskit's `StatevectorSampler._run_pub()`.
+    def run(
+        self,
+        pubs: Iterable[SamplerPubLike],
+        *,
+        shots: int | None = None,
+    ) -> PrimitiveJob[PrimitiveResult[SamplerPubResult]]:
+        """Run and collect samples from each provided PUB (primitive unified bloc).
+
+        Each PUB is run on the CircuitSimulator.
         """
+        if shots is None:
+            shots = self._default_shots
+        coerced_pubs = [SamplerPub.coerce(pub, shots) for pub in pubs]
+
+        job = PrimitiveJob(self._run, coerced_pubs)
+        job._submit()  # noqa: SLF001
+        return job
+
+    def _run(self, pubs: Iterable[SamplerPub]) -> PrimitiveResult[SamplerPubResult]:
+        results = [self._run_pub(pub) for pub in pubs]
+        return PrimitiveResult(results, metadata={"version": 2})
+
+    def _run_pub(self, pub: SamplerPub) -> SamplerPubResult:
         circuit = pub.circuit
         parameter_values = pub.parameter_values
         shots = pub.shots

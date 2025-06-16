@@ -15,20 +15,27 @@ from typing import TYPE_CHECKING
 import numpy as np
 from mqt.core import load
 from qiskit.circuit import QuantumCircuit
-from qiskit.primitives import DataBin, PubResult, StatevectorEstimator
+from qiskit.primitives.base import BaseEstimatorV2
+from qiskit.primitives.containers import DataBin, EstimatorPubLike, PrimitiveResult, PubResult
+from qiskit.primitives.containers.estimator_pub import EstimatorPub
+from qiskit.primitives.primitive_job import PrimitiveJob
 from qiskit.quantum_info import Pauli, SparsePauliOp
 
 from mqt.ddsim.pyddsim import CircuitSimulator
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from numpy.typing import NDArray
     from qiskit.primitives.container import ObservablesArray
-    from qiskit.primitives.containers import EstimatorPub
     from qiskit.quantum_info import Pauli
 
 
-class Estimator(StatevectorEstimator):  # type: ignore[misc]
-    """DDSIM implementation of Qiskit's estimator."""
+class Estimator(BaseEstimatorV2):  # type: ignore[misc]
+    """DDSIM implementation of Qiskit's estimator.
+
+    The implementation is adapted from Qiskit's `StatevectorEstimator`.
+    """
 
     def __init__(
         self,
@@ -37,11 +44,43 @@ class Estimator(StatevectorEstimator):  # type: ignore[misc]
         seed: np.random.Generator | int | None = -1,
     ) -> None:
         """Create a new DDSIM estimator."""
+        self._default_precision = default_precision
+
         if not isinstance(seed, int):
             msg = "seed must be an int."
             raise TypeError(msg)
+        self._seed = seed
 
-        super().__init__(default_precision=default_precision, seed=seed)
+    @property
+    def default_precision(self) -> float:
+        """Return the default precision."""
+        return self._default_precision
+
+    @property
+    def seed(self) -> int:
+        """Return the seed."""
+        return self._seed
+
+    def run(
+        self,
+        pubs: Iterable[EstimatorPubLike],
+        *,
+        precision: float | None = None,
+    ) -> PrimitiveJob[PrimitiveResult[PubResult]]:
+        """Estimate expectation values for each provided PUB (primitive unified bloc).
+
+        Each PUB is run on the CircuitSimulator.
+        """
+        if precision is None:
+            precision = self._default_precision
+        coerced_pubs = [EstimatorPub.coerce(pub, precision) for pub in pubs]
+
+        job = PrimitiveJob(self._run, coerced_pubs)
+        job._submit()  # noqa: SLF001
+        return job
+
+    def _run(self, pubs: list[EstimatorPub]) -> PrimitiveResult[PubResult]:
+        return PrimitiveResult([self._run_pub(pub) for pub in pubs], metadata={"version": 2})
 
     def _get_observable_circuits(
         self,
@@ -96,10 +135,6 @@ class Estimator(StatevectorEstimator):  # type: ignore[misc]
         return observable_circuit
 
     def _run_pub(self, pub: EstimatorPub) -> PubResult:
-        """Run a primitive unified block (PUB) on the CircuitSimulator.
-
-        Adapted from Qiskit's `StatevectorEstimator._run_pub()`.
-        """
         circuit = pub.circuit
         observables = pub.observables
         parameter_values = pub.parameter_values
