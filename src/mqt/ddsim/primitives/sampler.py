@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from mqt.core import load
-from qiskit.circuit import QuantumCircuit
+from qiskit.circuit import ClassicalRegister, QuantumCircuit
 from qiskit.primitives.base import BaseSamplerV2
 from qiskit.primitives.containers import (
     BitArray,
@@ -91,9 +91,9 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
 
         counts = self._run_experiment(bound_circuits_list, shots=shots, seed=self.seed)
 
-        meas = {creg.name: BitArray.from_counts(counts, creg.size) for creg in circuit.cregs}
+        bit_arrays = self._get_bit_arrays(circuit.cregs, counts)
         return SamplerPubResult(
-            DataBin(**meas, shape=pub.shape),
+            DataBin(**bit_arrays, shape=pub.shape),
             metadata={"shots": shots, "circuit_metadata": circuit.metadata},
         )
 
@@ -108,3 +108,24 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
             counts_list.append(counts)
 
         return counts_list
+
+    @staticmethod
+    def _get_bit_arrays(
+        cregs: list[ClassicalRegister],
+        counts: list[dict[str, int]],
+    ) -> dict[str, BitArray]:
+        bit_arrays = {}
+
+        start_index = 0
+        for creg in cregs:
+            creg_counts = [
+                {
+                    key[start_index - creg.size : start_index if start_index != 0 else None]: value
+                    for key, value in count.items()
+                }
+                for count in counts
+            ]
+            bit_arrays[creg.name] = BitArray.from_counts(creg_counts, creg.size)
+            start_index -= creg.size
+
+        return bit_arrays

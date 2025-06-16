@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import TypeVar
 
 import pytest
-from qiskit import QuantumCircuit
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.circuit.library import RealAmplitudes
 from qiskit.primitives import BitArray, PrimitiveResult
 
@@ -128,7 +128,7 @@ def test_run__multiple_circuits__without_parameters(
     compare_probs(probs, target[2])
 
 
-def test_run__single_circuits__with_parameters(circuits: list[QuantumCircuit], sampler: Sampler, shots: int) -> None:
+def test_run__single_circuit__with_parameters(circuits: list[QuantumCircuit], sampler: Sampler, shots: int) -> None:
     """Test single circuit with parameters."""
     param_qc = circuits[2]
     parameter_values = [[0, 1, 1, 2, 3, 5], [1, 2, 3, 4, 5, 6]]
@@ -214,3 +214,28 @@ def test_sequential_runs(circuits: list[QuantumCircuit], sampler: Sampler, shots
 
     probs = get_probs(result[1].data["meas"], shots)
     compare_probs(probs, target[1])
+
+
+def test_run__single_circuit__multiple_cregs(sampler: Sampler, shots: int) -> None:
+    """Test single circuit without parameters."""
+    p = QuantumRegister(2, "p")
+    q = QuantumRegister(2, "q")
+    b = ClassicalRegister(2, "b")
+    c = ClassicalRegister(2, "c")
+    quantum_circuit = QuantumCircuit(p, q, b, c)
+    quantum_circuit.x(p[0])
+    quantum_circuit.x(p[1])
+    quantum_circuit.measure(p, b)
+    quantum_circuit.measure(q, c)
+
+    target_b = {"00": 0, "01": 0, "10": 0, "11": 1.0}
+    target_c = {"00": 1.0, "01": 0, "10": 0, "11": 0}
+
+    result = sampler.run([quantum_circuit], shots=shots).result()
+    assert isinstance(result, PrimitiveResult)
+
+    probs_b = get_probs(result[0].data["b"], shots)
+    compare_probs(probs_b, target_b)
+
+    probs_c = get_probs(result[0].data["c"], shots)
+    compare_probs(probs_c, target_c)
