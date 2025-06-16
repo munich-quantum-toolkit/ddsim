@@ -1611,7 +1611,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "mqt-core", extras = ["qiskit"], specifier = ">=3.0.0" },
-    { name = "qiskit", specifier = ">=2" },
+    { name = "qiskit", specifier = ">=1.1" },
 ]
 
 [package.metadata.requires-dev]
