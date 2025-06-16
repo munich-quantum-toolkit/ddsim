@@ -110,14 +110,15 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
     def _get_qubit_indices(pauli: Pauli) -> list[int]:
         """Get the indices of the qubits that are part of the Pauli observable."""
         qubit_indices = np.arange(pauli.num_qubits)[pauli.z | pauli.x]
-        assert isinstance(qubit_indices, np.ndarray)
 
         if not np.any(qubit_indices):
             return [0]
 
         qubit_indices_list = qubit_indices.tolist()
-        assert isinstance(qubit_indices_list, list)
-        return qubit_indices_list
+        if isinstance(qubit_indices_list, int):
+            qubit_indices_list = [qubit_indices_list]
+
+        return qubit_indices_list  # type: ignore[no-any-return]
 
     @staticmethod
     def _get_observable_circuit(pauli: Pauli, num_qubits: int, qubit_indices: list[int]) -> QuantumCircuit:
