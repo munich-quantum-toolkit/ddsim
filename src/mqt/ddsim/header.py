@@ -13,13 +13,13 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Any
 
-import qiskit.version
-
 try:
     from qiskit.result.models import QobjExperimentHeader
+
+    QISKIT_PRE_2_0 = True
 except ImportError:
     QobjExperimentHeader = object
-
+    QISKIT_PRE_2_0 = False
 
 if TYPE_CHECKING:
     from qiskit import QuantumCircuit
@@ -57,7 +57,7 @@ class DDSIMHeader(QobjExperimentHeader):  # type: ignore[misc]
 
         For Qiskit < 2.0, return a QobjExperimentHeader. For Qiskit >= 2.0, return a dict.
         """
-        if qiskit.version.get_version_info() < "2.0":
+        if QISKIT_PRE_2_0:
             return self
 
         return asdict(self)
