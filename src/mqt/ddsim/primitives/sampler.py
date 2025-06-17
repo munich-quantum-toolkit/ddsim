@@ -38,13 +38,9 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
     The implementation is adapted from Qiskit's `StatevectorSampler`.
     """
 
-    def __init__(self, *, default_shots: int = 1024, seed: np.random.Generator | int | None = -1) -> None:
+    def __init__(self, *, default_shots: int = 1024, seed: int = -1) -> None:
         """Create a new DDSIM sampler."""
         self._default_shots = default_shots
-
-        if not isinstance(seed, int):
-            msg = "seed must be an int."
-            raise TypeError(msg)
         self._seed = seed
 
     @property

@@ -37,18 +37,9 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
     The implementation is adapted from Qiskit's `StatevectorEstimator`.
     """
 
-    def __init__(
-        self,
-        *,
-        default_precision: float = 0.0,
-        seed: np.random.Generator | int | None = -1,
-    ) -> None:
+    def __init__(self, *, default_precision: float = 0.0, seed: int = -1) -> None:
         """Create a new DDSIM estimator."""
         self._default_precision = default_precision
-
-        if not isinstance(seed, int):
-            msg = "seed must be an int."
-            raise TypeError(msg)
         self._seed = seed
 
     @property
