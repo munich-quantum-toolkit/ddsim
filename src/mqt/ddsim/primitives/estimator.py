@@ -38,7 +38,12 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
     """
 
     def __init__(self, *, default_precision: float = 0.0, seed: int = -1) -> None:
-        """Create a new DDSIM estimator."""
+        """Create a new DDSIM estimator.
+
+        Args:
+            default_precision: The default precision for expectation-value estimates. Defaults to ``0.0``.
+            seed: The seed for the ``CircuitSimulator``. Defaults to ``-1``.
+        """
         self._default_precision = default_precision
         self._seed = seed
 
@@ -61,6 +66,10 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
         """Estimate expectation values for each provided PUB (primitive unified bloc).
 
         Each PUB is run on the CircuitSimulator.
+
+        Args:
+            pubs: An iterable of pub-like objects, such as tuples ``(circuit, observables)`` or ``(circuit, observables, parameter_values)``.
+            precision: The target precision for expectation-value estimates. If ``None``, the default precision is used.
         """
         if precision is None:
             precision = self._default_precision

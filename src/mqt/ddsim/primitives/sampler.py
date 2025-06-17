@@ -39,7 +39,12 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
     """
 
     def __init__(self, *, default_shots: int = 1024, seed: int = -1) -> None:
-        """Create a new DDSIM sampler."""
+        """Create a new DDSIM sampler.
+
+        Args:
+            default_shots: The default number of shots to sample. Defaults to ``1024``.
+            seed: The seed for the ``CircuitSimulator``. Defaults to ``-1``.
+        """
         self._default_shots = default_shots
         self._seed = seed
 
@@ -61,7 +66,11 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
     ) -> PrimitiveJob[PrimitiveResult[SamplerPubResult]]:
         """Run and collect samples from each provided PUB (primitive unified bloc).
 
-        Each PUB is run on the CircuitSimulator.
+        Each PUB is run on the ``CircuitSimulator``.
+
+        Args:
+            pubs: An iterable of pub-like objects, such as tuples ``(circuit, parameter_values)``.
+            shots: The number of shots to sample. If ``None``, the default number of shots is used.
         """
         if shots is None:
             shots = self._default_shots
