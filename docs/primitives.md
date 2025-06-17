@@ -17,7 +17,7 @@ The existing Qiskit interface to backends (`backend.run()`) was originally desig
 
 To address this issue, Qiskit introduced the `qiskit.primitives` module in version 0.35.0 (Qiskit Terra 0.20.0) to provide a simplified way for end users to compute outputs of interest from a QuantumCircuit and to use backends. Qiskit's primitives provide methods that make it easier to build modular algorithms and other higher-order programs. Rather than simply returning counts, they return more immediately meaningful information.
 
-The two currently available primitives are the `Sampler` and the `Estimator`. The first one computes quasi-probability distributions from circuit measurements, while the second one calculates and interprets expectation values of quantum operators that are required for many near-term quantum algorithms.
+The two currently available primitives are the `Sampler` and the `Estimator`. The first one simulates a circuit and returns the measurement counts, while the second one calculates and interprets expectation values of quantum operators that are required for many near-term quantum algorithms.
 
 DDSIM provides its own version of these Qiskit primitives that leverage the default circuit simulator based on decision diagrams, while preserving the methods and functionality of the original Qiskit primitives.
 
@@ -27,9 +27,9 @@ DDSIM provides its own version of these Qiskit primitives that leverage the defa
 
 +++
 
-The [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) implements the Qiskit [`BaseSamplerV2`](#qiskit.*.BaseSamplerV2) interface. It takes a list of `QuantumCircuit` objects and simulates them using the `CircuitSimulator` from MQT DDSIM. It then computes the quasi-probability distributions of the circuits in the list and encapsulates the results, along with the job's metadata, within a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object.
+The [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) implements the Qiskit [`BaseSamplerV2`](#qiskit.*.BaseSamplerV2) interface. It takes a list of `QuantumCircuit` objects and simulates them using the `CircuitSimulator` from MQT DDSIM, returning the measurement counts. The results are encapsulated within a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object that also contains the job's metadata.
 
-Furthermore, it also handles compilation and parameter binding when working with parametrized circuits.
+Furthermore, the [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) also handles compilation and parameter binding when working with parametrized circuits.
 
 Here, we show an example on how to use this submodule:
 
@@ -55,7 +55,7 @@ circ.draw("mpl")
 sampler = Sampler()
 ```
 
-The `run()` method accepts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see Qiskit's [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not, the default value is 1024.
+The `run()` method accepts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see Qiskit's [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not set, the default value is 1024.
 
 ```{code-cell} ipython3
 pubs = [(circ, [np.pi])]
@@ -64,14 +64,13 @@ job = sampler.run(pubs, shots=shots)
 result = job.result()
 ```
 
-The `result()` method of the job returns a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object. This object contains a [`SamplerPubResult`](#qiskit.*.SamplerPubResult), which, in turn, contains the necessary information to compute the quasi-probability distribution. It furthermore contains job metadata.
+The `result()` method of the job returns a [`PrimitiveResult`](#qiskit.*.PrimitiveResult) object. This object contains a [`SamplerPubResult`](#qiskit.*.SamplerPubResult), which, in turn, contains the measurement counts. It furthermore contains job metadata.
 
 ```{code-cell} ipython3
-bit_array = result[0].data["meas"]
-probabilities = {key: value / shots for key, value in bit_array.get_counts().items()}
+counts = result[0].data["meas"].get_counts()
 
 print(f">>> {result}")
-print(f"  > Quasi-probability distribution: {probabilities}")
+print(f"  > Counts: {counts}")
 ```
 
 It is also possible to simulate multiple circuits in one job:
@@ -89,15 +88,12 @@ In this case, we have two PUB-like objects.
 job = sampler.run([(circ, [np.pi]), circ_2], shots=int(1e4))
 result = job.result()
 
-bit_array_1 = result[0].data["meas"]
-probabilities_1 = {key: value / shots for key, value in bit_array_1.get_counts().items()}
-
-bit_array_2 = result[1].data["meas"]
-probabilities_2 = {key: value / shots for key, value in bit_array_2.get_counts().items()}
+counts_1 = result[0].data["meas"].get_counts()
+counts_2 = result[1].data["meas"].get_counts()
 
 print(f">>> {result}")
-print(f"  > Quasi-probability distribution for circuit 1: {probabilities_1}")
-print(f"  > Quasi-probability distribution for circuit 2: {probabilities_2}")
+print(f"  > Counts for circuit 1: {counts_1}")
+print(f"  > Counts for circuit 2: {counts_2}")
 ```
 
 Now, let us use the [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) on a more complex circuit. For this example, we will test Grover's algorithm on a 4-qubit circuit where the marked states in the binary representation are "0110" and "1010".
@@ -160,13 +156,12 @@ qc.measure_all()
 qc.draw("mpl")
 ```
 
-After having built the circuit, use the [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) to get the probability distribution.
+After having built the circuit, use the [`Sampler`](#mqt.ddsim.primitives.sampler.Sampler) to get the measurement counts.
 
 ```{code-cell} ipython3
 result = sampler.run([qc], shots=int(1e4)).result()
-bit_array = result[0].data["meas"]
-probabilities = {key: value / shots for key, value in bit_array.get_int_counts().items()}
-plot_distribution(probabilities)
+counts = result[0].data["meas"].get_counts()
+plot_distribution(counts)
 ```
 
 ## Estimator
@@ -238,7 +233,6 @@ circ.measure_all()
 # Build observables
 pauli_x = Pauli("X")
 pauli_y = Pauli("Y")
-
 
 # Construct pub
 pub = (circ, [pauli_x, pauli_y])
