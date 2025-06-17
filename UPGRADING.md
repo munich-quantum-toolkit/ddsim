@@ -30,6 +30,9 @@ MQT DDSIM now requires CMake 3.24 or higher.
 Most modern operating systems should have this version available in their package manager.
 Alternatively, CMake can be conveniently installed from PyPI using the [`cmake`](https://pypi.org/project/cmake/) package.
 
+MQT DDSIM now supports Qiskit 2.0.
+As a result, the return values of the `Estimator` and `Sampler` have been changed to align with Qiskit's implementations.
+
 To developers of MQT DDSIM, it is worth mentioning that all Python code (except tests) has been moved to the top-level `python` directory.
 Furthermore, the C++ code for the Python bindings has been moved to the top-level `bindings` directory.
 

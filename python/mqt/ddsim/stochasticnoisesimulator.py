@@ -13,10 +13,11 @@ from __future__ import annotations
 import time
 from typing import TYPE_CHECKING, Any, cast
 
-from mqt import ddsim
 from mqt.core import load
 from qiskit.providers import Options
 from qiskit.result.models import ExperimentResult, ExperimentResultData
+
+from mqt.ddsim.pyddsim import StochasticNoiseSimulator
 
 from .header import DDSIMHeader
 from .qasmsimulator import QasmSimulatorBackend
@@ -65,7 +66,7 @@ class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
         shots = cast("int", options.get("shots", 1024))
 
         circ = load(qc)
-        sim = ddsim.StochasticNoiseSimulator(
+        sim = StochasticNoiseSimulator(
             circ=circ,
             approximation_step_fidelity=approximation_step_fidelity,
             approximation_steps=approximation_steps,
@@ -93,5 +94,5 @@ class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader(qc),
+            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
         )
