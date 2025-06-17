@@ -10,26 +10,54 @@
 
 from __future__ import annotations
 
-from collections import UserDict
+from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Any
+
+import qiskit.version
+
+try:
+    from qiskit.result.models import QobjExperimentHeader
+except ImportError:
+    QobjExperimentHeader = object
+
 
 if TYPE_CHECKING:
     from qiskit import QuantumCircuit
 
 
-class DDSIMHeader(UserDict[str, Any]):
+@dataclass
+class DDSIMHeader(QobjExperimentHeader):  # type: ignore[misc]
     """Header for DDSIM backends."""
 
+    name: str
+    n_qubits: int
+    memory_slots: int
+    global_phase: float
+    creg_sizes: list[tuple[str, int]]
+    clbit_labels: list[tuple[str, int]]
+    qreg_sizes: list[tuple[str, int]]
+    qubit_labels: list[tuple[str, int]]
+
     @classmethod
-    def from_quantum_circuit(cls, qc: QuantumCircuit) -> DDSIMHeader:
+    def from_quantum_circuit(cls, quantum_circuit: QuantumCircuit) -> DDSIMHeader:
         """Create a DDSIM experiment header from a QuantumCircuit."""
-        user_dict = {}
-        user_dict["name"] = qc.name
-        user_dict["n_qubits"] = qc.num_qubits
-        user_dict["memory_slots"] = qc.num_clbits
-        user_dict["global_phase"] = qc.global_phase
-        user_dict["creg_sizes"] = [(creg.name, creg.size) for creg in qc.cregs]
-        user_dict["clbit_labels"] = [(creg.name, j) for creg in qc.cregs for j in range(creg.size)]
-        user_dict["qreg_sizes"] = [(qreg.name, qreg.size) for qreg in qc.qregs]
-        user_dict["qubit_labels"] = [(qreg.name, j) for qreg in qc.qregs for j in range(qreg.size)]
-        return cls(user_dict)
+        return cls(
+            name=quantum_circuit.name,
+            n_qubits=quantum_circuit.num_qubits,
+            memory_slots=quantum_circuit.num_clbits,
+            global_phase=quantum_circuit.global_phase,
+            creg_sizes=[(creg.name, creg.size) for creg in quantum_circuit.cregs],
+            clbit_labels=[(creg.name, j) for creg in quantum_circuit.cregs for j in range(creg.size)],
+            qreg_sizes=[(qreg.name, qreg.size) for qreg in quantum_circuit.qregs],
+            qubit_labels=[(qreg.name, j) for qreg in quantum_circuit.qregs for j in range(qreg.size)],
+        )
+
+    def get_compatible_version(self) -> QobjExperimentHeader | dict[str, Any]:
+        """Return a compatible header.
+
+        For Qiskit < 2.0, return a QobjExperimentHeader. For Qiskit >= 2.0, return a dict.
+        """
+        if qiskit.version.get_version_info() < "2.0":
+            return self
+
+        return asdict(self)

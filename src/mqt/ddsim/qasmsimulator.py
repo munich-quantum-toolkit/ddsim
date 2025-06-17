@@ -212,5 +212,5 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc),
+            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
         )
