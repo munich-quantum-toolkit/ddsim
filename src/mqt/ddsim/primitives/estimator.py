@@ -10,230 +10,161 @@
 
 from __future__ import annotations
 
-from itertools import accumulate
-from typing import TYPE_CHECKING, Any, Union, cast
+from typing import TYPE_CHECKING
 
 import numpy as np
 from mqt.core import load
 from qiskit.circuit import QuantumCircuit
-from qiskit.primitives import Estimator as QiskitEstimator
-from qiskit.primitives import EstimatorResult
-from qiskit.quantum_info import Pauli, PauliList
+from qiskit.primitives.base import BaseEstimatorV2
+from qiskit.primitives.containers import DataBin, EstimatorPubLike, PrimitiveResult, PubResult
+from qiskit.primitives.containers.estimator_pub import EstimatorPub
+from qiskit.primitives.primitive_job import PrimitiveJob
+from qiskit.quantum_info import Pauli, SparsePauliOp
 
 from mqt.ddsim.pyddsim import CircuitSimulator
-from mqt.ddsim.qasmsimulator import QasmSimulatorBackend
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Iterable
 
-    from qiskit.circuit import Parameter
-    from qiskit.circuit.parameterexpression import ParameterValueType
+    from numpy.typing import NDArray
+    from qiskit.primitives.container import ObservablesArray
+    from qiskit.quantum_info import Pauli
 
-    Parameters = Union[Mapping[Parameter, ParameterValueType], Sequence[ParameterValueType]]
 
+class Estimator(BaseEstimatorV2):  # type: ignore[misc]
+    """DDSIM implementation of Qiskit's estimator.
 
-class Estimator(QiskitEstimator):  # type: ignore[misc]
-    """DDSIM implementation of qiskit's sampler.
-
-    Code adapted from Qiskit's BackendEstimator class.
+    The implementation is adapted from Qiskit's `StatevectorEstimator`.
     """
 
-    def __init__(
-        self,
-        options: dict[str, Any] | None = None,
-        abelian_grouping: bool = False,
-    ) -> None:
-        """Initialize a new Estimator instance.
+    def __init__(self, *, default_precision: float = 0.0, seed: int = -1) -> None:
+        """Create a new DDSIM estimator.
 
         Args:
-            options: Default options.
-            abelian_grouping: Whether the observable should be grouped into
-                commuting
+            default_precision: The default precision for expectation-value estimates. Defaults to ``0.0``.
+            seed: The seed for the ``CircuitSimulator``. Defaults to ``-1``.
         """
-        super().__init__(options=options)
-
-        self._abelian_grouping = abelian_grouping
-
-        self._preprocessed_circuits: tuple[list[QuantumCircuit], list[list[QuantumCircuit]]] | None = None
-
-        self._grouping = list(zip(range(len(self._circuits)), range(len(self._observables))))
+        self._default_precision = default_precision
+        self._seed = seed
 
     @property
-    def preprocessed_circuits(
+    def default_precision(self) -> float:
+        """Return the default precision."""
+        return self._default_precision
+
+    @property
+    def seed(self) -> int:
+        """Return the seed."""
+        return self._seed
+
+    def run(
         self,
-    ) -> tuple[list[QuantumCircuit], list[list[QuantumCircuit]]]:
-        """Generate quantum circuits for states and observables produced by preprocessing.
+        pubs: Iterable[EstimatorPubLike],
+        *,
+        precision: float | None = None,
+    ) -> PrimitiveJob[PrimitiveResult[PubResult]]:
+        """Estimate expectation values for each provided PUB (primitive unified bloc).
 
-        Returns: A tuple containing two entries: the quantum circuits for the states and observables.
+        Each PUB is run on the CircuitSimulator.
+
+        Args:
+            pubs: An iterable of pub-like objects, such as tuples ``(circuit, observables)`` or ``(circuit, observables, parameter_values)``.
+            precision: The target precision for expectation-value estimates. If ``None``, the default precision is used.
         """
-        self._preprocessed_circuits = self._preprocessing()
-        return self._preprocessed_circuits
+        if precision is None:
+            precision = self._default_precision
+        coerced_pubs = [EstimatorPub.coerce(pub, precision) for pub in pubs]
 
-    def _preprocessing(self) -> tuple[list[QuantumCircuit], list[list[QuantumCircuit]]]:
-        """Perform preprocessing for circuit arranging and packaging.
+        job = PrimitiveJob(self._run, coerced_pubs)
+        job._submit()  # noqa: SLF001
+        return job
 
-        Returns:
-        Tuple:
-            - List: Quantum circuits list entered in run() method.
-            - List: Quantum circuit representations of the observables.
+    def _run(self, pubs: list[EstimatorPub]) -> PrimitiveResult[PubResult]:
+        return PrimitiveResult([self._run_pub(pub) for pub in pubs], metadata={"version": 2})
 
-        This method performs preprocessing for circuit arranging and packaging. It processes quantum circuits and observables
-        based on the specified grouping and abelian grouping conditions.
-        """
-        state_circuits = []
-        observable_circuits = []
-        for group in self._grouping:
-            circuit = self._circuits[group[0]]
-            observable = self._observables[group[1]]
-            diff_circuits: list[QuantumCircuit] = []
-            if self._abelian_grouping:
-                for obs in observable.group_commuting(qubit_wise=True):
-                    basis = Pauli((
-                        np.logical_or.reduce(obs.paulis.z),
-                        np.logical_or.reduce(obs.paulis.x),
-                    ))
-                    obs_circuit, indices = self._observable_circuit(circuit.num_qubits, basis)
-                    paulis = PauliList.from_symplectic(
-                        obs.paulis.z[:, indices],
-                        obs.paulis.x[:, indices],
-                        obs.paulis.phase,
-                    )
-                    obs_circuit.metadata = {
-                        "paulis": paulis,
-                        "coeffs": np.real_if_close(obs.coeffs),
-                    }
-                    diff_circuits.append(obs_circuit)
-            else:
-                for basis, obs in zip(observable.paulis, observable):
-                    obs_circuit, indices = self._observable_circuit(circuit.num_qubits, basis)
-                    paulis = PauliList.from_symplectic(
-                        obs.paulis.z[:, indices],
-                        obs.paulis.x[:, indices],
-                        obs.paulis.phase,
-                    )
-                    obs_circuit.metadata = {
-                        "paulis": paulis,
-                        "coeffs": np.real_if_close(obs.coeffs),
-                    }
-                    diff_circuits.append(obs_circuit)
+    def _get_observable_circuits(
+        self,
+        observables: ObservablesArray,
+        num_qubits: int,
+    ) -> NDArray[object]:
+        """Get the quantum-circuit representations of the obvervables."""
+        observable_circuits = np.zeros_like(observables, dtype=object)
 
-            state_circuits.append(circuit.copy())
-            observable_circuits.append(diff_circuits)
-        return state_circuits, observable_circuits
+        for index in np.ndindex(*observables.shape):
+            observable = observables[index]
+
+            pauli_strings, coeffs = zip(*observable.items())
+            paulis = SparsePauliOp(pauli_strings, coeffs).paulis
+
+            observable_circuits_list = []
+            for pauli in paulis:
+                qubit_indices = self._get_qubit_indices(pauli)
+                observable_circuit = self._get_observable_circuit(pauli, num_qubits, qubit_indices)
+                observable_circuits_list.append(observable_circuit)
+
+            observable_circuits[index] = (coeffs, observable_circuits_list)
+
+        return observable_circuits
 
     @staticmethod
-    def _observable_circuit(num_qubits: int, pauli: Pauli) -> tuple[QuantumCircuit, list[int]]:
-        """Creates the quantum circuit representation of an observable given as a Pauli string.
-
-        Parameters:
-            - num_qubits: Number of qubits of the observable.
-            - pauli_string (str): The Pauli string representing the observable.
-
-        Returns:
-        Tuple: A tuple containing two entries:
-            - QuantumCircuit: The quantum circuit representation of the observable.
-            - List: A list of the qubits involved in the observables operators
-        """
+    def _get_qubit_indices(pauli: Pauli) -> list[int]:
+        """Get the indices of the qubits that are part of the Pauli observable."""
         qubit_indices = np.arange(pauli.num_qubits)[pauli.z | pauli.x]
+
         if not np.any(qubit_indices):
-            qubit_indices = [0]
-        obs_circuit = QuantumCircuit(num_qubits, len(qubit_indices))
+            return [0]
+
+        qubit_indices_list = qubit_indices.tolist()
+        if isinstance(qubit_indices_list, int):
+            qubit_indices_list = [qubit_indices_list]
+
+        return qubit_indices_list  # type: ignore[no-any-return]
+
+    @staticmethod
+    def _get_observable_circuit(pauli: Pauli, num_qubits: int, qubit_indices: list[int]) -> QuantumCircuit:
+        """Get the quantum-circuit representation of a Pauli observable."""
+        observable_circuit = QuantumCircuit(num_qubits, len(qubit_indices))
         for i in qubit_indices:
             if pauli.x[i]:
                 if pauli.z[i]:
-                    obs_circuit.y(i)
+                    observable_circuit.y(i)
                 else:
-                    obs_circuit.x(i)
+                    observable_circuit.x(i)
             elif pauli.z[i]:
-                obs_circuit.z(i)
+                observable_circuit.z(i)
 
-        return obs_circuit, qubit_indices
+        return observable_circuit
 
-    def _call(
-        self,
-        circuits: Sequence[int],
-        observables: Sequence[int],
-        parameter_values: Sequence[Parameters],
-        **run_options: dict[str, Any],
-    ) -> EstimatorResult:
-        # Organize circuits
-        self._grouping = list(zip(circuits, observables))
-        state_circuits, observable_circuits = self.preprocessed_circuits
-        num_observables = [len(obs_circ_list) for obs_circ_list in observable_circuits]
-        accum = [0, *list(accumulate(num_observables))]
+    def _run_pub(self, pub: EstimatorPub) -> PubResult:
+        circuit = pub.circuit
+        observables = pub.observables
+        parameter_values = pub.parameter_values
 
-        # Extract metadata from circuits
-        metadata = [circ.metadata for obs_circ_list in observable_circuits for circ in obs_circ_list]
-        for obs_circ_list in observable_circuits:
-            for circ in obs_circ_list:
-                circ.metadata = {}
+        observable_circuits = self._get_observable_circuits(observables, circuit.num_qubits)
+        bound_circuits = parameter_values.bind_all(circuit)
+        bc_bound_circuits, bc_observable_circuits = np.broadcast_arrays(bound_circuits, observable_circuits)
 
-        # Bind parameters
-        bound_circuits = QasmSimulatorBackend.assign_parameters(state_circuits, parameter_values)
+        evs = np.zeros_like(bc_bound_circuits, dtype=np.float64)
+        stds = np.zeros_like(bc_bound_circuits, dtype=np.float64)
 
-        # Run and bind parameters
-        result_list = [
-            exp
-            for circ, obs_circ_list in zip(bound_circuits, observable_circuits)
-            for exp in self._run_experiment(circ, obs_circ_list, **run_options)
-        ]
+        for index in np.ndindex(*bc_bound_circuits.shape):
+            bound_circuit = bc_bound_circuits[index]
+            observable_coeffs, observable_circuits = bc_observable_circuits[index]
+            expectation_values = self._run_experiment(bound_circuit, observable_circuits, self.seed)
+            evs[index] = np.dot(expectation_values, observable_coeffs)
 
-        return self._postprocessing(result_list, accum, metadata)
+        data = DataBin(evs=evs, stds=stds, shape=evs.shape)
+        return PubResult(data)
 
     @staticmethod
     def _run_experiment(
-        circ: QuantumCircuit,
-        obs_circ_list: list[QuantumCircuit],
-        **options: dict[str, Any],
+        bound_circuit: QuantumCircuit,
+        observable_circuits: list[QuantumCircuit],
+        seed: int = -1,
     ) -> list[float]:
-        approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
-        approximation_steps = cast("int", options.get("approximation_steps", 1))
-        approximation_strategy = str(options.get("approximation_strategy", "fidelity"))
-        seed = cast("int", options.get("seed_simulator", -1))
+        qc = load(bound_circuit)
+        sim = CircuitSimulator(qc, seed=seed)
 
-        qc = load(circ)
-        sim = CircuitSimulator(
-            qc,
-            approximation_step_fidelity=approximation_step_fidelity,
-            approximation_steps=approximation_steps,
-            approximation_strategy=approximation_strategy,
-            seed=seed,
-        )
-
-        return [sim.expectation_value(observable=load(obs)) for obs in obs_circ_list]
-
-    @staticmethod
-    def _postprocessing(result_list: list[float], accum: list[int], metadata: list[dict[str, Any]]) -> EstimatorResult:
-        """Perform postprocessing for the evaluation of expectation values.
-
-        Parameters:
-        - result_list (list[float]): A list of measurement results.
-        - accum (list[int]): A list representing accumulated indices for grouping measurement results.
-        - metadata (list[dict]): A list of dictionaries containing metadata associated with each measurement.
-
-        Returns:
-        EstimatorResult: An instance of the EstimatorResult class containing the processed expectation values and metadata.
-
-        This method calculates the expectation values by combining measurement results according to the provided accumulation indices.
-        The resulting expectation values are then packaged into an EstimatorResult object along with metadata.
-
-        The input metadata is overwritten, setting "variance" and "shots" to 0 for each expectation value.
-        """
-        expval_list = []
-
-        for i, j in zip(accum, accum[1:]):
-            combined_expval = 0.0
-
-            for k in range(i, j):
-                expval = [result_list[k]]
-                meta = metadata[k]
-                coeffs = meta["coeffs"]
-
-                # Accumulate
-                combined_expval += np.dot(expval, coeffs)
-
-            expval_list.append(combined_expval)
-
-        metadata = [{"variance": 0, "shots": 0} for _ in expval_list]
-
-        return EstimatorResult(np.real_if_close(expval_list), metadata)
+        return [
+            sim.expectation_value(observable=load(observable_circuit)) for observable_circuit in observable_circuits
+        ]
