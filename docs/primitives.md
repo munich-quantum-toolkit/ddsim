@@ -55,7 +55,7 @@ circ.draw("mpl")
 sampler = Sampler()
 ```
 
-The `run()` method accecpts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see Qiskit's [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not, the default value is 1024.
+The `run()` method accepts an iterable of PUB-like objects, where PUB stands for primitive unified bloc. In the example below, the PUB comprises the circuit and an array of parameter values, where the latter is optional. For more information, see Qiskit's [`StatevectorSampler.run()`](#qiskit.*.StatevectorSampler.run). The number of shots can be set as an additional argument. If not, the default value is 1024.
 
 ```{code-cell} ipython3
 pubs = [(circ, [np.pi])]
