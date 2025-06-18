@@ -11,7 +11,7 @@ requires = [
     "scikit-build-core>=0.11.2",
     "setuptools-scm>=8.3.1",
     "pybind11>=2.13.6",
-    "mqt.core~=3.0.0",
+    "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -47,7 +47,7 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "mqt.core[qiskit]>=3.0.0",
+    "mqt.core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -76,7 +76,7 @@ ninja.version = ">=1.10"
 build-dir = "build/{wheel_tag}/{build_type}"
 
 # Only build the Python bindings target
-build.targets = ["pyddsim"]
+build.targets = ["mqt-ddsim-bindings"]
 
 # Only install the Python package component
 install.components = ["mqt-ddsim_Python"]
@@ -321,7 +321,7 @@ build = [
   "pybind11>=2.13.6",
   "scikit-build-core>=0.11.2",
   "setuptools-scm>=8.3.1",
-  "mqt.core~=3.0.0",
+  "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
 ]
 docs = [
   "furo>=2024.8.6",

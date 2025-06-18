@@ -15,6 +15,7 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/ClassicControlledOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
@@ -87,7 +88,7 @@ void StochasticNoiseSimulator::runStochSimulationForId(
     std::size_t opCount = 0U;
 
     auto localRootEdge =
-        localDD->makeZeroState(static_cast<dd::Qubit>(nQubits));
+        dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *localDD);
     for (auto& op : *qc) {
       if (op->getType() == qc::Barrier) {
         continue;

@@ -25,19 +25,14 @@ list(
   ${BASEPOINT}/../../core/lib
   ${BASEPOINT}/../../core/lib64)
 
-pybind11_add_module(
+add_mqt_python_binding(
+  DDSIM
+  ${MQT_DDSIM_TARGET_NAME}-bindings
+  bindings.cpp
+  MODULE_NAME
   pyddsim
-  # Prefer thin LTO if available
-  THIN_LTO
-  # Optimize the bindings for size
-  OPT_SIZE
-  # Source code goes here
-  bindings.cpp)
-target_link_libraries(pyddsim PRIVATE MQT::DDSim MQT::ProjectOptions MQT::ProjectWarnings
-                                      pybind11_json)
-
-# Install directive for scikit-build-core
-install(
-  TARGETS pyddsim
-  DESTINATION .
-  COMPONENT mqt-ddsim_Python)
+  INSTALL_DIR
+  .
+  LINK_LIBS
+  MQT::DDSim
+  pybind11_json)

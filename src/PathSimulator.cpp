@@ -14,6 +14,7 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 
@@ -414,7 +415,7 @@ void PathSimulator::constructTaskGraph() {
   const auto& steps = simulationPath.steps;
 
   if (path.empty()) {
-    rootEdge = dd->makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()));
+    rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()), *dd);
     return;
   }
 
@@ -429,7 +430,7 @@ void PathSimulator::constructTaskGraph() {
       if (leftID == 0) {
         // initial state
         dd::VectorDD zeroState =
-            dd->makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()));
+            dd::makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()), *dd);
         dd->incRef(zeroState);
         results.emplace(leftID, zeroState);
       } else {

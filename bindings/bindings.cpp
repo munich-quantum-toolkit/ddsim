@@ -106,7 +106,7 @@ py::class_<Sim> createSimulator(py::module_ m, const std::string& name) {
 
 } // namespace
 
-PYBIND11_MODULE(pyddsim, m, py::mod_gil_not_used()) {
+PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
   py::module::import("mqt.core.dd");
   m.doc() = "Python interface for the MQT DDSIM quantum circuit simulator";
 

@@ -15,6 +15,7 @@
 #include "dd/Edge.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -38,7 +39,7 @@ ShorSimulator::simulate([[maybe_unused]] std::size_t shots) {
   }
 
   nQubits = static_cast<dd::Qubit>(3 * requiredBits);
-  rootEdge = dd->makeZeroState(static_cast<dd::Qubit>(nQubits));
+  rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *dd);
   dd->incRef(rootEdge);
   // Initialize qubits
   // TODO: other init method where the initial value can be chosen
