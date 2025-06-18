@@ -33,5 +33,8 @@ Alternatively, CMake can be conveniently installed from PyPI using the [`cmake`]
 MQT DDSIM now supports Qiskit 2.0.
 As a result, the return values of the `Estimator` and `Sampler` have been changed to align with Qiskit's implementations.
 
+To developers of MQT DDSIM, it is worth mentioning that all Python code (except tests) has been moved to the top-level `python` directory.
+Furthermore, the C++ code for the Python bindings has been moved to the top-level `bindings` directory.
+
 [MQT SyReC]: https://github.com/cda-tum/mqt-syrec
 [unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...HEAD

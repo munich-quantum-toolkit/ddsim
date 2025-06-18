@@ -59,7 +59,14 @@ include(cmake/ExternalDependencies.cmake)
 # set the include directory for the build tree
 set(MQT_DDSIM_INCLUDE_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+# set prefix for all MQT DDSIM targets
+set(MQT_DDSIM_TARGET_NAME mqt-ddsim)
+
 add_subdirectory(src)
+
+if(BUILD_MQT_DDSIM_BINDINGS)
+  add_subdirectory(bindings)
+endif()
 
 if(BUILD_MQT_DDSIM_TESTS)
   enable_testing()

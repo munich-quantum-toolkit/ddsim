@@ -14,6 +14,7 @@
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/operations/ClassicControlledOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
@@ -124,7 +125,7 @@ CircuitSimulator::expectationValue(const qc::QuantumComputation& observable) {
 }
 
 void CircuitSimulator::initializeSimulation(const std::size_t nQubits) {
-  rootEdge = dd->makeZeroState(static_cast<dd::Qubit>(nQubits));
+  rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *dd);
 }
 
 char CircuitSimulator::measure(const dd::Qubit i) {

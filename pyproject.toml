@@ -11,7 +11,7 @@ requires = [
     "scikit-build-core>=0.11.2",
     "setuptools-scm>=8.3.1",
     "pybind11>=2.13.6",
-    "mqt.core~=3.0.0",
+    "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -47,7 +47,7 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "mqt.core[qiskit]>=3.0.0",
+    "mqt.core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -67,7 +67,7 @@ minimum-version = "build-system.requires"
 wheel.install-dir = "mqt/ddsim"
 
 # Explicitly set the package directory
-wheel.packages = ["src/mqt"]
+wheel.packages = ["python/mqt"]
 
 # Set required Ninja version
 ninja.version = ">=1.10"
@@ -76,13 +76,13 @@ ninja.version = ">=1.10"
 build-dir = "build/{wheel_tag}/{build_type}"
 
 # Only build the Python bindings target
-build.targets = ["pyddsim"]
+build.targets = ["mqt-ddsim-bindings"]
 
 # Only install the Python package component
 install.components = ["mqt-ddsim_Python"]
 
 metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
-sdist.include = ["src/mqt/ddsim/_version.py"]
+sdist.include = ["python/mqt/ddsim/_version.py"]
 sdist.exclude = [
     "**/.github",
     "**/doc",
@@ -108,7 +108,7 @@ cmake.define.DISABLE_GIL = "1"
 
 
 [tool.check-sdist]
-sdist-only = ["src/mqt/ddsim/_version.py"]
+sdist-only = ["python/mqt/ddsim/_version.py"]
 git-only = [
     "docs/*",
     "extern/*",
@@ -118,7 +118,7 @@ git-only = [
 
 
 [tool.setuptools_scm]
-write_to = "src/mqt/ddsim/_version.py"
+write_to = "python/mqt/ddsim/_version.py"
 
 
 [tool.pytest.ini_options]
@@ -144,7 +144,7 @@ report.exclude_also = [
 
 
 [tool.mypy]
-files = ["src/mqt", "test/python", "noxfile.py"]
+files = ["python/mqt", "test/python", "noxfile.py"]
 mypy_path = ["$MYPY_CONFIG_FILE_DIR/src"]
 python_version = "3.9"
 warn_unused_configs = true
@@ -209,7 +209,6 @@ ignore = [
     "S101",    # Use of assert detected
     "S404",    # `subprocess` module is possibly insecure
 ]
-isort.required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "typing.Callable".msg = "Use collections.abc.Callable instead."
@@ -217,6 +216,10 @@ isort.required-imports = ["from __future__ import annotations"]
 "typing.Mapping".msg = "Use collections.abc.Mapping instead."
 "typing.Sequence".msg = "Use collections.abc.Sequence instead."
 "typing.Set".msg = "Use collections.abc.Set instead."
+
+[tool.ruff.lint.isort]
+known-first-party = ["mqt.ddsim"]
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.per-file-ignores]
 "test/python/**" = ["T20", "ANN", "D10"]
@@ -318,7 +321,7 @@ build = [
   "pybind11>=2.13.6",
   "scikit-build-core>=0.11.2",
   "setuptools-scm>=8.3.1",
-  "mqt.core~=3.0.0",
+  "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@a06d0fd",
 ]
 docs = [
   "furo>=2024.8.6",

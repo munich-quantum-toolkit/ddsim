@@ -13,6 +13,7 @@
 #include "dd/DDDefinitions.hpp"
 #include "dd/Edge.hpp"
 #include "dd/FunctionalityConstruction.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/Control.hpp"
@@ -78,7 +79,8 @@ GroverSimulator::simulate(std::size_t shots) {
   dd->incRef(fullIteration);
 
   assert(nQubits + nAnciallae <= std::numeric_limits<dd::Qubit>::max());
-  rootEdge = dd->makeZeroState(static_cast<dd::Qubit>(nQubits + nAnciallae));
+  rootEdge =
+      dd::makeZeroState(static_cast<dd::Qubit>(nQubits + nAnciallae), *dd);
   rootEdge = dd->multiply(setupOp, rootEdge);
   dd->incRef(rootEdge);
 

@@ -39,17 +39,17 @@ namespace nl = nlohmann;
 
 namespace std {
 template <class T>
-void to_json( // NOLINT(readability-identifier-naming)
-    nl::basic_json<>& j, const std::complex<T>& p) {
+// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
+void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
   j = nl::basic_json<>{p.real(), p.imag()};
 }
 template <class T>
-void from_json( // NOLINT(readability-identifier-naming)
-    const nl::basic_json<>& j, std::complex<T>& p) {
+// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
+void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
   p.real(j.at(0));
   p.imag(j.at(1));
 }
-} /* namespace std */
+} // namespace std
 
 int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   cxxopts::Options options(

@@ -15,6 +15,7 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/ClassicControlledOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
@@ -38,6 +39,7 @@ StochasticNoiseSimulator::simulate(const size_t nshots) {
   stochasticRuns = nshots;
   classicalMeasurementsMaps.resize(maxInstances);
   std::vector<std::thread> threadArray;
+  threadArray.reserve(maxInstances);
   // The stochastic runs are applied in parallel
   const auto t1Stoch = std::chrono::steady_clock::now();
   for (std::size_t runID = 0U; runID < maxInstances; runID++) {
@@ -68,7 +70,7 @@ void StochasticNoiseSimulator::runStochSimulationForId(
   std::mt19937_64 generator(localSeed);
 
   const std::uint64_t numberOfRuns =
-      stochasticRuns / maxInstances +
+      (stochasticRuns / maxInstances) +
       (stochRun < stochasticRuns % maxInstances ? 1U : 0U);
   const auto approxMod = static_cast<unsigned>(
       std::ceil(static_cast<double>(qc->getNops()) /
@@ -86,7 +88,7 @@ void StochasticNoiseSimulator::runStochSimulationForId(
     std::size_t opCount = 0U;
 
     auto localRootEdge =
-        localDD->makeZeroState(static_cast<dd::Qubit>(nQubits));
+        dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *localDD);
     for (auto& op : *qc) {
       if (op->getType() == qc::Barrier) {
         continue;

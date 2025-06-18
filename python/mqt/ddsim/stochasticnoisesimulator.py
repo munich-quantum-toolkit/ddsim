@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Density Matrix Simulator."""
+"""Backend for DDSIM Stochastic Simulator."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from mqt.core import load
 from qiskit.providers import Options
 from qiskit.result.models import ExperimentResult, ExperimentResultData
 
-from mqt import ddsim
+from mqt.ddsim.pyddsim import StochasticNoiseSimulator
 
 from .header import DDSIMHeader
 from .qasmsimulator import QasmSimulatorBackend
@@ -26,20 +26,15 @@ if TYPE_CHECKING:
     from qiskit import QuantumCircuit
 
 
-class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM deterministic noise-aware simulator."""
+class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
+    """Python interface to MQT DDSIM stochastic noise-aware simulator."""
 
     def __init__(
         self,
-        name: str = "dd_simulator_density_matrix",
-        description: str = "MQT DDSIM noise-aware density matrix simulator based on decision diagrams",
+        name: str = "stochastic_dd_simulator",
+        description: str = "MQT DDSIM noise-aware stochastic simulator based on decision diagrams",
     ) -> None:
-        """Constructor for the DDSIM density matrix simulator backend.
-
-        Args:
-            name: The name of the backend.
-            description: The description of the backend.
-        """
+        """Constructor for the DDSIM stochastic simulator backend."""
         super().__init__(name=name, description=description)
 
     @classmethod
@@ -48,6 +43,9 @@ class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
             shots=None,
             parameter_binds=None,
             simulator_seed=None,
+            approximation_step_fidelity=1.0,
+            approximation_steps=1,
+            approximation_strategy="fidelity",
             noise_effects="APD",
             noise_probability=0.01,
             amp_damping_probability=0.02,
@@ -57,16 +55,22 @@ class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
     @staticmethod
     def _run_experiment(qc: QuantumCircuit, **options: dict[str, Any]) -> ExperimentResult:
         start_time = time.time()
+        approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
+        approximation_steps = cast("int", options.get("approximation_steps", 1))
+        approximation_strategy = cast("str", options.get("approximation_strategy", "fidelity"))
         noise_effects = cast("str", options.get("noise_effects", "APD"))
         noise_probability = cast("float", options.get("noise_probability", 0.01))
         amp_damping_probability = cast("float", options.get("amp_damping_probability", 0.02))
         multi_qubit_gate_factor = cast("float", options.get("multi_qubit_gate_factor", 2))
-        seed = cast("int", options.get("simulator_seed", -1))
+        seed = cast("int", options.get("seed_simulator", -1))
         shots = cast("int", options.get("shots", 1024))
 
         circ = load(qc)
-        sim = ddsim.DeterministicNoiseSimulator(
+        sim = StochasticNoiseSimulator(
             circ=circ,
+            approximation_step_fidelity=approximation_step_fidelity,
+            approximation_steps=approximation_steps,
+            approximation_strategy=approximation_strategy,
             seed=seed,
             noise_effects=noise_effects,
             noise_probability=noise_probability,

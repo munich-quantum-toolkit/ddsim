@@ -14,6 +14,7 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 
@@ -298,13 +299,13 @@ void PathSimulator::generateBracketSimulationPath(std::size_t bracketSize) {
     if (i == 0) {
       components.emplace_back(memoryLeft, memoryLeft + (bracketSize - 1));
     } else {
-      components.emplace_back(memoryLeft + (bracketSize - 1) * bracketMemory +
+      components.emplace_back(memoryLeft + ((bracketSize - 1) * bracketMemory) +
                                   opMemory + i,
-                              memoryLeft + (bracketSize - 1) * (i + 1));
+                              memoryLeft + ((bracketSize - 1) * (i + 1)));
     }
   }
   // Adding the last stray element on the right-hand side
-  components.emplace_back(memoryLeft + (bracketSize)*bracketMemory + opMemory,
+  components.emplace_back(memoryLeft + (bracketSize * bracketMemory) + opMemory,
                           strayElem);
   setSimulationPath(components, true);
 }
@@ -414,7 +415,7 @@ void PathSimulator::constructTaskGraph() {
   const auto& steps = simulationPath.steps;
 
   if (path.empty()) {
-    rootEdge = dd->makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()));
+    rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()), *dd);
     return;
   }
 
@@ -429,7 +430,7 @@ void PathSimulator::constructTaskGraph() {
       if (leftID == 0) {
         // initial state
         dd::VectorDD zeroState =
-            dd->makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()));
+            dd::makeZeroState(static_cast<dd::Qubit>(qc->getNqubits()), *dd);
         dd->incRef(zeroState);
         results.emplace(leftID, zeroState);
       } else {

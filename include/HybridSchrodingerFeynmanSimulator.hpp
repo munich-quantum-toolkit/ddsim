@@ -15,6 +15,7 @@
 #include "dd/DDDefinitions.hpp"
 #include "dd/Node.hpp"
 #include "dd/Package.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/Operation.hpp"
@@ -113,7 +114,8 @@ private:
                    const qc::Qubit end_, const std::size_t controls_)
         : start(start_), end(end_), controls(controls_),
           nqubits(end - start + 1),
-          edge(dd->makeZeroState(static_cast<dd::Qubit>(nqubits), start_)) {
+          edge(
+              dd::makeZeroState(static_cast<dd::Qubit>(nqubits), *dd, start_)) {
       dd->incRef(edge);
     }
 
