@@ -42,8 +42,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
-[#567]: https://github.com/munich-quantum-toolkit/ddsim/pulls/567
 [#571]: https://github.com/munich-quantum-toolkit/ddsim/pulls/571
+[#567]: https://github.com/munich-quantum-toolkit/ddsim/pulls/567
 [#556]: https://github.com/munich-quantum-toolkit/ddsim/pulls/556
 [#538]: https://github.com/munich-quantum-toolkit/ddsim/pulls/538
 [#336]: https://github.com/munich-quantum-toolkit/ddsim/pulls/336
