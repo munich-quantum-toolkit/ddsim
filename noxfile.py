@@ -74,6 +74,9 @@ def _run_tests(
         *install_args,
         env=env,
     )
+    if "--cov" in session.posargs:
+        # try to use the lighter-weight `sys.monitoring` coverage core
+        env["COVERAGE_CORE"] = "sysmon"
     session.run(
         "uv",
         "run",
