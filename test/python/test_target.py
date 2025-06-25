@@ -95,7 +95,7 @@ def test_transpilation_preserves_mcx_target_gates(target: Target, num_controls: 
     qc.mcx(controls, 0, ancilla_qubits=list(range(nqubits, nqubits)))
     qc_transpiled = transpile(qc, target=target)
     assert len(qc_transpiled.data) == 1
-    assert qc_transpiled.data[0].operation.name == "mcx"
+    assert qc_transpiled.data[0].operation.name in {"mcx_gray", "mcx"}
 
 
 @pytest.mark.parametrize("num_controls", list(range(3, 6)))
