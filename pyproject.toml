@@ -124,7 +124,13 @@ write_to = "python/mqt/ddsim/_version.py"
 [tool.pytest.ini_options]
 minversion = "7.2"
 testpaths = ["test/python"]
-addopts = ["-ra", "--strict-markers", "--strict-config", "--showlocals"]
+addopts = [
+  "-ra",
+  "--strict-markers",
+  "--strict-config",
+  "--showlocals",
+  "--numprocesses=auto", # Automatically use all available CPU cores for parallel testing
+]
 log_cli_level = "INFO"
 xfail_strict = true
 filterwarnings = [
@@ -138,8 +144,11 @@ filterwarnings = [
 [tool.coverage]
 run.source = ["mqt.ddsim"]
 report.exclude_also = [
-    '\.\.\.',
-    'if TYPE_CHECKING:',
+  '\.\.\.',
+  'if TYPE_CHECKING:',
+]
+run.disable_warnings = [
+  "no-sysmon",
 ]
 
 
@@ -339,6 +348,8 @@ docs = [
 test = [
   "pytest>=8.3.5",
   "pytest-cov>=6.1.1",
+  "pytest-sugar>=1.0.0",
+  "pytest-xdist>=3.7.0",
   "numpy>=2.1; python_version >= '3.13'",
 ]
 dev = [
