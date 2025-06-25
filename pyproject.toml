@@ -136,6 +136,9 @@ filterwarnings = [
   # Qiskit 2.1 deprecations
   'ignore:.*``qiskit.circuit.library.n_local.*`` is deprecated as of Qiskit 2.1.*:DeprecationWarning:',
   'ignore:.*``qiskit.circuit.library.blueprintcircuit.BlueprintCircuit`` is deprecated as of Qiskit 2.1',
+  # Qiskit 2.1 starts to warn about the upcoming Python 3.9 removal in Qiskit 2.3.
+  # We will drop 3.9 support around the same time, at which point this warning filter can be removed
+  'ignore:.*Using Qiskit with Python 3.9 is deprecated as of the 2.1.0 release.*:DeprecationWarning:',
 ]
 
 [tool.coverage]
