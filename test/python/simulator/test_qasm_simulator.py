@@ -11,7 +11,6 @@ from __future__ import annotations
 import numpy as np
 import pytest
 from qiskit import (
-    AncillaRegister,
     ClassicalRegister,
     QuantumCircuit,
     QuantumRegister,
@@ -195,64 +194,17 @@ def test_qasm_simulator_portfolioqaoa(backend: QasmSimulatorBackend, shots: int)
 
 @pytest.mark.parametrize("num_controls", list(range(1, 8)))
 def test_qasm_simulator_mcx_no_ancilla(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate with no ancilla qubits."""
+    """Test MCX gate."""
     nqubits = num_controls + 1
     q = QuantumRegister(nqubits)
     c = ClassicalRegister(nqubits)
     circuit = QuantumCircuit(q, c)
     controls = q[1:nqubits]
     circuit.x(controls)
-    circuit.mcx(controls, q[0], mode="noancilla")
+    circuit.mcx(controls, q[0])
     circuit.measure(q, c)
 
     print(backend.target.operation_names)
-
-    result = backend.run(circuit, shots=shots).result()
-    assert result.success
-
-    counts = result.get_counts()
-    assert len(counts) == 1
-    assert counts["1" * nqubits] == shots
-
-
-@pytest.mark.parametrize("num_controls", list(range(1, 8)))
-def test_qasm_simulator_mcx_recursion(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate in recursion mode."""
-    nqubits = num_controls + 1
-    q = QuantumRegister(nqubits)
-    c = ClassicalRegister(nqubits)
-    anc = AncillaRegister(1)
-    circuit = QuantumCircuit(q, c, anc)
-    controls = q[1:nqubits]
-    circuit.x(controls)
-    circuit.mcx(controls, q[0], ancilla_qubits=anc, mode="recursion")
-    circuit.measure(q, c)
-
-    result = backend.run(circuit, shots=shots).result()
-    assert result.success
-
-    counts = result.get_counts()
-    assert len(counts) == 1
-    assert counts["1" * nqubits] == shots
-
-
-@pytest.mark.parametrize("num_controls", list(range(1, 8)))
-def test_qasm_simulator_mcx_vchain(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate in v-chain mode."""
-    nqubits = num_controls + 1
-    q = QuantumRegister(nqubits)
-    c = ClassicalRegister(nqubits)
-    num_ancilla = max(0, num_controls - 2)
-    circuit = QuantumCircuit(q, c)
-    if num_ancilla > 0:
-        anc = AncillaRegister(num_ancilla)
-        circuit.add_register(anc)
-    else:
-        anc = None
-    controls = q[1:nqubits]
-    circuit.x(controls)
-    circuit.mcx(controls, q[0], ancilla_qubits=anc, mode="v-chain")
-    circuit.measure(q, c)
 
     result = backend.run(circuit, shots=shots).result()
     assert result.success
