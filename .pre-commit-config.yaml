@@ -113,7 +113,7 @@ repos:
 
   # Check for spelling
   - repo: https://github.com/crate-ci/typos
-    rev: v1.34.0
+    rev: v1
     hooks:
       - id: typos
 
@@ -143,7 +143,7 @@ repos:
 
   # Check the pyproject.toml file
   - repo: https://github.com/henryiii/validate-pyproject-schema-store
-    rev: 2025.05.12
+    rev: 2025.06.23
     hooks:
       - id: validate-pyproject
 
