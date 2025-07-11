@@ -1630,13 +1630,13 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "mqt-core", extras = ["qiskit"], specifier = ">=3.1.0" },
+    { name = "mqt-core", extras = ["qiskit"], specifier = "~=3.1.0" },
     { name = "qiskit", specifier = ">=1.1" },
 ]
 
 [package.metadata.requires-dev]
 build = [
-    { name = "mqt-core", specifier = ">=3.1.0" },
+    { name = "mqt-core", specifier = "~=3.1.0" },
     { name = "pybind11", specifier = ">=2.13.6" },
     { name = "scikit-build-core", specifier = ">=0.11.2" },
     { name = "setuptools-scm", specifier = ">=8.3.1" },
@@ -1645,7 +1645,7 @@ dev = [
     { name = "breathe", specifier = ">=4.36.0" },
     { name = "furo", specifier = ">=2024.8.6" },
     { name = "graphviz", specifier = ">=0.20.3" },
-    { name = "mqt-core", specifier = ">=3.1.0" },
+    { name = "mqt-core", specifier = "~=3.1.0" },
     { name = "myst-nb", specifier = ">=1.2.0" },
     { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1" },
     { name = "pybind11", specifier = ">=2.13.6" },
