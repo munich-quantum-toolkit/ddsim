@@ -106,7 +106,9 @@ public:
                            std::size_t shots);
 
   [[nodiscard]] std::size_t getActiveNodeCount() const override {
-    return Simulator::dd->template getUniqueTable<dd::dNode>().getNumEntries();
+    const auto [vectorNodes, matrixNodes, densityNodes, realNumbers] =
+        dd->computeActiveCounts();
+    return densityNodes;
   }
 
   [[nodiscard]] std::size_t countNodesFromRoot() override {

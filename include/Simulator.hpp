@@ -86,11 +86,15 @@ public:
       std::vector<std::complex<dd::fp>>& amplitudes, std::size_t shots);
 
   [[nodiscard]] virtual std::size_t getActiveNodeCount() const {
-    return dd->getUniqueTable<dd::vNode>().getNumEntries();
+    const auto [vectorNodes, matrixNodes, densityNodes, realNumbers] =
+        dd->computeActiveCounts();
+    return vectorNodes;
   }
 
   [[nodiscard]] virtual std::size_t getMatrixActiveNodeCount() const {
-    return dd->getUniqueTable<dd::mNode>().getNumEntries();
+    const auto [vectorNodes, matrixNodes, densityNodes, realNumbers] =
+        dd->computeActiveCounts();
+    return matrixNodes;
   }
 
   [[nodiscard]] virtual std::size_t countNodesFromRoot() {
