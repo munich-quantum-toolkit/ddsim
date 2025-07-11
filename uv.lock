@@ -1637,7 +1637,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 build = [
     { name = "mqt-core", specifier = "~=3.1.0" },
-    { name = "pybind11", specifier = ">=2.13.6" },
+    { name = "pybind11", specifier = ">=3.0.0" },
     { name = "scikit-build-core", specifier = ">=0.11.2" },
     { name = "setuptools-scm", specifier = ">=8.3.1" },
 ]
@@ -1648,7 +1648,7 @@ dev = [
     { name = "mqt-core", specifier = "~=3.1.0" },
     { name = "myst-nb", specifier = ">=1.2.0" },
     { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1" },
-    { name = "pybind11", specifier = ">=2.13.6" },
+    { name = "pybind11", specifier = ">=3.0.0" },
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-cov", specifier = ">=6.1.1" },
     { name = "pytest-sugar", specifier = ">=1.0.0" },
