@@ -78,14 +78,6 @@ py::class_<Sim> createSimulator(py::module_ m, const std::string& name) {
       .def("get_active_matrix_node_count", &Sim::getMatrixActiveNodeCount,
            "Get the number of active matrix nodes, i.e., the number of matrix "
            "DD nodes in the unique table with a non-zero reference count.")
-      .def("get_max_vector_node_count", &Sim::getMaxNodeCount,
-           "Get the maximum number of (active) vector nodes, i.e., the maximum "
-           "number of vector DD nodes in the unique table at any point during "
-           "the simulation.")
-      .def("get_max_matrix_node_count", &Sim::getMaxMatrixNodeCount,
-           "Get the maximum number of (active) matrix nodes, i.e., the maximum "
-           "number of matrix DD nodes in the unique table at any point during "
-           "the simulation.")
       .def("get_tolerance", &Sim::getTolerance,
            "Get the tolerance for the DD package.")
       .def("set_tolerance", &Sim::setTolerance, "tol"_a,
@@ -235,6 +227,5 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
       .def("get_mode", &UnitarySimulator::getMode)
       .def("get_construction_time", &UnitarySimulator::getConstructionTime)
       .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount)
-      .def("get_max_node_count", &UnitarySimulator::getMaxNodeCount)
       .def("get_constructed_dd", &UnitarySimulator::getConstructedDD);
 }

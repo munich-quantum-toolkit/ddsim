@@ -84,9 +84,6 @@ public:
 
   std::map<std::string, std::size_t> simulate(std::size_t shots) override;
 
-  [[nodiscard]] std::size_t getMaxMatrixNodeCount() const override {
-    return 0U;
-  } // Not available for stochastic simulation
   [[nodiscard]] std::size_t getMatrixActiveNodeCount() const override {
     return 0U;
   } // Not available for stochastic simulation

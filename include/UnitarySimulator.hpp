@@ -39,7 +39,6 @@ public:
   [[nodiscard]] dd::MatrixDD getConstructedDD() const { return e; }
   [[nodiscard]] double getConstructionTime() const { return constructionTime; }
   [[nodiscard]] std::size_t getFinalNodeCount() const { return e.size(); }
-  [[nodiscard]] std::size_t getMaxNodeCount() const override;
 
 private:
   dd::MatrixDD e{};

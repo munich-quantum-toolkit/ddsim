@@ -280,7 +280,6 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         {"benchmark", ddsim->getName()},
         {"n_qubits", +ddsim->getNumberOfQubits()},
         {"applied_gates", ddsim->getNumberOfOps()},
-        {"max_nodes", ddsim->getMaxNodeCount()},
         {"shots", shots},
         {"distinct_results", m.size()},
         {"seed", ddsim->getSeed()},

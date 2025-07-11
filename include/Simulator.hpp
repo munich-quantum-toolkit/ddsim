@@ -86,19 +86,11 @@ public:
       std::vector<std::complex<dd::fp>>& amplitudes, std::size_t shots);
 
   [[nodiscard]] virtual std::size_t getActiveNodeCount() const {
-    return dd->getUniqueTable<dd::vNode>().getNumActiveEntries();
-  }
-
-  [[nodiscard]] virtual std::size_t getMaxNodeCount() const {
-    return dd->getUniqueTable<dd::vNode>().getPeakNumActiveEntries();
-  }
-
-  [[nodiscard]] virtual std::size_t getMaxMatrixNodeCount() const {
-    return dd->getUniqueTable<dd::mNode>().getPeakNumActiveEntries();
+    return dd->getUniqueTable<dd::vNode>().getNumEntries();
   }
 
   [[nodiscard]] virtual std::size_t getMatrixActiveNodeCount() const {
-    return dd->getUniqueTable<dd::mNode>().getNumActiveEntries();
+    return dd->getUniqueTable<dd::mNode>().getNumEntries();
   }
 
   [[nodiscard]] virtual std::size_t countNodesFromRoot() {
