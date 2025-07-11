@@ -17,6 +17,8 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Changed
 
+- **Breaking**: ⬆️ Bump minimum required MQT Core version to `3.1.0` ([#591]) ([**@denialhaag**])
+- **Breaking**: ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
 - ♻️ Move the C++ code for the Python bindings to the top-level `bindings` directory ([#567]) ([**@denialhaag**])
 - ♻️ Move all Python code (no tests) to the top-level `python` directory ([#567]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Support Qiskit 2.0 ([#571]) ([**@denialhaag**])
@@ -42,11 +44,12 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
-[#571]: https://github.com/munich-quantum-toolkit/ddsim/pulls/571
-[#567]: https://github.com/munich-quantum-toolkit/ddsim/pulls/567
-[#556]: https://github.com/munich-quantum-toolkit/ddsim/pulls/556
-[#538]: https://github.com/munich-quantum-toolkit/ddsim/pulls/538
-[#336]: https://github.com/munich-quantum-toolkit/ddsim/pulls/336
+[#591]: https://github.com/munich-quantum-toolkit/ddsim/pull/591
+[#571]: https://github.com/munich-quantum-toolkit/ddsim/pull/571
+[#567]: https://github.com/munich-quantum-toolkit/ddsim/pull/567
+[#556]: https://github.com/munich-quantum-toolkit/ddsim/pull/556
+[#538]: https://github.com/munich-quantum-toolkit/ddsim/pull/538
+[#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
 
 <!-- Contributor -->
 
