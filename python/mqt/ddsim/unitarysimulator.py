@@ -90,7 +90,6 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
         data = ExperimentResultData(
             unitary=unitary,
             construction_time=sim.get_construction_time(),
-            max_dd_nodes=sim.get_max_node_count(),
             dd_nodes=sim.get_final_node_count(),
             time_taken=end_time - start_time,
         )

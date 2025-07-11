@@ -146,7 +146,6 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
           {"benchmark", ddsim->getName()},
           {"n_qubits", ddsim->getNumberOfQubits()},
           {"applied_gates", ddsim->getNumberOfOps()},
-          {"max_matrix_nodes", ddsim->getMaxMatrixNodeCount()},
           {"active_matrix_nodes", ddsim->getMatrixActiveNodeCount()},
           {"seed", ddsim->getSeed()},
           {"active_nodes", ddsim->getActiveNodeCount()},

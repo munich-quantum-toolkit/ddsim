@@ -318,7 +318,6 @@ TEST(StochNoiseSimTest,
   EXPECT_NEAR(static_cast<double>(m.find("0011")->second), 35, tolerance);
   EXPECT_NEAR(static_cast<double>(m.find("1011")->second), 24, tolerance);
 
-  EXPECT_EQ(ddsim.getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim.getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim.countNodesFromRoot(), 0);
   auto statistics = ddsim.additionalStatistics();
@@ -382,8 +381,6 @@ TEST(StochNoiseSimTest, TestingSimulatorFunctionality) {
 
   EXPECT_EQ(ddsim.getNumberOfQubits(), 4);
   EXPECT_EQ(ddsim.getActiveNodeCount(), 0);
-  EXPECT_EQ(ddsim.getMaxNodeCount(), 0);
-  EXPECT_EQ(ddsim.getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim.getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim.countNodesFromRoot(), 0);
   std::cout << ddsim.getName() << "\n";

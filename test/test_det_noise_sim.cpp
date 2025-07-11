@@ -336,8 +336,6 @@ TEST(DeterministicNoiseSimTest, TestFunctionsOptimized) {
 
   EXPECT_EQ(ddsim->getNumberOfQubits(), 4);
   EXPECT_EQ(ddsim->getActiveNodeCount(), 22);
-  EXPECT_EQ(ddsim->getMaxNodeCount(), 44);
-  EXPECT_EQ(ddsim->getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim->getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim->countNodesFromRoot(), 23);
 }

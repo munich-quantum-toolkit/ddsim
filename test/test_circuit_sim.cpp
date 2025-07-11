@@ -37,8 +37,6 @@ TEST(CircuitSimTest, SingleOneQubitGateOnTwoQubitCircuit) {
 
   ddsim.simulate(1);
 
-  EXPECT_EQ(ddsim.getMaxNodeCount(), 4);
-
   const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
@@ -221,7 +219,6 @@ TEST(CircuitSimTest, TestingProperties) {
   ddsim.simulate(1);
 
   EXPECT_EQ(ddsim.getActiveNodeCount(), 6);
-  EXPECT_EQ(ddsim.getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim.getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim.countNodesFromRoot(), 7);
   EXPECT_EQ(ddsim.getSeed(), "1");
