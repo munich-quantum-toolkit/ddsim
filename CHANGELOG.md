@@ -29,6 +29,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Removed
 
+- **Breaking**: 🔥 Remove methods for querying maximum node count ([#591]) ([**@denialhaag**])
 - **Breaking**: 🔥 Remove the TN flow from the path simulator ([#336]) ([**@burgholzer**])
 - **Breaking**: 🔥 Remove some superfluous C++ executables ([#336]) ([**@burgholzer**])
 - **Breaking**: 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538]) ([**@burgholzer**])
