@@ -134,7 +134,7 @@ jobs:
       clang-version: 20
       cmake-args: -DBUILD_MQT_DDSIM_BINDINGS=ON
       files-changed-only: true
-      install-pkgs: "pybind11==2.13.6"
+      install-pkgs: "pybind11==3.0.0"
       setup-python: true
 
   # run extensive Python tests whenever this is on a PR and the PR has the `extensive-python-ci` label

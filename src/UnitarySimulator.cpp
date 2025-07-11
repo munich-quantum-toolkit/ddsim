@@ -18,7 +18,6 @@
 #include "ir/QuantumComputation.hpp"
 
 #include <chrono>
-#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -58,8 +57,4 @@ UnitarySimulator::UnitarySimulator(
       mode(simMode) {
   // remove final measurements
   qc::CircuitOptimizer::removeFinalMeasurements(*qc);
-}
-
-std::size_t UnitarySimulator::getMaxNodeCount() const {
-  return dd->getUniqueTable<dd::mNode>().getPeakNumActiveEntries();
 }
