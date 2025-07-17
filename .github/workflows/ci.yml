@@ -160,9 +160,6 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@v1.14
     with:
       runs-on: ${{ matrix.runs-on }}
-    permissions:
-      contents: read
-      id-token: write
 
   # run extensive Python tests on PRs labeled with the `extensive-python-ci` label
   python-tests-extensive:
@@ -187,9 +184,6 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@v1.14
     with:
       runs-on: ${{ matrix.runs-on }}
-    permissions:
-      contents: read
-      id-token: write
 
   python-coverage:
     name: 🐍 Coverage
