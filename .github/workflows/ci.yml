@@ -149,7 +149,7 @@ jobs:
   python-tests:
     name: 🐍 Test
     needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-python-tests) && !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci')
+    if: fromJSON(needs.change-detection.outputs.run-python-tests)
     strategy:
       fail-fast: false
       matrix:
@@ -159,6 +159,15 @@ jobs:
     with:
       runs-on: ${{ matrix.runs-on }}
 
+  python-coverage:
+    name: 🐍 Coverage
+    needs: [change-detection, python-tests]
+    if: fromJSON(needs.change-detection.outputs.run-python-tests)
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-coverage.yml@v1.14
+    permissions:
+      contents: read
+      id-token: write
+
   # run extensive Python tests on PRs labeled with the `extensive-python-ci` label
   python-tests-extensive:
     name: 🐍 Test (Extensive)
@@ -167,30 +176,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on:
-          [
-            ubuntu-22.04,
-            ubuntu-24.04,
-            ubuntu-22.04-arm,
-            ubuntu-24.04-arm,
-            macos-13,
-            macos-14,
-            macos-15,
-            windows-2022,
-            windows-2025,
-          ]
+        runs-on: [ubuntu-22.04, ubuntu-22.04-arm, macos-15, windows-2025]
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@v1.14
     with:
       runs-on: ${{ matrix.runs-on }}
-
-  python-coverage:
-    name: 🐍 Coverage
-    needs: [change-detection, python-tests, python-tests-extensive]
-    if: fromJSON(needs.change-detection.outputs.run-python-tests) && ${{ always() && !failure() && !cancelled() }}
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-coverage.yml@v1.14
-    permissions:
-      contents: read
-      id-token: write
 
   python-linter:
     name: 🐍 Lint
@@ -245,8 +234,8 @@ jobs:
       - cpp-coverage
       - cpp-linter
       - python-tests
-      - python-tests-extensive
       - python-linter
+      - python-tests-extensive
       - code-ql
       - build-sdist
       - build-wheel
@@ -273,16 +262,12 @@ jobs:
               && '' || 'cpp-linter,'
             }}
             ${{
-              fromJSON(needs.change-detection.outputs.run-python-tests) && !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci')
-              && '' || 'python-tests,'
+              fromJSON(needs.change-detection.outputs.run-python-tests)
+              && '' || 'python-tests,python-coverage,'
             }}
             ${{
               fromJSON(needs.change-detection.outputs.run-python-tests) && github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'extensive-python-ci')
               && '' || 'python-tests-extensive,'
-            }}
-            ${{
-              fromJSON(needs.change-detection.outputs.run-python-tests)
-              && '' || 'python-coverage,'
             }}
             ${{
               fromJSON(needs.change-detection.outputs.run-python-tests)
