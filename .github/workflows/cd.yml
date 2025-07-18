@@ -10,25 +10,30 @@ permissions:
   id-token: write
 
 jobs:
-  # Builds the sdist and wheels on all supported platforms and uploads the resulting
-  # wheels as GitHub artifacts `dev-cibw-*` or `cibw-*`, depending on whether the
-  # workflow is triggered from a PR or a release, respectively.
-  python-packaging:
+  build-sdist:
     name: 🐍 Packaging
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging.yml@v1.12
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@v1.14
+
+  # Builds wheels on all supported platforms using cibuildwheel.
+  # The wheels are uploaded as GitHub artifacts `dev-cibw-*` or `cibw-*`, depending on whether
+  # the workflow is triggered from a PR or a release, respectively.
+  build-wheel:
+    name: 🐍 Packaging
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on:
+          [
+            ubuntu-24.04,
+            ubuntu-24.04-arm,
+            macos-13,
+            macos-14,
+            windows-2022,
+            windows-11-arm,
+          ]
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@v1.14
     with:
-      # Runs to enable
-      enable-ubuntu2404: true
-      enable-ubuntu2404-arm: true
-      enable-macos13: true
-      enable-macos14: true
-      enable-windows2022: true
-      enable-windows11-arm: true
-      # Runs to disable
-      enable-ubuntu2204: false
-      enable-ubuntu2204-arm: false
-      enable-macos15: false
-      enable-windows2025: false
+      runs-on: ${{ matrix.runs-on }}
 
   # Downloads the previously generated artifacts and deploys to PyPI on published releases.
   deploy:
@@ -38,7 +43,7 @@ jobs:
     environment:
       name: pypi
       url: https://pypi.org/p/mqt.ddsim
-    needs: [python-packaging]
+    needs: [build-sdist, build-wheel]
     steps:
       - uses: actions/download-artifact@v4
         with:
