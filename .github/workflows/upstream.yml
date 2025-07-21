@@ -1,0 +1,35 @@
+name: Qiskit Upstream Tests
+on:
+  schedule:
+    # Run every Monday at 00:00 UTC
+    - cron: "0 0 * * 1"
+  pull_request:
+    paths:
+      - ".github/workflows/upstream.yml"
+  workflow_dispatch: # Allow manual triggering
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  qiskit-upstream-tests:
+    name: 🐍⚛️
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-24.04, macos-14, windows-2022]
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-tests.yml@v1.15
+    with:
+      runs-on: ${{ matrix.runs-on }}
+
+  create-issue-on-failure:
+    name: Create issue on failure
+    needs: qiskit-upstream-tests
+    if: ${{ always() }}
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-issue.yml@v1.15
+    with:
+      tests-result: ${{ needs.qiskit-upstream-tests.result }}
+    permissions:
+      contents: read
+      issues: write # Needed to create/update issues
