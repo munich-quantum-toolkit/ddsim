@@ -46,6 +46,7 @@ def _run_tests(
     session: nox.Session,
     *,
     install_args: Sequence[str] = (),
+    extra_command: Sequence[str] = (),
     run_args: Sequence[str] = (),
 ) -> None:
     env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
@@ -74,6 +75,8 @@ def _run_tests(
         *install_args,
         env=env,
     )
+    if extra_command:
+        session.run(*extra_command, env=env)
     if "--cov" in session.posargs:
         # try to use the lighter-weight `sys.monitoring` coverage core
         env["COVERAGE_CORE"] = "sysmon"
@@ -109,6 +112,17 @@ def minimums(session: nox.Session) -> None:
     env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
     session.run("uv", "tree", "--frozen", env=env)
     session.run("uv", "lock", "--refresh", env=env)
+
+
+@nox.session(reuse_venv=True, venv_backend="uv", python=PYTHON_ALL_VERSIONS)
+def qiskit(session: nox.Session) -> None:
+    """Tests against the latest version of Qiskit."""
+    _run_tests(
+        session,
+        extra_command=["uv", "pip", "install", "qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git"],
+    )
+    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
+    session.run("uv", "pip", "show", "qiskit", env=env)
 
 
 @nox.session(reuse_venv=True)
