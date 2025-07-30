@@ -17,7 +17,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Changed
 
-- **Breaking**: ⬆️ Bump minimum required MQT Core version to `3.1.0` ([#591]) ([**@denialhaag**])
+- **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
 - ♻️ Move the C++ code for the Python bindings to the top-level `bindings` directory ([#567]) ([**@denialhaag**])
 - ♻️ Move all Python code (no tests) to the top-level `python` directory ([#567]) ([**@denialhaag**])
@@ -34,6 +34,10 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 - **Breaking**: 🔥 Remove some superfluous C++ executables ([#336]) ([**@burgholzer**])
 - **Breaking**: 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538]) ([**@burgholzer**])
 
+### Fixed
+
+- 🚸 Increase binary compatibility between `mqt-ddsim` and `mqt-core` ([#606]) ([**@denialhaag**])
+
 ## [1.24.0] - 2024-10-10
 
 _📚 Refer to the [GitHub Release Notes] for previous changelogs._
@@ -45,6 +49,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#606]: https://github.com/munich-quantum-toolkit/ddsim/pull/606
 [#591]: https://github.com/munich-quantum-toolkit/ddsim/pull/591
 [#571]: https://github.com/munich-quantum-toolkit/ddsim/pull/571
 [#567]: https://github.com/munich-quantum-toolkit/ddsim/pull/567
