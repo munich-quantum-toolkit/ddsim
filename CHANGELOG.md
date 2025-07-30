@@ -17,6 +17,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Changed
 
+- ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
 - ♻️ Move the C++ code for the Python bindings to the top-level `bindings` directory ([#567]) ([**@denialhaag**])
@@ -49,6 +50,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#607]: https://github.com/munich-quantum-toolkit/ddsim/pull/607
 [#606]: https://github.com/munich-quantum-toolkit/ddsim/pull/606
 [#591]: https://github.com/munich-quantum-toolkit/ddsim/pull/591
 [#571]: https://github.com/munich-quantum-toolkit/ddsim/pull/571
