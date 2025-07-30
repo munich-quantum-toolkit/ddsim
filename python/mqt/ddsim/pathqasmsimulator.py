@@ -24,7 +24,7 @@ from qiskit.result.models import ExperimentResult, ExperimentResultData
 from qiskit.transpiler import Target
 
 from .header import DDSIMHeader
-from .pyddsim import PathCircuitSimulator, PathSimulatorConfiguration, PathSimulatorMode
+from .pyddsim import PathCircuitSimulator, PathSimulatorConfiguration
 from .qasmsimulator import QasmSimulatorBackend
 from .target import DDSIMTargetBuilder
 
@@ -83,7 +83,7 @@ class PathQasmSimulatorBackend(QasmSimulatorBackend):
 
         mode = options.get("mode")
         if mode is not None:
-            pathsim_configuration.mode = PathSimulatorMode[mode]
+            pathsim_configuration.mode = mode
 
         bracket_size = options.get("bracket_size")
         if bracket_size is not None:
