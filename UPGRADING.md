@@ -11,8 +11,10 @@ We intend to provide a more comprehensive migration guide for future releases.
 The major change in this major release is the move to the MQT Core Python package.
 This move allows us to make `qiskit` a fully optional dependency and entirely rely on the MQT Core IR for representing circuits.
 Additionally, the `mqt-core` Python package now ships all its C++ libraries as shared libraries so that these need not be fetched or built as part of the build process.
-This was tricky to achieve cross-platform, and you can find some more backstory in the corresponding [PR](https://github.com/munich-quantum-toolkit/ddsim/pulls/336).
-We expect this integration to mature over the next few releases.
+This was tricky to achieve cross-platform, and you can find some more backstory in the corresponding PR [#336].
+The problem was simplified by the latest `pybind11` release (`v3`) that greatly increased binary compatibility.
+It is not necessary to build MQT Core from source, and a simple `uv sync` is enough to successfully run `pytest`.
+We expect the MQT Core integration to mature over the next few releases.
 If you encounter any issues, please let us know.
 
 Support for the tensor network strategy in the path simulator has been removed.
@@ -20,7 +22,7 @@ If you still depend on that method, please use the last version of MQT DDSIM tha
 
 MQT Core itself dropped support for several parsers in `v3.0.0`, including the `.real`, `.qc`, `.tfc`, and `GRCS` parsers.
 The `.real` parser lives on as part of the [MQT SyReC] project. All others have been removed without replacement.
-Consequently, these input formats are no longer supported in MQT QMAP.
+Consequently, these input formats are no longer supported in MQT DDSIM.
 
 MQT DDSIM has moved to the [munich-quantum-toolkit](https://github.com/munich-quantum-toolkit) GitHub organization under https://github.com/munich-quantum-toolkit/ddsim.
 While most links should be automatically redirected, please update any links in your code to point to the new location.
@@ -36,5 +38,11 @@ As a result, the return values of the `Estimator` and `Sampler` have been change
 To developers of MQT DDSIM, it is worth mentioning that all Python code (except tests) has been moved to the top-level `python` directory.
 Furthermore, the C++ code for the Python bindings has been moved to the top-level `bindings` directory.
 
-[MQT SyReC]: https://github.com/cda-tum/mqt-syrec
+<!-- Version links -->
+
 [unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...HEAD
+
+<!-- Other links -->
+
+[#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
+[MQT SyReC]: https://github.com/cda-tum/mqt-syrec
