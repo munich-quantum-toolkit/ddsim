@@ -76,6 +76,7 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
         seed = options.get("seed", -1)
         mode = options.get("mode", "amplitude")
         nthreads = int(options.get("nthreads", local_hardware_info()["cpus"]))
+
         if mode == "amplitude":
             hybrid_mode = HybridMode.amplitude
             max_qubits = 30  # hard-coded 16GiB memory limit

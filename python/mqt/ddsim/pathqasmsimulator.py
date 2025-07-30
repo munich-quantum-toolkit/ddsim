@@ -83,7 +83,7 @@ class PathQasmSimulatorBackend(QasmSimulatorBackend):
 
         mode = options.get("mode")
         if mode is not None:
-            pathsim_configuration.mode = PathSimulatorMode(mode)
+            pathsim_configuration.mode = PathSimulatorMode[mode]
 
         bracket_size = options.get("bracket_size")
         if bracket_size is not None:

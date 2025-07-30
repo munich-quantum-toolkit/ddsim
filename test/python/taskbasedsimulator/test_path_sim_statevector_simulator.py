@@ -13,6 +13,7 @@ import unittest
 
 from qiskit import QuantumCircuit, QuantumRegister
 
+from mqt.ddsim import PathSimulatorMode
 from mqt.ddsim.pathstatevectorsimulator import PathStatevectorSimulatorBackend
 
 
@@ -38,7 +39,7 @@ class MQTStatevectorSimulatorTest(unittest.TestCase):
 
     def test_statevector_output_pairwise(self) -> None:
         """Test final state vector for single circuit run."""
-        mode = "pairwise_recursive"
+        mode = PathSimulatorMode.pairwise_recursive
         result = self.backend.run(self.q_circuit, mode=mode).result()
         assert result.success
         actual = result.get_statevector()
