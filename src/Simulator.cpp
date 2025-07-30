@@ -137,8 +137,8 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
  * @param edge reference to the root node of the quantum state, will point to
  * the new state afterwards if removeNodes is true
  * @param targetFidelity the fidelity that should be achieved
- * @param allLevels if true, apply approximation to targetFidely to each level,
- * if false, only apply to the most suitable level
+ * @param allLevels if true, apply approximation to targetFidelity to each
+ * level, if false, only apply to the most suitable level
  * @param actuallyRemoveNodes if true, actually remove the nodes that are
  * identified as unnecessary for the targetFidelity, if false, don't remove
  * anything

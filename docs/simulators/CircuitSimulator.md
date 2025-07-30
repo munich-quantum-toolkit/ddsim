@@ -105,7 +105,7 @@ Path(filename).unlink()
 ## Using Qiskit `QuantumCircuit` objects as input
 
 The `CircuitSimulator` can also be directly used with Qiskit's `QuantumCircuit` objects, which can be more convenient for some users.
-THe above computation can be done as follows:
+The above computation can be done as follows:
 
 ```{code-cell} ipython3
 from qiskit import QuantumCircuit
