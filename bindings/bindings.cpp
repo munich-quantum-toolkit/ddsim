@@ -22,6 +22,7 @@
 #include <memory>
 #include <optional>
 #include <pybind11/cast.h>
+#include <pybind11/native_enum.h>
 #include <pybind11/numpy.h> // NOLINT(misc-include-cleaner)
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h> // NOLINT(misc-include-cleaner)
@@ -136,10 +137,12 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
       "amp_damping_probability"_a = 0.02, "multi_qubit_gate_factor"_a = 2);
 
   // Hybrid Schrödinger-Feynman Simulator
-  py::enum_<HybridSchrodingerFeynmanSimulator::Mode>(m, "HybridMode")
+  py::native_enum<HybridSchrodingerFeynmanSimulator::Mode>(
+      m, "HybridMode", "enum.Enum",
+      "Enumeration of modes for the HybridSchrodingerFeynmanSimulator.")
       .value("DD", HybridSchrodingerFeynmanSimulator::Mode::DD)
       .value("amplitude", HybridSchrodingerFeynmanSimulator::Mode::Amplitude)
-      .export_values();
+      .finalize();
 
   auto hsfSimulator = createSimulator<HybridSchrodingerFeynmanSimulator>(
       m, "HybridCircuitSimulator");
@@ -158,18 +161,16 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
            &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation);
 
   // Path Simulator
-  py::enum_<PathSimulator::Configuration::Mode>(m, "PathSimulatorMode")
+  py::native_enum<PathSimulator::Configuration::Mode>(
+      m, "PathSimulatorMode", "enum.Enum",
+      "Enumeration of modes for the PathSimulator.")
       .value("sequential", PathSimulator::Configuration::Mode::Sequential)
       .value("pairwise_recursive",
              PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping)
       .value("bracket", PathSimulator::Configuration::Mode::BracketGrouping)
       .value("alternating", PathSimulator::Configuration::Mode::Alternating)
       .value("gate_cost", PathSimulator::Configuration::Mode::GateCost)
-      .export_values()
-      .def(py::init(
-          [](const std::string& str) -> PathSimulator::Configuration::Mode {
-            return PathSimulator::Configuration::modeFromString(str);
-          }));
+      .finalize();
 
   py::class_<PathSimulator::Configuration>(
       m, "PathSimulatorConfiguration",
@@ -211,10 +212,12 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
            "path"_a, "assume_correct_order"_a = false);
 
   // Unitary Simulator
-  py::enum_<UnitarySimulator::Mode>(m, "ConstructionMode")
+  py::native_enum<UnitarySimulator::Mode>(
+      m, "ConstructionMode", "enum.Enum",
+      "Enumeration of modes for the UnitarySimulator.")
       .value("recursive", UnitarySimulator::Mode::Recursive)
       .value("sequential", UnitarySimulator::Mode::Sequential)
-      .export_values();
+      .finalize();
 
   auto unitarySimulator =
       createSimulator<UnitarySimulator>(m, "UnitarySimulator");

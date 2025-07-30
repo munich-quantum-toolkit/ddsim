@@ -38,6 +38,10 @@ As a result, the return values of the `Estimator` and `Sampler` have been change
 To developers of MQT DDSIM, it is worth mentioning that all Python code (except tests) has been moved to the top-level `python` directory.
 Furthermore, the C++ code for the Python bindings has been moved to the top-level `bindings` directory.
 
+The `ConstructionMode`, `HybridMode`, and `PathSimulatorMode` enums are now exposed via `pybind11`'s new `py::native_enum`, which makes them compatible with Python's `enum.Enum` class (PEP 435).
+As a result, the enums can no longer be initialized using a string.
+Instead of `PathSimulatorMode("sequential")` or `"sequential"`, use `PathSimulatorMode.sequential`.
+
 <!-- Version links -->
 
 [unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...HEAD

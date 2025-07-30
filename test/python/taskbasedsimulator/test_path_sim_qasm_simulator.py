@@ -12,6 +12,7 @@ import unittest
 
 from qiskit import QuantumCircuit
 
+from mqt.ddsim import PathSimulatorMode
 from mqt.ddsim.pathqasmsimulator import PathQasmSimulatorBackend
 
 
@@ -79,7 +80,7 @@ class MQTQasmSimulatorTest(unittest.TestCase):
     def test_qasm_simulator_pairwise(self) -> None:
         """Test data counts output for single circuit run against reference."""
         shots = 8192
-        result = self.backend.run(self.circuit, shots=shots, mode="pairwise_recursive").result()
+        result = self.backend.run(self.circuit, shots=shots, mode=PathSimulatorMode.pairwise_recursive).result()
         threshold = 0.04 * shots
         counts = result.get_counts()
         target = {
@@ -101,7 +102,7 @@ class MQTQasmSimulatorTest(unittest.TestCase):
     def test_qasm_simulator_bracket(self) -> None:
         """Test data counts output for single circuit run against reference."""
         shots = 8192
-        result = self.backend.run(self.circuit, shots=shots, mode="bracket").result()
+        result = self.backend.run(self.circuit, shots=shots, mode=PathSimulatorMode.bracket).result()
 
         print(result)
         threshold = 0.04 * shots
@@ -125,7 +126,7 @@ class MQTQasmSimulatorTest(unittest.TestCase):
     def test_qasm_simulator_alternating(self) -> None:
         """Test data counts output for single circuit run against reference."""
         shots = 8192
-        result = self.backend.run(self.circuit, shots=shots, mode="alternating").result()
+        result = self.backend.run(self.circuit, shots=shots, mode=PathSimulatorMode.alternating).result()
 
         print(result)
         threshold = 0.04 * shots
