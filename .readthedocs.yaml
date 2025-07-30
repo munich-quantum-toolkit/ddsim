@@ -43,7 +43,7 @@ build:
         - mkdir -p $READTHEDOCS_OUTPUT/htmlzip
         - zip -r $READTHEDOCS_OUTPUT/htmlzip/html.zip docs/_build/dirhtml/*
       # pdf:
-      #   - Z3_ROOT=~/z3-4.13.4-x64-glibc-2.35 uv run --frozen --no-dev --no-build-isolation-package mqt-qmap -m sphinx -T -b latex -d docs/_build/doctrees -D language=en docs docs/_build/latex
+      #   - uv run --frozen --no-dev --no-build-isolation-package mqt-ddsim -m sphinx -T -b latex -d docs/_build/doctrees -D language=en docs docs/_build/latex
       #   - cd docs/_build/latex && latexmk -pdf -f -dvi- -ps- -interaction=nonstopmode -jobname=$READTHEDOCS_PROJECT
       #   - mkdir -p $READTHEDOCS_OUTPUT/pdf
       #   - cp docs/_build/latex/$READTHEDOCS_PROJECT.pdf $READTHEDOCS_OUTPUT/pdf/$READTHEDOCS_PROJECT.pdf
