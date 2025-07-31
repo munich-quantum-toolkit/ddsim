@@ -42,6 +42,9 @@ The `ConstructionMode`, `HybridMode`, and `PathSimulatorMode` enums are now expo
 As a result, the enums can no longer be initialized using a string.
 Instead of `PathSimulatorMode("sequential")` or `"sequential"`, use `PathSimulatorMode.sequential`.
 
+Finally, the minimum required C++ version has been raised from C++17 to C++20.
+The default compilers of our test systems support all relevant features of the standard.
+
 <!-- Version links -->
 
 [unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...HEAD
