@@ -24,6 +24,7 @@
 #include <cmath>
 #include <complex>
 #include <cstddef>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <map>
