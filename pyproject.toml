@@ -43,6 +43,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Development Status :: 5 - Production/Stable",
 ]
 requires-python = ">=3.9"
@@ -286,6 +287,9 @@ enable = ["cpython-freethreading"]
 test-skip = [
     "cp3*t-*", # no freethreading qiskit wheels
     "cp*-win_arm64", # no numpy, qiskit, ... wheels
+    # TODO(denialhaag): Remove when all dependencies support Python 3.14
+    #   https://github.com/munich-quantum-toolkit/ddsim/issues/609
+    "cp314-*",
 ]
 
 # The mqt-core shared libraries are provided by the mqt-core Python package.
