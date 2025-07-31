@@ -13,6 +13,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Added
 
+- 🐍 Build Python 3.14 wheels ([#608]) ([**@denialhaag**])
 - ✨ Add Windows 11 ARM64 wheels and C++ testing ([#556]) ([**@burgholzer**])
 
 ### Changed
@@ -50,6 +51,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#608]: https://github.com/munich-quantum-toolkit/ddsim/pull/608
 [#607]: https://github.com/munich-quantum-toolkit/ddsim/pull/607
 [#606]: https://github.com/munich-quantum-toolkit/ddsim/pull/606
 [#591]: https://github.com/munich-quantum-toolkit/ddsim/pull/591
