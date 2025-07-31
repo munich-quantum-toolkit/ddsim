@@ -4,7 +4,7 @@
 \begin{abstract}
 ```
 
-MQT DDSIM is an open-source C++17 and Python library for classical quantum circuit simulation developed as part of the _{doc}`Munich Quantum Toolkit (MQT) <mqt:index>`_ [^1].
+MQT DDSIM is an open-source C++20 and Python library for classical quantum circuit simulation developed as part of the _{doc}`Munich Quantum Toolkit (MQT) <mqt:index>`_ [^1].
 
 This documentation provides a comprehensive guide to the MQT DDSIM library, including {doc}`installation instructions <installation>`, a {doc}`quickstart guide <quickstart>`, and detailed {doc}`API documentation <api/mqt/ddsim/index>`.
 The source code of MQT DDSIM is publicly available on GitHub at [munich-quantum-toolkit/ddsim](https://github.com/munich-quantum-toolkit/ddsim), while pre-built binaries are available via [PyPI](https://pypi.org/project/mqt.ddsim/) for all major operating systems and all modern Python versions.

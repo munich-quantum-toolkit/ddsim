@@ -118,7 +118,7 @@ Ready to contribute to the project? This guide will get you started.
 
 ## Working on the C++ library
 
-Building the project requires a C++ compiler supporting _C++17_ and CMake with a minimum version of _3.24_.
+Building the project requires a C++ compiler supporting _C++20_ and CMake with a minimum version of _3.24_.
 As of 2025, our CI pipeline on GitHub continuously tests the library under the following matrix of systems and compilers:
 
 - Ubuntu 24.04 with GCC 13 or Clang 18 on x86_64 and arm64

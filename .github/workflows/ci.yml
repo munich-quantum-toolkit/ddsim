@@ -88,6 +88,12 @@ jobs:
           [ubuntu-22.04, ubuntu-24.04, ubuntu-22.04-arm, ubuntu-24.04-arm]
         compiler: [gcc, clang, clang-19, clang-20]
         config: [Release, Debug]
+        exclude:
+          # both combinations do not support C++20 due to the compiler being too old
+          - runs-on: ubuntu-22.04
+            compiler: clang
+          - runs-on: ubuntu-22.04-arm
+            compiler: clang
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@v1.16
     with:
       runs-on: ${{ matrix.runs-on }}
@@ -153,6 +159,7 @@ jobs:
       files-changed-only: true
       install-pkgs: "pybind11==3.0.0"
       setup-python: true
+      cpp-linter-extra-args: "-std=c++20"
 
   python-tests:
     name: 🐍 Test
