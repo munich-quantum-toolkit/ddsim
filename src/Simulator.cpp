@@ -58,11 +58,9 @@ std::map<std::string, std::size_t> Simulator::sampleFromAmplitudeVectorInPlace(
   for (unsigned int i = 0; i < shots; ++i) {
     auto p = dist(mt);
     // use binary search to find the first entry >= p
-    auto mit =
-        std::upper_bound(amplitudes.begin(), amplitudes.end(), p,
-                         [](const dd::fp val, const std::complex<dd::fp>& c) {
-                           return val < c.real();
-                         });
+    auto mit = std::ranges::upper_bound(
+        amplitudes, p, std::less<>{},
+        [](const std::complex<dd::fp>& c) { return c.real(); });
     auto m = std::distance(amplitudes.begin(), mit);
 
     // construct basis state string
