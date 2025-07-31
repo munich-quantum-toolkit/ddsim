@@ -300,10 +300,10 @@ test-skip = [
 environment = { DEPLOY = "ON" }
 # The SOVERSION needs to be updated when the shared libraries are updated.
 repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
---exclude libmqt-core-ir.so.3.1 \
---exclude libmqt-core-qasm.so.3.1 \
---exclude libmqt-core-circuit-optimizer.so.3.1 \
---exclude libmqt-core-dd.so.3.1"""
+--exclude libmqt-core-ir.so.3.2 \
+--exclude libmqt-core-qasm.so.3.2 \
+--exclude libmqt-core-circuit-optimizer.so.3.2 \
+--exclude libmqt-core-dd.so.3.2"""
 
 [tool.cibuildwheel.macos]
 environment = { MACOSX_DEPLOYMENT_TARGET = "10.15" }
