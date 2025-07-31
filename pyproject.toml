@@ -11,7 +11,7 @@ requires = [
     "scikit-build-core>=0.11.2",
     "setuptools-scm>=8.3.1",
     "pybind11>=3.0.0",
-    "mqt.core~=3.2.0",
+    "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@4fe9ea48ee7a33d9309915e7ba7548552ce122f7",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -48,7 +48,7 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "mqt.core[qiskit]~=3.2.0",
+    "mqt.core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@4fe9ea48ee7a33d9309915e7ba7548552ce122f7",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -336,7 +336,7 @@ build = [
   "pybind11>=3.0.0",
   "scikit-build-core>=0.11.2",
   "setuptools-scm>=8.3.1",
-  "mqt.core~=3.2.0",
+  "mqt.core @ git+https://github.com/munich-quantum-toolkit/core.git@4fe9ea48ee7a33d9309915e7ba7548552ce122f7",
 ]
 docs = [
   "furo>=2024.8.6",
