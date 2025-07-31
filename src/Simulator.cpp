@@ -98,7 +98,7 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
     const dd::fp parentProb = probsMone[ptr];
 
     if (ptr->e.at(0).p != nullptr && !ptr->e.at(0).w.exactlyZero()) {
-      if (probsMone.find(ptr->e.at(0).p) == probsMone.end()) {
+      if (!probsMone.contains(ptr->e.at(0).p)) {
         q.push(ptr->e.at(0).p);
         probsMone[ptr->e.at(0).p] = 0;
       }
@@ -107,7 +107,7 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
     }
 
     if (ptr->e.at(1).p != nullptr && !ptr->e.at(1).w.exactlyZero()) {
-      if (probsMone.find(ptr->e.at(1).p) == probsMone.end()) {
+      if (!probsMone.contains(ptr->e.at(1).p)) {
         q.push(ptr->e.at(1).p);
         probsMone[ptr->e.at(1).p] = 0;
       }
@@ -259,13 +259,13 @@ double Simulator::approximateBySampling(std::unique_ptr<dd::Package>& localDD,
     q.pop();
 
     if (ptr->e.at(0).p != nullptr && !ptr->e.at(0).w.approximatelyZero() &&
-        visitedNodes2.find(ptr->e.at(0).p) == visitedNodes2.end()) {
+        !visitedNodes2.contains(ptr->e.at(0).p)) {
       visitedNodes2.insert(ptr->e.at(0).p);
       q.push(ptr->e.at(0).p);
     }
 
     if (ptr->e.at(1).p != nullptr && !ptr->e.at(1).w.approximatelyZero() &&
-        visitedNodes2.find(ptr->e.at(1).p) == visitedNodes2.end()) {
+        !visitedNodes2.contains(ptr->e.at(1).p)) {
       visitedNodes2.insert(ptr->e.at(1).p);
       q.push(ptr->e.at(1).p);
     }

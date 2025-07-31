@@ -464,7 +464,7 @@ void ShorFastSimulator::uAEmulate2Rec(dd::vEdge e) {
     return;
   }
   auto& nodes = nodesOnLevel.at(static_cast<std::size_t>(e.p->v));
-  if (nodes.find(e.p) != nodes.end()) {
+  if (nodes.contains(e.p)) {
     return;
   }
   nodes[e.p] = dd::vCachedEdge::zero();
