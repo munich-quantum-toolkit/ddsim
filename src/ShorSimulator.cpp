@@ -110,8 +110,7 @@ ShorSimulator::simulate([[maybe_unused]] std::size_t shots) {
   }
 
   // EXACT QFT
-  for (std::int32_t i = 0; i < static_cast<std::int32_t>(2 * requiredBits);
-       i++) {
+  for (std::int32_t i = 0; std::cmp_less(i, 2 * requiredBits); i++) {
     if (verbose) {
       std::clog << "[ " << i + 1 << "/" << 2 * requiredBits
                 << " ] QFT Pass. dd size=" << rootEdge.size() << "\n";

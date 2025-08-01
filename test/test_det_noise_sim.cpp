@@ -133,7 +133,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPDWithSimulate) {
                  907, 4145, 235, 262, 184, 116, 110};
   const auto tolerance = 100;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -164,7 +164,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackD) {
       0.0186346925411, 0.0275086747656};
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -195,7 +195,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPD) {
       0.0184033482066, 0.0116282811276, 0.0110373166627};
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -221,7 +221,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAP) {
       std::array{0.03008702498522842, 0.9364832248561167};
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -261,7 +261,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPDCustomProb) {
       0.0157508473593, 0.0187340765889, 0.0132640682125};
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -282,7 +282,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPDWithShots) {
   const auto expectedValues = std::array{616, 1487, 570, 5519};
   const std::size_t tolerance = 500;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -304,7 +304,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4NoNoise1) {
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
   const double tolerance = 1e-10;
-  if (m.count("1001") == 0) {
+  if (!m.contains("1001")) {
     FAIL() << "Expected entry 1001 not found in result";
   }
   EXPECT_NEAR(m.find("1001")->second, 1, tolerance);
@@ -321,7 +321,7 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4NoNoise2) {
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
   const double tolerance = 1e-10;
-  if (m.count("1001") == 0) {
+  if (!m.contains("1001")) {
     FAIL() << "Expected entry 1001 not found in result";
   }
   EXPECT_NEAR(static_cast<double>(m.find("1001")->second),
@@ -353,7 +353,7 @@ TEST(DeterministicNoiseSimTest, TestSimulateInterface) {
   const auto expectedValues = std::array{616, 1487, 570, 5519};
   const double tolerance = 500;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }
@@ -381,7 +381,7 @@ TEST(DeterministicNoiseSimTest, TestSimulateInterfaceWithMeasurements) {
   const auto expectedValues = std::array{616, 1487, 570, 5519};
   const double tolerance = 500;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
-    if (m.count(expectedEntries.at(i)) == 0) {
+    if (!m.contains(expectedEntries.at(i))) {
       FAIL() << "Expected entry " << expectedEntries.at(i)
              << " not found in result";
     }

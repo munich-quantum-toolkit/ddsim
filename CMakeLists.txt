@@ -14,6 +14,8 @@ project(
   LANGUAGES C CXX
   DESCRIPTION "MQT DDSIM - A quantum circuit simulator based on decision diagrams")
 
+set(CMAKE_CXX_STANDARD 20)
+
 option(BUILD_MQT_DDSIM_BINDINGS "Build the MQT DDSIM Python bindings" OFF)
 if(BUILD_MQT_DDSIM_BINDINGS)
   # ensure that the BINDINGS option is set

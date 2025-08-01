@@ -1,6 +1,6 @@
 # Installation
 
-MQT DDSIM is mainly developed as a C++17 library with Python bindings.
+MQT DDSIM is mainly developed as a C++20 library with Python bindings.
 The resulting Python package is available on [PyPI](https://pypi.org/project/mqt.ddsim/) and can be installed on all major operating systems using all modern Python versions.
 
 :::::{tip}
@@ -96,7 +96,7 @@ $ uv pip install mqt.ddsim --no-binary mqt.ddsim --no-binary mqt.core
 :::
 ::::
 
-This requires a [C++ compiler supporting C++17](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers) and a minimum [CMake](https://cmake.org/) version of 3.24.
+This requires a [C++ compiler supporting C++20](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers) and a minimum [CMake](https://cmake.org/) version of 3.24.
 The library is continuously tested under Linux, MacOS, and Windows using the [latest available system versions for GitHub Actions](https://github.com/actions/virtual-environments).
 In order to access the latest build logs, visit the [GitHub Actions page](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
 
