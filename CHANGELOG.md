@@ -18,7 +18,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Changed
 
-- **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.2.0` ([#610]) ([**@denialhaag**])
+- **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Require C++20 ([#610]) ([**@denialhaag**])
 - **Breaking**: ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
