@@ -13,7 +13,7 @@ import math
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.quantum_info import Statevector, state_fidelity
 
-from mqt.ddsim.statevectorsimulator import StatevectorSimulatorBackend
+from mqt.ddsim.statevector_simulator_backend import StatevectorSimulatorBackend
 
 
 def test_circuit_multi() -> None:

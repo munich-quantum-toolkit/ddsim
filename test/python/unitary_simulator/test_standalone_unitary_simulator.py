@@ -13,7 +13,7 @@ import unittest
 import numpy as np
 from mqt.core.ir import QuantumComputation
 
-from mqt.ddsim import ConstructionMode, UnitarySimulator
+from mqt.ddsim import UnitarySimulator, UnitarySimulatorMode
 
 
 class MQTStandaloneUnitarySimulatorTests(unittest.TestCase):
@@ -26,7 +26,7 @@ class MQTStandaloneUnitarySimulatorTests(unittest.TestCase):
         self.non_zeros_in_bell_circuit = 16
 
     def test_standalone_sequential_mode(self) -> None:
-        sim = UnitarySimulator(self.circuit, mode=ConstructionMode.sequential)
+        sim = UnitarySimulator(self.circuit, mode=UnitarySimulatorMode.sequential)
         sim.construct()
 
         unitary = np.array(sim.get_constructed_dd().get_matrix(sim.get_number_of_qubits()), copy=False)
@@ -34,7 +34,7 @@ class MQTStandaloneUnitarySimulatorTests(unittest.TestCase):
         assert np.count_nonzero(unitary) == self.non_zeros_in_bell_circuit
 
     def test_standalone_sequential_mode_with_seed(self) -> None:
-        sim = UnitarySimulator(self.circuit, seed=1337, mode=ConstructionMode.sequential)
+        sim = UnitarySimulator(self.circuit, seed=1337, mode=UnitarySimulatorMode.sequential)
         sim.construct()
 
         unitary = np.array(sim.get_constructed_dd().get_matrix(sim.get_number_of_qubits()), copy=False)
@@ -42,7 +42,7 @@ class MQTStandaloneUnitarySimulatorTests(unittest.TestCase):
         assert np.count_nonzero(unitary) == self.non_zeros_in_bell_circuit
 
     def test_standalone_recursive_mode(self) -> None:
-        sim = UnitarySimulator(self.circuit, mode=ConstructionMode.recursive)
+        sim = UnitarySimulator(self.circuit, mode=UnitarySimulatorMode.recursive)
         sim.construct()
 
         unitary = np.array(sim.get_constructed_dd().get_matrix(sim.get_number_of_qubits()), copy=False)
@@ -50,7 +50,7 @@ class MQTStandaloneUnitarySimulatorTests(unittest.TestCase):
         assert np.count_nonzero(unitary) == self.non_zeros_in_bell_circuit
 
     def test_standalone_recursive_mode_with_seed(self) -> None:
-        sim = UnitarySimulator(self.circuit, seed=1337, mode=ConstructionMode.recursive)
+        sim = UnitarySimulator(self.circuit, seed=1337, mode=UnitarySimulatorMode.recursive)
         sim.construct()
 
         unitary = np.array(sim.get_constructed_dd().get_matrix(sim.get_number_of_qubits()), copy=False)

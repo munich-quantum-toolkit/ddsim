@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Stochastic Simulator."""
+"""Qiskit backend for the MQT DDSIM stochastic noise-aware simulator."""
 
 from __future__ import annotations
 
@@ -19,22 +19,22 @@ from qiskit.result.models import ExperimentResult, ExperimentResultData
 
 from mqt.ddsim.pyddsim import StochasticNoiseSimulator
 
-from .header import DDSIMHeader
-from .qasmsimulator import QasmSimulatorBackend
+from .experiment_header import DDSIMExperimentHeader
+from .qasm_simulator_backend import QasmSimulatorBackend
 
 if TYPE_CHECKING:
     from qiskit import QuantumCircuit
 
 
 class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM stochastic noise-aware simulator."""
+    """Qiskit backend for the MQT DDSIM stochastic noise-aware simulator."""
 
     def __init__(
         self,
-        name: str = "stochastic_dd_simulator",
-        description: str = "MQT DDSIM noise-aware stochastic simulator based on decision diagrams",
+        name: str = "stochastic_noise_simulator",
+        description: str = "MQT DDSIM stochastic noise-aware simulator",
     ) -> None:
-        """Constructor for the DDSIM stochastic simulator backend."""
+        """Constructor for the MQT DDSIM stochastic noise-aware simulator backend."""
         super().__init__(name=name, description=description)
 
     @classmethod
@@ -94,5 +94,5 @@ class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )

@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Unitary Simulator."""
+"""Qiskit backend for the MQT DDSIM unitary simulator."""
 
 from __future__ import annotations
 
@@ -20,9 +20,9 @@ from qiskit.providers import Options
 from qiskit.result.models import ExperimentResult, ExperimentResultData
 from qiskit.transpiler import Target
 
-from .header import DDSIMHeader
-from .pyddsim import ConstructionMode, UnitarySimulator
-from .qasmsimulator import QasmSimulatorBackend
+from .experiment_header import DDSIMExperimentHeader
+from .pyddsim import UnitarySimulator, UnitarySimulatorMode
+from .qasm_simulator_backend import QasmSimulatorBackend
 from .target import DDSIMTargetBuilder
 
 if TYPE_CHECKING:
@@ -32,10 +32,10 @@ if TYPE_CHECKING:
 
 
 class UnitarySimulatorBackend(QasmSimulatorBackend):
-    """Decision diagram-based unitary simulator."""
+    """Qiskit backend for the MQT DDSIM unitary simulator."""
 
     _US_TARGET = Target(
-        description="MQT DDSIM Unitary Simulator Target",
+        description="Target for the MQT DDSIM unitary simulator",
         num_qubits=15,  # corresponds to 16GiB memory for storing the full matrix
     )
 
@@ -48,9 +48,13 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
         DDSIMTargetBuilder.add_multi_qubit_gates(target)
         DDSIMTargetBuilder.add_barrier(target)
 
-    def __init__(self) -> None:
-        """Constructor for the DDSIM unitary simulator backend."""
-        super().__init__(name="unitary_simulator", description="MQT DDSIM Unitary Simulator")
+    def __init__(
+        self,
+        name: str = "unitary_simulator",
+        description: str = "MQT DDSIM unitary simulator",
+    ) -> None:
+        """Constructor for the MQT DDSIM unitary simulator backend."""
+        super().__init__(name=name, description=description)
 
     @classmethod
     def _default_options(cls) -> Options:
@@ -68,9 +72,9 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
         mode = options.get("mode", "recursive")
 
         if mode == "sequential":
-            construction_mode = ConstructionMode.sequential
+            construction_mode = UnitarySimulatorMode.sequential
         elif mode == "recursive":
-            construction_mode = ConstructionMode.recursive
+            construction_mode = UnitarySimulatorMode.recursive
         else:
             msg = (
                 f"Construction mode {mode} not supported by DDSIM unitary simulator. Available modes are "
@@ -101,7 +105,7 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )
 
     def _validate(self, quantum_circuits: Sequence[QuantumCircuit]) -> None:

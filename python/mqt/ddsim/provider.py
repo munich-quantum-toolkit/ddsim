@@ -15,15 +15,15 @@ from typing import TYPE_CHECKING, Any, cast
 from qiskit.providers.exceptions import QiskitBackendNotFoundError
 from qiskit.providers.providerutils import filter_backends
 
-from .deterministicnoisesimulator import DeterministicNoiseSimulatorBackend
-from .hybridqasmsimulator import HybridQasmSimulatorBackend
-from .hybridstatevectorsimulator import HybridStatevectorSimulatorBackend
-from .pathqasmsimulator import PathQasmSimulatorBackend
-from .pathstatevectorsimulator import PathStatevectorSimulatorBackend
-from .qasmsimulator import QasmSimulatorBackend
-from .statevectorsimulator import StatevectorSimulatorBackend
-from .stochasticnoisesimulator import StochasticNoiseSimulatorBackend
-from .unitarysimulator import UnitarySimulatorBackend
+from .deterministic_noise_simulator_backend import DeterministicNoiseSimulatorBackend
+from .hybrid_qam_simulator_backend import HybridQasmSimulatorBackend
+from .hybrid_statevector_simulator_backend import HybridStatevectorSimulatorBackend
+from .path_qasm_simulator_backend import PathQasmSimulatorBackend
+from .path_statevector_simulator_backend import PathStatevectorSimulatorBackend
+from .qasm_simulator_backend import QasmSimulatorBackend
+from .statevector_simulator_backend import StatevectorSimulatorBackend
+from .stochastic_noise_simulator_backend import StochasticNoiseSimulatorBackend
+from .unitary_simulator_backend import UnitarySimulatorBackend
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -39,11 +39,11 @@ class DDSIMProvider:
         ("statevector_simulator", StatevectorSimulatorBackend),
         ("hybrid_qasm_simulator", HybridQasmSimulatorBackend),
         ("hybrid_statevector_simulator", HybridStatevectorSimulatorBackend),
-        ("path_sim_qasm_simulator", PathQasmSimulatorBackend),
-        ("path_sim_statevector_simulator", PathStatevectorSimulatorBackend),
+        ("path_qasm_simulator", PathQasmSimulatorBackend),
+        ("path_statevector_simulator", PathStatevectorSimulatorBackend),
         ("unitary_simulator", UnitarySimulatorBackend),
-        ("stochastic_dd_simulator", StochasticNoiseSimulatorBackend),
-        ("density_matrix_dd_simulator", DeterministicNoiseSimulatorBackend),
+        ("stochastic_noise_simulator", StochasticNoiseSimulatorBackend),
+        ("deterministic_noise_simulator", DeterministicNoiseSimulatorBackend),
     )
 
     def get_backend(self, name: str | None = None, **kwargs: Any) -> BackendV2:

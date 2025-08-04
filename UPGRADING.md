@@ -38,7 +38,17 @@ As a result, the return values of the `Estimator` and `Sampler` have been change
 To developers of MQT DDSIM, it is worth mentioning that all Python code (except tests) has been moved to the top-level `python` directory.
 Furthermore, the C++ code for the Python bindings has been moved to the top-level `bindings` directory.
 
-The `ConstructionMode`, `HybridMode`, and `PathSimulatorMode` enums are now exposed via `pybind11`'s new `py::native_enum`, which makes them compatible with Python's `enum.Enum` class (PEP 435).
+Furthermore, many Python modules and classes have been renamed.
+In particular,
+
+- `HybridCircuitSimulator` has been renamed to `HybridSimulator`,
+- `HybridMode` has been renamed to `HybridSimulatorMode`,
+- `PathCircuitSimulator` has been renamed to `PathSimulator`, and
+- `ConstructionMode` has been renamed to `UnitraySimulatorMode`.
+- Some of the Qiskit backends have been renammed.
+  For the new names, see `DDSIMProvider.get_backend()`.
+
+The `UnitarySimulatorMode`, `HybridSimulatorMode`, and `PathSimulatorMode` enums are now exposed via `pybind11`'s new `py::native_enum`, which makes them compatible with Python's `enum.Enum` class (PEP 435).
 As a result, the enums can no longer be initialized using a string.
 Instead of `PathSimulatorMode("sequential")` or `"sequential"`, use `PathSimulatorMode.sequential`.
 

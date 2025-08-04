@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Task-Based Simulator."""
+"""Qiskit backend for the MQT DDSIM simulation-path QASM simulator."""
 
 from __future__ import annotations
 
@@ -23,16 +23,19 @@ from qiskit.providers import Options
 from qiskit.result.models import ExperimentResult, ExperimentResultData
 from qiskit.transpiler import Target
 
-from .header import DDSIMHeader
-from .pyddsim import PathCircuitSimulator, PathSimulatorConfiguration
-from .qasmsimulator import QasmSimulatorBackend
+from .experiment_header import DDSIMExperimentHeader
+from .pyddsim import PathSimulator, PathSimulatorConfiguration
+from .qasm_simulator_backend import QasmSimulatorBackend
 from .target import DDSIMTargetBuilder
 
 
 class PathQasmSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM Simulation Path Framework."""
+    """Qiskit backend for the MQT DDSIM simulation-path QASM simulator."""
 
-    _PATH_TARGET = Target(description="MQT DDSIM Simulation Path Framework Target", num_qubits=128)
+    _PATH_TARGET = Target(
+        description="Target for the MQT DDSIM simulation-path QASM simulator",
+        num_qubits=128,
+    )
 
     @staticmethod
     def _add_operations_to_target(target: Target) -> None:
@@ -46,15 +49,10 @@ class PathQasmSimulatorBackend(QasmSimulatorBackend):
 
     def __init__(
         self,
-        name: str = "path_sim_qasm_simulator",
-        description: str = "MQT DDSIM Simulation Path Framework",
+        name: str = "path_qasm_simulator",
+        description: str = "MQT DDSIM simulation-path QASM simulator",
     ) -> None:
-        """Constructor for the DDSIM Simulation Path Framework QASM Simulator backend.
-
-        Args:
-            name: The name of the backend.
-            description: The description of the backend.
-        """
+        """Constructor for the MQT DDSIM simulation-path QASM simulator backend."""
         super().__init__(name=name, description=description)
 
     @classmethod
@@ -102,7 +100,7 @@ class PathQasmSimulatorBackend(QasmSimulatorBackend):
             pathsim_configuration.seed = seed
 
         circuit = load(qc)
-        sim = PathCircuitSimulator(circuit, config=pathsim_configuration)
+        sim = PathSimulator(circuit, config=pathsim_configuration)
 
         shots = options.get("shots", 1024)
         setup_time = time.time()
@@ -125,5 +123,5 @@ class PathQasmSimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )

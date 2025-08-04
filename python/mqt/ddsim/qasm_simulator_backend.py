@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM."""
+"""Qiskit backend for MQT DDSIM QASM simulators."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from qiskit.result.models import ExperimentResult, ExperimentResultData
 from qiskit.transpiler import Target
 
 from . import __version__
-from .header import DDSIMHeader
+from .experiment_header import DDSIMExperimentHeader
 from .job import DDSIMJob
 from .pyddsim import CircuitSimulator
 from .target import DDSIMTargetBuilder
@@ -38,10 +38,13 @@ if TYPE_CHECKING:
 
 
 class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
-    """Python interface to MQT DDSIM."""
+    """Qiskit backend for MQT DDSIM QASM simulators."""
 
     _SHOW_STATE_VECTOR = False
-    _TARGET = Target(description="MQT DDSIM Simulator Target", num_qubits=128)
+    _TARGET = Target(
+        description="Target for the MQT DDSIM QASM simulator",
+        num_qubits=128,
+    )
 
     @staticmethod
     def _add_operations_to_target(target: Target) -> None:
@@ -61,9 +64,9 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
     def __init__(
         self,
         name: str = "qasm_simulator",
-        description: str = "MQT DDSIM QASM Simulator",
+        description: str = "MQT DDSIM QASM simulator",
     ) -> None:
-        """Constructor for the DDSIM QASM simulator backend."""
+        """Constructor for the MQT DDSIM QASM simulator backend."""
         super().__init__(name=name, description=description, backend_version=__version__)
         self._initialize_target()
 
@@ -212,5 +215,5 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )

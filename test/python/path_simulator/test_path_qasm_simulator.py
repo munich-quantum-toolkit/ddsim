@@ -13,7 +13,7 @@ import unittest
 from qiskit import QuantumCircuit
 
 from mqt.ddsim import PathSimulatorMode
-from mqt.ddsim.pathqasmsimulator import PathQasmSimulatorBackend
+from mqt.ddsim.path_qasm_simulator_backend import PathQasmSimulatorBackend
 
 
 class MQTQasmSimulatorTest(unittest.TestCase):

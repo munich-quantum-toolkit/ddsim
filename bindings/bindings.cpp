@@ -138,14 +138,14 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
 
   // Hybrid Schrödinger-Feynman Simulator
   py::native_enum<HybridSchrodingerFeynmanSimulator::Mode>(
-      m, "HybridMode", "enum.Enum",
-      "Enumeration of modes for the HybridSchrodingerFeynmanSimulator.")
+      m, "HybridSimulatorMode", "enum.Enum",
+      "Enumeration of modes for the :class:`~.HybridSimulator`.")
       .value("DD", HybridSchrodingerFeynmanSimulator::Mode::DD)
       .value("amplitude", HybridSchrodingerFeynmanSimulator::Mode::Amplitude)
       .finalize();
 
-  auto hsfSimulator = createSimulator<HybridSchrodingerFeynmanSimulator>(
-      m, "HybridCircuitSimulator");
+  auto hsfSimulator =
+      createSimulator<HybridSchrodingerFeynmanSimulator>(m, "HybridSimulator");
   hsfSimulator
       .def(py::init<>(
                &constructSimulator<HybridSchrodingerFeynmanSimulator,
@@ -163,7 +163,7 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
   // Path Simulator
   py::native_enum<PathSimulator::Configuration::Mode>(
       m, "PathSimulatorMode", "enum.Enum",
-      "Enumeration of modes for the PathSimulator.")
+      "Enumeration of modes for the :class:`~.PathSimulator`.")
       .value("sequential", PathSimulator::Configuration::Mode::Sequential)
       .value("pairwise_recursive",
              PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping)
@@ -174,7 +174,7 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
 
   py::class_<PathSimulator::Configuration>(
       m, "PathSimulatorConfiguration",
-      "Configuration options for the Path Simulator")
+      "Configuration options for the :class:`~.PathSimulator`.")
       .def(py::init())
       .def_readwrite(
           "mode", &PathSimulator::Configuration::mode,
@@ -192,8 +192,7 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
       .def("json", &PathSimulator::Configuration::json)
       .def("__repr__", &PathSimulator::Configuration::toString);
 
-  auto pathSimulator =
-      createSimulator<PathSimulator>(m, "PathCircuitSimulator");
+  auto pathSimulator = createSimulator<PathSimulator>(m, "PathSimulator");
   pathSimulator
       .def(py::init<>(
                &constructSimulatorWithoutSeed<PathSimulator,
@@ -213,8 +212,8 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
 
   // Unitary Simulator
   py::native_enum<UnitarySimulator::Mode>(
-      m, "ConstructionMode", "enum.Enum",
-      "Enumeration of modes for the UnitarySimulator.")
+      m, "UnitarySimulatorMode", "enum.Enum",
+      "Enumeration of modes for the :class:`~.UnitarySimulator`.")
       .value("recursive", UnitarySimulator::Mode::Recursive)
       .value("sequential", UnitarySimulator::Mode::Sequential)
       .finalize();

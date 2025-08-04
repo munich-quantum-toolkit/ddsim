@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""MQT DDSim Python Package."""
+"""MQT DDSIM Python Package."""
 
 from __future__ import annotations
 
@@ -32,28 +32,28 @@ from ._version import version as __version__
 from .provider import DDSIMProvider
 from .pyddsim import (
     CircuitSimulator,
-    ConstructionMode,
     DeterministicNoiseSimulator,
-    HybridCircuitSimulator,
-    HybridMode,
-    PathCircuitSimulator,
+    HybridSimulator,
+    HybridSimulatorMode,
+    PathSimulator,
     PathSimulatorConfiguration,
     PathSimulatorMode,
     StochasticNoiseSimulator,
     UnitarySimulator,
+    UnitarySimulatorMode,
 )
 
 __all__ = [
     "CircuitSimulator",
-    "ConstructionMode",
     "DDSIMProvider",
     "DeterministicNoiseSimulator",
-    "HybridCircuitSimulator",
-    "HybridMode",
-    "PathCircuitSimulator",
+    "HybridSimulator",
+    "HybridSimulatorMode",
+    "PathSimulator",
     "PathSimulatorConfiguration",
     "PathSimulatorMode",
     "StochasticNoiseSimulator",
     "UnitarySimulator",
+    "UnitarySimulatorMode",
     "__version__",
 ]

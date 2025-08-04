@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class DDSIMHeader(QobjExperimentHeader):  # type: ignore[misc]
+class DDSIMExperimentHeader(QobjExperimentHeader):  # type: ignore[misc]
     """Header for DDSIM backends."""
 
     name: str
@@ -39,7 +39,7 @@ class DDSIMHeader(QobjExperimentHeader):  # type: ignore[misc]
     qubit_labels: list[tuple[str, int]]
 
     @classmethod
-    def from_quantum_circuit(cls, quantum_circuit: QuantumCircuit) -> DDSIMHeader:
+    def from_quantum_circuit(cls, quantum_circuit: QuantumCircuit) -> DDSIMExperimentHeader:
         """Create a DDSIM experiment header from a QuantumCircuit."""
         return cls(
             name=quantum_circuit.name,

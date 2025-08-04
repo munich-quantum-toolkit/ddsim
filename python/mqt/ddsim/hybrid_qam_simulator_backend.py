@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Hybrid Schrodinger-Feynman Simulator."""
+"""Qiskit backend for the MQT DDSIM hybrid Schrodinger-Feynman simulator."""
 
 from __future__ import annotations
 
@@ -24,16 +24,19 @@ from qiskit.result.models import ExperimentResult, ExperimentResultData
 from qiskit.transpiler import Target
 from qiskit.utils import local_hardware_info
 
-from .header import DDSIMHeader
-from .pyddsim import HybridCircuitSimulator, HybridMode
-from .qasmsimulator import QasmSimulatorBackend
+from .experiment_header import DDSIMExperimentHeader
+from .pyddsim import HybridSimulator, HybridSimulatorMode
+from .qasm_simulator_backend import QasmSimulatorBackend
 from .target import DDSIMTargetBuilder
 
 
 class HybridQasmSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM Hybrid Schrodinger-Feynman Simulator."""
+    """Qiskit backend for the MQT DDSIM hybrid Schrodinger-Feynman simulator."""
 
-    _HSF_TARGET = Target(description="MQT DDSIM HSF Simulator Target", num_qubits=128)
+    _HSF_TARGET = Target(
+        description="Target for the MQT DDSIM Schrodinger-Feynman simulator",
+        num_qubits=128,
+    )
 
     @staticmethod
     def _add_operations_to_target(target: Target) -> None:
@@ -46,14 +49,9 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
     def __init__(
         self,
         name: str = "hybrid_qasm_simulator",
-        description: str = "MQT DDSIM Hybrid Schrodinger-Feynman simulator",
+        description: str = "MQT DDSIM hybrid Schrodinger-Feynman QASM simulator",
     ) -> None:
-        """Constructor for the DDSIM Hybrid Schrodinger-Feynman simulator backend.
-
-        Args:
-            name: The name of the backend.
-            description: The description of the backend.
-        """
+        """Constructor for the MQT DDSIM hybrid Schrodinger-Feynman QASM simulator backend."""
         super().__init__(name=name, description=description)
 
     @classmethod
@@ -78,7 +76,7 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
         nthreads = int(options.get("nthreads", local_hardware_info()["cpus"]))
 
         if mode == "amplitude":
-            hybrid_mode = HybridMode.amplitude
+            hybrid_mode = HybridSimulatorMode.amplitude
             max_qubits = 30  # hard-coded 16GiB memory limit
             algorithm_qubits = qc.num_qubits
             if algorithm_qubits > max_qubits:
@@ -87,13 +85,13 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
             qubit_diff = max_qubits - algorithm_qubits
             nthreads = int(min(2**qubit_diff, nthreads))
         elif mode == "dd":
-            hybrid_mode = HybridMode.DD
+            hybrid_mode = HybridSimulatorMode.DD
         else:
             msg = f"Simulation mode{mode} not supported by hybrid simulator. Available modes are 'amplitude' and 'dd'."
             raise QiskitError(msg)
 
         circuit = load(qc)
-        sim = HybridCircuitSimulator(circuit, seed=seed, mode=hybrid_mode, nthreads=nthreads)
+        sim = HybridSimulator(circuit, seed=seed, mode=hybrid_mode, nthreads=nthreads)
 
         shots = options.get("shots", 1024)
         if self._SHOW_STATE_VECTOR and shots > 0:
@@ -107,7 +105,7 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
             statevector=None
             if not self._SHOW_STATE_VECTOR
             else np.array(sim.get_constructed_dd().get_vector(), copy=False)
-            if sim.get_mode() == HybridMode.DD
+            if sim.get_mode() == HybridSimulatorMode.DD
             else sim.get_final_amplitudes(),
             time_taken=end_time - start_time,
             mode=mode,
@@ -121,5 +119,5 @@ class HybridQasmSimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )

@@ -48,14 +48,14 @@ circ.cx(0, 2)  # corresponds to ID 3
 circ.draw(output="mpl", style="iqp")
 ```
 
-Then, obtain the simulation path framework qiskit backend. You can choose between the `path_sim_qasm_simulator` and the `path_sim_statevector_simulator`.
+Then, obtain the simulation path framework qiskit backend. You can choose between the `path_qasm_simulator` and the `path_statevector_simulator`.
 The first just yields a dictionary with the counts of the measurements, while the latter also provides the complete statevector (which, depending on the amount of qubits, might not fit in the available memory).
 
 ```{code-cell} ipython3
 from mqt.ddsim import DDSIMProvider
 
 provider = DDSIMProvider()
-backend = provider.get_backend("path_sim_qasm_simulator")
+backend = provider.get_backend("path_qasm_simulator")
 ```
 
 Per default, the backend uses the `sequential` strategy. For this particular example, this means:

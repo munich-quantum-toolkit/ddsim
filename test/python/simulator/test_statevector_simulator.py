@@ -13,7 +13,7 @@ import unittest
 
 from qiskit import QuantumCircuit, QuantumRegister
 
-from mqt.ddsim.statevectorsimulator import StatevectorSimulatorBackend
+from mqt.ddsim.statevector_simulator_backend import StatevectorSimulatorBackend
 
 
 class MQTStatevectorSimulatorTest(unittest.TestCase):

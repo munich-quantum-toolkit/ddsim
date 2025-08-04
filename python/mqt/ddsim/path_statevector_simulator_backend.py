@@ -6,29 +6,29 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM."""
+"""Qiskit backend for the MQT DDSIM simulation-path statevector simulator."""
 
 from __future__ import annotations
 
 from qiskit.transpiler import Target
 
-from .pathqasmsimulator import PathQasmSimulatorBackend
+from .path_qasm_simulator_backend import PathQasmSimulatorBackend
 
 
 class PathStatevectorSimulatorBackend(PathQasmSimulatorBackend):
-    """Python interface to MQT DDSIM Simulation Path Framework."""
+    """Qiskit backend for the MQT DDSIM simulation-path statevector simulator."""
 
     _SHOW_STATE_VECTOR = True
     _Path_SV_TARGET = Target(
-        description="MQT DDSIM Simulation Path Framework Statevector Target",
+        description="Target for the MQT DDSIM simulation-path statevector simulator",
         num_qubits=30,  # corresponds to 16GiB memory for storing the full statevector
     )
 
     def __init__(self) -> None:
-        """Constructor for the DDSIM Simulation Path Framework Statevector Simulator backend."""
+        """Constructor for the MQT DDSIM simulation-path statevector simulator."""
         super().__init__(
-            name="path_sim_statevector_simulator",
-            description="MQT DDSIM Simulation Path Framework Statevector Simulator",
+            name="path_statevector_simulator",
+            description="MQT DDSIM simulation-path statevector simulator",
         )
 
     @property
