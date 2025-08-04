@@ -18,6 +18,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
 
 ### Changed
 
+- **Breaking**: ♻️ Streamline names of Python modules and classes ([#614]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610]) ([**@denialhaag**])
 - **Breaking**: ⬆️ Require C++20 ([#610]) ([**@denialhaag**])
 - **Breaking**: ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
@@ -53,6 +54,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#614]: https://github.com/munich-quantum-toolkit/ddsim/pull/614
 [#610]: https://github.com/munich-quantum-toolkit/ddsim/pull/610
 [#608]: https://github.com/munich-quantum-toolkit/ddsim/pull/608
 [#607]: https://github.com/munich-quantum-toolkit/ddsim/pull/607
