@@ -9,7 +9,9 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
-_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#Unreleased)._
+## [2.0.0] - 2025-08-04
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
 
 ### Added
 
@@ -49,7 +51,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v1.24.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.0.0
 [1.24.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v1.24.0
 
 <!-- PR links -->

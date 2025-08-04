@@ -4,6 +4,8 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
+## [2.0.0]
+
 This major release introduces several breaking changes, including the removal of deprecated features.
 The following paragraphs describe the most important changes and how to adapt your code accordingly.
 We intend to provide a more comprehensive migration guide for future releases.
@@ -57,7 +59,8 @@ The default compilers of our test systems support all relevant features of the s
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...v2.0.0
 
 <!-- Other links -->
 
