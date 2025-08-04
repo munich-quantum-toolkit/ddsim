@@ -19,27 +19,22 @@ from qiskit.result.models import ExperimentResult, ExperimentResultData
 
 from mqt.ddsim.pyddsim import DeterministicNoiseSimulator
 
-from .header import DDSIMHeader
-from .qasmsimulator import QasmSimulatorBackend
+from .experiment_header import DDSIMExperimentHeader
+from .qasm_simulator_backend import QasmSimulatorBackend
 
 if TYPE_CHECKING:
     from qiskit import QuantumCircuit
 
 
 class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM deterministic noise-aware simulator."""
+    """Qiskit backend for the MQT DDSIM deterministic noise-aware simulator."""
 
     def __init__(
         self,
-        name: str = "dd_simulator_density_matrix",
-        description: str = "MQT DDSIM noise-aware density matrix simulator based on decision diagrams",
+        name: str = "deterministic_noise_simulator",
+        description: str = "MQT DDSIM deterministic noise-aware simulator",
     ) -> None:
-        """Constructor for the DDSIM density matrix simulator backend.
-
-        Args:
-            name: The name of the backend.
-            description: The description of the backend.
-        """
+        """Constructor for the MQT DDSIM deterministic noise-aware simulator backend."""
         super().__init__(name=name, description=description)
 
     @classmethod
@@ -90,5 +85,5 @@ class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
             seed=seed,
             data=data,
             metadata=qc.metadata,
-            header=DDSIMHeader.from_quantum_circuit(qc).get_compatible_version(),
+            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
         )

@@ -12,7 +12,7 @@ import unittest
 
 from qiskit import QuantumCircuit, QuantumRegister
 
-from mqt.ddsim.hybridqasmsimulator import HybridQasmSimulatorBackend
+from mqt.ddsim.hybrid_qam_simulator_backend import HybridQasmSimulatorBackend
 
 
 class MQTHybridQasmSimulatorTest(unittest.TestCase):

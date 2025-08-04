@@ -11,7 +11,7 @@ from __future__ import annotations
 import pytest
 from qiskit import QuantumCircuit, qasm2
 
-from mqt.ddsim.deterministicnoisesimulator import DeterministicNoiseSimulatorBackend
+from mqt.ddsim.deterministic_noise_simulator_backend import DeterministicNoiseSimulatorBackend
 
 
 @pytest.fixture

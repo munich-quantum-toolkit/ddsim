@@ -6,27 +6,31 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM."""
+"""Qiskit backend for MQT DDSIM statevector simulators."""
 
 from __future__ import annotations
 
 from qiskit.transpiler import Target
 
-from .qasmsimulator import QasmSimulatorBackend
+from .qasm_simulator_backend import QasmSimulatorBackend
 
 
 class StatevectorSimulatorBackend(QasmSimulatorBackend):
-    """Python interface to MQT DDSIM."""
+    """Qiskit backend for MQT DDSIM statevector simulators."""
 
     _SHOW_STATE_VECTOR = True
     _SV_TARGET = Target(
-        description="MQT DDSIM Statevector Simulator Target",
+        description="Target for the MQT DDSIM statevector simulator",
         num_qubits=30,  # corresponds to 16GiB memory for storing the full statevector
     )
 
-    def __init__(self) -> None:
-        """Constructor for the DDSIM Statevector simulator backend."""
-        super().__init__(name="statevector_simulator", description="MQT DDSIM Statevector Simulator")
+    def __init__(
+        self,
+        name: str = "statevector_simulator",
+        description: str = "MQT DDSIM statevector simulator",
+    ) -> None:
+        """Constructor for the MQT DDSIM statevector simulator backend."""
+        super().__init__(name=name, description=description)
 
     @property
     def target(self) -> Target:

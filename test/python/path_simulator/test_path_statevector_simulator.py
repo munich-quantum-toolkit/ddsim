@@ -14,7 +14,7 @@ import unittest
 from qiskit import QuantumCircuit, QuantumRegister
 
 from mqt.ddsim import PathSimulatorMode
-from mqt.ddsim.pathstatevectorsimulator import PathStatevectorSimulatorBackend
+from mqt.ddsim.path_statevector_simulator_backend import PathStatevectorSimulatorBackend
 
 
 class MQTStatevectorSimulatorTest(unittest.TestCase):

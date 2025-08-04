@@ -17,7 +17,7 @@ from qiskit import (
 )
 from qiskit.circuit import Parameter
 
-from mqt.ddsim.qasmsimulator import QasmSimulatorBackend
+from mqt.ddsim.qasm_simulator_backend import QasmSimulatorBackend
 
 
 @pytest.fixture

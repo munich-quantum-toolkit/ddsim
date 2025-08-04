@@ -13,7 +13,7 @@ import unittest
 import numpy as np
 from qiskit import QuantumCircuit
 
-from mqt.ddsim.unitarysimulator import UnitarySimulatorBackend
+from mqt.ddsim.unitary_simulator_backend import UnitarySimulatorBackend
 
 
 class MQTUnitarySimulatorTest(unittest.TestCase):
