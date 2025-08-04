@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Density Matrix Simulator."""
+"""Qiskit backend for the MQT DDSIM deterministic noise-aware simulator."""
 
 from __future__ import annotations
 

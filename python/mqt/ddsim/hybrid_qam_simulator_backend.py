@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Hybrid Schrodinger-Feynman Simulator."""
+"""Qiskit backend for the MQT DDSIM hybrid Schrodinger-Feynman simulator."""
 
 from __future__ import annotations
 

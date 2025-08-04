@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Unitary Simulator."""
+"""Qiskit backend for the MQT DDSIM unitary simulator."""
 
 from __future__ import annotations
 

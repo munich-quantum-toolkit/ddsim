@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Backend for DDSIM Stochastic Simulator."""
+"""Qiskit backend for the MQT DDSIM stochastic noise-aware simulator."""
 
 from __future__ import annotations
 
