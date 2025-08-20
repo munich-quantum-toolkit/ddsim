@@ -7,7 +7,8 @@
 ````{only} html
 # References
 
-*MQT DDSIM* is academic software. Thus, many of its built-in algorithms have been published as scientific papers.
+*MQT DDSIM* is academic software.
+Thus, many of its built-in algorithms have been published as scientific papers.
 
 *MQT DDSIM* is part of the Munich Quantum Toolkit, which is described in {cite:p}`mqt`.
 If you want to cite the Munich Quantum Toolkit, please use the following BibTeX entry:
@@ -24,13 +25,12 @@ If you want to cite the Munich Quantum Toolkit, please use the following BibTeX 
     eprinttype   = {arxiv},
     addendum     = {A live version of this document is available at \url{https://mqt.readthedocs.io}},
 }
-````
+```
 
 If you use _MQT DDSIM_ in your work, we would appreciate if you cited the respective papers.
 A full list of references is given below.
-
 ````
 
 ```{bibliography}
 
-````
+```
