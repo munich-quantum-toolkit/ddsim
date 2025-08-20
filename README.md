@@ -59,11 +59,12 @@ We are firmly committed to keeping it open and actively maintained for the quant
 
 To support this endeavor, please consider:
 
-- Sponsoring us on GitHub: https://github.com/sponsors/munich-quantum-toolkit
 - Starring and sharing our repositories: https://github.com/munich-quantum-toolkit
 - Contributing code, documentation, tests, or examples via issues and pull requests
 - Citing the MQT in your publications (see [Cite This](#cite-this))
+- Citing our research in your publications (see [References](https://mqt.readthedocs.io/projects/ddsim/en/latest/references.html))
 - Using the MQT in research and teaching, and sharing feedback and use cases
+- Sponsoring us on GitHub: https://github.com/sponsors/munich-quantum-toolkit
 
 <p align="center">
   <a href="https://github.com/sponsors/munich-quantum-toolkit">
@@ -73,7 +74,7 @@ To support this endeavor, please consider:
 
 ## Getting Started
 
-DDSIM bundled with the provider and backends for Qiskit is available via [PyPI](https://pypi.org/project/mqt.ddsim/) for Linux, macOS, and Windows and supports Python 3.9 to 3.13.
+MQT DDSIM bundled with the provider and backends for Qiskit is available via [PyPI](https://pypi.org/project/mqt.ddsim/) for Linux, macOS, and Windows and supports Python 3.9 to 3.13.
 
 ```console
 (venv) $ pip install mqt.ddsim
@@ -110,20 +111,21 @@ Building (and running) is continuously tested under Linux, macOS, and Windows us
 
 ## Cite This
 
-If you want to cite MQT DDSIM, please use the following BibTeX entry:
+When citing the software itself or results produced with it, please cite the MQT Handbook:
 
-TODO.
-
-## References
-
-DDSIM has been developed based on methods proposed in the following papers:
-
-- A. Zulehner and R. Wille, "[Advanced Simulation of Quantum Computations](https://www.cda.cit.tum.de/files/eda/2018_tcad_advanced_simulation_quantum_computation.pdf)," Transactions on CAD of Integrated Circuits and Systems (TCAD), 2019
-- S. Hillmich, I.L. Markov, and R. Wille, "[Just Like the Real Thing: Fast Weak Simulation of Quantum Computation](https://www.cda.cit.tum.de/files/eda/2020_dac_weak_simulation_quantum_computation.pdf)," in Design Automation Conference (DAC), 2020
-- S. Hillmich, R. Kueng, I. L. Markov, and R. Wille, "[As Accurate as Needed, as Efficient as Possible: Approximations in DD-based Quantum Circuit Simulation](https://www.cda.cit.tum.de/files/eda/2021_date_approximations_dd_baed_quantum_circuit_simulation.pdf)," in Design, Automation and Test in Europe (DATE), 2021
-- L. Burgholzer, H. Bauer, and R. Wille, "[Hybrid Schrödinger-Feynman Simulation of Quantum Circuits With Decision Diagrams](https://www.cda.cit.tum.de/files/eda/2021_qce_hybrid_schrodinger_feynman_simulation_with_decision_diagrams.pdf)," Conference on Quantum Computing and Engineering (QCE), 2021
-- L. Burgholzer, A.Ploier, and R. Wille, "[Exploiting Arbitrary Paths for the Simulation of Quantum Circuits with Decision Diagrams](https://www.cda.cit.tum.de/files/eda/2022_date_exploiting_arbitrary_paths_simulation_quantum_circuits_decision_diagrams.pdf)," in Design, Automation and Test in Europe (DATE), 2022
-- T. Grurl, J. Fuß, and R. Wille, "[Noise-aware Quantum Circuit Simulation With Decision Diagrams](https://www.cda.cit.tum.de/files/eda/2022_tcad_noise-aware_quantum_circuit_simulation_with_decision_diagrams.pdf)," Transactions on CAD of Integrated Circuits and Systems (TCAD), 2022.
+```bibtex
+@inproceedings{mqt,
+    title        = {The {{MQT}} Handbook: {{A}} Summary of Design Automation Tools and Software for Quantum Computing},
+    shorttitle   = {{The MQT Handbook}},
+    author       = {Robert Wille and Lucas Berent and Tobias Forster and Jagatheesan Kunasaikaran and Kevin Mato and Tom Peham and Nils Quetschlich and Damian Rovara and Aaron Sander and Ludwig Schmid and Daniel Schoenberger and Yannick Stade and Lukas Burgholzer},
+    booktitle    = {IEEE International Conference on Quantum Software (QSW)},
+    doi          = {10.1109/QSW62656.2024.00013},
+    year         = 2024,
+    eprint       = {2405.17543},
+    eprinttype   = {arxiv},
+    addendum     = {A live version of this document is available at \url{https://mqt.readthedocs.io}},
+}
+```
 
 ---
 
