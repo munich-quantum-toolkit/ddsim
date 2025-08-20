@@ -63,7 +63,7 @@ repos:
 
   # Python linting using ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.8
+    rev: v0.12.9
     hooks:
       - id: ruff
         args: ["--fix", "--show-fixes"]
@@ -113,7 +113,7 @@ repos:
 
   # Check for spelling
   - repo: https://github.com/crate-ci/typos
-    rev: v1.35.3
+    rev: v1.35.4
     hooks:
       - id: typos
 
