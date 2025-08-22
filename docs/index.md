@@ -88,7 +88,7 @@ Thank you to all the contributors who have helped make MQT DDSIM a reality!
 
 <p align="center">
 <a href="https://github.com/munich-quantum-toolkit/ddsim/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=munich-quantum-toolkit/ddsim" />
+  <img src="https://contrib.rocks/image?repo=munich-quantum-toolkit/ddsim" alt="Contributors to munich-quantum-toolkit/ddsim" />
 </a>
 </p>
 

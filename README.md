@@ -28,9 +28,15 @@ It builds upon [MQT Core](https://github.com/munich-quantum-toolkit/core), which
 
 ## Key Features
 
-- Point 1
-- Point 2
-- Point 3
+- Decision-diagram–based circuit simulation: [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html)—strong (statevector) and weak (sampling), incl. mid‑circuit measurements and resets; Qiskit backends [qasm_simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend) • [statevector_simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend). [Quickstart](https://mqt.readthedocs.io/projects/ddsim/en/latest/quickstart.html) • [API](https://mqt.readthedocs.io/projects/ddsim/en/latest/api/mqt/ddsim/index.html)
+- Unitary simulation: [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html) with an optional [alternative recursive construction](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html#alternative-construction-sequence) for improved intermediate compactness.
+- Hybrid Schrödinger–Feynman: [Hybrid simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/HybridSchrodingerFeynman.html) trading memory for runtime with DD and amplitude modes plus multithreading; also available as a statevector backend.
+- Simulation Path Framework: [Path-based simulation](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html) with strategies [sequential](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#simulating-a-simple-circuit), [pairwise_recursive](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration), [bracket](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration), and [alternating](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration).
+- Noise-aware simulation: [Stochastic and deterministic noise](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/NoiseAwareSimulator.html) (amplitude damping, depolarization, phase flip; density-matrix mode) for global decoherence and gate errors.
+- Qiskit-native API: Provider backends and Primitives—[Sampler](https://mqt.readthedocs.io/projects/ddsim/en/latest/primitives.html#sampler) • [Estimator](https://mqt.readthedocs.io/projects/ddsim/en/latest/primitives.html#estimator)—for algorithm-friendly workflows. [API](https://mqt.readthedocs.io/projects/ddsim/en/latest/api/mqt/ddsim/index.html)
+- Decision-diagram visualization: inspect states/unitaries via Graphviz export; see [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html) and [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html).
+- Standalone CLI: fast C++ executables with JSON output; e.g., [ddsim_simple](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-standalone-c-executable).
+- Efficient and portable: C++20 core with DD engines; prebuilt wheels for Linux/macOS/Windows via [PyPI](https://pypi.org/project/mqt.ddsim/).
 
 If you have any questions, feel free to create a [discussion](https://github.com/munich-quantum-toolkit/ddsim/discussions) or an [issue](https://github.com/munich-quantum-toolkit/ddsim/issues) on [GitHub](https://github.com/munich-quantum-toolkit/ddsim).
 
@@ -50,7 +56,7 @@ Thank you to all the contributors who have helped make MQT DDSIM a reality!
 
 <p align="center">
   <a href="https://github.com/munich-quantum-toolkit/ddsim/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=munich-quantum-toolkit/ddsim" />
+  <img src="https://contrib.rocks/image?repo=munich-quantum-toolkit/ddsim" alt="Contributors to munich-quantum-toolkit/ddsim" />
   </a>
 </p>
 
@@ -74,7 +80,7 @@ To support this endeavor, please consider:
 
 ## Getting Started
 
-MQT DDSIM bundled with the provider and backends for Qiskit is available via [PyPI](https://pypi.org/project/mqt.ddsim/) for Linux, macOS, and Windows and supports Python 3.9 to 3.13.
+MQT DDSIM bundled with the provider and backends for Qiskit is available via [PyPI](https://pypi.org/project/mqt.ddsim/) for Linux, macOS, and Windows and supports Python 3.9 to 3.14.
 
 ```console
 (venv) $ pip install mqt.ddsim
@@ -111,7 +117,28 @@ Building (and running) is continuously tested under Linux, macOS, and Windows us
 
 ## Cite This
 
-When citing the software itself or results produced with it, please cite the MQT Handbook:
+Please cite the work that best fits your use case.
+
+### MQT DDSIM (the tool)
+
+When citing the software itself or results produced with it, cite the original DD simulation paper:
+
+```bibtex
+@article{zulehner2019advanced,
+    title               = {Advanced Simulation of Quantum Computations},
+    author              = {Zulehner, Alwin and Wille, Robert},
+    year                = {2019},
+    journal             = tcad,
+    volume              = {38},
+    number              = {5},
+    pages               = {848--859},
+    doi                 = {10.1109/TCAD.2018.2834427},
+}
+```
+
+### The Munich Quantum Toolkit (the project)
+
+When discussing the overall MQT project or its ecosystem, cite the MQT Handbook:
 
 ```bibtex
 @inproceedings{mqt,
@@ -126,6 +153,34 @@ When citing the software itself or results produced with it, please cite the MQT
     addendum     = {A live version of this document is available at \url{https://mqt.readthedocs.io}},
 }
 ```
+
+### Peer-Reviewed Research
+
+When citing the underlying methods and research, please reference the most relevant peer-reviewed publications from the list below:
+
+[[1]](https://www.cda.cit.tum.de/files/eda/2018_tcad_advanced_simulation_quantum_computation.pdf)
+A. Zulehner and R. Wille. Advanced Simulation of Quantum Computations.
+_IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems (TCAD)_, 2019.
+
+[[2]](https://www.cda.cit.tum.de/files/eda/2020_dac_weak_simulation_quantum_computation.pdf)
+S. Hillmich, I. L. Markov, and R. Wille. Just Like the Real Thing: Fast Weak Simulation of Quantum Computation.
+In _Design Automation Conference (DAC)_, 2020.
+
+[[3]](https://www.cda.cit.tum.de/files/eda/2021_date_approximations_dd_baed_quantum_circuit_simulation.pdf)
+S. Hillmich, R. Kueng, I. L. Markov, and R. Wille. As Accurate as Needed, as Efficient as Possible: Approximations in DD-based Quantum Circuit Simulation.
+In _Design, Automation and Test in Europe (DATE)_, 2021.
+
+[[4]](https://www.cda.cit.tum.de/files/eda/2021_qce_hybrid_schrodinger_feynman_simulation_with_decision_diagrams.pdf)
+L. Burgholzer, H. Bauer, and R. Wille. Hybrid Schrödinger–Feynman Simulation of Quantum Circuits with Decision Diagrams.
+In _IEEE International Conference on Quantum Computing and Engineering (QCE)_, 2021.
+
+[[5]](https://www.cda.cit.tum.de/files/eda/2022_date_exploiting_arbitrary_paths_simulation_quantum_circuits_decision_diagrams.pdf)
+L. Burgholzer, A. Ploier, and R. Wille. Exploiting Arbitrary Paths for the Simulation of Quantum Circuits with Decision Diagrams.
+In _Design, Automation and Test in Europe (DATE)_, 2022.
+
+[[6]](https://www.cda.cit.tum.de/files/eda/2022_tcad_noise-aware_quantum_circuit_simulation_with_decision_diagrams.pdf)
+T. Grurl, J. Fuß, and R. Wille. Noise-aware Quantum Circuit Simulation with Decision Diagrams.
+_IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems (TCAD)_, 2022.
 
 ---
 
