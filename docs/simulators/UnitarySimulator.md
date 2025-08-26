@@ -337,7 +337,7 @@ import graphviz
 from mqt.core import load
 from qiskit import QuantumCircuit
 
-from mqt.ddsim import ConstructionMode, UnitarySimulator
+from mqt.ddsim import UnitarySimulatorMode, UnitarySimulator
 
 qc = QuantumCircuit(3)
 qc.h(2)
@@ -347,7 +347,7 @@ qc.cx(2, 1)
 
 # Create the simulator
 circ = load(qc)
-sim = UnitarySimulator(circ, mode=ConstructionMode.recursive)
+sim = UnitarySimulator(circ, mode=UnitarySimulatorMode.recursive)
 
 # Construct the decision diagram representation of the unitary
 sim.construct()
