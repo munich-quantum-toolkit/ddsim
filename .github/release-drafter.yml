@@ -1,12 +1,15 @@
+# This file has been generated from an external template. Please do not modify it directly.
+# Changes should be contributed to https://github.com/munich-quantum-toolkit/templates.
+
 name-template: "MQT DDSIM $RESOLVED_VERSION Release"
 tag-template: "v$RESOLVED_VERSION"
 categories:
   - title: "🚀 Features and Enhancements"
     labels:
-      - "feature"
       - "enhancement"
-      - "usability"
+      - "feature"
       - "refactor"
+      - "usability"
   - title: "🐛 Bug Fixes"
     labels:
       - "bug"
@@ -14,23 +17,23 @@ categories:
   - title: "📄 Documentation"
     labels:
       - "documentation"
+  - title: "🤖 CI"
+    labels:
+      - "continuous integration"
   - title: "📦 Packaging"
     labels:
       - "packaging"
   - title: "🧹 Code Quality"
     labels:
       - "code quality"
-  - title: "🤖 CI"
-    labels:
-      - "continuous integration"
   - title: "⬆️ Dependencies"
     collapse-after: 5
     labels:
       - "dependencies"
-      - "submodules"
-      - "github_actions"
+      - "github-actions"
       - "pre-commit"
-change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+      - "submodules"
+change-template: "- $TITLE ([#$NUMBER]($URL)) ([**@$AUTHOR**](https://github.com/$AUTHOR))"
 change-title-escapes: '\<*_&'
 version-resolver:
   major:
