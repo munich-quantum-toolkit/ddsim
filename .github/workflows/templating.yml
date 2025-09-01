@@ -21,5 +21,7 @@ jobs:
       - uses: munich-quantum-toolkit/templates@aa244c8b5ea6b44f4834aebc8f8269c75e10be96 # v1.1.2
         with:
           token: ${{ steps.create-token.outputs.token }}
+          name: DDSIM
           organization: ${{ github.repository_owner }}
+          project-type: c++-python
           repository: ${{ github.event.repository.name }}
