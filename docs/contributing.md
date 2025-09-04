@@ -111,7 +111,6 @@ As of August 2025, our CI pipeline on GitHub continuously tests the library acro
 - {code}`ubuntu-24.04`: {code}`Release` and {code}`Debug` builds using {code}`gcc`
 - {code}`ubuntu-24.04-arm`: {code}`Release` build using {code}`gcc`
 - {code}`macos-14`: {code}`Release` and {code}`Debug` builds using {code}`AppleClang`
-- {code}`macos-13`: {code}`Release` build using {code}`AppleClang`
 - {code}`windows-2022`: {code}`Release` and {code}`Debug` builds using {code}`msvc`
 - {code}`windows-11-arm`: {code}`Release` build using {code}`msvc`
 
@@ -487,8 +486,8 @@ This will ensure that the respective PR does not influence the type of an upcomi
 
 :::
 
-Once everything is in order and the release draft looks good, you can merge the PR preparing the release.
-Afterward, navigate to the [Releases page](https://github.com/munich-quantum-toolkit/ddsim/releases) on GitHub, edit the created draft, and publish the release.
+Once everything is in order, you can merge the PR preparing the release.
+Afterward, navigate to the [Releases page](https://github.com/munich-quantum-toolkit/ddsim/releases) on GitHub, edit the release draft if necessary, and publish the release.
 
 <!--- Links --->
 
