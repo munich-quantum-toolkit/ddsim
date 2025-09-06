@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+### Changed
+
+- 🔥 Stop testing on and shipping wheels for x86 macOS systems ([#640]) ([**@denialhaag**])
+
 ## [2.0.0] - 2025-08-04
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
@@ -57,6 +61,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
 [#614]: https://github.com/munich-quantum-toolkit/ddsim/pull/614
 [#610]: https://github.com/munich-quantum-toolkit/ddsim/pull/610
 [#608]: https://github.com/munich-quantum-toolkit/ddsim/pull/608
