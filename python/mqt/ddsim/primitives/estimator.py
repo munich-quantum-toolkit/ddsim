@@ -86,14 +86,14 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
         self,
         observables: ObservablesArray,
         num_qubits: int,
-    ) -> NDArray[object]:
+    ) -> NDArray[np.object_]:
         """Get the quantum-circuit representations of the obvervables."""
         observable_circuits = np.zeros_like(observables, dtype=object)
 
         for index in np.ndindex(*observables.shape):
             observable = observables[index]
 
-            pauli_strings, coeffs = zip(*observable.items())
+            pauli_strings, coeffs = zip(*observable.items(), strict=False)
             paulis = SparsePauliOp(pauli_strings, coeffs).paulis
 
             observable_circuits_list = []

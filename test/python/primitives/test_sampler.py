@@ -77,7 +77,7 @@ def compare_probs(
 
     assert len(prob) == len(target)
 
-    for p, targ in zip(prob, target):
+    for p, targ in zip(prob, target, strict=False):
         for key, t_val in targ.items():
             if key in p:
                 assert abs(p[key] - t_val) < tolerance

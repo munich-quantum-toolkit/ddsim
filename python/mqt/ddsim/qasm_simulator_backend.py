@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import TYPE_CHECKING, Any, Union, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from mqt.core import load
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from qiskit.circuit import Parameter
     from qiskit.circuit.parameterexpression import ParameterValueType
 
-    Parameters = Union[Mapping[Parameter, ParameterValueType], Sequence[ParameterValueType]]
+    Parameters = Mapping[Parameter, ParameterValueType] | Sequence[ParameterValueType]
 
 
 class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
@@ -121,11 +121,12 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
             raise ValueError(msg)
 
         bound_circuits = [
-            qc.assign_parameters(parameters=values) for qc, values in zip(quantum_circuits, parameter_values)
+            qc.assign_parameters(parameters=values)
+            for qc, values in zip(quantum_circuits, parameter_values, strict=False)
         ]
 
         # fix the circuit names
-        for qcb, qc in zip(bound_circuits, quantum_circuits):
+        for qcb, qc in zip(bound_circuits, quantum_circuits, strict=False):
             qcb.name = qc.name
 
         return bound_circuits
