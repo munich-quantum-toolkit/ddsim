@@ -106,7 +106,7 @@ counts = job.result().get_counts(circ)
 print(counts)
 ```
 
-**Detailed documentation on all available methods, options, and input formats is available at [ReadTheDocs](https://mqt.readthedocs.io/projects/ddsim).**
+**Detailed documentation and examples are available at [ReadTheDocs](https://mqt.readthedocs.io/projects/ddsim).**
 
 ## System Requirements and Building
 
