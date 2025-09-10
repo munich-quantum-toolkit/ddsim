@@ -76,11 +76,11 @@ def observables() -> list[SparsePauliOp]:
     ]
 
 
-def get_evs(result: PubResult) -> NDArray[float]:
+def get_evs(result: PubResult) -> NDArray[np.float64]:
     """Get the expected values from a PubResult."""
     assert isinstance(result, PubResult)
     assert isinstance(result.data, DataBin)
-    return result.data["evs"]
+    return np.asarray(result.data["evs"], dtype=np.float64)
 
 
 def test_run__single_circuit__single_observable__without_parameters(

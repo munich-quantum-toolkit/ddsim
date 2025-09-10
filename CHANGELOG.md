@@ -9,8 +9,9 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
-### Changed
+### Removed
 
+- 🔥 Drop support for Python 3.9 ([#645]) ([**@denialhaag**])
 - 🔥 Stop testing on and shipping wheels for x86 macOS systems ([#640]) ([**@denialhaag**])
 
 ## [2.0.0] - 2025-08-04
@@ -61,6 +62,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
 [#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
 [#614]: https://github.com/munich-quantum-toolkit/ddsim/pull/614
 [#610]: https://github.com/munich-quantum-toolkit/ddsim/pull/610

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import functools
 from concurrent import futures
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 from qiskit.providers import JobError, JobStatus, JobV1
 
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from qiskit.providers import BackendV2
     from qiskit.result import Result
 
-    Parameters = Union[Mapping[Parameter, ParameterValueType], Sequence[ParameterValueType]]
+    Parameters = Mapping[Parameter, ParameterValueType] | Sequence[ParameterValueType]
 
 
 def requires_submit(func: Callable[..., Any]) -> Callable[..., Any]:

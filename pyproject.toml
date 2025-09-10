@@ -38,7 +38,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -46,7 +45,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Development Status :: 5 - Production/Stable",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "mqt.core[qiskit]~=3.2.1",
     "qiskit>=1.1",
@@ -143,9 +142,6 @@ filterwarnings = [
   # Qiskit 2.1 deprecations
   'ignore:.*``qiskit.circuit.library.n_local.*`` is deprecated as of Qiskit 2.1.*:DeprecationWarning:',
   'ignore:.*``qiskit.circuit.library.blueprintcircuit.BlueprintCircuit`` is deprecated as of Qiskit 2.1',
-  # Qiskit 2.1 starts to warn about the upcoming Python 3.9 removal in Qiskit 2.3.
-  # We will drop 3.9 support around the same time, at which point this warning filter can be removed
-  'ignore:.*Using Qiskit with Python 3.9 is deprecated as of the 2.1.0 release.*:DeprecationWarning:',
 ]
 
 [tool.coverage]
@@ -162,7 +158,7 @@ run.disable_warnings = [
 [tool.mypy]
 files = ["python/mqt", "test/python", "noxfile.py"]
 mypy_path = ["$MYPY_CONFIG_FILE_DIR/src"]
-python_version = "3.9"
+python_version = "3.10"
 warn_unused_configs = true
 enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 strict = true
@@ -347,8 +343,7 @@ docs = [
   "sphinxext-opengraph>=0.10.0",
   "breathe>=4.36.0",
   "graphviz>=0.20.3",
-  "sphinx>=7.4.7",
-  "sphinx>=8.1.3; python_version >= '3.10'",
+  "sphinx>=8.1.3",
   "sphinx>=8.2.3; python_version >= '3.11'",
 ]
 test = [
