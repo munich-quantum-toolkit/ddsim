@@ -111,7 +111,7 @@ print(counts)
 ## System Requirements and Building
 
 Building the project requires a C++ compiler with support for C++20 and CMake 3.24 or newer.
-For detail on how to build the project, please refer to the [documentation](https://mqt.readthedocs.io/projects/ddsim).
+For details on how to build the project, please refer to the [documentation](https://mqt.readthedocs.io/projects/ddsim).
 Building (and running) is continuously tested under Linux, macOS, and Windows using the [latest available system versions for GitHub Actions](https://github.com/actions/runner-images).
 MQT DDSIM is compatible with all [officially supported Python versions](https://devguide.python.org/versions/).
 
