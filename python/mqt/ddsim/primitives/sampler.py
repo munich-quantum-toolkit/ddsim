@@ -31,9 +31,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from qiskit.circuit import ClassicalRegister
-    from qiskit.primitives.containers import (
-        SamplerPubLike,
-    )
+    from qiskit.primitives.containers import SamplerPubLike
 
 
 class Sampler(BaseSamplerV2):  # type: ignore[misc]
