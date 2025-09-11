@@ -8,10 +8,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
-from qiskit import QuantumCircuit, qasm2
+from qiskit import qasm2
 
 from mqt.ddsim.stochastic_noise_simulator_backend import StochasticNoiseSimulatorBackend
+
+if TYPE_CHECKING:
+    from qiskit import QuantumCircuit
 
 
 @pytest.fixture

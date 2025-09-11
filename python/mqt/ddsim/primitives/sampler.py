@@ -14,13 +14,12 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from mqt.core import load
-from qiskit.circuit import ClassicalRegister, QuantumCircuit
+from qiskit.circuit import QuantumCircuit
 from qiskit.primitives.base import BaseSamplerV2
 from qiskit.primitives.containers import (
     BitArray,
     DataBin,
     PrimitiveResult,
-    SamplerPubLike,
     SamplerPubResult,
 )
 from qiskit.primitives.containers.sampler_pub import SamplerPub
@@ -30,6 +29,11 @@ from mqt.ddsim.pyddsim import CircuitSimulator
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+
+    from qiskit.circuit import ClassicalRegister
+    from qiskit.primitives.containers import (
+        SamplerPubLike,
+    )
 
 
 class Sampler(BaseSamplerV2):  # type: ignore[misc]
