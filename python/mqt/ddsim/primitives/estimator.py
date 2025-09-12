@@ -16,7 +16,7 @@ import numpy as np
 from mqt.core import load
 from qiskit.circuit import QuantumCircuit
 from qiskit.primitives.base import BaseEstimatorV2
-from qiskit.primitives.containers import DataBin, EstimatorPubLike, PrimitiveResult, PubResult
+from qiskit.primitives.containers import DataBin, PrimitiveResult, PubResult
 from qiskit.primitives.containers.estimator_pub import EstimatorPub
 from qiskit.primitives.primitive_job import PrimitiveJob
 from qiskit.quantum_info import Pauli, SparsePauliOp
@@ -28,6 +28,7 @@ if TYPE_CHECKING:
 
     from numpy.typing import NDArray
     from qiskit.primitives.container import ObservablesArray
+    from qiskit.primitives.containers import EstimatorPubLike
     from qiskit.quantum_info import Pauli
 
 

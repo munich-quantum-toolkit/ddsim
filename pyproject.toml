@@ -221,17 +221,10 @@ ignore = [
     "S101",    # Use of assert detected
     "S404",    # `subprocess` module is possibly insecure
 ]
-
-[tool.ruff.lint.flake8-tidy-imports.banned-api]
-"typing.Callable".msg = "Use collections.abc.Callable instead."
-"typing.Iterator".msg = "Use collections.abc.Iterator instead."
-"typing.Mapping".msg = "Use collections.abc.Mapping instead."
-"typing.Sequence".msg = "Use collections.abc.Sequence instead."
-"typing.Set".msg = "Use collections.abc.Set instead."
+future-annotations = true
 
 [tool.ruff.lint.isort]
 known-first-party = ["mqt.ddsim"]
-required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.per-file-ignores]
 "test/python/**" = ["T20", "ANN", "D10"]
