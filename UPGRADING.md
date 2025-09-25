@@ -4,13 +4,6 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
-### End of support for x86 macOS systems
-
-Starting with this release, MQT DDSIM no longer ships Python wheels for x86 macOS systems.
-This comes as a result of GitHub removing the `macos-13` runners from their infrastructure.
-Users on x86 macOS systems can still install MQT DDSIM from source as we continue to ship a source distribution.
-However, these systems are no longer tested in our CI and we can no longer guarantee that MQT DDSIM builds and runs correctly.
-
 ### End of support for Python 3.9
 
 Starting with this release, MQT DDSIM no longer supports Python 3.9.
