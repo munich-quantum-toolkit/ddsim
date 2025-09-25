@@ -11,16 +11,18 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import os
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import nox
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Generator, Sequence
 
 nox.needs_version = ">=2024.3.2"
 nox.options.default_venv_backend = "uv"
@@ -33,6 +35,17 @@ PYTHON_ALL_VERSIONS = ["3.10", "3.11", "3.12", "3.13"]
 
 if os.environ.get("CI", None):
     nox.options.error_on_missing_interpreters = True
+
+
+@contextlib.contextmanager
+def preserve_lockfile() -> Generator[None]:
+    """Preserve the lockfile by moving it to a temporary directory."""
+    with tempfile.TemporaryDirectory() as temp_dir_name:
+        shutil.move("uv.lock", f"{temp_dir_name}/uv.lock")
+        try:
+            yield
+        finally:
+            shutil.move(f"{temp_dir_name}/uv.lock", "uv.lock")
 
 
 @nox.session(reuse_venv=True)
@@ -101,25 +114,26 @@ def tests(session: nox.Session) -> None:
 @nox.session(reuse_venv=True, venv_backend="uv", python=PYTHON_ALL_VERSIONS)
 def minimums(session: nox.Session) -> None:
     """Test the minimum versions of dependencies."""
-    _run_tests(
-        session,
-        install_args=["--resolution=lowest-direct"],
-        run_args=["-Wdefault"],
-    )
-    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    session.run("uv", "tree", "--frozen", env=env)
-    session.run("uv", "lock", "--refresh", env=env)
+    with preserve_lockfile():
+        _run_tests(
+            session,
+            install_args=["--resolution=lowest-direct"],
+            run_args=["-Wdefault"],
+        )
+        env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
+        session.run("uv", "tree", "--frozen", env=env)
 
 
 @nox.session(reuse_venv=True, venv_backend="uv", python=PYTHON_ALL_VERSIONS)
 def qiskit(session: nox.Session) -> None:
     """Tests against the latest version of Qiskit."""
-    _run_tests(
-        session,
-        extra_command=["uv", "pip", "install", "qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git"],
-    )
-    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    session.run("uv", "pip", "show", "qiskit", env=env)
+    with preserve_lockfile():
+        _run_tests(
+            session,
+            extra_command=["uv", "pip", "install", "qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git"],
+        )
+        env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
+        session.run("uv", "pip", "show", "qiskit", env=env)
 
 
 @nox.session(reuse_venv=True)
