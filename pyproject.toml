@@ -276,9 +276,6 @@ enable = ["cpython-freethreading"]
 test-skip = [
     "cp3*t-*", # no freethreading qiskit wheels
     "cp*-win_arm64", # no numpy, qiskit, ... wheels
-    # TODO(denialhaag): Remove when all dependencies support Python 3.14
-    #   https://github.com/munich-quantum-toolkit/ddsim/issues/609
-    "cp314-*",
 ]
 
 # The mqt-core shared libraries are provided by the mqt-core Python package.
@@ -345,6 +342,7 @@ test = [
   "pytest-sugar>=1.0.0",
   "pytest-xdist>=3.7.0",
   "numpy>=2.1; python_version >= '3.13'",
+  "numpy>=2.3.2; python_version >= '3.14'",
 ]
 dev = [
   {include-group = "build"},
