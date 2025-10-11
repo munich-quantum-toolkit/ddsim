@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+### Added
+
+- 👷 Enable testing on Python 3.14 ([#674]) ([**@denialhaag**])
+
 ### Removed
 
 - 🔥 Drop support for Python 3.9 ([#645]) ([**@denialhaag**])
@@ -61,6 +65,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#674]: https://github.com/munich-quantum-toolkit/ddsim/pull/674
 [#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
 [#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
 [#614]: https://github.com/munich-quantum-toolkit/ddsim/pull/614
