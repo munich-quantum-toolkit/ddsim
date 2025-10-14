@@ -13,6 +13,10 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 - 👷 Enable testing on Python 3.14 ([#674]) ([**@denialhaag**])
 
+### Changed
+
+- ⬆️ Bump minimum required `mqt-core` version to `3.3.1` ([#681]) ([**@denialhaag**])
+
 ### Removed
 
 - 🔥 Drop support for Python 3.9 ([#645]) ([**@denialhaag**])
@@ -28,26 +32,26 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
 
 ### Changed
 
-- **Breaking**: ♻️ Streamline names of Python modules and classes ([#614]) ([**@denialhaag**])
-- **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610]) ([**@denialhaag**])
-- **Breaking**: ⬆️ Require C++20 ([#610]) ([**@denialhaag**])
-- **Breaking**: ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
-- **Breaking**: ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
-- **Breaking**: ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
+- ♻️ Streamline names of Python modules and classes ([#614]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610]) ([**@denialhaag**])
+- ⬆️ Require C++20 ([#610]) ([**@denialhaag**])
+- ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
 - ♻️ Move the C++ code for the Python bindings to the top-level `bindings` directory ([#567]) ([**@denialhaag**])
 - ♻️ Move all Python code (no tests) to the top-level `python` directory ([#567]) ([**@denialhaag**])
-- **Breaking**: ⬆️ Support Qiskit 2.0 ([#571]) ([**@denialhaag**])
-- **Breaking**: 🚚 Move MQT DDSIM to the [munich-quantum-toolkit] GitHub organization
-- **Breaking**: ♻️ Use the `mqt-core` Python package for handling circuits ([#336]) ([**@burgholzer**])
-- **Breaking**: ⬆️ Bump minimum required CMake version to `3.24.0` ([#538]) ([**@burgholzer**])
+- ⬆️ Support Qiskit 2.0 ([#571]) ([**@denialhaag**])
+- 🚚 Move MQT DDSIM to the [munich-quantum-toolkit] GitHub organization
+- ♻️ Use the `mqt-core` Python package for handling circuits ([#336]) ([**@burgholzer**])
+- ⬆️ Bump minimum required CMake version to `3.24.0` ([#538]) ([**@burgholzer**])
 - 📝 Rework existing project documentation ([#556]) ([**@burgholzer**])
 
 ### Removed
 
-- **Breaking**: 🔥 Remove methods for querying maximum node count ([#591]) ([**@denialhaag**])
-- **Breaking**: 🔥 Remove the TN flow from the path simulator ([#336]) ([**@burgholzer**])
-- **Breaking**: 🔥 Remove some superfluous C++ executables ([#336]) ([**@burgholzer**])
-- **Breaking**: 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538]) ([**@burgholzer**])
+- 🔥 Remove methods for querying maximum node count ([#591]) ([**@denialhaag**])
+- 🔥 Remove the TN flow from the path simulator ([#336]) ([**@burgholzer**])
+- 🔥 Remove some superfluous C++ executables ([#336]) ([**@burgholzer**])
+- 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538]) ([**@burgholzer**])
 
 ### Fixed
 
@@ -65,6 +69,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#681]: https://github.com/munich-quantum-toolkit/ddsim/pull/681
 [#674]: https://github.com/munich-quantum-toolkit/ddsim/pull/674
 [#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
 [#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
