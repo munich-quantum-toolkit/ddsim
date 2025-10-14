@@ -97,12 +97,12 @@ TEST(CircuitSimTest, BarrierStatement) {
   ASSERT_EQ("1", ddsim.additionalStatistics().at("single_shots"));
 }
 
-TEST(CircuitSimTest, ClassicControlledOp) {
+TEST(CircuitSimTest, IfElseOp) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
-  quantumComputation->classicControlled(
-      qc::X, 1U, quantumComputation->getClassicalRegisters().at("c"));
+  quantumComputation->if_(qc::X, 1U,
+                          quantumComputation->getClassicalRegisters().at("c"));
 
   CircuitSimulator ddsim(
       std::move(quantumComputation),
@@ -114,11 +114,11 @@ TEST(CircuitSimTest, ClassicControlledOp) {
   ASSERT_EQ("11", m);
 }
 
-TEST(CircuitSimTest, ClassicControlledOpAsNop) {
+TEST(CircuitSimTest, IfElseOpAsNop) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
-  quantumComputation->classicControlled(
+  quantumComputation->if_(
       qc::X, 1U, quantumComputation->getClassicalRegisters().at("c"), 0);
 
   CircuitSimulator ddsim(

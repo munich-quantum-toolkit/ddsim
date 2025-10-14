@@ -90,11 +90,11 @@ TEST(DeterministicNoiseSimTest, TestingResetGate) {
   ASSERT_EQ(m.find("10")->second, 1000);
 }
 
-TEST(DeterministicNoiseSimTest, ClassicControlledOp) {
+TEST(DeterministicNoiseSimTest, IfElseOp) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
-  quantumComputation->classicControlled(qc::X, 1U, {0, 1});
+  quantumComputation->if_(qc::X, 1U, {0, 1});
   quantumComputation->measure(0, 0);
   quantumComputation->measure(1, 1);
 
