@@ -206,8 +206,8 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          std::clog << "Expected value: " << expectedValue << "\n";
-          std::clog << "Actual value: " << actualValue << "\n";
+          // std::clog << "Expected value: " << expectedValue << "\n";
+          // std::clog << "Actual value: " << actualValue << "\n";
 
           if (actualValue == expectedValue) {
             auto thenOp = ifElseOp->getThenOp()->clone();

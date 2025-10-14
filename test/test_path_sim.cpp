@@ -302,7 +302,7 @@ TEST(TaskBasedSimTest, DynamicCircuitSupport) {
   auto qc = std::make_unique<qc::QuantumComputation>(1, 1);
   qc->h(0);
   qc->measure(0, 0);
-  qc->if_(qc::X, 0, 0, 1);
+  qc->if_(qc::X, 0, 0, true);
   std::cout << *qc << "\n";
 
   PathSimulator sim(std::move(qc));
