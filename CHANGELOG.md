@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ### Added
 
+- ✨ Add support for Qiskit's `IfElse` operations ([#681]) ([**@denialhaag**])
 - 👷 Enable testing on Python 3.14 ([#674]) ([**@denialhaag**])
 
 ### Changed
