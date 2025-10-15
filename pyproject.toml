@@ -11,7 +11,7 @@ requires = [
     "scikit-build-core>=0.11.2",
     "setuptools-scm>=8.3.1",
     "pybind11>=3.0.0",
-    "mqt.core~=3.2.1",
+    "mqt.core~=3.3.1",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -47,7 +47,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "mqt.core[qiskit]~=3.2.1",
+    "mqt.core[qiskit]~=3.3.1",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -286,10 +286,10 @@ test-skip = [
 environment = { DEPLOY = "ON" }
 # The SOVERSION needs to be updated when the shared libraries are updated.
 repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
---exclude libmqt-core-ir.so.3.2 \
---exclude libmqt-core-qasm.so.3.2 \
---exclude libmqt-core-circuit-optimizer.so.3.2 \
---exclude libmqt-core-dd.so.3.2"""
+--exclude libmqt-core-ir.so.3.3 \
+--exclude libmqt-core-qasm.so.3.3 \
+--exclude libmqt-core-circuit-optimizer.so.3.3 \
+--exclude libmqt-core-dd.so.3.3"""
 
 [tool.cibuildwheel.macos]
 environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }
@@ -318,7 +318,7 @@ build = [
   "pybind11>=3.0.0",
   "scikit-build-core>=0.11.2",
   "setuptools-scm>=8.3.1",
-  "mqt.core~=3.2.1",
+  "mqt.core~=3.3.1",
 ]
 docs = [
   "furo>=2024.8.6",

@@ -17,7 +17,7 @@
 #include "dd/Package.hpp"
 #include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
-#include "ir/operations/ClassicControlledOperation.hpp"
+#include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -107,12 +107,11 @@ void StochasticNoiseSimulator::runStochSimulationForId(
         continue;
       }
       dd::mEdge operation;
-      if (op->isClassicControlledOperation()) {
+      if (op->isIfElseOperation()) {
         // Check if the operation is controlled by a classical register
-        const auto& classicOp =
-            dynamic_cast<const qc::ClassicControlledOperation&>(*op);
-        localRootEdge = applyClassicControlledOperation(
-            classicOp, localRootEdge, *localDD, classicValues);
+        const auto& classicOp = dynamic_cast<const qc::IfElseOperation&>(*op);
+        localRootEdge = applyIfElseOperation(classicOp, localRootEdge, *localDD,
+                                             classicValues);
         continue;
       }
       const auto& targets = op->getTargets();

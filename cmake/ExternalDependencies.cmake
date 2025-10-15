@@ -41,11 +41,11 @@ if(BUILD_MQT_DDSIM_BINDINGS)
 endif()
 
 # cmake-format: off
-set(MQT_CORE_MINIMUM_VERSION 3.2.1
+set(MQT_CORE_MINIMUM_VERSION 3.3.1
     CACHE STRING "MQT Core minimum version")
-set(MQT_CORE_VERSION 3.2.1
+set(MQT_CORE_VERSION 3.3.1
     CACHE STRING "MQT Core version")
-set(MQT_CORE_REV "0425f88169f573e4505b49703c4cadf3699ccbcd"
+set(MQT_CORE_REV "1392d1b70f7331ea1ebb3247587c62cb8fd1d078"
     CACHE STRING "MQT Core identifier (tag, branch or commit hash)")
 set(MQT_CORE_REPO_OWNER "munich-quantum-toolkit"
     CACHE STRING "MQT Core repository owner (change when using a fork)")

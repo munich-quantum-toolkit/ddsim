@@ -131,12 +131,12 @@ TEST(StochNoiseSimTest, Reordering) {
   ddsim.simulate(1);
 }
 
-TEST(StochNoiseSimTest, SimulateClassicControlledOpWithError) {
+TEST(StochNoiseSimTest, SimulateIfElseOpWithError) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
   quantumComputation->h(0);
-  quantumComputation->classicControlled(qc::X, 1U, {0, 1});
+  quantumComputation->if_(qc::X, 1U, {0, 1});
 
   for (qc::Qubit i = 0; i < 2; i++) {
     quantumComputation->measure(i, i);
