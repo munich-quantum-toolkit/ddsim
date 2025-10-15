@@ -15,7 +15,8 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/StateGeneration.hpp"
-#include "ir/operations/ClassicControlledOperation.hpp"
+#include "ir/Definitions.hpp"
+#include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -85,7 +86,7 @@ auto CircuitSimulator::analyseCircuit() -> CircuitAnalysis {
   auto analysis = CircuitAnalysis{};
 
   for (auto& op : *qc) {
-    if (op->isClassicControlledOperation() || op->getType() == qc::Reset) {
+    if (op->isIfElseOperation() || op->getType() == qc::Reset) {
       analysis.isDynamic = true;
     }
     if (const auto* measure = dynamic_cast<qc::NonUnitaryOperation*>(op.get());
@@ -156,7 +157,7 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
                 (static_cast<double>(approximationInfo.stepNumber + 1))));
 
   for (auto& op : *qc) {
-    if (op->isNonUnitaryOperation()) {
+    if (op->isNonUnitaryOperation() && !op->isIfElseOperation()) {
       if (ignoreNonUnitaries) {
         continue;
       }
@@ -186,32 +187,61 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
       }
       dd->garbageCollect();
     } else {
-      if (op->isClassicControlledOperation()) {
-        if (auto* classicallyControlledOp =
-                dynamic_cast<qc::ClassicControlledOperation*>(op.get())) {
-          const auto startIndex = static_cast<std::uint16_t>(
-              classicallyControlledOp->getParameter().at(0));
-          const auto length = static_cast<std::uint16_t>(
-              classicallyControlledOp->getParameter().at(1));
-          const auto expectedValue =
-              classicallyControlledOp->getExpectedValue();
-          unsigned int actualValue = 0;
+      if (op->isIfElseOperation()) {
+        if (auto* ifElseOp = dynamic_cast<qc::IfElseOperation*>(op.get())) {
+          const auto& comparisonKind = ifElseOp->getComparisonKind();
+
+          std::size_t startIndex = 0;
+          std::size_t length = 0;
+          std::uint64_t expectedValue = 0;
+          if (ifElseOp->getControlBit().has_value()) {
+            startIndex = ifElseOp->getControlBit().value();
+            length = 1;
+            expectedValue = ifElseOp->getExpectedValueBit() ? 1U : 0U;
+          } else {
+            startIndex = ifElseOp->getControlRegister()->getStartIndex();
+            length = ifElseOp->getControlRegister()->getSize();
+            expectedValue = ifElseOp->getExpectedValueRegister();
+          }
+
+          std::uint64_t actualValue = 0;
           for (std::size_t i = 0; i < length; i++) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          // std::clog << "expected " << expected_value << " and actual value
-          // was " << actual_value << "\n";
+          const auto control = [actualValue, expectedValue, comparisonKind]() {
+            switch (comparisonKind) {
+            case qc::ComparisonKind::Eq:
+              return actualValue == expectedValue;
+            case qc::ComparisonKind::Neq:
+              return actualValue != expectedValue;
+            case qc::ComparisonKind::Lt:
+              return actualValue < expectedValue;
+            case qc::ComparisonKind::Leq:
+              return actualValue <= expectedValue;
+            case qc::ComparisonKind::Gt:
+              return actualValue > expectedValue;
+            case qc::ComparisonKind::Geq:
+              return actualValue >= expectedValue;
+            }
+            qc::unreachable();
+          }();
 
-          if (actualValue != expectedValue) {
+          if (control) {
+            auto thenOp = ifElseOp->getThenOp()->clone();
+            applyOperationToState(thenOp);
+          } else if (ifElseOp->getElseOp() != nullptr) {
+            auto elseOp = ifElseOp->getElseOp()->clone();
+            applyOperationToState(elseOp);
+          } else {
             continue;
           }
         } else {
-          throw std::runtime_error(
-              "Dynamic cast to ClassicControlledOperation failed.");
+          throw std::runtime_error("Dynamic cast to IfElseOperation failed.");
         }
+      } else {
+        applyOperationToState(op);
       }
-      applyOperationToState(op);
 
       if (approximationInfo.stepNumber > 0 &&
           approximationInfo.stepFidelity < 1.0) {

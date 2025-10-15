@@ -15,7 +15,12 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#210)._
 
 ### Added
 
+- ✨ Add support for Qiskit's `IfElse` operations ([#681]) ([**@denialhaag**])
 - 👷 Enable testing on Python 3.14 ([#674]) ([**@denialhaag**])
+
+### Changed
+
+- ⬆️ Bump minimum required `mqt-core` version to `3.3.1` ([#681]) ([**@denialhaag**])
 
 ### Removed
 
@@ -70,6 +75,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#681]: https://github.com/munich-quantum-toolkit/ddsim/pull/681
 [#674]: https://github.com/munich-quantum-toolkit/ddsim/pull/674
 [#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
 [#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
