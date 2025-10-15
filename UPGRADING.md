@@ -67,9 +67,9 @@ The default compilers of our test systems support all relevant features of the s
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/qmap/compare/v2.1.0...HEAD
-[2.1.0]: https://github.com/munich-quantum-toolkit/qmap/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/munich-quantum-toolkit/qmap/compare/v1.24.0...v2.0.0
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v1.24.0...v2.0.0
 
 <!-- Other links -->
 
