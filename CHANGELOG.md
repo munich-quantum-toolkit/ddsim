@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-10-15
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#210)._
+
 ### Added
 
 - ✨ Add support for Qiskit's `IfElse` operations ([#681]) ([**@denialhaag**])
@@ -64,7 +68,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.1.0
 [2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.0.0
 [1.24.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v1.24.0
 
