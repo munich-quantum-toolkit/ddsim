@@ -209,9 +209,6 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          // std::clog << "Expected value: " << expectedValue << "\n";
-          // std::clog << "Actual value: " << actualValue << "\n";
-
           const auto control = [actualValue, expectedValue, comparisonKind]() {
             switch (comparisonKind) {
             case qc::ComparisonKind::Eq:
