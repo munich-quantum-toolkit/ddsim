@@ -15,7 +15,9 @@
 #include "dd/DDDefinitions.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/OpType.hpp"
+#include "ir/operations/StandardOperation.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -97,12 +99,13 @@ TEST(CircuitSimTest, BarrierStatement) {
   ASSERT_EQ("1", ddsim.additionalStatistics().at("single_shots"));
 }
 
-TEST(CircuitSimTest, IfElseOp) {
+TEST(CircuitSimTest, IfElseOpBitEq) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
-  quantumComputation->if_(qc::X, 1U,
-                          quantumComputation->getClassicalRegisters().at("c"));
+  quantumComputation->ifElse(std::make_unique<qc::StandardOperation>(1U, qc::X),
+                             std::make_unique<qc::StandardOperation>(1U, qc::I),
+                             0U, 1U, qc::Eq);
 
   CircuitSimulator ddsim(
       std::move(quantumComputation),
@@ -114,12 +117,13 @@ TEST(CircuitSimTest, IfElseOp) {
   ASSERT_EQ("11", m);
 }
 
-TEST(CircuitSimTest, IfElseOpAsNop) {
+TEST(CircuitSimTest, IfElseOpBitNeq) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
-  quantumComputation->if_(
-      qc::X, 1U, quantumComputation->getClassicalRegisters().at("c"), 0);
+  quantumComputation->ifElse(std::make_unique<qc::StandardOperation>(1U, qc::X),
+                             std::make_unique<qc::StandardOperation>(1U, qc::I),
+                             0U, 1U, qc::Neq);
 
   CircuitSimulator ddsim(
       std::move(quantumComputation),
@@ -129,6 +133,120 @@ TEST(CircuitSimTest, IfElseOpAsNop) {
   auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterEq) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Eq);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("11", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterNeq) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Neq);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("01", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterLt) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Lt);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("01", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterLeq) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Leq);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("11", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterGt) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Gt);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("01", m);
+}
+
+TEST(CircuitSimTest, IfElseOpRegisterGeq) {
+  auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
+  quantumComputation->x(0);
+  quantumComputation->measure(0, 0);
+  quantumComputation->ifElse(
+      std::make_unique<qc::StandardOperation>(1U, qc::X),
+      std::make_unique<qc::StandardOperation>(1U, qc::I),
+      quantumComputation->getClassicalRegisters().at("c"), 1U, qc::Geq);
+
+  CircuitSimulator ddsim(
+      std::move(quantumComputation),
+      ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
+  ddsim.simulate(1);
+
+  auto m = ddsim.measureAll(false);
+
+  ASSERT_EQ("11", m);
 }
 
 TEST(CircuitSimTest, DestructiveMeasurementAll) {
