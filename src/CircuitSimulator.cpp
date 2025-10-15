@@ -188,6 +188,8 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
     } else {
       if (op->isIfElseOperation()) {
         if (auto* ifElseOp = dynamic_cast<qc::IfElseOperation*>(op.get())) {
+          const auto& comparisonKind = ifElseOp->getComparisonKind();
+
           std::size_t startIndex = 0;
           std::size_t length = 0;
           std::uint64_t expectedValue = 0;
@@ -209,7 +211,25 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
           // std::clog << "Expected value: " << expectedValue << "\n";
           // std::clog << "Actual value: " << actualValue << "\n";
 
-          if (actualValue == expectedValue) {
+          const auto control = [actualValue, expectedValue, comparisonKind]() {
+            switch (comparisonKind) {
+            case qc::ComparisonKind::Eq:
+              return actualValue == expectedValue;
+            case qc::ComparisonKind::Neq:
+              return actualValue != expectedValue;
+            case qc::ComparisonKind::Lt:
+              return actualValue < expectedValue;
+            case qc::ComparisonKind::Leq:
+              return actualValue <= expectedValue;
+            case qc::ComparisonKind::Gt:
+              return actualValue > expectedValue;
+            case qc::ComparisonKind::Geq:
+              return actualValue >= expectedValue;
+            }
+            qc::unreachable();
+          }();
+
+          if (control) {
             auto thenOp = ifElseOp->getThenOp()->clone();
             applyOperationToState(thenOp);
           } else if (ifElseOp->getElseOp() != nullptr) {
