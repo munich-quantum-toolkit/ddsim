@@ -15,6 +15,7 @@
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/StateGeneration.hpp"
+#include "ir/Definitions.hpp"
 #include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"

@@ -105,7 +105,7 @@ TEST(CircuitSimTest, IfElseOpBitEq) {
   quantumComputation->measure(0, 0);
   quantumComputation->ifElse(std::make_unique<qc::StandardOperation>(1U, qc::X),
                              std::make_unique<qc::StandardOperation>(1U, qc::I),
-                             0U, 1U, qc::Eq);
+                             0U, true, qc::Eq);
 
   CircuitSimulator ddsim(
       std::move(quantumComputation),
@@ -123,7 +123,7 @@ TEST(CircuitSimTest, IfElseOpBitNeq) {
   quantumComputation->measure(0, 0);
   quantumComputation->ifElse(std::make_unique<qc::StandardOperation>(1U, qc::X),
                              std::make_unique<qc::StandardOperation>(1U, qc::I),
-                             0U, 1U, qc::Neq);
+                             0U, true, qc::Neq);
 
   CircuitSimulator ddsim(
       std::move(quantumComputation),
