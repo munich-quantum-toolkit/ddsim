@@ -131,7 +131,7 @@ addopts = [
   "--showlocals",
   "--numprocesses=auto", # Automatically use all available CPU cores for parallel testing
 ]
-log_cli_level = "INFO"
+log_level = "INFO"
 xfail_strict = true
 filterwarnings = [
   "error",
