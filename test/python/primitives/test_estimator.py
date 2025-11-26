@@ -30,7 +30,21 @@ def estimator() -> Estimator:
 
 
 @pytest.fixture
-def circuits() -> list[QuantumCircuit]:
+def circuit_0() -> QuantumCircuit:
+    """The circuit fixture for the tests in this file."""
+    return RealAmplitudes(num_qubits=2, reps=2)
+
+
+@pytest.fixture
+def circuits_1() -> tuple[QuantumCircuit, QuantumCircuit]:
+    """The circuit fixture for the tests in this file."""
+    param_qc_1 = RealAmplitudes(num_qubits=2, reps=2)
+    param_qc_2 = RealAmplitudes(num_qubits=2, reps=3)
+    return param_qc_1, param_qc_2
+
+
+@pytest.fixture
+def circuits_2() -> tuple[QuantumCircuit, QuantumCircuit, QuantumCircuit]:
     """The circuit fixture for the tests in this file."""
     qc_z = QuantumCircuit(1)
     qc_z.ry(np.pi / 2, 0)
@@ -43,17 +57,13 @@ def circuits() -> list[QuantumCircuit]:
     qc_x = QuantumCircuit(1)
     qc_x.ry(np.pi / 2, 0)
 
-    ansatz = RealAmplitudes(num_qubits=2, reps=2)
-    param_qc_1 = RealAmplitudes(num_qubits=2, reps=2)
-    param_qc_2 = RealAmplitudes(num_qubits=2, reps=3)
-
-    return [ansatz, [param_qc_1, param_qc_2], [qc_x, qc_y, qc_z]]
+    return qc_x, qc_y, qc_z
 
 
 @pytest.fixture
-def observables() -> list[SparsePauliOp]:
+def observable_0() -> SparsePauliOp:
     """The observable fixture for the tests in this file."""
-    observable = SparsePauliOp.from_list([
+    return SparsePauliOp.from_list([
         ("II", -1.052373245772859),
         ("IZ", 0.39793742484318045),
         ("ZI", -0.39793742484318045),
@@ -61,19 +71,25 @@ def observables() -> list[SparsePauliOp]:
         ("XX", 0.18093119978423156),
     ])
 
-    pauli_x = Pauli("X")
-    pauli_y = Pauli("Y")
-    pauli_z = Pauli("Z")
 
+@pytest.fixture
+def observables_1() -> tuple[SparsePauliOp, SparsePauliOp, SparsePauliOp]:
+    """The observable fixture for the tests in this file."""
     hamiltonian_1 = SparsePauliOp.from_list([("II", 1), ("IZ", 2), ("XI", 3)])
     hamiltonian_2 = SparsePauliOp.from_list([("IZ", 1)])
     hamiltonian_3 = SparsePauliOp.from_list([("ZI", 1), ("ZZ", 1)])
 
-    return [
-        observable,
-        [hamiltonian_1, hamiltonian_2, hamiltonian_3],
-        [pauli_x, pauli_y, pauli_z],
-    ]
+    return hamiltonian_1, hamiltonian_2, hamiltonian_3
+
+
+@pytest.fixture
+def observables_2() -> tuple[Pauli, Pauli, Pauli]:
+    """The observable fixture for the tests in this file."""
+    pauli_x = Pauli("X")
+    pauli_y = Pauli("Y")
+    pauli_z = Pauli("Z")
+
+    return pauli_x, pauli_y, pauli_z
 
 
 def get_evs(result: PubResult) -> NDArray[np.float64]:
@@ -84,13 +100,13 @@ def get_evs(result: PubResult) -> NDArray[np.float64]:
 
 
 def test_run__single_circuit__single_observable__without_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuit_0: QuantumCircuit,
+    observable_0: SparsePauliOp,
     estimator: Estimator,
 ) -> None:
     """Test single circuit and single observable, without parameters."""
-    circuit = circuits[0].assign_parameters([0, 1, 1, 2, 3, 5])
-    observable = observables[0]
+    circuit = circuit_0.assign_parameters([0, 1, 1, 2, 3, 5])
+    observable = observable_0
 
     result = estimator.run([(circuit, [observable])]).result()
     assert isinstance(result, PrimitiveResult)
@@ -99,10 +115,11 @@ def test_run__single_circuit__single_observable__without_parameters(
 
 
 def test_run__single_circuit__operator_observable__without_parameters(
-    circuits: list[QuantumCircuit], estimator: Estimator
+    circuit_0: QuantumCircuit,
+    estimator: Estimator,
 ) -> None:
     """Test single circuit and an operator observable, without parameters."""
-    circuit = circuits[0].assign_parameters([0, 1, 1, 2, 3, 5])
+    circuit = circuit_0.assign_parameters([0, 1, 1, 2, 3, 5])
     matrix = SparsePauliOp.from_operator(
         Operator([
             [-1.06365335, 0.0, 0.0, 0.1809312],
@@ -119,28 +136,25 @@ def test_run__single_circuit__operator_observable__without_parameters(
 
 
 def test_run__single_circuit__single_observable__with_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuit_0: QuantumCircuit,
+    observable_0: SparsePauliOp,
     estimator: Estimator,
 ) -> None:
     """Test single circuit and single observable, with parameters."""
-    circuit = circuits[0]
-    observable = observables[0]
-
-    result = estimator.run([(circuit, [observable], [[0, 1, 1, 2, 3, 5]])]).result()
+    result = estimator.run([(circuit_0, [observable_0], [[0, 1, 1, 2, 3, 5]])]).result()
     assert isinstance(result, PrimitiveResult)
     evs = get_evs(result[0])
     np.testing.assert_allclose(evs, [-1.284366511861733], rtol=1e-7, atol=1e-7)
 
 
 def test_run__single_circuit__multiple_observables__without_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuits_2: tuple[QuantumCircuit, QuantumCircuit, QuantumCircuit],
+    observables_2: tuple[Pauli, Pauli, Pauli],
     estimator: Estimator,
 ) -> None:
     """Test single circuit and multiple observables, without parameters."""
-    qc_x, _, _ = circuits[2]
-    pauli_x, pauli_y, pauli_z = observables[2]
+    qc_x, _, _ = circuits_2
+    pauli_x, pauli_y, pauli_z = observables_2
 
     result = estimator.run([(qc_x, [pauli_x, pauli_y, pauli_z])]).result()
     assert isinstance(result, PrimitiveResult)
@@ -149,13 +163,13 @@ def test_run__single_circuit__multiple_observables__without_parameters(
 
 
 def test_run__multiple_circuits__multiple_observables__without_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuits_2: tuple[QuantumCircuit, QuantumCircuit, QuantumCircuit],
+    observables_2: tuple[Pauli, Pauli, Pauli],
     estimator: Estimator,
 ) -> None:
     """Test multiple circuits and multiple observables, without parameters."""
-    qc_x, qc_y, qc_z = circuits[2]
-    pauli_x, pauli_y, pauli_z = observables[2]
+    qc_x, qc_y, qc_z = circuits_2
+    pauli_x, pauli_y, pauli_z = observables_2
 
     result = estimator.run([(qc_x, [pauli_x]), (qc_y, [pauli_y]), (qc_z, [pauli_z])]).result()
     assert isinstance(result, PrimitiveResult)
@@ -171,13 +185,13 @@ def test_run__multiple_circuits__multiple_observables__without_parameters(
 
 
 def test_run__single_circuit__multiple_observables__with_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuits_1: tuple[QuantumCircuit, QuantumCircuit],
+    observables_1: tuple[SparsePauliOp, SparsePauliOp, SparsePauliOp],
     estimator: Estimator,
 ) -> None:
     """Test single circuits and multiple observables, with parameters."""
-    psi_1, _ = circuits[1]
-    hamiltonian_1, _, hamiltonian_3 = observables[1]
+    psi_1, _ = circuits_1
+    hamiltonian_1, _, hamiltonian_3 = observables_1
     theta_1, theta_2 = (
         [0, 1, 1, 2, 3, 5],
         [1, 2, 3, 4, 5, 6],
@@ -190,13 +204,13 @@ def test_run__single_circuit__multiple_observables__with_parameters(
 
 
 def test_run__multiple_circuits__multiple_observables__with_parameters(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuits_1: tuple[QuantumCircuit, QuantumCircuit],
+    observables_1: tuple[SparsePauliOp, SparsePauliOp, SparsePauliOp],
     estimator: Estimator,
 ) -> None:
     """Test multiple circuits and multiple observables, with parameters."""
-    psi_1, psi_2 = circuits[1]
-    hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables[1]
+    psi_1, psi_2 = circuits_1
+    hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables_1
     theta_1, theta_2, theta_3 = (
         [0, 1, 1, 2, 3, 5],
         [0, 1, 1, 2, 3, 5, 8, 13],
@@ -223,13 +237,13 @@ def test_run__multiple_circuits__multiple_observables__with_parameters(
 
 
 def test_sequential_runs(
-    circuits: list[QuantumCircuit],
-    observables: list[SparsePauliOp],
+    circuits_1: tuple[QuantumCircuit, QuantumCircuit],
+    observables_1: tuple[SparsePauliOp, SparsePauliOp, SparsePauliOp],
     estimator: Estimator,
 ) -> None:
     """Test sequential runs."""
-    psi_1, psi_2 = circuits[1]
-    hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables[1]
+    psi_1, psi_2 = circuits_1
+    hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables_1
     theta_1, theta_2, theta_3 = (
         [0, 1, 1, 2, 3, 5],
         [0, 1, 1, 2, 3, 5, 8, 13],
