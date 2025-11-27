@@ -10,16 +10,16 @@
 
 from __future__ import annotations
 
-import os
 import sys
-from pathlib import Path
 
 # under Windows, make sure to add the appropriate DLL directory to the PATH
 if sys.platform == "win32":
 
     def _dll_patch() -> None:
         """Add the DLL directory to the PATH."""
-        import sysconfig  # noqa: PLC0415
+        import os  # noqa: PLC0415 because only needed on Windows
+        import sysconfig  # noqa: PLC0415 because only needed on Windows
+        from pathlib import Path  # noqa: PLC0415 because only needed on Windows
 
         site_packages = Path(sysconfig.get_paths()["purelib"])
         bin_dir = site_packages / "mqt" / "core" / "bin"
