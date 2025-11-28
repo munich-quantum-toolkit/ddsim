@@ -157,7 +157,7 @@ jobs:
       clang-version: 20
       cmake-args: -DBUILD_MQT_DDSIM_BINDINGS=ON
       files-changed-only: true
-      install-pkgs: "pybind11==3.0.0"
+      install-pkgs: "pybind11==3.0.1"
       setup-python: true
       cpp-linter-extra-args: "-std=c++20"
 

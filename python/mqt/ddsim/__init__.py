@@ -17,9 +17,9 @@ if sys.platform == "win32":
 
     def _dll_patch() -> None:
         """Add the DLL directory to the PATH."""
-        import os
-        import sysconfig
-        from pathlib import Path
+        import os  # noqa: PLC0415 because only needed on Windows
+        import sysconfig  # noqa: PLC0415 because only needed on Windows
+        from pathlib import Path  # noqa: PLC0415 because only needed on Windows
 
         site_packages = Path(sysconfig.get_paths()["purelib"])
         bin_dir = site_packages / "mqt" / "core" / "bin"

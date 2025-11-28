@@ -11,6 +11,7 @@ from __future__ import annotations
 import pathlib
 import unittest
 
+import numpy as np
 from mqt.core import load
 from mqt.core.ir import QuantumComputation
 
@@ -56,7 +57,6 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
         assert "111" in result
 
     def test_standalone_simple_approximation(self) -> None:
-        import numpy as np
 
         # creates a state with <2% probability of measuring |1x>
         circ = QuantumComputation(2)
@@ -93,7 +93,6 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
 
     @staticmethod
     def test_expectation_value_local_operators() -> None:
-        import numpy as np
 
         max_qubits = 3
         for qubits in range(1, max_qubits + 1):
@@ -112,7 +111,6 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
 
     @staticmethod
     def test_expectation_value_global_operators() -> None:
-        import numpy as np
 
         max_qubits = 3
         for qubits in range(1, max_qubits + 1):
