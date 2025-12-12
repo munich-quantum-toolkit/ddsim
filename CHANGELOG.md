@@ -115,4 +115,3 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
 [GitHub Release Notes]: https://github.com/munich-quantum-toolkit/ddsim/releases
 [munich-quantum-toolkit]: https://github.com/munich-quantum-toolkit
-
