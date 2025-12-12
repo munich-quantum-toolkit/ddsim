@@ -28,22 +28,22 @@ license = "MIT"
 license-files = ["LICENSE.md"]
 
 classifiers = [
-    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
-    "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: C++",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Development Status :: 5 - Production/Stable",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Typing :: Typed",
 ]
 requires-python = ">=3.10"
 dependencies = [
@@ -272,13 +272,13 @@ ignore = ["GH200"]
 
 [tool.cibuildwheel]
 build = "cp3*"
-skip = "*-musllinux_*"
+skip = ["*-musllinux_*", "cp313t-*"]
 archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
 build-frontend = "build[uv]"
 enable = ["cpython-freethreading"]
 test-skip = [
-    "cp3*t-*", # no freethreading qiskit wheels
+    "cp3??t-*", # no freethreading qiskit wheels
     "cp*-win_arm64", # no numpy, qiskit, ... wheels
 ]
 
@@ -300,7 +300,7 @@ environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }
 repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel} --ignore-missing-dependencies"
 
 [tool.cibuildwheel.windows]
-before-build = "uv pip install delvewheel>=1.9.0"
+before-build = "uv pip install delvewheel>=1.11.2"
 repair-wheel-command = """delvewheel repair -w {dest_dir} {wheel} --namespace-pkg mqt \
 --exclude mqt-core-ir.dll \
 --exclude mqt-core-qasm.dll \

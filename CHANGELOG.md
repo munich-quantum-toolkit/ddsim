@@ -9,6 +9,17 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+### Changed
+
+- 👷 Stop testing on `ubuntu-22.04` and `ubuntu-22.04-arm` runners ([#740]) ([**@denialhaag**])
+- 👷 Stop testing with `clang-19` and start testing with `clang-21` ([#740]) ([**@denialhaag**])
+- 👷 Fix macOS tests with Homebrew Clang via new `munich-quantum-toolkit/workflows` version ([#740]) ([**@denialhaag**])
+- 👷 Re-enable macOS tests with GCC by disabling module scanning ([#740]) ([**@denialhaag**])
+
+### Removed
+
+- 🔥 Remove wheel builds for Python 3.13t ([#740]) ([**@denialhaag**])
+
 ## [2.1.0] - 2025-10-15
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#210)._
@@ -75,6 +86,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#740]: https://github.com/munich-quantum-toolkit/ddsim/pull/740
 [#681]: https://github.com/munich-quantum-toolkit/ddsim/pull/681
 [#674]: https://github.com/munich-quantum-toolkit/ddsim/pull/674
 [#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
