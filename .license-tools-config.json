@@ -1,9 +1,10 @@
 {
   "author": {
-    "name": "Chair for Design Automation, TUM\nCopyright (c) 2025 Munich Quantum Software Company GmbH",
-    "years": [2023, 2025]
+    "name": "Chair for Design Automation, TUM\nCopyright (c) 2025 - 2026 Munich Quantum Software Company GmbH",
+    "years": [2023, 2026]
   },
   "force_author": true,
+  "force_license": true,
   "license": "MIT",
   "title": false,
   "include": ["**/*"],
