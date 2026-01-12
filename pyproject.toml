@@ -1,5 +1,5 @@
-# Copyright (c) 2023 - 2025 Chair for Design Automation, TUM
-# Copyright (c) 2025 Munich Quantum Software Company GmbH
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
 # All rights reserved.
 #
 # SPDX-License-Identifier: MIT
@@ -36,6 +36,7 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Programming Language :: C++",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -267,7 +268,10 @@ optin = "optin"
 
 
 [tool.repo-review]
-ignore = ["GH200"]
+ignore = [
+  "GH200", # We use Renovate instead of Dependabot
+  "PC160", # We use a mirror of crate-ci/typos
+]
 
 
 [tool.cibuildwheel]
@@ -311,7 +315,11 @@ environment = { CMAKE_ARGS = "-T ClangCL" }
 
 [tool.uv]
 required-version = ">=0.5.20"
-reinstall-package = ["mqt.ddsim"]
+cache-keys = [
+  { file = "pyproject.toml" },
+  { git = { commit = true, tags = true } },
+  { file = "bindings/**/*.cpp"},
+]
 
 [tool.uv.sources]
 mqt-ddsim = { workspace = true }
