@@ -311,7 +311,11 @@ environment = { CMAKE_ARGS = "-T ClangCL" }
 
 [tool.uv]
 required-version = ">=0.5.20"
-reinstall-package = ["mqt.ddsim"]
+cache-keys = [
+  { file = "pyproject.toml" },
+  { git = { commit = true, tags = true } },
+  { file = "bindings/**/*.cpp"},
+]
 
 [tool.uv.sources]
 mqt-ddsim = { workspace = true }
