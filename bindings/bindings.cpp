@@ -21,17 +21,12 @@
 #include <list>
 #include <memory>
 #include <nanobind/nanobind.h>
-#include <nanobind/stl/complex.h>       // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/list.h>          // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/map.h>           // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/optional.h>      // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/pair.h>          // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/set.h>           // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/string.h>        // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/unique_ptr.h>    // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/unordered_map.h> // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/variant.h>       // NOLINT(misc-include-cleaner)
-#include <nanobind/stl/vector.h>        // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/complex.h>  // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/list.h>     // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/map.h>      // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/optional.h> // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/string.h>   // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/vector.h>   // NOLINT(misc-include-cleaner)
 #include <optional>
 #include <string>
 #include <utility>
@@ -75,6 +70,7 @@ nb::class_<Sim> createSimulator(nb::module_ m, const std::string& name) {
 
 } // namespace
 
+// NOLINTNEXTLINE(performance-unnecessary-value-param)
 NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
   nb::module_::import_("mqt.core.dd");
   m.doc() = "Python interface for the MQT DDSIM quantum circuit simulator";
@@ -240,7 +236,7 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
       .def(
           "__init__",
           [](PathSimulator* self, const qc::QuantumComputation& circ,
-             PathSimulator::Configuration config) {
+             const PathSimulator::Configuration& config) {
             auto qc = std::make_unique<qc::QuantumComputation>(circ);
             new (self) PathSimulator(std::move(qc), config);
           },
@@ -274,8 +270,8 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
       .def(
           "__init__",
           [](UnitarySimulator* self, const qc::QuantumComputation& circ,
-             double stepFidelity, unsigned int stepNumber,
-             const std::string& approximationStrategy, std::int64_t seed,
+             const double stepFidelity, const unsigned int stepNumber,
+             const std::string& approximationStrategy, const std::int64_t seed,
              UnitarySimulator::Mode mode) {
             auto qc = std::make_unique<qc::QuantumComputation>(circ);
             const auto approx = ApproximationInfo{
