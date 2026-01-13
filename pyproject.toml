@@ -315,6 +315,11 @@ repair-wheel-command = """delvewheel repair -w {dest_dir} {wheel} --namespace-pk
 --exclude mqt-core-dd.dll"""
 environment = { CMAKE_ARGS = "-T ClangCL" }
 
+[[tool.cibuildwheel.overrides]]
+select = "cp312-*"
+inherit.repair-wheel-command = "append"
+repair-wheel-command = "uvx abi3audit --strict --report {wheel}"
+
 
 [tool.uv]
 required-version = ">=0.5.20"
