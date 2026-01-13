@@ -70,7 +70,7 @@ wheel.install-dir = "mqt/ddsim"
 # Explicitly set the package directory
 wheel.packages = ["python/mqt"]
 
-# Enable stable ABI builds for CPython 3.12+
+# Enable Stable ABI builds for CPython 3.12+
 wheel.py-api = "cp312"
 
 # Set required Ninja version
