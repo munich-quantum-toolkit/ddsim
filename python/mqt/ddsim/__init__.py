@@ -13,7 +13,7 @@ from __future__ import annotations
 import sys
 
 # under Windows, make sure to add the appropriate DLL directory to the PATH
-if sys.platform == "win32":
+if sys.platform == "win32":  # noqa: RUF067 This is actually required on Windows
 
     def _dll_patch() -> None:
         """Add the DLL directory to the PATH."""
