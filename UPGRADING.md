@@ -4,12 +4,24 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
-### Removal of Python 3.13t wheels
+### Python wheels
 
+This release contains two changes to the distributed wheels.
+
+First, we have removed all wheels for Python 3.13t.
 Free-threading Python was introduced as an experimental feature in Python 3.13.
 It became stable in Python 3.14.
-To conserve space on PyPI and to reduce the CD build times, we have removed all wheels for Python 3.13t from our CI.
-We continue to provide wheels for the regular Python versions 3.10 to 3.14, as well as 3.14t.
+
+Second, for Python 3.12+, we are now providing Stable ABI wheels instead of separate version-specific wheels.
+This was enabled by migrating our Python bindings from `pybind11` to `nanobind`.
+
+Both of these changes were made in the interest of conserving PyPI space and reducing CI/CD build times.
+The full list of wheels now reads:
+
+- 3.10
+- 3.11
+- 3.12+ Stable ABI
+- 3.14t
 
 ## [2.1.0]
 

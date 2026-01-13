@@ -25,7 +25,7 @@ list(
   ${BASEPOINT}/../../core/lib
   ${BASEPOINT}/../../core/lib64)
 
-add_mqt_python_binding(
+add_mqt_python_binding_nanobind(
   DDSIM
   ${MQT_DDSIM_TARGET_NAME}-bindings
   bindings.cpp
@@ -34,5 +34,4 @@ add_mqt_python_binding(
   INSTALL_DIR
   .
   LINK_LIBS
-  MQT::DDSim
-  pybind11_json)
+  MQT::DDSim)

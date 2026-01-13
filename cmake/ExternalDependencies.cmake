@@ -25,27 +25,19 @@ if(BUILD_MQT_DDSIM_BINDINGS)
     message(STATUS "Found mqt-core package: ${mqt-core_DIR}")
   endif()
 
-  if(NOT SKBUILD)
-    # Manually detect the installed pybind11 package.
-    execute_process(
-      COMMAND "${Python_EXECUTABLE}" -m pybind11 --cmakedir
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-      OUTPUT_VARIABLE pybind11_DIR)
-
-    # Add the detected directory to the CMake prefix path.
-    list(APPEND CMAKE_PREFIX_PATH "${pybind11_DIR}")
-  endif()
-
-  # add pybind11 library
-  find_package(pybind11 3.0.1 CONFIG REQUIRED)
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    OUTPUT_VARIABLE nanobind_ROOT)
+  find_package(nanobind CONFIG REQUIRED)
 endif()
 
 # cmake-format: off
-set(MQT_CORE_MINIMUM_VERSION 3.3.1
+set(MQT_CORE_MINIMUM_VERSION 3.4.0
     CACHE STRING "MQT Core minimum version")
-set(MQT_CORE_VERSION 3.3.3
+set(MQT_CORE_VERSION 3.4.0
     CACHE STRING "MQT Core version")
-set(MQT_CORE_REV "8c9f6ab24968401e450812fc0ff7d05b5ae07a63"
+set(MQT_CORE_REV "6bcc01e7d135058c6439c64fdd5f14b65ab88816"
     CACHE STRING "MQT Core identifier (tag, branch or commit hash)")
 set(MQT_CORE_REPO_OWNER "munich-quantum-toolkit"
     CACHE STRING "MQT Core repository owner (change when using a fork)")
@@ -96,15 +88,6 @@ if(BUILD_MQT_DDSIM_CLI)
   set(CXXOPTS_URL https://github.com/jarro2783/cxxopts/archive/refs/tags/v${CXXOPTS_VERSION}.tar.gz)
   FetchContent_Declare(cxxopts URL ${CXXOPTS_URL} FIND_PACKAGE_ARGS ${CXXOPTS_VERSION})
   list(APPEND FETCH_PACKAGES cxxopts)
-endif()
-
-if(BUILD_MQT_DDSIM_BINDINGS)
-  # add pybind11_json library
-  FetchContent_Declare(
-    pybind11_json
-    GIT_REPOSITORY https://github.com/pybind/pybind11_json
-    FIND_PACKAGE_ARGS)
-  list(APPEND FETCH_PACKAGES pybind11_json)
 endif()
 
 # Make all declared dependencies available.

@@ -20,54 +20,25 @@
 #include <cstdint>
 #include <list>
 #include <memory>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/complex.h>  // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/list.h>     // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/map.h>      // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/optional.h> // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/string.h>   // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/vector.h>   // NOLINT(misc-include-cleaner)
 #include <optional>
-#include <pybind11/cast.h>
-#include <pybind11/native_enum.h>
-#include <pybind11/numpy.h> // NOLINT(misc-include-cleaner)
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h> // NOLINT(misc-include-cleaner)
 #include <string>
 #include <utility>
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nb::literals;
 
 namespace {
 
-template <class Simulator, typename... Args>
-std::unique_ptr<Simulator>
-constructSimulator(const qc::QuantumComputation& circ,
-                   const double stepFidelity, const unsigned int stepNumber,
-                   const std::string& approximationStrategy,
-                   const std::int64_t seed, Args&&... args) {
-  auto qc = std::make_unique<qc::QuantumComputation>(circ);
-  const auto approx =
-      ApproximationInfo{stepFidelity, stepNumber,
-                        ApproximationInfo::fromString(approximationStrategy)};
-  if constexpr (std::is_same_v<Simulator, PathSimulator>) {
-    return std::make_unique<Simulator>(std::move(qc),
-                                       std::forward<Args>(args)...);
-  } else {
-    if (seed < 0) {
-      return std::make_unique<Simulator>(std::move(qc), approx,
-                                         std::forward<Args>(args)...);
-    }
-    return std::make_unique<Simulator>(std::move(qc), approx, seed,
-                                       std::forward<Args>(args)...);
-  }
-}
-
-template <class Simulator, typename... Args>
-std::unique_ptr<Simulator>
-constructSimulatorWithoutSeed(const qc::QuantumComputation& circ,
-                              Args&&... args) {
-  return constructSimulator<Simulator>(circ, 1., 1, "fidelity", -1,
-                                       std::forward<Args>(args)...);
-}
-
 template <class Sim>
-py::class_<Sim> createSimulator(py::module_ m, const std::string& name) {
-  auto sim = py::class_<Sim>(std::move(m), name.c_str());
+nb::class_<Sim> createSimulator(nb::module_ m, const std::string& name) {
+  auto sim = nb::class_<Sim>(std::move(m), name.c_str());
   sim.def("get_number_of_qubits", &Sim::getNumberOfQubits,
           "Get the number of qubits")
       .def("get_name", &Sim::getName, "Get the name of the simulator")
@@ -99,17 +70,35 @@ py::class_<Sim> createSimulator(py::module_ m, const std::string& name) {
 
 } // namespace
 
-PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
-  py::module::import("mqt.core.dd");
+// NOLINTNEXTLINE(performance-unnecessary-value-param)
+NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
+  nb::module_::import_("mqt.core.dd");
   m.doc() = "Python interface for the MQT DDSIM quantum circuit simulator";
 
   // Circuit Simulator
   auto circuitSimulator =
       createSimulator<CircuitSimulator>(m, "CircuitSimulator");
   circuitSimulator
-      .def(py::init<>(&constructSimulator<CircuitSimulator>), "circ"_a,
-           "approximation_step_fidelity"_a = 1., "approximation_steps"_a = 1,
-           "approximation_strategy"_a = "fidelity", "seed"_a = -1)
+      .def(
+          "__init__",
+          [](CircuitSimulator* self, const qc::QuantumComputation& circ,
+             const double stepFidelity, const unsigned int stepNumber,
+             const std::string& approximationStrategy,
+             const std::int64_t seed) {
+            auto qc = std::make_unique<qc::QuantumComputation>(circ);
+            const auto approx = ApproximationInfo{
+                stepFidelity, stepNumber,
+                ApproximationInfo::fromString(approximationStrategy)};
+            if (seed < 0) {
+              new (self) CircuitSimulator(std::move(qc), approx);
+            } else {
+              new (self) CircuitSimulator(std::move(qc), approx,
+                                          static_cast<std::uint64_t>(seed));
+            }
+          },
+          "circ"_a, "approximation_step_fidelity"_a = 1.,
+          "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
+          "seed"_a = -1)
       .def("expectation_value", &CircuitSimulator::expectationValue,
            "observable"_a);
 
@@ -117,8 +106,28 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
   auto stochasticNoiseSimulator =
       createSimulator<StochasticNoiseSimulator>(m, "StochasticNoiseSimulator");
   stochasticNoiseSimulator.def(
-      py::init<>(&constructSimulator<StochasticNoiseSimulator, std::string,
-                                     double, std::optional<double>, double>),
+      "__init__",
+      [](StochasticNoiseSimulator* self, const qc::QuantumComputation& circ,
+         const double stepFidelity, const unsigned int stepNumber,
+         const std::string& approximationStrategy, const std::int64_t seed,
+         const std::string& noiseEffects, const double noiseProbability,
+         std::optional<double> ampDampingProb,
+         const double multiQubitGateFactor) {
+        auto qc = std::make_unique<qc::QuantumComputation>(circ);
+        const auto approx = ApproximationInfo{
+            stepFidelity, stepNumber,
+            ApproximationInfo::fromString(approximationStrategy)};
+        if (seed < 0) {
+          new (self) StochasticNoiseSimulator(
+              std::move(qc), approx, noiseEffects, noiseProbability,
+              ampDampingProb, multiQubitGateFactor);
+        } else {
+          new (self) StochasticNoiseSimulator(
+              std::move(qc), approx, static_cast<std::size_t>(seed),
+              noiseEffects, noiseProbability, ampDampingProb,
+              multiQubitGateFactor);
+        }
+      },
       "circ"_a, "approximation_step_fidelity"_a = 1.,
       "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
       "seed"_a = -1, "noise_effects"_a = "APD", "noise_probability"_a = 0.01,
@@ -129,103 +138,156 @@ PYBIND11_MODULE(MQT_DDSIM_MODULE_NAME, m, py::mod_gil_not_used()) {
       createSimulator<DeterministicNoiseSimulator>(
           m, "DeterministicNoiseSimulator");
   deterministicNoiseSimulator.def(
-      py::init<>(&constructSimulator<DeterministicNoiseSimulator, std::string,
-                                     double, std::optional<double>, double>),
+      "__init__",
+      [](DeterministicNoiseSimulator* self, const qc::QuantumComputation& circ,
+         const double stepFidelity, const unsigned int stepNumber,
+         const std::string& approximationStrategy, const std::int64_t seed,
+         const std::string& noiseEffects, const double noiseProbability,
+         std::optional<double> ampDampingProb,
+         const double multiQubitGateFactor) {
+        auto qc = std::make_unique<qc::QuantumComputation>(circ);
+        const auto approx = ApproximationInfo{
+            stepFidelity, stepNumber,
+            ApproximationInfo::fromString(approximationStrategy)};
+        if (seed < 0) {
+          new (self) DeterministicNoiseSimulator(
+              std::move(qc), approx, noiseEffects, noiseProbability,
+              ampDampingProb, multiQubitGateFactor);
+        } else {
+          new (self) DeterministicNoiseSimulator(
+              std::move(qc), approx, static_cast<std::size_t>(seed),
+              noiseEffects, noiseProbability, ampDampingProb,
+              multiQubitGateFactor);
+        }
+      },
       "circ"_a, "approximation_step_fidelity"_a = 1.,
       "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
       "seed"_a = -1, "noise_effects"_a = "APD", "noise_probability"_a = 0.01,
       "amp_damping_probability"_a = 0.02, "multi_qubit_gate_factor"_a = 2);
 
   // Hybrid Schrödinger-Feynman Simulator
-  py::native_enum<HybridSchrodingerFeynmanSimulator::Mode>(
-      m, "HybridSimulatorMode", "enum.Enum",
-      "Enumeration of modes for the :class:`~.HybridSimulator`.")
+  nb::enum_<HybridSchrodingerFeynmanSimulator::Mode>(m, "HybridSimulatorMode")
       .value("DD", HybridSchrodingerFeynmanSimulator::Mode::DD)
-      .value("amplitude", HybridSchrodingerFeynmanSimulator::Mode::Amplitude)
-      .finalize();
+      .value("amplitude", HybridSchrodingerFeynmanSimulator::Mode::Amplitude);
 
   auto hsfSimulator =
       createSimulator<HybridSchrodingerFeynmanSimulator>(m, "HybridSimulator");
   hsfSimulator
-      .def(py::init<>(
-               &constructSimulator<HybridSchrodingerFeynmanSimulator,
-                                   HybridSchrodingerFeynmanSimulator::Mode&,
-                                   const std::size_t&>),
-           "circ"_a, "approximation_step_fidelity"_a = 1.,
-           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
-           "seed"_a = -1,
-           "mode"_a = HybridSchrodingerFeynmanSimulator::Mode::Amplitude,
-           "nthreads"_a = 2)
+      .def(
+          "__init__",
+          [](HybridSchrodingerFeynmanSimulator* self,
+             const qc::QuantumComputation& circ, const double stepFidelity,
+             const unsigned int stepNumber,
+             const std::string& approximationStrategy, const std::int64_t seed,
+             HybridSchrodingerFeynmanSimulator::Mode mode,
+             const std::size_t nthreads) {
+            auto qc = std::make_unique<qc::QuantumComputation>(circ);
+            const auto approx = ApproximationInfo{
+                stepFidelity, stepNumber,
+                ApproximationInfo::fromString(approximationStrategy)};
+            if (seed < 0) {
+              new (self) HybridSchrodingerFeynmanSimulator(
+                  std::move(qc), approx, mode, nthreads);
+            } else {
+              new (self) HybridSchrodingerFeynmanSimulator(
+                  std::move(qc), approx, static_cast<std::uint64_t>(seed), mode,
+                  nthreads);
+            }
+          },
+          "circ"_a, "approximation_step_fidelity"_a = 1.,
+          "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
+          "seed"_a = -1,
+          "mode"_a = HybridSchrodingerFeynmanSimulator::Mode::Amplitude,
+          "nthreads"_a = 2)
       .def("get_mode", &HybridSchrodingerFeynmanSimulator::getMode)
       .def("get_final_amplitudes",
            &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation);
 
   // Path Simulator
-  py::native_enum<PathSimulator::Configuration::Mode>(
-      m, "PathSimulatorMode", "enum.Enum",
-      "Enumeration of modes for the :class:`~.PathSimulator`.")
+  nb::enum_<PathSimulator::Configuration::Mode>(m, "PathSimulatorMode")
       .value("sequential", PathSimulator::Configuration::Mode::Sequential)
       .value("pairwise_recursive",
              PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping)
       .value("bracket", PathSimulator::Configuration::Mode::BracketGrouping)
       .value("alternating", PathSimulator::Configuration::Mode::Alternating)
-      .value("gate_cost", PathSimulator::Configuration::Mode::GateCost)
-      .finalize();
+      .value("gate_cost", PathSimulator::Configuration::Mode::GateCost);
 
-  py::class_<PathSimulator::Configuration>(
+  nb::class_<PathSimulator::Configuration>(
       m, "PathSimulatorConfiguration",
       "Configuration options for the :class:`~.PathSimulator`.")
-      .def(py::init())
-      .def_readwrite(
+      .def(nb::init())
+      .def_rw(
           "mode", &PathSimulator::Configuration::mode,
           R"pbdoc(Setting the mode used for determining a simulation path)pbdoc")
-      .def_readwrite("bracket_size", &PathSimulator::Configuration::bracketSize,
-                     R"pbdoc(Size of the brackets one wants to combine)pbdoc")
-      .def_readwrite(
-          "starting_point", &PathSimulator::Configuration::startingPoint,
-          R"pbdoc(Start of the alternating or gate_cost strategy)pbdoc")
-      .def_readwrite(
+      .def_rw("bracket_size", &PathSimulator::Configuration::bracketSize,
+              R"pbdoc(Size of the brackets one wants to combine)pbdoc")
+      .def_rw("starting_point", &PathSimulator::Configuration::startingPoint,
+              R"pbdoc(Start of the alternating or gate_cost strategy)pbdoc")
+      .def_rw(
           "gate_cost", &PathSimulator::Configuration::gateCost,
           R"pbdoc(A list that contains the number of gates which are considered in each step)pbdoc")
-      .def_readwrite("seed", &PathSimulator::Configuration::seed,
-                     R"pbdoc(Seed for the simulator)pbdoc")
+      .def_rw("seed", &PathSimulator::Configuration::seed,
+              R"pbdoc(Seed for the simulator)pbdoc")
       .def("json", &PathSimulator::Configuration::json)
       .def("__repr__", &PathSimulator::Configuration::toString);
 
   auto pathSimulator = createSimulator<PathSimulator>(m, "PathSimulator");
   pathSimulator
-      .def(py::init<>(
-               &constructSimulatorWithoutSeed<PathSimulator,
-                                              PathSimulator::Configuration&>),
-           "circ"_a, "config"_a = PathSimulator::Configuration())
-      .def(py::init<>(&constructSimulatorWithoutSeed<
-                      PathSimulator, PathSimulator::Configuration::Mode&,
-                      const std::size_t&, const std::size_t&,
-                      const std::list<std::size_t>&, const std::size_t&>),
-           "circ"_a, "mode"_a = PathSimulator::Configuration::Mode::Sequential,
-           "bracket_size"_a = 2, "starting_point"_a = 0,
-           "gate_cost"_a = std::list<std::size_t>{}, "seed"_a = 0)
+      .def(
+          "__init__",
+          [](PathSimulator* self, const qc::QuantumComputation& circ,
+             const PathSimulator::Configuration& config) {
+            auto qc = std::make_unique<qc::QuantumComputation>(circ);
+            new (self) PathSimulator(std::move(qc), config);
+          },
+          "circ"_a, "config"_a = PathSimulator::Configuration())
+      .def(
+          "__init__",
+          [](PathSimulator* self, const qc::QuantumComputation& circ,
+             PathSimulator::Configuration::Mode mode,
+             const std::size_t bracketSize, const std::size_t startingPoint,
+             const std::list<std::size_t>& gateCost, const std::size_t seed) {
+            auto qc = std::make_unique<qc::QuantumComputation>(circ);
+            new (self) PathSimulator(std::move(qc), mode, bracketSize,
+                                     startingPoint, gateCost, seed);
+          },
+          "circ"_a, "mode"_a = PathSimulator::Configuration::Mode::Sequential,
+          "bracket_size"_a = 2, "starting_point"_a = 0,
+          "gate_cost"_a = std::list<std::size_t>{}, "seed"_a = 0)
       .def("set_simulation_path",
-           py::overload_cast<const PathSimulator::SimulationPath::Components&,
+           nb::overload_cast<const PathSimulator::SimulationPath::Components&,
                              bool>(&PathSimulator::setSimulationPath),
            "path"_a, "assume_correct_order"_a = false);
 
   // Unitary Simulator
-  py::native_enum<UnitarySimulator::Mode>(
-      m, "UnitarySimulatorMode", "enum.Enum",
-      "Enumeration of modes for the :class:`~.UnitarySimulator`.")
+  nb::enum_<UnitarySimulator::Mode>(m, "UnitarySimulatorMode")
       .value("recursive", UnitarySimulator::Mode::Recursive)
-      .value("sequential", UnitarySimulator::Mode::Sequential)
-      .finalize();
+      .value("sequential", UnitarySimulator::Mode::Sequential);
 
   auto unitarySimulator =
       createSimulator<UnitarySimulator>(m, "UnitarySimulator");
   unitarySimulator
-      .def(py::init<>(
-               &constructSimulator<UnitarySimulator, UnitarySimulator::Mode&>),
-           "circ"_a, "approximation_step_fidelity"_a = 1.,
-           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
-           "seed"_a = -1, "mode"_a = UnitarySimulator::Mode::Recursive)
+      .def(
+          "__init__",
+          [](UnitarySimulator* self, const qc::QuantumComputation& circ,
+             const double stepFidelity, const unsigned int stepNumber,
+             const std::string& approximationStrategy, const std::int64_t seed,
+             UnitarySimulator::Mode mode) {
+            auto qc = std::make_unique<qc::QuantumComputation>(circ);
+            const auto approx = ApproximationInfo{
+                stepFidelity, stepNumber,
+                ApproximationInfo::fromString(approximationStrategy)};
+            if (seed < 0) {
+              new (self) UnitarySimulator(std::move(qc), approx, mode);
+            } else {
+              new (self)
+                  UnitarySimulator(std::move(qc), approx,
+                                   static_cast<std::uint64_t>(seed), mode);
+            }
+          },
+          "circ"_a, "approximation_step_fidelity"_a = 1.,
+          "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
+          "seed"_a = -1, "mode"_a = UnitarySimulator::Mode::Recursive)
       .def("get_mode", &UnitarySimulator::getMode)
       .def("get_construction_time", &UnitarySimulator::getConstructionTime)
       .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount)
