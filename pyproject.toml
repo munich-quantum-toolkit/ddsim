@@ -330,7 +330,7 @@ build = [
   "pybind11>=3.0.1",
   "scikit-build-core>=0.11.6",
   "setuptools-scm>=9.2.2",
-  "mqt.core~=3.3.1",
+  "mqt.core~=3.4.0",
 ]
 docs = [
   "breathe>=4.36.0",
