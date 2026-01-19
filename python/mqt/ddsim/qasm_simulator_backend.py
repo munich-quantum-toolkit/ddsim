@@ -187,7 +187,7 @@ class QasmSimulatorBackend(BackendV2):
             time_taken=end - start,
         )
 
-    def _run_experiment(self, qc: QuantumCircuit, **options: dict[str, Any]) -> ExperimentResult:
+    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:
         start_time = time.time()
         approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
         approximation_steps = cast("int", options.get("approximation_steps", 1))

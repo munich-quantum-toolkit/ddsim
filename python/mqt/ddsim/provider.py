@@ -67,7 +67,7 @@ class DDSIMProvider:
         self,
         name: str | None = None,
         filters: Callable[[Backend], bool] | None = None,
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ) -> list[BackendV2]:
         """Return a list of backends matching the specified criteria.
 
