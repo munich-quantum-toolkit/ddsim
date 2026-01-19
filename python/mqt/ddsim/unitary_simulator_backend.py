@@ -65,8 +65,7 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
         """Return the target of the backend."""
         return self._US_TARGET
 
-    @classmethod
-    def _run_experiment(cls, qc: QuantumCircuit, **options: Any) -> ExperimentResult:
+    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:  # noqa: PLR6301
         start_time = time.time()
         seed = options.get("seed", -1)
         mode = options.get("mode", "recursive")

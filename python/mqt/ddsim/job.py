@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import functools
 from concurrent import futures
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from qiskit.providers import JobError, JobStatus, JobV1
 
@@ -48,7 +48,7 @@ def requires_submit(func: Callable[..., Any]) -> Callable[..., Any]:
     return _wrapper
 
 
-class DDSIMJob(JobV1):  # type: ignore[misc]
+class DDSIMJob(JobV1):
     """DDSIMJob class.
 
     Attributes:
@@ -153,6 +153,6 @@ class DDSIMJob(JobV1):  # type: ignore[misc]
         # in any of the previous states, is PENDING, ergo INITIALIZING for us.
         return JobStatus.INITIALIZING
 
-    def backend(self) -> BackendV2 | None:
+    def backend(self) -> BackendV2:
         """Return the instance of the backend used for this job."""
-        return self._backend
+        return cast("BackendV2", self._backend)

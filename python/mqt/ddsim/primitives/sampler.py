@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from qiskit.primitives.containers import SamplerPubLike
 
 
-class Sampler(BaseSamplerV2):  # type: ignore[misc]
+class Sampler(BaseSamplerV2):
     """DDSIM implementation of Qiskit's sampler.
 
     The implementation is adapted from Qiskit's `StatevectorSampler`.
@@ -90,6 +90,8 @@ class Sampler(BaseSamplerV2):  # type: ignore[misc]
         circuit = pub.circuit
         parameter_values = pub.parameter_values
         shots = pub.shots
+        if shots is None:
+            shots = self._default_shots
 
         bound_circuits = parameter_values.bind_all(circuit)
         bound_circuits_list = np.asarray(bound_circuits, dtype=object).tolist()

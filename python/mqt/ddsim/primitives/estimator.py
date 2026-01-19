@@ -27,12 +27,12 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from numpy.typing import NDArray
-    from qiskit.primitives.container import ObservablesArray
     from qiskit.primitives.containers import EstimatorPubLike
+    from qiskit.primitives.containers.observables_array import ObservablesArray
     from qiskit.quantum_info import Pauli
 
 
-class Estimator(BaseEstimatorV2):  # type: ignore[misc]
+class Estimator(BaseEstimatorV2):
     """DDSIM implementation of Qiskit's estimator.
 
     The implementation is adapted from Qiskit's `StatevectorEstimator`.
@@ -119,7 +119,7 @@ class Estimator(BaseEstimatorV2):  # type: ignore[misc]
         if isinstance(qubit_indices_list, int):
             qubit_indices_list = [qubit_indices_list]
 
-        return qubit_indices_list  # type: ignore[no-any-return]
+        return qubit_indices_list
 
     @staticmethod
     def _get_observable_circuit(pauli: Pauli, num_qubits: int, qubit_indices: list[int]) -> QuantumCircuit:

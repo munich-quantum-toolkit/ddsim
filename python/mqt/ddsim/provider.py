@@ -28,7 +28,7 @@ from .unitary_simulator_backend import UnitarySimulatorBackend
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from qiskit.providers import BackendV2
+    from qiskit.providers import Backend, BackendV2
 
 
 class DDSIMProvider:
@@ -66,7 +66,7 @@ class DDSIMProvider:
     def backends(
         self,
         name: str | None = None,
-        filters: Callable[[list[BackendV2]], list[BackendV2]] | None = None,
+        filters: Callable[[Backend], bool] | None = None,
         **kwargs: dict[str, Any],
     ) -> list[BackendV2]:
         """Return a list of backends matching the specified criteria.
