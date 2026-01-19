@@ -140,8 +140,8 @@ class QasmSimulatorBackend(BackendV2):
 
         Args:
             run_input: The quantum circuit(s) to run.
-            parameter_values: The parameter values to bind to the circuits.
             options: Additional run options.
+                Supports `parameter_values` to bind parameter values to the circuits.
 
         Returns:
             The DDSIM job
