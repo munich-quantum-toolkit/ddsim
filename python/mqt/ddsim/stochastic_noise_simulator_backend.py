@@ -52,8 +52,7 @@ class StochasticNoiseSimulatorBackend(QasmSimulatorBackend):
             multi_qubit_gate_factor=2,
         )
 
-    @staticmethod
-    def _run_experiment(qc: QuantumCircuit, **options: dict[str, Any]) -> ExperimentResult:
+    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:  # noqa: PLR6301
         start_time = time.time()
         approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
         approximation_steps = cast("int", options.get("approximation_steps", 1))

@@ -131,7 +131,9 @@ def test_run__multiple_circuits__without_parameters(
 def test_run__single_circuit__with_parameters(circuits: list[QuantumCircuit], sampler: Sampler, shots: int) -> None:
     """Test single circuit with parameters."""
     param_qc = circuits[2]
-    parameter_values = [[0, 1, 1, 2, 3, 5], [1, 2, 3, 4, 5, 6]]
+    parameters_a = dict(zip(param_qc.parameters, [0, 1, 1, 2, 3, 5], strict=True))
+    parameters_b = dict(zip(param_qc.parameters, [1, 2, 3, 4, 5, 6], strict=True))
+    parameters_combined = dict(zip(param_qc.parameters, [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [5, 6]], strict=True))
     target = [
         {
             "00": 0.1309248462975777,
@@ -148,7 +150,7 @@ def test_run__single_circuit__with_parameters(circuits: list[QuantumCircuit], sa
     ]
 
     # Test multiple PUBs
-    result = sampler.run([(param_qc, [parameter_values[0]]), (param_qc, [parameter_values[1]])], shots=shots).result()
+    result = sampler.run([(param_qc, parameters_a), (param_qc, parameters_b)], shots=shots).result()
     assert isinstance(result, PrimitiveResult)
 
     probs = get_probs(result[0].data["meas"], shots)
@@ -158,7 +160,7 @@ def test_run__single_circuit__with_parameters(circuits: list[QuantumCircuit], sa
     compare_probs(probs, target[1])
 
     # Test single PUB
-    result = sampler.run([(param_qc, parameter_values)], shots=shots).result()
+    result = sampler.run([(param_qc, parameters_combined)], shots=shots).result()
     assert isinstance(result, PrimitiveResult)
 
     probs = get_probs(result[0].data["meas"][0], shots)
@@ -172,11 +174,9 @@ def test_sequential_runs(circuits: list[QuantumCircuit], sampler: Sampler, shots
     """Test sequential runs."""
     qc_1 = circuits[2]
     qc_2 = circuits[3]
-    parameter_values = [
-        [0, 1, 1, 2, 3, 5],
-        [1, 2, 3, 4, 5, 6],
-        [0, 1, 2, 3, 4, 5, 6, 7],
-    ]
+    parameters_1_a = dict(zip(qc_1.parameters, [0, 1, 1, 2, 3, 5], strict=False))
+    parameters_1_b = dict(zip(qc_1.parameters, [1, 2, 3, 4, 5, 6], strict=False))
+    parameters_2 = dict(zip(qc_2.parameters, [0, 1, 2, 3, 4, 5, 6, 7], strict=False))
     target = [
         {
             "00": 0.1309248462975777,
@@ -199,14 +199,14 @@ def test_sequential_runs(circuits: list[QuantumCircuit], sampler: Sampler, shots
     ]
 
     # First run
-    result = sampler.run([(qc_1, parameter_values[0])], shots=shots).result()
+    result = sampler.run([(qc_1, parameters_1_a)], shots=shots).result()
     assert isinstance(result, PrimitiveResult)
 
     probs = get_probs(result[0].data["meas"], shots)
     compare_probs(probs, target[0])
 
     # Second run
-    result = sampler.run([(qc_2, parameter_values[2]), (qc_1, parameter_values[1])], shots=shots).result()
+    result = sampler.run([(qc_2, parameters_2), (qc_1, parameters_1_b)], shots=shots).result()
     assert isinstance(result, PrimitiveResult)
 
     probs = get_probs(result[0].data["meas"], shots)

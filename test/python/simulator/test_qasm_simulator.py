@@ -100,7 +100,7 @@ def test_qasm_simulator_support_parametrized_gates(backend: QasmSimulatorBackend
         ValueError,
         match=r"Mismatching number of values and parameters.*",
     ):
-        backend.run([bare_circuit], [[np.pi]], shots=shots).result()
+        backend.run([bare_circuit], parameter_values=[[np.pi]], shots=shots).result()
 
     with pytest.raises(
         ValueError,
@@ -112,10 +112,10 @@ def test_qasm_simulator_support_parametrized_gates(backend: QasmSimulatorBackend
         ValueError,
         match=r"The number of circuits \(2\) does not match the number of provided parameter sets \(1\)\.",
     ):
-        backend.run([circuit_1, circuit_2], [[np.pi / 2]], shots=shots).result()
+        backend.run([circuit_1, circuit_2], parameter_values=[[np.pi / 2]], shots=shots).result()
 
     # Test backend's correct functionality with multiple circuit
-    result = backend.run([circuit_1, circuit_2], [[np.pi], [np.pi / 2, np.pi]], shots=shots).result()
+    result = backend.run([circuit_1, circuit_2], parameter_values=[[np.pi], [np.pi / 2, np.pi]], shots=shots).result()
     assert result.success
 
     counts_1 = result.get_counts(circuit_1)

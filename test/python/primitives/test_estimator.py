@@ -121,12 +121,14 @@ def test_run__single_circuit__operator_observable__without_parameters(
     """Test single circuit and an operator observable, without parameters."""
     circuit = circuit_0.assign_parameters([0, 1, 1, 2, 3, 5])
     matrix = SparsePauliOp.from_operator(
-        Operator([
-            [-1.06365335, 0.0, 0.0, 0.1809312],
-            [0.0, -1.83696799, 0.1809312, 0.0],
-            [0.0, 0.1809312, -0.24521829, 0.0],
-            [0.1809312, 0.0, 0.0, -1.06365335],
-        ])
+        Operator(
+            np.asarray([
+                [-1.06365335, 0.0, 0.0, 0.1809312],
+                [0.0, -1.83696799, 0.1809312, 0.0],
+                [0.0, 0.1809312, -0.24521829, 0.0],
+                [0.1809312, 0.0, 0.0, -1.06365335],
+            ])
+        )
     )
 
     result = estimator.run([(circuit, [matrix])]).result()
@@ -141,7 +143,8 @@ def test_run__single_circuit__single_observable__with_parameters(
     estimator: Estimator,
 ) -> None:
     """Test single circuit and single observable, with parameters."""
-    result = estimator.run([(circuit_0, [observable_0], [[0, 1, 1, 2, 3, 5]])]).result()
+    thetas = dict(zip(circuit_0.parameters, [0, 1, 1, 2, 3, 5], strict=True))
+    result = estimator.run([(circuit_0, [observable_0], thetas)]).result()
     assert isinstance(result, PrimitiveResult)
     evs = get_evs(result[0])
     np.testing.assert_allclose(evs, [-1.284366511861733], rtol=1e-7, atol=1e-7)
@@ -192,12 +195,9 @@ def test_run__single_circuit__multiple_observables__with_parameters(
     """Test single circuits and multiple observables, with parameters."""
     psi_1, _ = circuits_1
     hamiltonian_1, _, hamiltonian_3 = observables_1
-    theta_1, theta_2 = (
-        [0, 1, 1, 2, 3, 5],
-        [1, 2, 3, 4, 5, 6],
-    )
+    thetas_combined = dict(zip(psi_1.parameters, [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [5, 6]], strict=True))
 
-    result = estimator.run([(psi_1, [hamiltonian_1, hamiltonian_3], [theta_1, theta_2])]).result()
+    result = estimator.run([(psi_1, [hamiltonian_1, hamiltonian_3], thetas_combined)]).result()
     assert isinstance(result, PrimitiveResult)
     evs = get_evs(result[0])
     np.testing.assert_allclose(evs, [1.55555728, -1.08766318], rtol=1e-7, atol=1e-7)
@@ -211,17 +211,15 @@ def test_run__multiple_circuits__multiple_observables__with_parameters(
     """Test multiple circuits and multiple observables, with parameters."""
     psi_1, psi_2 = circuits_1
     hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables_1
-    theta_1, theta_2, theta_3 = (
-        [0, 1, 1, 2, 3, 5],
-        [0, 1, 1, 2, 3, 5, 8, 13],
-        [1, 2, 3, 4, 5, 6],
-    )
+    thetas_1_a = dict(zip(psi_1.parameters, [0, 1, 1, 2, 3, 5], strict=True))
+    thetas_1_b = dict(zip(psi_1.parameters, [1, 2, 3, 4, 5, 6], strict=True))
+    thetas_2 = dict(zip(psi_2.parameters, [0, 1, 1, 2, 3, 5, 8, 13], strict=True))
 
     result = estimator.run(
         [
-            (psi_1, [hamiltonian_1], [theta_1]),
-            (psi_2, [hamiltonian_2], [theta_2]),
-            (psi_1, [hamiltonian_3], [theta_3]),
+            (psi_1, [hamiltonian_1], thetas_1_a),
+            (psi_2, [hamiltonian_2], thetas_2),
+            (psi_1, [hamiltonian_3], thetas_1_b),
         ],
     ).result()
     assert isinstance(result, PrimitiveResult)
@@ -244,27 +242,25 @@ def test_sequential_runs(
     """Test sequential runs."""
     psi_1, psi_2 = circuits_1
     hamiltonian_1, hamiltonian_2, hamiltonian_3 = observables_1
-    theta_1, theta_2, theta_3 = (
-        [0, 1, 1, 2, 3, 5],
-        [0, 1, 1, 2, 3, 5, 8, 13],
-        [1, 2, 3, 4, 5, 6],
-    )
+    thetas_1_a = dict(zip(psi_1.parameters, [0, 1, 1, 2, 3, 5], strict=True))
+    thetas_1_b = dict(zip(psi_1.parameters, [1, 2, 3, 4, 5, 6], strict=True))
+    thetas_2 = dict(zip(psi_2.parameters, [0, 1, 1, 2, 3, 5, 8, 13], strict=True))
 
     # First run
-    result = estimator.run([(psi_1, [hamiltonian_1], [theta_1])]).result()
+    result = estimator.run([(psi_1, [hamiltonian_1], thetas_1_a)]).result()
     assert isinstance(result, PrimitiveResult)
     assert isinstance(result[0], PubResult)
     evs = result[0].data["evs"]
     np.testing.assert_allclose(evs, [1.5555573817900956], rtol=1e-7, atol=1e-7)
 
     # Second run
-    result = estimator.run([(psi_2, [hamiltonian_1], [theta_2])]).result()
+    result = estimator.run([(psi_2, [hamiltonian_1], thetas_2)]).result()
     assert isinstance(result, PrimitiveResult)
     evs = get_evs(result[0])
     np.testing.assert_allclose(evs, [2.97797666], rtol=1e-7, atol=1e-7)
 
     # Third run
-    result = estimator.run([(psi_1, [hamiltonian_2], [theta_1]), (psi_1, [hamiltonian_3], [theta_1])]).result()
+    result = estimator.run([(psi_1, [hamiltonian_2], thetas_1_a), (psi_1, [hamiltonian_3], thetas_1_a)]).result()
     assert isinstance(result, PrimitiveResult)
 
     evs = get_evs(result[0])
@@ -275,9 +271,9 @@ def test_sequential_runs(
 
     # Last run
     result = estimator.run([
-        (psi_1, [hamiltonian_1], [theta_1]),
-        (psi_2, [hamiltonian_2], [theta_2]),
-        (psi_1, [hamiltonian_3], [theta_3]),
+        (psi_1, [hamiltonian_1], thetas_1_a),
+        (psi_2, [hamiltonian_2], thetas_2),
+        (psi_1, [hamiltonian_3], thetas_1_b),
     ]).result()
     assert isinstance(result, PrimitiveResult)
 

@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Any
 
 try:
-    from qiskit.result.models import QobjExperimentHeader
+    from qiskit.result.models import QobjExperimentHeader  # ty: ignore[unresolved-import]
 
     QISKIT_PRE_2_0 = True
 except ImportError:
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class DDSIMExperimentHeader(QobjExperimentHeader):  # type: ignore[misc]
+class DDSIMExperimentHeader(QobjExperimentHeader):
     """Header for DDSIM backends."""
 
     name: str

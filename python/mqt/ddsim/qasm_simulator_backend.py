@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     Parameters = Mapping[Parameter, ParameterValueType] | Sequence[ParameterValueType]
 
 
-class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
+class QasmSimulatorBackend(BackendV2):
     """Qiskit backend for MQT DDSIM QASM simulators."""
 
     _SHOW_STATE_VECTOR = False
@@ -133,25 +133,28 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
 
     def run(
         self,
-        quantum_circuits: QuantumCircuit | Sequence[QuantumCircuit],
-        parameter_values: Sequence[Parameters] | None = None,
+        run_input: QuantumCircuit | Sequence[QuantumCircuit],
         **options: Any,
     ) -> DDSIMJob:
         """Run a quantum circuit or list of quantum circuits on the DDSIM backend.
 
         Args:
-            quantum_circuits: The quantum circuit(s) to run.
-            parameter_values: The parameter values to bind to the circuits.
+            run_input: The quantum circuit(s) to run.
             options: Additional run options.
+                Supports `parameter_values` to bind parameter values to the circuits.
 
         Returns:
             The DDSIM job
         """
-        if isinstance(quantum_circuits, QuantumCircuit):
-            quantum_circuits = [quantum_circuits]
+        if isinstance(run_input, QuantumCircuit):
+            run_input = [run_input]
+
+        parameter_values: Sequence[Parameters] | None = None
+        if "parameter_values" in options:
+            parameter_values = options.pop("parameter_values")
 
         job_id = str(uuid.uuid4())
-        local_job = DDSIMJob(self, job_id, self._run_job, quantum_circuits, parameter_values, **options)
+        local_job = DDSIMJob(self, job_id, self._run_job, run_input, parameter_values, **options)
         local_job.submit()
         return local_job
 
@@ -184,7 +187,7 @@ class QasmSimulatorBackend(BackendV2):  # type: ignore[misc]
             time_taken=end - start,
         )
 
-    def _run_experiment(self, qc: QuantumCircuit, **options: dict[str, Any]) -> ExperimentResult:
+    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:
         start_time = time.time()
         approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
         approximation_steps = cast("int", options.get("approximation_steps", 1))

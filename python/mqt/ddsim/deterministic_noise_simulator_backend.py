@@ -49,8 +49,7 @@ class DeterministicNoiseSimulatorBackend(QasmSimulatorBackend):
             multi_qubit_gate_factor=2,
         )
 
-    @staticmethod
-    def _run_experiment(qc: QuantumCircuit, **options: dict[str, Any]) -> ExperimentResult:
+    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:  # noqa: PLR6301
         start_time = time.time()
         noise_effects = cast("str", options.get("noise_effects", "APD"))
         noise_probability = cast("float", options.get("noise_probability", 0.01))
