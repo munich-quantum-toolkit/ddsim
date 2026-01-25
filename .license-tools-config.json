@@ -36,6 +36,7 @@
     ".*\\.profile",
     "uv\\.lock",
     "py\\.typed",
-    ".*build.*"
+    ".*build.*",
+    "ddsim_patterns.txt"
   ]
 }

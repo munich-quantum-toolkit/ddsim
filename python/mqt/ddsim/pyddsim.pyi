@@ -6,101 +6,142 @@
 #
 # Licensed under the MIT License
 
-from enum import Enum
+import enum
+from collections.abc import Sequence
 from typing import Any, overload
 
-from mqt.core.dd import MatrixDD, VectorDD
-from mqt.core.ir import QuantumComputation
-
-__all__ = [
-    "CircuitSimulator",
-    "DeterministicNoiseSimulator",
-    "HybridSimulator",
-    "HybridSimulatorMode",
-    "PathSimulator",
-    "PathSimulatorConfiguration",
-    "PathSimulatorMode",
-    "StochasticNoiseSimulator",
-    "UnitarySimulator",
-    "UnitarySimulatorMode",
-]
+import mqt.core.dd
+import mqt.core.ir
 
 class CircuitSimulator:
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         approximation_step_fidelity: float = 1.0,
         approximation_steps: int = 1,
         approximation_strategy: str = "fidelity",
         seed: int = -1,
     ) -> None: ...
-    def expectation_value(self, observable: QuantumComputation) -> float: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def get_constructed_dd(self) -> VectorDD: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def simulate(self, shots: int) -> dict[str, int]: ...
-    def statistics(self) -> dict[str, str]: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
+
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def simulate(self, shots: int) -> dict[str, int]:
+        """Simulate the circuit and return the result as a dictionary of counts."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
+        """Get the vector DD resulting from the simulation."""
+
+    def expectation_value(self, observable: mqt.core.ir.QuantumComputation) -> float: ...
 
 class StochasticNoiseSimulator:
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         approximation_step_fidelity: float = 1.0,
         approximation_steps: int = 1,
         approximation_strategy: str = "fidelity",
         seed: int = -1,
         noise_effects: str = "APD",
         noise_probability: float = 0.01,
-        amp_damping_probability: float | None = 0.02,
+        amp_damping_probability: float = 0.02,
         multi_qubit_gate_factor: float = 2,
     ) -> None: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def get_constructed_dd(self) -> VectorDD: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def simulate(self, shots: int) -> dict[str, int]: ...
-    def statistics(self) -> dict[str, str]: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
+
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def simulate(self, shots: int) -> dict[str, int]:
+        """Simulate the circuit and return the result as a dictionary of counts."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
+        """Get the vector DD resulting from the simulation."""
 
 class DeterministicNoiseSimulator:
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         approximation_step_fidelity: float = 1.0,
         approximation_steps: int = 1,
         approximation_strategy: str = "fidelity",
         seed: int = -1,
         noise_effects: str = "APD",
         noise_probability: float = 0.01,
-        amp_damping_probability: float | None = 0.02,
+        amp_damping_probability: float = 0.02,
         multi_qubit_gate_factor: float = 2,
     ) -> None: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def get_constructed_dd(self) -> VectorDD: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def simulate(self, shots: int) -> dict[str, int]: ...
-    def statistics(self) -> dict[str, str]: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
 
-class HybridSimulatorMode(Enum):
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def simulate(self, shots: int) -> dict[str, int]:
+        """Simulate the circuit and return the result as a dictionary of counts."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
+        """Get the vector DD resulting from the simulation."""
+
+class HybridSimulatorMode(enum.Enum):
     """Enumeration of modes for the :class:`~HybridSimulator`."""
 
-    DD = ...
-    amplitude = ...
+    DD = 0
+
+    amplitude = 1
 
 class HybridSimulator:
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         approximation_step_fidelity: float = 1.0,
         approximation_steps: int = 1,
         approximation_strategy: str = "fidelity",
@@ -108,101 +149,169 @@ class HybridSimulator:
         mode: HybridSimulatorMode = ...,
         nthreads: int = 2,
     ) -> None: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
-    def get_final_amplitudes(self) -> list[complex]: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
+
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def simulate(self, shots: int) -> dict[str, int]:
+        """Simulate the circuit and return the result as a dictionary of counts."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
+        """Get the vector DD resulting from the simulation."""
+
     def get_mode(self) -> HybridSimulatorMode: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def get_constructed_dd(self) -> VectorDD: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def simulate(self, shots: int) -> dict[str, int]: ...
-    def statistics(self) -> dict[str, str]: ...
+    def get_final_amplitudes(self) -> list[complex]: ...
 
-class PathSimulatorMode(Enum):
-    """Enumeration of modes for the :class:`~PathCSimulator`."""
+class PathSimulatorMode(enum.Enum):
+    """Enumeration of modes for the :class:`~PathSimulator`."""
 
-    alternating = ...
-    bracket = ...
-    gate_cost = ...
-    pairwise_recursive = ...
-    sequential = ...
+    sequential = 0
+
+    pairwise_recursive = 1
+
+    bracket = 2
+
+    alternating = 3
+
+    gate_cost = 4
 
 class PathSimulatorConfiguration:
+    """Configuration options for the :class:`~.PathSimulator`."""
+
     def __init__(self) -> None: ...
-    def json(self) -> dict[str, Any]: ...
     @property
-    def bracket_size(self) -> int: ...
-    @bracket_size.setter
-    def bracket_size(self, arg0: int) -> None: ...
-    @property
-    def gate_cost(self) -> list[int]: ...
-    @gate_cost.setter
-    def gate_cost(self, arg0: list[int]) -> None: ...
-    @property
-    def mode(self) -> PathSimulatorMode: ...
+    def mode(self) -> PathSimulatorMode:
+        """The mode used for determining a simulation path."""
+
     @mode.setter
-    def mode(self, arg0: PathSimulatorMode) -> None: ...
+    def mode(self, arg: PathSimulatorMode, /) -> None: ...
     @property
-    def seed(self) -> int: ...
-    @seed.setter
-    def seed(self, arg0: int) -> None: ...
+    def bracket_size(self) -> int:
+        """Size of the brackets one wants to combine."""
+
+    @bracket_size.setter
+    def bracket_size(self, arg: int, /) -> None: ...
     @property
-    def starting_point(self) -> int: ...
+    def starting_point(self) -> int:
+        """Start of the alternating or gate_cost strategy."""
+
     @starting_point.setter
-    def starting_point(self, arg0: int) -> None: ...
+    def starting_point(self, arg: int, /) -> None: ...
+    @property
+    def gate_cost(self) -> list[int]:
+        """A list that contains the number of gates which are considered in each step."""
+
+    @gate_cost.setter
+    def gate_cost(self, arg: Sequence[int], /) -> None: ...
+    @property
+    def seed(self) -> int:
+        """Seed for the simulator."""
+
+    @seed.setter
+    def seed(self, arg: int, /) -> None: ...
+    def json(self) -> dict[str, Any]: ...
 
 class PathSimulator:
     @overload
-    def __init__(self, circ: QuantumComputation, config: PathSimulatorConfiguration = ...) -> None: ...
+    def __init__(self, circ: mqt.core.ir.QuantumComputation, config: PathSimulatorConfiguration = ...) -> None: ...
     @overload
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         mode: PathSimulatorMode = ...,
         bracket_size: int = 2,
         starting_point: int = 0,
-        gate_cost: list[int] = ...,
-        seed: int = ...,
+        gate_cost: Sequence[int] = [],
+        seed: int = 0,
     ) -> None: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def get_constructed_dd(self) -> VectorDD: ...
-    def set_simulation_path(self, path: list[tuple[int, int]], assume_correct_order: bool = False) -> None: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def simulate(self, shots: int) -> dict[str, int]: ...
-    def statistics(self) -> dict[str, str]: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
 
-class UnitarySimulatorMode(Enum):
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def simulate(self, shots: int) -> dict[str, int]:
+        """Simulate the circuit and return the result as a dictionary of counts."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
+        """Get the vector DD resulting from the simulation."""
+
+    def set_simulation_path(self, path: Sequence[tuple[int, int]], assume_correct_order: bool = False) -> None: ...
+
+class UnitarySimulatorMode(enum.Enum):
     """Enumeration of modes for the :class:`~UnitarySimulator`."""
 
-    recursive = ...
-    sequential = ...
+    recursive = 1
+
+    sequential = 0
 
 class UnitarySimulator:
     def __init__(
         self,
-        circ: QuantumComputation,
+        circ: mqt.core.ir.QuantumComputation,
         approximation_step_fidelity: float = 1.0,
         approximation_steps: int = 1,
         approximation_strategy: str = "fidelity",
         seed: int = -1,
         mode: UnitarySimulatorMode = ...,
     ) -> None: ...
-    def construct(self) -> None: ...
-    def get_active_matrix_node_count(self) -> int: ...
-    def get_active_vector_node_count(self) -> int: ...
+    def get_number_of_qubits(self) -> int:
+        """Get the number of qubits."""
+
+    def get_name(self) -> str:
+        """Get the name of the simulator."""
+
+    def statistics(self) -> dict[str, str]:
+        """Get additional statistics provided by the simulator."""
+
+    def get_active_vector_node_count(self) -> int:
+        """Get the number of active vector nodes, i.e., the number of vector DD nodes in the unique table with a non-zero reference count."""
+
+    def get_active_matrix_node_count(self) -> int:
+        """Get the number of active matrix nodes, i.e., the number of matrix DD nodes in the unique table with a non-zero reference count."""
+
+    def get_tolerance(self) -> float:
+        """Get the tolerance for the DD package."""
+
+    def set_tolerance(self, tol: float) -> None:
+        """Set the tolerance for the DD package."""
+
+    def construct(self) -> None:
+        """Construct the DD representing the unitary matrix of the circuit."""
+
+    def get_mode(self) -> UnitarySimulatorMode: ...
     def get_construction_time(self) -> float: ...
     def get_final_node_count(self) -> int: ...
-    def get_max_node_count(self) -> int: ...
-    def get_mode(self) -> UnitarySimulatorMode: ...
-    def get_name(self) -> str: ...
-    def get_number_of_qubits(self) -> int: ...
-    def get_tolerance(self) -> float: ...
-    def set_tolerance(self, tol: float) -> None: ...
-    def statistics(self) -> dict[str, str]: ...
-    def get_constructed_dd(self) -> MatrixDD: ...
+    def get_constructed_dd(self) -> mqt.core.dd.MatrixDD: ...
