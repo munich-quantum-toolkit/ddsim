@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 ### Changed
 
 - 🔧 Replace `mypy` with `ty` ([#770]) ([**@denialhaag**])
-- ♻️ Migrate Python bindings from `pybind11` to `nanobind` ([#766]) ([**@denialhaag**])
+- ♻️ Migrate Python bindings from `pybind11` to `nanobind` ([#766], [#773]) ([**@denialhaag**])
 - 📦️ Provide Stable ABI wheels for Python 3.12+ ([#766]) ([**@denialhaag**])
 - 👷 Stop testing on `ubuntu-22.04` and `ubuntu-22.04-arm` runners ([#740]) ([**@denialhaag**])
 - 👷 Stop testing with `clang-19` and start testing with `clang-21` ([#740]) ([**@denialhaag**])
@@ -89,6 +89,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#773]: https://github.com/munich-quantum-toolkit/ddsim/pull/773
 [#770]: https://github.com/munich-quantum-toolkit/ddsim/pull/770
 [#766]: https://github.com/munich-quantum-toolkit/ddsim/pull/766
 [#740]: https://github.com/munich-quantum-toolkit/ddsim/pull/740
