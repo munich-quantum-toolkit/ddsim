@@ -227,9 +227,9 @@ def stubs(session: nox.Session) -> None:
         "--recursive",
         "--include-private",
         "--output-dir",
-        str(package_root),
+        package_root,
         "--pattern-file",
-        str(pattern_file),
+        pattern_file,
         "--module",
         "mqt.ddsim.pyddsim",
     )
