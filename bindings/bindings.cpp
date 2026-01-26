@@ -100,7 +100,8 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
           "seed"_a = -1)
       .def("expectation_value", &CircuitSimulator::expectationValue,
-           "observable"_a);
+           "observable"_a,
+           "Compute the expectation value for the given observable.");
 
   // Stoch simulator
   auto stochasticNoiseSimulator =
@@ -201,9 +202,11 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "seed"_a = -1,
           "mode"_a = HybridSchrodingerFeynmanSimulator::Mode::Amplitude,
           "nthreads"_a = 2)
-      .def("get_mode", &HybridSchrodingerFeynmanSimulator::getMode)
+      .def("get_mode", &HybridSchrodingerFeynmanSimulator::getMode,
+           "Get the mode of the hybrid simulator.")
       .def("get_final_amplitudes",
-           &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation);
+           &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation,
+           "Get the final amplitudes from the hybrid simulation.");
 
   // Path Simulator
   nb::enum_<PathSimulator::Configuration::Mode>(
@@ -231,13 +234,15 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           R"pb(A list that contains the number of gates which are considered in each step.)pb")
       .def_rw("seed", &PathSimulator::Configuration::seed,
               R"pb(Seed for the simulator.)pb")
-      .def("json",
-           [](const PathSimulator::Configuration& config) {
-             const auto json = nb::module_::import_("json");
-             const auto loads = json.attr("loads");
-             const auto dict = loads(config.json().dump());
-             return nb::cast<nb::typed<nb::dict, nb::str, nb::any>>(dict);
-           })
+      .def(
+          "json",
+          [](const PathSimulator::Configuration& config) {
+            const auto json = nb::module_::import_("json");
+            const auto loads = json.attr("loads");
+            const auto dict = loads(config.json().dump());
+            return nb::cast<nb::typed<nb::dict, nb::str, nb::any>>(dict);
+          },
+          "Get the configuration as a JSON-style dictionary.")
       .def("__repr__", &PathSimulator::Configuration::toString);
 
   auto pathSimulator = createSimulator<PathSimulator>(m, "PathSimulator");
@@ -266,7 +271,12 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
       .def("set_simulation_path",
            nb::overload_cast<const PathSimulator::SimulationPath::Components&,
                              bool>(&PathSimulator::setSimulationPath),
-           "path"_a, "assume_correct_order"_a = false);
+           "path"_a, "assume_correct_order"_a = false,
+           R"pb(Set the simulation path.
+
+Args:
+    path: The components of the simulation path.
+    assume_correct_order: Whether the provided path is assumed to be in the correct order. Defaults to False.)pb");
 
   // Unitary Simulator
   nb::enum_<UnitarySimulator::Mode>(
@@ -299,8 +309,12 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "circ"_a, "approximation_step_fidelity"_a = 1.,
           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
           "seed"_a = -1, "mode"_a = UnitarySimulator::Mode::Recursive)
-      .def("get_mode", &UnitarySimulator::getMode)
-      .def("get_construction_time", &UnitarySimulator::getConstructionTime)
-      .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount)
-      .def("get_constructed_dd", &UnitarySimulator::getConstructedDD);
+      .def("get_mode", &UnitarySimulator::getMode,
+           "Get the mode of the unitary simulator.")
+      .def("get_construction_time", &UnitarySimulator::getConstructionTime,
+           "Get the time taken to construct the DD.")
+      .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount,
+           "Get the final node count of the constructed DD.")
+      .def("get_constructed_dd", &UnitarySimulator::getConstructedDD,
+           "Get the constructed DD.");
 }

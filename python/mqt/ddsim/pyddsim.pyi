@@ -49,7 +49,8 @@ class CircuitSimulator:
     def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
         """Get the vector DD resulting from the simulation."""
 
-    def expectation_value(self, observable: mqt.core.ir.QuantumComputation) -> float: ...
+    def expectation_value(self, observable: mqt.core.ir.QuantumComputation) -> float:
+        """Compute the expectation value for the given observable."""
 
 class StochasticNoiseSimulator:
     def __init__(
@@ -176,8 +177,11 @@ class HybridSimulator:
     def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
         """Get the vector DD resulting from the simulation."""
 
-    def get_mode(self) -> HybridSimulatorMode: ...
-    def get_final_amplitudes(self) -> list[complex]: ...
+    def get_mode(self) -> HybridSimulatorMode:
+        """Get the mode of the hybrid simulator."""
+
+    def get_final_amplitudes(self) -> list[complex]:
+        """Get the final amplitudes from the hybrid simulation."""
 
 class PathSimulatorMode(enum.Enum):
     """Enumeration of modes for the :class:`~PathSimulator`."""
@@ -226,7 +230,8 @@ class PathSimulatorConfiguration:
 
     @seed.setter
     def seed(self, arg: int, /) -> None: ...
-    def json(self) -> dict[str, Any]: ...
+    def json(self) -> dict[str, Any]:
+        """Get the configuration as a JSON-style dictionary."""
 
 class PathSimulator:
     @overload
@@ -268,7 +273,13 @@ class PathSimulator:
     def get_constructed_dd(self) -> mqt.core.dd.VectorDD:
         """Get the vector DD resulting from the simulation."""
 
-    def set_simulation_path(self, path: Sequence[tuple[int, int]], assume_correct_order: bool = False) -> None: ...
+    def set_simulation_path(self, path: Sequence[tuple[int, int]], assume_correct_order: bool = False) -> None:
+        """Set the simulation path.
+
+        Args:
+            path: The components of the simulation path.
+            assume_correct_order: Whether the provided path is assumed to be in the correct order. Defaults to False.
+        """
 
 class UnitarySimulatorMode(enum.Enum):
     """Enumeration of modes for the :class:`~UnitarySimulator`."""
@@ -311,7 +322,14 @@ class UnitarySimulator:
     def construct(self) -> None:
         """Construct the DD representing the unitary matrix of the circuit."""
 
-    def get_mode(self) -> UnitarySimulatorMode: ...
-    def get_construction_time(self) -> float: ...
-    def get_final_node_count(self) -> int: ...
-    def get_constructed_dd(self) -> mqt.core.dd.MatrixDD: ...
+    def get_mode(self) -> UnitarySimulatorMode:
+        """Get the mode of the unitary simulator."""
+
+    def get_construction_time(self) -> float:
+        """Get the time taken to construct the DD."""
+
+    def get_final_node_count(self) -> int:
+        """Get the final node count of the constructed DD."""
+
+    def get_constructed_dd(self) -> mqt.core.dd.MatrixDD:
+        """Get the constructed DD."""
