@@ -25,6 +25,7 @@
 #include <nanobind/stl/list.h>     // NOLINT(misc-include-cleaner)
 #include <nanobind/stl/map.h>      // NOLINT(misc-include-cleaner)
 #include <nanobind/stl/optional.h> // NOLINT(misc-include-cleaner)
+#include <nanobind/stl/pair.h>     // NOLINT(misc-include-cleaner)
 #include <nanobind/stl/string.h>   // NOLINT(misc-include-cleaner)
 #include <nanobind/stl/vector.h>   // NOLINT(misc-include-cleaner)
 #include <optional>
@@ -73,7 +74,6 @@ nb::class_<Sim> createSimulator(nb::module_ m, const std::string& name) {
 // NOLINTNEXTLINE(performance-unnecessary-value-param)
 NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
   nb::module_::import_("mqt.core.dd");
-  m.doc() = "Python interface for the MQT DDSIM quantum circuit simulator";
 
   // Circuit Simulator
   auto circuitSimulator =
@@ -100,7 +100,8 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
           "seed"_a = -1)
       .def("expectation_value", &CircuitSimulator::expectationValue,
-           "observable"_a);
+           "observable"_a,
+           "Compute the expectation value for the given observable.");
 
   // Stoch simulator
   auto stochasticNoiseSimulator =
@@ -166,7 +167,9 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
       "amp_damping_probability"_a = 0.02, "multi_qubit_gate_factor"_a = 2);
 
   // Hybrid Schrödinger-Feynman Simulator
-  nb::enum_<HybridSchrodingerFeynmanSimulator::Mode>(m, "HybridSimulatorMode")
+  nb::enum_<HybridSchrodingerFeynmanSimulator::Mode>(
+      m, "HybridSimulatorMode",
+      R"pb(Enumeration of modes for the :class:`~HybridSimulator`.)pb")
       .value("DD", HybridSchrodingerFeynmanSimulator::Mode::DD)
       .value("amplitude", HybridSchrodingerFeynmanSimulator::Mode::Amplitude);
 
@@ -199,12 +202,16 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "seed"_a = -1,
           "mode"_a = HybridSchrodingerFeynmanSimulator::Mode::Amplitude,
           "nthreads"_a = 2)
-      .def("get_mode", &HybridSchrodingerFeynmanSimulator::getMode)
+      .def("get_mode", &HybridSchrodingerFeynmanSimulator::getMode,
+           "Get the mode of the hybrid simulator.")
       .def("get_final_amplitudes",
-           &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation);
+           &HybridSchrodingerFeynmanSimulator::getVectorFromHybridSimulation,
+           "Get the final amplitudes from the hybrid simulation.");
 
   // Path Simulator
-  nb::enum_<PathSimulator::Configuration::Mode>(m, "PathSimulatorMode")
+  nb::enum_<PathSimulator::Configuration::Mode>(
+      m, "PathSimulatorMode",
+      "Enumeration of modes for the :class:`~PathSimulator`.")
       .value("sequential", PathSimulator::Configuration::Mode::Sequential)
       .value("pairwise_recursive",
              PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping)
@@ -214,21 +221,28 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
 
   nb::class_<PathSimulator::Configuration>(
       m, "PathSimulatorConfiguration",
-      "Configuration options for the :class:`~.PathSimulator`.")
+      R"pb(Configuration options for the :class:`~.PathSimulator`.)pb")
       .def(nb::init())
-      .def_rw(
-          "mode", &PathSimulator::Configuration::mode,
-          R"pbdoc(Setting the mode used for determining a simulation path)pbdoc")
+      .def_rw("mode", &PathSimulator::Configuration::mode,
+              R"pb(The mode used for determining a simulation path.)pb")
       .def_rw("bracket_size", &PathSimulator::Configuration::bracketSize,
-              R"pbdoc(Size of the brackets one wants to combine)pbdoc")
+              R"pb(Size of the brackets one wants to combine.)pb")
       .def_rw("starting_point", &PathSimulator::Configuration::startingPoint,
-              R"pbdoc(Start of the alternating or gate_cost strategy)pbdoc")
+              R"pb(Start of the alternating or gate_cost strategy.)pb")
       .def_rw(
           "gate_cost", &PathSimulator::Configuration::gateCost,
-          R"pbdoc(A list that contains the number of gates which are considered in each step)pbdoc")
+          R"pb(A list that contains the number of gates which are considered in each step.)pb")
       .def_rw("seed", &PathSimulator::Configuration::seed,
-              R"pbdoc(Seed for the simulator)pbdoc")
-      .def("json", &PathSimulator::Configuration::json)
+              R"pb(Seed for the simulator.)pb")
+      .def(
+          "json",
+          [](const PathSimulator::Configuration& config) {
+            const auto json = nb::module_::import_("json");
+            const auto loads = json.attr("loads");
+            const auto dict = loads(config.json().dump());
+            return nb::cast<nb::typed<nb::dict, nb::str, nb::any>>(dict);
+          },
+          "Get the configuration as a JSON-style dictionary.")
       .def("__repr__", &PathSimulator::Configuration::toString);
 
   auto pathSimulator = createSimulator<PathSimulator>(m, "PathSimulator");
@@ -257,10 +271,17 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
       .def("set_simulation_path",
            nb::overload_cast<const PathSimulator::SimulationPath::Components&,
                              bool>(&PathSimulator::setSimulationPath),
-           "path"_a, "assume_correct_order"_a = false);
+           "path"_a, "assume_correct_order"_a = false,
+           R"pb(Set the simulation path.
+
+Args:
+    path: The components of the simulation path.
+    assume_correct_order: Whether the provided path is assumed to be in the correct order. Defaults to False.)pb");
 
   // Unitary Simulator
-  nb::enum_<UnitarySimulator::Mode>(m, "UnitarySimulatorMode")
+  nb::enum_<UnitarySimulator::Mode>(
+      m, "UnitarySimulatorMode",
+      R"pb(Enumeration of modes for the :class:`~UnitarySimulator`.)pb")
       .value("recursive", UnitarySimulator::Mode::Recursive)
       .value("sequential", UnitarySimulator::Mode::Sequential);
 
@@ -288,8 +309,12 @@ NB_MODULE(MQT_DDSIM_MODULE_NAME, m) {
           "circ"_a, "approximation_step_fidelity"_a = 1.,
           "approximation_steps"_a = 1, "approximation_strategy"_a = "fidelity",
           "seed"_a = -1, "mode"_a = UnitarySimulator::Mode::Recursive)
-      .def("get_mode", &UnitarySimulator::getMode)
-      .def("get_construction_time", &UnitarySimulator::getConstructionTime)
-      .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount)
-      .def("get_constructed_dd", &UnitarySimulator::getConstructedDD);
+      .def("get_mode", &UnitarySimulator::getMode,
+           "Get the mode of the unitary simulator.")
+      .def("get_construction_time", &UnitarySimulator::getConstructionTime,
+           "Get the time taken to construct the DD.")
+      .def("get_final_node_count", &UnitarySimulator::getFinalNodeCount,
+           "Get the final node count of the constructed DD.")
+      .def("get_constructed_dd", &UnitarySimulator::getConstructedDD,
+           "Get the constructed DD.");
 }

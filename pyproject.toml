@@ -237,7 +237,7 @@ known-first-party = ["mqt.ddsim"]
 "test/python/**" = ["T20", "ANN", "D10"]
 "docs/**" = ["T20"]
 "noxfile.py" = ["T20", "TID251"]
-"*.pyi" = ["D418", "PYI021"]  # pydocstyle
+"*.pyi" = ["D418", "E501", "PYI021"]
 "*.ipynb" = [
     "D",    # pydocstyle
     "E402", # Allow imports to appear anywhere in Jupyter notebooks
