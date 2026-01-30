@@ -26,9 +26,9 @@ jobs:
           [
             ubuntu-24.04,
             ubuntu-24.04-arm,
+            macos-15,
             macos-15-intel,
-            macos-14,
-            windows-2022,
+            windows-2025,
             windows-11-arm,
           ]
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@d6314c45667c131055a0389afc110e8dedc6da3f # v1.17.11
