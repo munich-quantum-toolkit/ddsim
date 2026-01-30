@@ -275,6 +275,7 @@ ignore = [
   "MY100", # We use ty instead of mypy
   "PC140", # We use ty instead of mypy
   "PC160", # We use a mirror of crate-ci/typos
+  "PC170", # We do not use rST files anymore
 ]
 
 
