@@ -11,6 +11,8 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.4.1 ([#779]) ([**@denialhaag**])
+- ⬆️ Update `nanobind` to version 2.11.0 ([#779]) ([**@denialhaag**])
 - 🔧 Replace `mypy` with `ty` ([#770]) ([**@denialhaag**])
 - ♻️ Migrate Python bindings from `pybind11` to `nanobind` ([#766], [#773]) ([**@denialhaag**])
 - 📦️ Provide Stable ABI wheels for Python 3.12+ ([#766]) ([**@denialhaag**])
@@ -89,6 +91,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#779]: https://github.com/munich-quantum-toolkit/ddsim/pull/779
 [#773]: https://github.com/munich-quantum-toolkit/ddsim/pull/773
 [#770]: https://github.com/munich-quantum-toolkit/ddsim/pull/770
 [#766]: https://github.com/munich-quantum-toolkit/ddsim/pull/766
