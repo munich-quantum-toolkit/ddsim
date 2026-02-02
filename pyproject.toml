@@ -8,10 +8,10 @@
 
 [build-system]
 requires = [
-  "nanobind~=2.10.2",
+  "nanobind~=2.11.0",
   "scikit-build-core>=0.11.6",
   "setuptools-scm>=9.2.2",
-  "mqt.core~=3.4.0",
+  "mqt.core~=3.4.1",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -48,7 +48,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "mqt.core[qiskit]~=3.4.0",
+    "mqt.core[qiskit]~=3.4.1",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -337,10 +337,10 @@ mqt-ddsim = { workspace = true }
 
 [dependency-groups]
 build = [
-  "nanobind~=2.10.2",
+  "nanobind~=2.11.0",
   "scikit-build-core>=0.11.6",
   "setuptools-scm>=9.2.2",
-  "mqt.core~=3.4.0",
+  "mqt.core~=3.4.1",
 ]
 docs = [
   "breathe>=4.36.0",

@@ -218,7 +218,6 @@ def stubs(session: nox.Session) -> None:
     )
 
     package_root = Path(__file__).parent / "python" / "mqt" / "ddsim"
-    pattern_file = Path(__file__).parent / "bindings" / "ddsim_patterns.txt"
 
     session.run(
         "python",
@@ -228,8 +227,6 @@ def stubs(session: nox.Session) -> None:
         "--include-private",
         "--output-dir",
         package_root,
-        "--pattern-file",
-        pattern_file,
         "--module",
         "mqt.ddsim.pyddsim",
     )
