@@ -50,8 +50,8 @@ repos:
       - id: disallow-caps
         name: Disallow improper capitalization
         language: pygrep
-        entry: '\b(?:Nanobind|Numpy|Cmake|CCache|Github|PyTest|Mqt|Tum)\b'
-        exclude: .pre-commit-config.yaml
+        entry: \b(Nanobind|Numpy|Cmake|CCache|Github|PyTest|Mqt|Tum)\b
+        exclude: ^(\.pre-commit-config\.yaml)$
         priority: 0
 
   ## Check for spelling
