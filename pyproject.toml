@@ -267,6 +267,7 @@ wille = "wille"
 mone = "mone"
 anc = "anc"
 optin = "optin"
+iz = "iz"
 
 
 [tool.repo-review]
