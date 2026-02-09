@@ -65,7 +65,7 @@ def observable_0() -> SparsePauliOp:
     """The observable fixture for the tests in this file."""
     return SparsePauliOp.from_list([
         ("II", -1.052373245772859),
-        ("IS", 0.39793742484318045),
+        ("IZ", 0.39793742484318045),
         ("ZI", -0.39793742484318045),
         ("ZZ", -0.01128010425623538),
         ("XX", 0.18093119978423156),
@@ -75,8 +75,8 @@ def observable_0() -> SparsePauliOp:
 @pytest.fixture
 def observables_1() -> tuple[SparsePauliOp, SparsePauliOp, SparsePauliOp]:
     """The observable fixture for the tests in this file."""
-    hamiltonian_1 = SparsePauliOp.from_list([("II", 1), ("IS", 2), ("XI", 3)])
-    hamiltonian_2 = SparsePauliOp.from_list([("IS", 1)])
+    hamiltonian_1 = SparsePauliOp.from_list([("II", 1), ("IZ", 2), ("XI", 3)])
+    hamiltonian_2 = SparsePauliOp.from_list([("IZ", 1)])
     hamiltonian_3 = SparsePauliOp.from_list([("ZI", 1), ("ZZ", 1)])
 
     return hamiltonian_1, hamiltonian_2, hamiltonian_3
