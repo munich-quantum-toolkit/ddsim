@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-02-16
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#220)._
+
 ### Changed
 
 - ⬆️ Update `mqt-core` to version 3.4.1 ([#779]) ([**@denialhaag**])
@@ -84,7 +88,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.2.0
 [2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.1.0
 [2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.0.0
 [1.24.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v1.24.0
