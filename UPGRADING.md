@@ -4,6 +4,8 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
+## [2.2.0]
+
 ### Python wheels
 
 This release contains two changes to the distributed wheels.
@@ -86,7 +88,8 @@ The default compilers of our test systems support all relevant features of the s
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v1.24.0...v2.0.0
 
