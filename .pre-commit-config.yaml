@@ -78,7 +78,7 @@ repos:
 
   ## Ensure uv lock file is up-to-date
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.10.4
+    rev: 0.10.7
     hooks:
       - id: uv-lock
         priority: 0
@@ -132,7 +132,7 @@ repos:
 
   ## Python linting using ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.2
+    rev: v0.15.4
     hooks:
       - id: ruff-format
         priority: 1
