@@ -49,6 +49,7 @@ UPGRADING
 :glob:
 
 contributing
+ai_usage
 tooling
 support
 ```
