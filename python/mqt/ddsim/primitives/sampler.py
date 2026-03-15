@@ -10,7 +10,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
 from mqt.core import load
@@ -28,7 +28,7 @@ from qiskit.primitives.primitive_job import PrimitiveJob
 from mqt.ddsim.pyddsim import CircuitSimulator
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Mapping
 
     from qiskit.circuit import ClassicalRegister
     from qiskit.primitives.containers import SamplerPubLike
@@ -134,7 +134,10 @@ class Sampler(BaseSamplerV2):
                 }
                 for count in counts
             ]
-            bit_arrays[creg.name] = BitArray.from_counts(creg_counts, creg.size)
+            bit_arrays[creg.name] = BitArray.from_counts(
+                counts=cast("Iterable[Mapping[str | int, int]]", creg_counts),
+                num_bits=creg.size,
+            )
             start_index -= creg.size
 
         return bit_arrays
