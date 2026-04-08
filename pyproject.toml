@@ -286,7 +286,6 @@ skip = ["*-musllinux_*", "cp313t-*"]
 archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
 build-frontend = "uv"
-enable = ["cpython-freethreading"]
 test-skip = [
     "cp3??t-*", # no freethreading qiskit wheels
     "cp*-win_arm64", # no numpy, qiskit, ... wheels
