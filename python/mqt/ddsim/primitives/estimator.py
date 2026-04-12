@@ -95,7 +95,7 @@ class Estimator(BaseEstimatorV2):
             observable = observables[index]
 
             pauli_strings, coeffs = zip(*observable.items(), strict=False)
-            paulis = SparsePauliOp(pauli_strings, coeffs).paulis
+            paulis = SparsePauliOp(list(pauli_strings), np.asarray(coeffs)).paulis
 
             observable_circuits_list = []
             for pauli in paulis:
