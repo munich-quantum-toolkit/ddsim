@@ -9,7 +9,7 @@
 [build-system]
 requires = [
   "nanobind~=2.11.0",
-  "scikit-build-core>=0.11.6",
+  "scikit-build-core>=0.12.2",
   "setuptools-scm>=9.2.2",
   "mqt.core~=3.4.1",
 ]
@@ -338,7 +338,7 @@ mqt-ddsim = { workspace = true }
 [dependency-groups]
 build = [
   "nanobind~=2.11.0",
-  "scikit-build-core>=0.11.6",
+  "scikit-build-core>=0.12.2",
   "setuptools-scm>=9.2.2",
   "mqt.core~=3.4.1",
 ]
