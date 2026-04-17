@@ -37,6 +37,6 @@
     "uv\\.lock",
     "py\\.typed",
     ".*build.*",
-    "ddsim_patterns.txt"
+    "LICENSE"
   ]
 }
