@@ -15,8 +15,6 @@ ci:
   skip: [ty-check]
 
 repos:
-  # Priority 0: Fast validation and independent fixers
-
   ## Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -26,14 +24,7 @@ repos:
       - id: end-of-file-fixer
         priority: 1
       - id: trailing-whitespace
-        priority: 1
-
-  ## Check the pyproject.toml file
-  - repo: https://github.com/henryiii/validate-pyproject-schema-store
-    rev: 2026.04.11
-    hooks:
-      - id: validate-pyproject
-        priority: 0
+        priority: 2
 
   ## Check JSON schemata
   - repo: https://github.com/python-jsonschema/check-jsonschema
@@ -44,7 +35,29 @@ repos:
       - id: check-readthedocs
         priority: 0
 
-  ## Catch common capitalization mistakes
+  ## Check best practices for scientific Python code
+  - repo: https://github.com/scientific-python/cookie
+    rev: 2026.04.04
+    hooks:
+      - id: sp-repo-review
+        additional_dependencies: ["repo-review[cli]"]
+        priority: 0
+
+  ## Check pyproject.toml file
+  - repo: https://github.com/henryiii/validate-pyproject-schema-store
+    rev: 2026.04.11
+    hooks:
+      - id: validate-pyproject
+        priority: 0
+
+  ## Ensure uv.lock is up to date
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.6
+    hooks:
+      - id: uv-lock
+        priority: 0
+
+  ## Check for common capitalization mistakes
   - repo: local
     hooks:
       - id: disallow-caps
@@ -54,36 +67,21 @@ repos:
         exclude: ^(\.pre-commit-config\.yaml)$
         priority: 0
 
-  ## Check for spelling
+  ## Check for typos
   - repo: https://github.com/adhtruong/mirrors-typos
     rev: v1.45.0
     hooks:
       - id: typos
-        priority: 0
+        priority: 3
 
-  ## Check best practices for scientific Python code
-  - repo: https://github.com/scientific-python/cookie
-    rev: 2026.04.04
-    hooks:
-      - id: sp-repo-review
-        additional_dependencies: ["repo-review[cli]"]
-        priority: 0
-
-  ## Check for license headers
+  ## Check license headers
   - repo: https://github.com/emzeat/mz-lictools
     rev: v2.9.0
     hooks:
       - id: license-tools
-        priority: 0
+        priority: 4
 
-  ## Ensure uv lock file is up-to-date
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.6
-    hooks:
-      - id: uv-lock
-        priority: 0
-
-  ## Tidy up BibTeX files
+  ## Format BibTeX files with bibtex-tidy
   - repo: https://github.com/FlamingTempura/bibtex-tidy
     rev: v1.14.0
     hooks:
@@ -100,27 +98,7 @@ repos:
             "--trailing-commas",
             "--remove-empty-fields",
           ]
-        priority: 0
-
-  # Priority 1: Second-pass fixers
-
-  ## Clang-format the C++ part of the code base automatically
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.3
-    hooks:
-      - id: clang-format
-        types_or: [c++, c, cuda]
-        priority: 1
-
-  ## Format the CMakeLists.txt files
-  - repo: https://github.com/cheshirekow/cmake-format-precommit
-    rev: v0.6.13
-    hooks:
-      - id: cmake-format
-        additional_dependencies: [pyyaml]
-        types: [file]
-        files: (\.cmake|CMakeLists.txt)(.in)?$
-        priority: 1
+        priority: 5
 
   ## Format configuration files with prettier
   - repo: https://github.com/rbubley/mirrors-prettier
@@ -128,22 +106,38 @@ repos:
     hooks:
       - id: prettier
         types_or: [yaml, markdown, html, css, scss, javascript, json, json5]
-        priority: 1
+        priority: 5
 
-  ## Python linting using ruff
+  ## Format CMake files with cmake-format
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+      - id: cmake-format
+        additional_dependencies: [pyyaml]
+        types: [file]
+        files: (\.cmake|CMakeLists.txt)(.in)?$
+        priority: 5
+
+  ## Format C++ files with clang-format
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v22.1.3
+    hooks:
+      - id: clang-format
+        types_or: [c++, c, cuda]
+        priority: 5
+
+  ## Format and lint Python files with ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:
       - id: ruff-format
         types_or: [python, pyi, jupyter, markdown]
-        priority: 1
+        priority: 6
       - id: ruff-check
         require_serial: true
-        priority: 2
+        priority: 7
 
-  # Priority 2+: Final checks and fixers
-
-  ## Static type checking using ty (needs to run after lockfile update/ruff format, and ruff lint)
+  ## Check Python types with ty
   - repo: local
     hooks:
       - id: ty-check
@@ -154,4 +148,4 @@ repos:
         types_or: [python, pyi, jupyter]
         exclude: ^(docs/)
         pass_filenames: false
-        priority: 3
+        priority: 8
