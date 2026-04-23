@@ -8,10 +8,10 @@
 
 [build-system]
 requires = [
-  "nanobind~=2.11.0",
+  "nanobind~=2.12.0",
   "scikit-build-core>=0.12.2",
   "setuptools-scm>=9.2.2",
-  "mqt.core~=3.4.1",
+  "mqt.core~=3.5.1",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -48,7 +48,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "mqt.core[qiskit]~=3.4.1",
+    "mqt.core[qiskit]~=3.5.1",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -299,10 +299,10 @@ test-skip = [
 environment = { DEPLOY = "ON" }
 # The SOVERSION needs to be updated when the shared libraries are updated.
 repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
---exclude libmqt-core-ir.so.3.4 \
---exclude libmqt-core-qasm.so.3.4 \
---exclude libmqt-core-circuit-optimizer.so.3.4 \
---exclude libmqt-core-dd.so.3.4"""
+--exclude libmqt-core-ir.so.3.5 \
+--exclude libmqt-core-qasm.so.3.5 \
+--exclude libmqt-core-circuit-optimizer.so.3.5 \
+--exclude libmqt-core-dd.so.3.5"""
 
 [tool.cibuildwheel.macos]
 environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }
@@ -337,10 +337,10 @@ mqt-ddsim = { workspace = true }
 
 [dependency-groups]
 build = [
-  "nanobind~=2.11.0",
+  "nanobind~=2.12.0",
   "scikit-build-core>=0.12.2",
   "setuptools-scm>=9.2.2",
-  "mqt.core~=3.4.1",
+  "mqt.core~=3.5.1",
 ]
 docs = [
   "breathe>=4.36.0",
@@ -359,8 +359,8 @@ docs = [
   "qiskit[visualization]>=1.0.0",
 ]
 test = [
-  "pytest>=9.0.1",
-  "pytest-cov>=7.0.0",
+  "pytest>=9.0.3",
+  "pytest-cov>=7.1.0",
   "pytest-sugar>=1.1.1",
   "pytest-xdist>=3.8.0",
   "numpy>=2.1; python_version >= '3.13'",
@@ -369,6 +369,6 @@ test = [
 dev = [
   {include-group = "build"},
   {include-group = "test"},
-  "nox>=2025.11.12",
-  "ty==0.0.29",
+  "nox>=2026.04.10",
+  "ty==0.0.32",
 ]

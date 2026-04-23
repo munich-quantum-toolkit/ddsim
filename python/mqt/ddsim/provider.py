@@ -76,7 +76,7 @@ class DDSIMProvider:
             filters: Additional filtering criteria.
             kwargs: Additional filtering criteria.
         """
-        backends = [
+        backends: list[Backend] = [
             backend_cls() for backend_name, backend_cls in self._BACKENDS if name is None or backend_name == name
         ]
         return cast("list[BackendV2]", filter_backends(backends, filters=filters, **kwargs))

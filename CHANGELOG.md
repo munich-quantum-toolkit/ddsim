@@ -9,6 +9,15 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#230)._
+
+## [2.3.0] - 2026-04-23
+
+### Changed
+
+- ⬆️ Update `mqt-core` to version 3.5.1 ([#847]) ([**@burgholzer**])
+- ⬆️ Update `nanobind` to version 2.12.0 ([#847]) ([**@burgholzer**])
+
 ## [2.2.0] - 2026-02-19
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#220)._
@@ -88,7 +97,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.3.0
 [2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.2.0
 [2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.1.0
 [2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.0.0
@@ -96,6 +106,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#847]: https://github.com/munich-quantum-toolkit/ddsim/pull/847
 [#779]: https://github.com/munich-quantum-toolkit/ddsim/pull/779
 [#773]: https://github.com/munich-quantum-toolkit/ddsim/pull/773
 [#770]: https://github.com/munich-quantum-toolkit/ddsim/pull/770
