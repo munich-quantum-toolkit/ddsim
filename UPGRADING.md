@@ -4,6 +4,10 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
+## [2.3.0]
+
+This release updates the minimum required `mqt-core` version to `v3.5.1` as well as the `nanobind` version to `v2.12.0`.
+
 ## [2.2.0]
 
 ### Python wheels
@@ -88,7 +92,8 @@ The default compilers of our test systems support all relevant features of the s
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v1.24.0...v2.0.0
