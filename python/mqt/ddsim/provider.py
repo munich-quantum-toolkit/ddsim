@@ -10,7 +10,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 from qiskit.providers.exceptions import QiskitBackendNotFoundError
 from qiskit.providers.providerutils import filter_backends
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 class DDSIMProvider:
     """Provider for DDSIM backends."""
 
-    _BACKENDS = (
+    _BACKENDS: tuple[tuple[str, type[BackendV2]], ...] = (
         ("qasm_simulator", QasmSimulatorBackend),
         ("statevector_simulator", StatevectorSimulatorBackend),
         ("hybrid_qasm_simulator", HybridQasmSimulatorBackend),
@@ -79,7 +79,7 @@ class DDSIMProvider:
         backends = [
             backend_cls() for backend_name, backend_cls in self._BACKENDS if name is None or backend_name == name
         ]
-        return cast("list[BackendV2]", filter_backends(backends, filters=filters, **kwargs))
+        return filter_backends(backends, filters=filters, **kwargs)  # ty: ignore[invalid-argument-type, invalid-return-type]
 
     def __str__(self) -> str:
         """Return the provider name."""
