@@ -1675,13 +1675,13 @@ requires-dist = [
 [package.metadata.requires-dev]
 build = [
     { name = "mqt-core", specifier = "~=3.4.1" },
-    { name = "nanobind", specifier = "~=2.11.0" },
+    { name = "nanobind", specifier = "~=2.12.0" },
     { name = "scikit-build-core", specifier = ">=0.12.2" },
     { name = "setuptools-scm", specifier = ">=9.2.2" },
 ]
 dev = [
     { name = "mqt-core", specifier = "~=3.4.1" },
-    { name = "nanobind", specifier = "~=2.11.0" },
+    { name = "nanobind", specifier = "~=2.12.0" },
     { name = "nox", specifier = ">=2025.11.12" },
     { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1" },
     { name = "numpy", marker = "python_full_version >= '3.14'", specifier = ">=2.3.2" },
@@ -1797,11 +1797,11 @@ wheels = [
 
 [[package]]
 name = "nanobind"
-version = "2.11.0"
+version = "2.12.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/7c/d6/2d17c0a630fabc05785c0ea57a994bb165b342416bec8e41c96f3fee5add/nanobind-2.11.0.tar.gz", hash = "sha256:6d98d063c61dbbd05a2d903e59be398bfcff9d59c54fbbc9d4488960485d40d0", size = 1001251, upload-time = "2026-01-29T11:24:34.403Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c6/5c/3b69bc3933ad3c3668ba029ad410ba8ecfdc8ee7262ff1009f3304f3c562/nanobind-2.12.0.tar.gz", hash = "sha256:0ae77c1a88f27153fa57045ee00f7b0a7b06b1cd3df942e95a34b38c5d0a5bee", size = 1002704, upload-time = "2026-02-25T09:41:54.691Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e8/1c/37ae5b9a0d13defd8e27222e4cbfb82e569dbfd12d16ba8c78cab593e56c/nanobind-2.11.0-py3-none-any.whl", hash = "sha256:8097442c3e55d011a67f016ce1d9567ed9e3cdb3ad6749f13a76dbbc2721f0ee", size = 248913, upload-time = "2026-01-29T11:24:32.651Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/bf/1a54e3573736f3ad15fc599c5dde007937234652a1a7efd62573b4ce3a7e/nanobind-2.12.0-py3-none-any.whl", hash = "sha256:a10d3d88e691dcdf22696f9acd893fda3c5a05635763aea238829d274fcad480", size = 249512, upload-time = "2026-02-25T09:41:52.908Z" },
 ]
 
 [[package]]
@@ -2204,7 +2204,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess" },
+    { name = "ptyprocess", marker = "(python_full_version < '3.11' and sys_platform == 'emscripten') or (python_full_version < '3.11' and sys_platform == 'win32') or (sys_platform != 'emscripten' and sys_platform != 'win32')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
