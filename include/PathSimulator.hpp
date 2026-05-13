@@ -22,7 +22,7 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 #include <taskflow/core/async.hpp> // IWYU pragma: keep

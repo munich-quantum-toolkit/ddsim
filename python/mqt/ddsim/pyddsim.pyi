@@ -62,8 +62,8 @@ class StochasticNoiseSimulator:
         seed: int = -1,
         noise_effects: str = "APD",
         noise_probability: float = 0.01,
-        amp_damping_probability: float = 0.02,
-        multi_qubit_gate_factor: float | None = 2,
+        amp_damping_probability: float | None = 0.02,
+        multi_qubit_gate_factor: float = 2,
     ) -> None: ...
     def get_number_of_qubits(self) -> int:
         """Get the number of qubits."""
@@ -102,8 +102,8 @@ class DeterministicNoiseSimulator:
         seed: int = -1,
         noise_effects: str = "APD",
         noise_probability: float = 0.01,
-        amp_damping_probability: float = 0.02,
-        multi_qubit_gate_factor: float | None = 2,
+        amp_damping_probability: float | None = 0.02,
+        multi_qubit_gate_factor: float = 2,
     ) -> None: ...
     def get_number_of_qubits(self) -> int:
         """Get the number of qubits."""
