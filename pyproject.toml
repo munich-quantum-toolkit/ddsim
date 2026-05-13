@@ -369,6 +369,6 @@ test = [
 dev = [
   {include-group = "build"},
   {include-group = "test"},
-  "nox>=2026.04.10",
-  "ty==0.0.32",
+  "nox>=2025.11.12",
+  "ty==0.0.34",
 ]
