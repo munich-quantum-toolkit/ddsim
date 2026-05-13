@@ -9,9 +9,9 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
-_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#230)._
+## [2.3.0] - 2026-05-13
 
-## [2.3.0] - 2026-04-23
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#230)._
 
 ### Changed
 
