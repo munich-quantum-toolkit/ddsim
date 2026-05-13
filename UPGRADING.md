@@ -6,7 +6,7 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [2.3.0]
 
-This release updates the minimum required `mqt-core` version to `v3.5.1` as well as the `nanobind` version to `v2.12.0`.
+This release updates the minimum required `mqt-core` version to `v3.6.0` as well as the `nanobind` version to `v2.12.0`.
 
 ## [2.2.0]
 
