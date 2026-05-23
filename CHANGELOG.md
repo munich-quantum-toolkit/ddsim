@@ -9,6 +9,14 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ## [Unreleased]
 
+### Added
+
+- 🚸 Add [CMake presets] to provide a standardized and reproducible way to configure builds ([#871]) ([**@denialhaag**])
+
+### Changed
+
+- ⬆️ Update [munich-quantum-toolkit/workflows] to version `v2.0.1` ([#871]) ([**@denialhaag**])
+
 ## [2.3.0] - 2026-05-13
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#230)._
@@ -106,6 +114,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#871]: https://github.com/munich-quantum-toolkit/ddsim/pull/871
 [#847]: https://github.com/munich-quantum-toolkit/ddsim/pull/847
 [#779]: https://github.com/munich-quantum-toolkit/ddsim/pull/779
 [#773]: https://github.com/munich-quantum-toolkit/ddsim/pull/773
@@ -140,3 +149,5 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
 [GitHub Release Notes]: https://github.com/munich-quantum-toolkit/ddsim/releases
 [munich-quantum-toolkit]: https://github.com/munich-quantum-toolkit
+[CMake presets]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
+[munich-quantum-toolkit/workflows]: https://github.com/munich-quantum-toolkit/workflows
