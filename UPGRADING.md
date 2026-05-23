@@ -4,6 +4,23 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
+### CMake presets
+
+[CMake presets] have been added to provide a standardized and reproducible way to configure builds across different platforms.
+These presets are also used in our CI.
+
+On Unix systems, the `debug`, `release`, and `coverage` presets can be used to configure, build, and test MQT DDSIM.
+
+```console
+cmake --preset release
+cmake --build --preset release
+ctest --preset release
+```
+
+Additionally, the `lint` preset can be used to configure and build MQT DDSIM in preparation for a `clang-tidy` run.
+
+If you are on Windows, use the `debug-windows` and `release-windows` presets.
+
 ## [2.3.0]
 
 This release updates the minimum required `mqt-core` version to `v3.6.0` as well as the `nanobind` version to `v2.12.0`.
@@ -102,3 +119,4 @@ The default compilers of our test systems support all relevant features of the s
 
 [#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
 [MQT SyReC]: https://github.com/cda-tum/mqt-syrec
+[CMake presets]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
