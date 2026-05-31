@@ -45,7 +45,7 @@ repos:
 
   ## Check pyproject.toml file
   - repo: https://github.com/henryiii/validate-pyproject-schema-store
-    rev: 2026.05.22
+    rev: 2026.05.24
     hooks:
       - id: validate-pyproject
         priority: 0
@@ -69,7 +69,7 @@ repos:
 
   ## Check for typos
   - repo: https://github.com/adhtruong/mirrors-typos
-    rev: v1.46.2
+    rev: v1.46.3
     hooks:
       - id: typos
         priority: 3
