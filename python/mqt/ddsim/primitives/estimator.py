@@ -29,7 +29,6 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
     from qiskit.primitives.containers import EstimatorPubLike
     from qiskit.primitives.containers.observables_array import ObservablesArray
-    from qiskit.quantum_info import Pauli
 
 
 class Estimator(BaseEstimatorV2):
