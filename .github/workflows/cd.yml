@@ -12,7 +12,7 @@ permissions:
 jobs:
   build-sdist:
     name: 🐍 Packaging
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@143bf51e7192c31e76abafe58e3732c5aff9c69b # v2.0.1
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@fe2cdef83f21c972314c8040a1a31af9803b5498 # v2.0.2
 
   # Builds wheels on all supported platforms using cibuildwheel.
   # The wheels are uploaded as GitHub artifacts `dev-cibw-*` or `cibw-*`, depending on whether
@@ -31,7 +31,7 @@ jobs:
             windows-2025,
             windows-11-arm,
           ]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@143bf51e7192c31e76abafe58e3732c5aff9c69b # v2.0.1
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@fe2cdef83f21c972314c8040a1a31af9803b5498 # v2.0.2
     with:
       runs-on: ${{ matrix.runs-on }}
 
