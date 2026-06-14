@@ -363,12 +363,15 @@ test = [
   "pytest-cov>=7.1.0",
   "pytest-sugar>=1.1.1",
   "pytest-xdist>=3.8.0",
+  "numpy>=1.22",
+  "numpy>=1.24; python_version >= '3.11'",
+  "numpy>=1.26; python_version >= '3.12'",
   "numpy>=2.1; python_version >= '3.13'",
   "numpy>=2.3.2; python_version >= '3.14'",
+  "qiskit>=1.1",
 ]
 dev = [
   {include-group = "build"},
   {include-group = "test"},
   "nox>=2025.11.12",
-  "ty==0.0.40",
 ]
