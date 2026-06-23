@@ -276,7 +276,7 @@ jobs:
               && 'python-tests,python-coverage,' || ''
             }}
             ${{
-              (!fromJSON(needs.change-detection.outputs.run-python-tests) || !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci') || github.event_name != 'pull_request')
+              (!fromJSON(needs.change-detection.outputs.run-python-tests) || github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci'))
               && 'python-tests-extensive,' || ''
             }}
             ${{
