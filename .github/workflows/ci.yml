@@ -197,7 +197,7 @@ jobs:
   python-linter:
     name: 🐍 Lint
     needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-python-tests)
+    if: fromJSON(needs.change-detection.outputs.run-python-linter)
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-linter.yml@e7f84f39ce2d3b6c5d1d04526b8f94f98e455143 # v2.2.0
     with:
       check-stubs: true
@@ -260,7 +260,7 @@ jobs:
               && 'cpp-tests-ubuntu,cpp-tests-macos,cpp-tests-windows,' || ''
             }}
             ${{
-              (!fromJSON(needs.change-detection.outputs.run-cpp-tests) || !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci') || github.event_name != 'pull_request')
+              (!fromJSON(needs.change-detection.outputs.run-cpp-tests) || github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci'))
               && 'cpp-tests-extensive-ubuntu,cpp-tests-extensive-macos,cpp-tests-extensive-windows,' || ''
             }}
             ${{
@@ -273,11 +273,15 @@ jobs:
             }}
             ${{
               !fromJSON(needs.change-detection.outputs.run-python-tests)
-              && 'python-tests,python-coverage,python-linter,' || ''
+              && 'python-tests,python-coverage,' || ''
             }}
             ${{
               (!fromJSON(needs.change-detection.outputs.run-python-tests) || !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci') || github.event_name != 'pull_request')
               && 'python-tests-extensive,' || ''
+            }}
+            ${{
+              !fromJSON(needs.change-detection.outputs.run-python-linter)
+              && 'python-linter,' || ''
             }}
             ${{
               !fromJSON(needs.change-detection.outputs.run-cd)
