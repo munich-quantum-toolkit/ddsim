@@ -84,12 +84,12 @@ class QasmSimulatorBackend(BackendV2):
 
     @property
     def target(self) -> Target:
-        """Return the target of the backend."""
+        """The target of the backend."""
         return self._TARGET
 
     @property
     def max_circuits(self) -> int | None:
-        """Return the maximum number of circuits that can be run in a single job."""
+        """The maximum number of circuits that can be run in a single job."""
         return None
 
     @staticmethod

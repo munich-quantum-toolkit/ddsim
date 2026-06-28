@@ -62,7 +62,7 @@ class UnitarySimulatorBackend(QasmSimulatorBackend):
 
     @property
     def target(self) -> Target:
-        """Return the target of the backend."""
+        """The target of the backend."""
         return self._US_TARGET
 
     def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:  # noqa: PLR6301
