@@ -41,20 +41,20 @@ class Estimator(BaseEstimatorV2):
         """Create a new DDSIM estimator.
 
         Args:
-            default_precision: The default precision for expectation-value estimates. Defaults to ``0.0``.
-            seed: The seed for the ``CircuitSimulator``. Defaults to ``-1``.
+            default_precision: The default precision for expectation-value estimates. Defaults to `0.0`.
+            seed: The seed for the `CircuitSimulator`. Defaults to `-1`.
         """
         self._default_precision = default_precision
         self._seed = seed
 
     @property
     def default_precision(self) -> float:
-        """Return the default precision."""
+        """The default precision for expectation-value estimates."""
         return self._default_precision
 
     @property
     def seed(self) -> int:
-        """Return the seed."""
+        """The seed for the `CircuitSimulator`."""
         return self._seed
 
     def run(

@@ -44,20 +44,20 @@ class Sampler(BaseSamplerV2):
         """Create a new DDSIM sampler.
 
         Args:
-            default_shots: The default number of shots to sample. Defaults to ``1024``.
-            seed: The seed for the ``CircuitSimulator``. Defaults to ``-1``.
+            default_shots: The default number of shots to sample. Defaults to `1024`.
+            seed: The seed for the `CircuitSimulator`. Defaults to `-1`.
         """
         self._default_shots = default_shots
         self._seed = seed
 
     @property
     def default_shots(self) -> int:
-        """Return the default shots."""
+        """The default number of shots to sample."""
         return self._default_shots
 
     @property
     def seed(self) -> int:
-        """Return the seed."""
+        """The seed for the `CircuitSimulator`."""
         return self._seed
 
     def run(

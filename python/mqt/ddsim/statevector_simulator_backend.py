@@ -34,5 +34,5 @@ class StatevectorSimulatorBackend(QasmSimulatorBackend):
 
     @property
     def target(self) -> Target:
-        """Return the target of the backend."""
+        """The target of the backend."""
         return self._SV_TARGET

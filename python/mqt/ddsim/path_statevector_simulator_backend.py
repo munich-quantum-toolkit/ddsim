@@ -33,5 +33,5 @@ class PathStatevectorSimulatorBackend(PathQasmSimulatorBackend):
 
     @property
     def target(self) -> Target:
-        """Return the target of the backend."""
+        """The target of the backend."""
         return self._Path_SV_TARGET
