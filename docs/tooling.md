@@ -3,10 +3,9 @@
 
 # Tooling
 
-This page summarizes the main tools, software,
-and standards used in MQT DDSIM.
-It serves as a quick reference for new contributors
-and users who want to understand the project's ecosystem.
+This page summarizes the main tools, software, and standards used in MQT
+DDSIM. It serves as a quick reference for new contributors and users who want
+to understand the project's ecosystem.
 
 ## C++
 
@@ -26,17 +25,15 @@ and users who want to understand the project's ecosystem.
 | **scikit-build-core** | Build backend for Python package.                              | [Documentation](https://scikit-build-core.readthedocs.io/en/latest/).                                                                     |
 | **cibuildwheel**      | Builds wheels for all supported platforms and Python versions. | [Documentation](https://cibuildwheel.pypa.io/en/stable/). Configured in {code}`pyproject.toml`.                                           |
 
-By using nanobind, we can take advantage of the
-[Stable ABI](https://docs.python.org/3/c-api/stable.html) for Python 3.12+.
-This means that, starting from Python 3.12,
-we only need to build one wheel per platform,
-which can be used across all Python 3.12+ versions.
-We still build separate wheels for older supported Python versions.
+By using `nanobind`, we can take advantage of the
+[Stable ABI](https://docs.python.org/3/c-api/stable.html) for Python 3.12+. This
+means that, starting from Python 3.12, we only need to build one wheel per
+platform, which can be used across all Python 3.12+ versions. We still build
+separate wheels for older supported Python versions.
 
-Additionally, we support the free-threading version of Python
-that is no longer marked experimental as of Python 3.14.
-The corresponding wheels are built separately since there is no stable ABI
-for free-threading Python yet.
+Additionally, we support the free-threading version of Python that is no longer
+marked experimental as of Python 3.14. The corresponding wheels are built
+separately since there is no stable ABI for free-threading Python yet.
 
 ## Python
 
@@ -49,8 +46,8 @@ for free-threading Python yet.
 | **ty**     | Fast Python type checker and language server.                                            | [Documentation](https://docs.astral.sh/ty/).                                                                                                           |
 | **pytest** | Testing framework for Python.                                                            | [Documentation](https://docs.pytest.org/). Run via {code}`nox -s tests` or {code}`uv run pytest`.                                                      |
 
-The project adheres to modern standards and practices.
-For the Python ecosystem, we make use of the following standards:
+The project adheres to modern standards and practices. For the Python ecosystem,
+we make use of the following standards:
 
 | Standard    | Description                                                     | Links / Notes                                       |
 | ----------- | --------------------------------------------------------------- | --------------------------------------------------- |

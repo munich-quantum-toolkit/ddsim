@@ -3,15 +3,15 @@
 
 # Contributing
 
-Thank you for your interest in contributing to MQT DDSIM!
-This document outlines the development guidelines and how to contribute.
+Thank you for your interest in contributing to MQT DDSIM! This document
+outlines the development guidelines and how to contribute.
 
 We use GitHub to
 [host code](https://github.com/munich-quantum-toolkit/ddsim), to
 [track issues and feature requests][issues], as well as accept
-[pull requests](https://github.com/munich-quantum-toolkit/ddsim/pulls).
-See <https://docs.github.com/en/get-started/quickstart>
-for a general introduction to working with GitHub and contributing to projects.
+[pull requests](https://github.com/munich-quantum-toolkit/ddsim/pulls). See
+<https://docs.github.com/en/get-started/quickstart> for a general introduction
+to working with GitHub and contributing to projects.
 
 ## Types of Contributions
 
@@ -20,45 +20,39 @@ Pick the path that fits your time and interests:
 - 🐛 Report bugs:
 
   Use the _🐛 Bug report_ template at
-  <https://github.com/munich-quantum-toolkit/ddsim/issues>.
-  Include steps to reproduce, expected vs. actual behavior, environment,
-  and a minimal example.
+  <https://github.com/munich-quantum-toolkit/ddsim/issues>. Include steps to
+  reproduce, expected vs. actual behavior, environment, and a minimal example.
 
 - 🛠️ Fix bugs:
 
-  Browse [issues][issues], especially those labeled "bug", "help wanted",
-  or "good first issue".
-  Open a draft PR early to get feedback.
+  Browse [issues][issues], especially those labeled "bug", "help wanted", or
+  "good first issue". Open a draft PR early to get feedback.
 
 - 💡 Propose features:
 
   Use the _✨ Feature request_ template at
-  <https://github.com/munich-quantum-toolkit/ddsim/issues>.
-  Describe the motivation, alternatives considered,
-  and (optionally) a small API sketch.
+  <https://github.com/munich-quantum-toolkit/ddsim/issues>. Describe the
+  motivation, alternatives considered, and (optionally) a small API sketch.
 
 - ✨ Implement features:
 
-  Pick items labeled "feature" or "enhancement".
-  Coordinate in the issue first if the change is substantial;
-  start with a draft PR.
+  Pick items labeled "feature" or "enhancement". Coordinate in the issue first
+  if the change is substantial; start with a draft PR.
 
 - 📝 Improve documentation:
 
-  Add or refine docstrings, tutorials, and examples; fix typos;
-  clarify explanations.
-  Small documentation-only PRs are very welcome.
+  Add or refine docstrings, tutorials, and examples; fix typos; clarify
+  explanations. Small documentation-only PRs are very welcome.
 
 - ⚡️ Performance and reliability:
 
-  Profile hot paths, add benchmarks, reduce allocations, deflake tests,
-  and improve error messages.
+  Profile hot paths, add benchmarks, reduce allocations, deflake tests, and
+  improve error messages.
 
 - 📦 Packaging and tooling:
 
-  Improve build configuration, type hints/stubs, CI workflows,
-  and platform wheels.
-  Incremental tooling fixes have a big impact.
+  Improve build configuration, type hints/stubs, CI workflows, and platform
+  wheels. Incremental tooling fixes have a big impact.
 
 - 🙌 Community support:
 
@@ -68,25 +62,24 @@ Pick the path that fits your time and interests:
 ## Guidelines
 
 Please adhere to the following guidelines to help the project grow sustainably.
-Contributions that do not comply with these guidelines
-or violate our {doc}`ai_usage` may be rejected without further review.
+Contributions that do not comply with these guidelines or violate our
+{doc}`ai_usage` may be rejected without further review.
 
 ### Core Guidelines
 
 - ["Commit early and push often"](https://www.worklytics.co/blog/commit-early-push-often).
-- Write meaningful commit messages,
-  preferably using [gitmoji](https://gitmoji.dev) for additional context.
+- Write meaningful commit messages, preferably using
+  [gitmoji](https://gitmoji.dev) for additional context.
 - Focus on a single feature or bug at a time and only touch relevant files.
   Split multiple features into separate contributions.
 - Add tests for new features to ensure they work as intended.
 - Document new features.
-  For user-facing changes, add a changelog entry; for breaking changes,
-  update the upgrade guide.
-  For details, see {ref}`maintaining-changelog-upgrade-guide`.
+  For user-facing changes, add a changelog entry; for breaking changes, update the
+  upgrade guide. For details, see {ref}`maintaining-changelog-upgrade-guide`.
 - Add tests for bug fixes to demonstrate the fix.
 - Document your code thoroughly and ensure it is readable.
-- Keep your code clean by removing debug statements, leftover comments,
-  and unrelated code.
+- Keep your code clean by removing debug statements, leftover comments, and
+  unrelated code.
 - Check your code for style and linting errors before committing.
 - Follow the project's coding standards and conventions.
 - Be open to feedback and willing to make necessary changes based on code
@@ -94,165 +87,145 @@ or violate our {doc}`ai_usage` may be rejected without further review.
 
 ### AI-assisted contributions
 
-We acknowledge the utility of AI-based coding agents
-(e.g., Claude Code, OpenAI Codex, or GitHub Copilot)
-in modern software development.
-However, their use requires a high degree of responsibility
-and transparency to maintain code quality and licensing compliance.
+We acknowledge the utility of AI-based coding agents (e.g., Claude Code, OpenAI
+Codex, or GitHub Copilot) in modern software development. However, their use
+requires a high degree of responsibility and transparency to maintain code
+quality and licensing compliance.
 
-Please carefully read and follow our dedicated {doc}`ai_usage`
-before submitting any AI-assisted contribution.
-In short: **You are responsible for every line of code you submit**,
-and a **human must always be in the loop**.
-We require disclosure of AI tool usage in your PR description.
+Please carefully read and follow our dedicated {doc}`ai_usage` before submitting
+any AI-assisted contribution. In short:
+**You are responsible for every line of code you submit**, and a
+**human must always be in the loop**. We require disclosure of AI tool usage in
+your PR description.
 
 If you use an agent, it will automatically read the provided {code}`AGENTS.md`,
 which contains context and instructions to help the agent work on MQT DDSIM.
-For Claude Code, create a symlink with {code}`ln -s AGENTS.md CLAUDE.md`
-so Claude picks up the same file.
+For Claude Code, create a symlink with {code}`ln -s AGENTS.md CLAUDE.md` so
+Claude picks up the same file.
 
 ### Pull Request Workflow
 
-- Create PRs early.
-  Work-in-progress PRs are welcome; mark them as drafts on GitHub.
-- Use a clear title, reference related issues by number,
-  and describe the changes.
-  Follow the PR template; only omit the issue reference if not applicable.
+- Create PRs early. Work-in-progress PRs are welcome; mark them as drafts on
+  GitHub.
+- Use a clear title, reference related issues by number, and describe the
+  changes. Follow the PR template; only omit the issue reference if not
+  applicable.
 - CI runs on all supported platforms and Python versions to build, test, format,
-  and lint.
-  All checks must pass before merging.
-- When ready, convert the draft to a regular PR
-  and request a review from a maintainer.
-  If unsure, ask in PR comments.
-  If you are a first-time contributor,
-  mention a maintainer in a comment to request a review.
-- If your PR gets a "Changes requested" review,
-  address the feedback and push updates to the same branch.
-  Do not close and reopen a new PR.
-  Respond to comments to signal that you have addressed the feedback.
-  Do not resolve review comments yourself;
-  the reviewer will do so once satisfied.
-- If the reviewer suggested changes with explicit code suggestions
-  as part of the comments, apply these directly using the GitHub UI.
-  This attributes the changes to the reviewer
-  and automatically resolves the respective comments
-  (this is an exception to the rule above).
-  If there are multiple suggestions that you want to apply at once,
-  you can batch them into a single commit.
-  Go to the "Files changed" tab of the PR,
-  and then click "Add suggestion to batch"
-  for each suggestion you want to include.
-  Once you are done selecting suggestions, click "Commit suggestions".
-  Only apply suggestions manually if using the GitHub UI is not feasible.
+  and lint. All checks must pass before merging.
+- When ready, convert the draft to a regular PR and request a review from a
+  maintainer. If unsure, ask in PR comments. If you are a first-time
+  contributor, mention a maintainer in a comment to request a review.
+- If your PR gets a "Changes requested" review, address the feedback and push
+  updates to the same branch. Do not close and reopen a new PR. Respond to
+  comments to signal that you have addressed the feedback. Do not resolve review
+  comments yourself; the reviewer will do so once satisfied.
+- If the reviewer suggested changes with explicit code suggestions as part of
+  the comments, apply these directly using the GitHub UI. This attributes the
+  changes to the reviewer and automatically resolves the respective comments
+  (this is an exception to the rule above). If there are multiple suggestions
+  that you want to apply at once, you can batch them into a single commit. Go to
+  the "Files changed" tab of the PR, and then click "Add suggestion to batch"
+  for each suggestion you want to include. Once you are done selecting
+  suggestions, click "Commit suggestions". Only apply suggestions manually if
+  using the GitHub UI is not feasible.
 - Re-request a review after pushing changes that address feedback.
-- Do not squash commits locally; maintainers typically squash on merge.
-  Avoid rebasing or force-pushing before reviews;
-  you may rebase after addressing feedback if desired.
+- Do not squash commits locally; maintainers typically squash on merge. Avoid
+  rebasing or force-pushing before reviews; you may rebase after addressing
+  feedback if desired.
 
 ### Working with CodeRabbit
 
-We often use [CodeRabbit](https://www.coderabbit.ai/)
-for the initial review of PRs.
-We use this tool to ease the workload on our maintainers
-and to counteract the trend of sloppy AI-assisted contributions.
+We often use [CodeRabbit](https://www.coderabbit.ai/) for the initial review of
+PRs. We use this tool to ease the workload on our maintainers and to counteract
+the trend of sloppy AI-assisted contributions.
 
 Once your PR is ready, an initial review by CodeRabbit can be requested via
-{code}`@coderabbitai full review`.
-Just post this command as a PR comment on GitHub.
-Any subsequent reviews can be requested via {code}`@coderabbitai review`.
+{code}`@coderabbitai full review`. Just post this command as a PR comment on
+GitHub. Any subsequent reviews can be requested via
+{code}`@coderabbitai review`.
 
-To get the most out of it and help the project maintain its high ambitions
-for code quality, please follow these practices:
+To get the most out of it and help the project maintain its high ambitions for
+code quality, please follow these practices:
 
 - **Review the review**: Do not take CodeRabbit's suggestions as absolute truth.
-  LLMs can be overly defensive and conservative,
-  leading to overcomplicated code.
-  Treat its comments as suggestions: consider them,
-  but feel free to disagree and explain why.
-- **Respond to comments**:
-  Do not simply resolve CodeRabbit's comments without answering them.
-  It learns from your replies and improves over time.
-  If a suggestion does not apply, take a moment to explain why in a reply.
-- **Avoid multiple AI review bots**:
-  CodeRabbit performs significantly worse when other AI review bots
-  (e.g., GitHub Copilot) are active on the same PR.
-  For the best results, do not tag Copilot
-  unless you have already iterated with CodeRabbit and want an extra pass.
-- **Engage CodeRabbit in discussions**:
-  When team members are discussing code in PR comments,
-  CodeRabbit stays silent by default.
-  Tag {code}`@coderabbitai` to engage it in the conversation
-  and get its feedback on the specific points being discussed.
-  In particular, when you tag another person in a comment,
-  ensure to also tag CodeRabbit.
-  Otherwise, you will just get an automatic "It seems like the humans are having
-  a chat" response from CodeRabbit anyway, which does not add much value.
-- **Let CodeRabbit resolve comments**:
-  Wait until after the next push
-  before considering resolving CodeRabbit's comments manually.
-  CodeRabbit will automatically resolve comments
-  that it thinks have been addressed by your changes.
-  Sometimes, it gets stuck, at which point you may resolve it manually.
+  LLMs can be overly defensive and conservative, leading to overcomplicated
+  code. Treat its comments as suggestions: consider them, but feel free to
+  disagree and explain why.
+- **Respond to comments**: Do not simply resolve CodeRabbit's comments without
+  answering them. It learns from your replies and improves over time. If a
+  suggestion does not apply, take a moment to explain why in a reply.
+- **Avoid multiple AI review bots**: CodeRabbit performs significantly worse
+  when other AI review bots (e.g., GitHub Copilot) are active on the same PR.
+  For the best results, do not tag Copilot unless you have already iterated with
+  CodeRabbit and want an extra pass.
+- **Engage CodeRabbit in discussions**: When team members are discussing code in
+  PR comments, CodeRabbit stays silent by default. Tag {code}`@coderabbitai` to
+  engage it in the conversation and get its feedback on the specific points
+  being discussed. In particular, when you tag another person in a comment,
+  ensure to also tag CodeRabbit. Otherwise, you will just get an automatic "It
+  seems like the humans are having a chat" response from CodeRabbit anyway,
+  which does not add much value.
+- **Let CodeRabbit resolve comments**: Wait until after the next push before
+  considering resolving CodeRabbit's comments manually. CodeRabbit will
+  automatically resolve comments that it thinks have been addressed by your
+  changes. Sometimes, it gets stuck, at which point you may resolve it manually.
 
-Note that having your PR reviewed by CodeRabbit does **not** count
-as an AI-assisted contribution
-for the purpose of the disclosure requirement mentioned above.
+Note that having your PR reviewed by CodeRabbit does **not** count as an
+AI-assisted contribution for the purpose of the disclosure requirement mentioned
+above.
 
 ## Get Started 🎉
 
-Ready to contribute?
-We value contributions from people with all levels of experience.
-In particular, if this is your first PR, not everything has to be perfect.
-We will guide you through the process.
+Ready to contribute? We value contributions from people with all levels of
+experience. In particular, if this is your first PR, not everything has to be
+perfect. We will guide you through the process.
 
 ## Installation
 
-Check out our {ref}`installation guide for developers <development-setup>`
-for instructions on how to set up your development environment.
+Check out our {ref}`installation guide for developers <development-setup>` for
+instructions on how to set up your development environment.
 
 ## Working on the C++ Library
 
 Building the project requires a C++20-capable
 [C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.24 or newer.
-As of August 2025, our CI pipeline on GitHub continuously tests the library
-across the following matrix of systems and compilers:
+and [CMake](https://cmake.org/) 3.24 or newer. As of August 2025, our CI
+pipeline on GitHub continuously tests the library across the following matrix of
+systems and compilers:
 
-- {code}`ubuntu-24.04`: {code}`Release`
-  and {code}`Debug` builds using {code}`gcc`
+- {code}`ubuntu-24.04`: {code}`Release` and {code}`Debug` builds using
+  {code}`gcc`
 - {code}`ubuntu-24.04-arm`: {code}`Release` build using {code}`gcc`
-- {code}`macos-26`: {code}`Release`
-  and {code}`Debug` builds using {code}`AppleClang`
+- {code}`macos-26`: {code}`Release` and {code}`Debug` builds using
+  {code}`AppleClang`
 - {code}`macos-26-intel`: {code}`Release` build using {code}`AppleClang`
-- {code}`windows-2025`: {code}`Release`
-  and {code}`Debug` builds using {code}`msvc`
+- {code}`windows-2025`: {code}`Release` and {code}`Debug` builds using
+  {code}`msvc`
 - {code}`windows-11-arm`: {code}`Release` build using {code}`msvc`
 
 To access the latest build logs, visit the
 [GitHub Actions page](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
 
 Additionally, we regularly run extensive tests with an even wider matrix of
-compilers and operating systems.
-We are not aware of any issues with other compilers or operating systems.
-If you encounter any problems, please [open an issue][issues] and let us know.
+compilers and operating systems. We are not aware of any issues with other
+compilers or operating systems. If you encounter any problems, please
+[open an issue][issues] and let us know.
 
 ### Configure and Build
 
 :::{tip}
-We recommend using an IDE like [CLion][clion] or [Visual Studio Code][vscode]
-for development.
-Both IDEs have excellent support for CMake projects
-and provide a convenient way to run CMake and build the project.
-If you prefer to work on the command line,
-the following instructions will guide you through the process.
+We recommend using an IDE like [CLion][clion] or [VS Code][vscode] for
+development. Both IDEs have excellent support for CMake projects and provide a
+convenient way to run CMake and build the project. If you prefer to work on the
+command line, the following instructions will guide you through the process.
 :::
 
-This project uses CMake as the main build configuration tool.
-To standardize the configuration, we provide
+This project uses CMake as the main build configuration tool. To standardize the
+configuration, we provide
 [CMake presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
 
-Building a project using CMake is a two-stage process.
-First, CMake needs to be _configured_ by calling:
+Building a project using CMake is a two-stage process. First, CMake needs to be
+_configured_ by calling:
 
 ```console
 cmake --preset release
@@ -260,9 +233,9 @@ cmake --preset release
 
 Under the hood, this effectively calls
 `cmake -S . -B build/release -DCMAKE_BUILD_TYPE=Release` and configures a
-{code}`Release` build.
-A {code}`Debug` build can be requested by using the {code}`debug` preset.
-If you are on Windows, use the `release-windows` and `debug-windows` presets.
+{code}`Release` build. A {code}`Debug` build can be requested by using the
+{code}`debug` preset. If you are on Windows, use the `release-windows` and
+`debug-windows` presets.
 
 After configuring CMake, the project can be _built_ by calling:
 
@@ -283,66 +256,59 @@ Building the project this way generates
 
 This project uses CMake's
 [{code}`FetchContent`](https://cmake.org/cmake/help/latest/module/FetchContent.html)
-module to download and build its dependencies.
-Because of this, the first time you configure the project,
-you will need an active internet connection to fetch the required libraries.
+module to download and build its dependencies. Because of this, the first time
+you configure the project, you will need an active internet connection to fetch
+the required libraries.
 
 However, there are several ways to bypass these downloads:
 
-- **Use system-installed dependencies**:
-  If the dependencies are already installed on your system
-  and Find-modules exist for them,
-  {code}`FetchContent` will use those versions instead of downloading them.
-- **Provide a local copy**: If you have local copies of the dependencies
-  (from a previous build or another project),
-  you can point {code}`FetchContent` to them by passing the
+- **Use system-installed dependencies**: If the dependencies are already
+  installed on your system and Find-modules exist for them, {code}`FetchContent`
+  will use those versions instead of downloading them.
+- **Provide a local copy**: If you have local copies of the dependencies (from a
+  previous build or another project), you can point {code}`FetchContent` to them
+  by passing the
   [{code}`-DFETCHCONTENT_SOURCE_DIR_<uppercaseName>`](https://cmake.org/cmake/help/latest/module/FetchContent.html#variable:FETCHCONTENT_SOURCE_DIR_%3CuppercaseName%3E)
-  flag to your CMake configure step.
-  The {code}`<uppercaseName>` should be replaced with the name of the dependency
-  as specified in the project's CMake files.
-- **Use project-specific options**:
-  Some projects provide specific CMake options to use a system-wide dependency
-  instead of downloading it.
-  Check the project's documentation or CMake files for these types of flags.
+  flag to your CMake configure step. The {code}`<uppercaseName>` should be
+  replaced with the name of the dependency as specified in the project's CMake
+  files.
+- **Use project-specific options**: Some projects provide specific CMake options
+  to use a system-wide dependency instead of downloading it. Check the project's
+  documentation or CMake files for these types of flags.
 
 :::
 
 ### Running the C++ Tests and Code Coverage
 
 We use the [GoogleTest](https://google.github.io/googletest/primer.html)
-framework for unit testing of the C++ library.
-All tests are contained in the {code}`test` directory,
-which is further divided into subdirectories for different parts of the library.
-You are expected to write tests for any new features you implement and ensure
-that all tests pass.
-Our CI pipeline on GitHub will also run the tests and check for any failures.
+framework for unit testing of the C++ library. All tests are contained in the
+{code}`test` directory, which is further divided into subdirectories for
+different parts of the library. You are expected to write tests for any new
+features you implement and ensure that all tests pass. Our CI pipeline on GitHub
+will also run the tests and check for any failures.
 
-Most IDEs like [CLion][clion]
-or [Visual Studio Code][vscode] provide a convenient way to run the tests
-directly from the IDE.
-If you prefer to run the tests from the command line,
-you can use CMake's test runner
-[CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html).
-To run the tests, run the following command from the main project directory
-after building the project as described above:
+Most IDEs like [CLion][clion] or [VS Code][vscode] provide a convenient way to
+run the tests directly from the IDE. If you prefer to run the tests from the
+command line, you can use CMake's test runner
+[CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html). To run the
+tests, run the following command from the main project directory after building
+the project as described above:
 
 ```console
 ctest --preset release
 ```
 
 :::{tip}
-If you want to disable configuring and building the C++ tests,
-you can pass {code}`-DBUILD_MQT_DDSIM_TESTS=OFF` to the CMake
-configure step.
+If you want to disable configuring and building the C++ tests, you can pass
+{code}`-DBUILD_MQT_DDSIM_TESTS=OFF` to the CMake configure step.
 :::
 
-Our CI pipeline on GitHub also collects code coverage information
-and uploads it to
-[Codecov](https://codecov.io/gh/munich-quantum-toolkit/ddsim).
-Our goal is to have new contributions at least maintain the current code
-coverage level, while striving for covering as much of the code as possible.
-Try to write meaningful tests that actually test the correctness of the code
-and not just exercise the code paths.
+Our CI pipeline on GitHub also collects code coverage information and uploads it
+to [Codecov](https://codecov.io/gh/munich-quantum-toolkit/ddsim). Our goal is
+to have new contributions at least maintain the current code coverage level,
+while striving for covering as much of the code as possible. Try to write
+meaningful tests that actually test the correctness of the code and not just
+exercise the code paths.
 
 If you want to enable coverage locally, you can use the `coverage` preset:
 
@@ -356,111 +322,101 @@ ctest --preset coverage
 
 This project mostly follows the
 [LLVM Coding Standard](https://llvm.org/docs/CodingStandards.html), which is a
-set of guidelines for writing C++ code.
-To ensure the quality of the code and that it conforms to these guidelines,
-we use:
+set of guidelines for writing C++ code. To ensure the quality of the code and
+that it conforms to these guidelines, we use:
 
-- [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/),
-  a static analysis tool that checks for common mistakes in C++ code, and
-- [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html),
-  a tool that automatically formats C++ code according to a given style guide.
+- [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/), a static analysis
+  tool that checks for common mistakes in C++ code, and
+- [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html), a tool that
+  automatically formats C++ code according to a given style guide.
 
-Common IDEs like [CLion][clion] or [Visual Studio Code][vscode] have plugins
-that can automatically run {code}`clang-tidy` on the code
-and automatically format it with {code}`clang-format`.
+Common IDEs like [CLion][clion] or [VS Code][vscode] have plugins that can
+automatically run {code}`clang-tidy` on the code and automatically format it
+with {code}`clang-format`.
 
-- If you are using CLion,
-  you can configure the project to use the {code}`.clang-tidy`
-  and {code}`.clang-format` files in the project root directory.
-- If you are using [Visual Studio Code][vscode], you can install the
+- If you are using CLion, you can configure the project to use the
+  {code}`.clang-tidy` and {code}`.clang-format` files in the project root
+  directory.
+- If you are using [VS Code][vscode], you can install the
   [clangd extension](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd).
 
-They will automatically execute {code}`clang-tidy` on your code
-and highlight any issues.
-In many cases, they also provide quick-fixes for these issues.
+They will automatically execute {code}`clang-tidy` on your code and highlight
+any issues. In many cases, they also provide quick-fixes for these issues.
 Furthermore, they provide a command to automatically format your code according
 to the given style.
 
 :::{note}
 
-After configuring CMake with the `lint` preset,
-you can run {code}`clang-tidy` on a file by calling the following command:
+After configuring CMake with the `lint` preset, you can run {code}`clang-tidy`
+on a file by calling the following command:
 
 ```console
 clang-tidy <FILE> -- -I <PATH_TO_INCLUDE_DIRECTORY>
 ```
 
-Here, {code}`<FILE>` is the file you want to analyze
-and {code}`<PATH_TO_INCLUDE_DIRECTORY>` is the path to the {code}`include`
-directory of the project.
+Here, {code}`<FILE>` is the file you want to analyze and
+{code}`<PATH_TO_INCLUDE_DIRECTORY>` is the path to the {code}`include` directory
+of the project.
 
 :::
 
-Our [{code}`prek`][prek] configuration also includes {code}`clang-format`.
-If you have installed {code}`prek`,
-it will automatically run {code}`clang-format` on your code before each commit.
-If you do not have {code}`prek` set up,
-the [pre-commit.ci](https://pre-commit.ci) bot will run {code}`clang-format` on
-your code and automatically format it according to the style guide.
+Our [{code}`prek`][prek] configuration also includes {code}`clang-format`. If
+you have installed {code}`prek`, it will automatically run {code}`clang-format`
+on your code before each commit. If you do not have {code}`prek` set up, the
+[pre-commit.ci](https://pre-commit.ci) bot will run {code}`clang-format` on your
+code and automatically format it according to the style guide.
 
 :::{tip}
-Remember to pull the changes back into your local repository
-after the bot has formatted your code to avoid merge conflicts.
+Remember to pull the changes back into your local repository after the bot has
+formatted your code to avoid merge conflicts.
 :::
 
-Our CI pipeline will also run {code}`clang-tidy` over the changes in your PR
-and report any issues it finds.
-Due to technical limitations,
-the workflow can only post PR comments
-if the changes are not coming from a fork.
-If you are working on a fork,
-you can still see the {code}`clang-tidy` results either in the GitHub Actions
-logs, on the workflow summary page, or in the "Files changed" tab of the PR.
+Our CI pipeline will also run {code}`clang-tidy` over the changes in your PR and
+report any issues it finds. Due to technical limitations, the workflow can only
+post PR comments if the changes are not coming from a fork. If you are working
+on a fork, you can still see the {code}`clang-tidy` results either in the GitHub
+Actions logs, on the workflow summary page, or in the "Files changed" tab of the
+PR.
 
 ### C++ Documentation
 
 Historically, the C++ part of the code base has not been sufficiently
-documented.
-Given the substantial size of the code base,
-we have set ourselves the goal to improve the documentation over time.
-We expect any new additions to the code base to be documented using
-[Doxygen](https://www.doxygen.nl/index.html) comments.
-When touching existing code,
-we encourage you to add Doxygen comments to the code you touch or refactor.
+documented. Given the substantial size of the code base, we have set ourselves
+the goal to improve the documentation over time. We expect any new additions to
+the code base to be documented using
+[Doxygen](https://www.doxygen.nl/index.html) comments. When touching existing
+code, we encourage you to add Doxygen comments to the code you touch or
+refactor.
 
-For some tips on how to write good Doxygen comments,
-see the [Doxygen Manual](https://www.doxygen.nl/manual/docblocks.html).
+For some tips on how to write good Doxygen comments, see the
+[Doxygen Manual](https://www.doxygen.nl/manual/docblocks.html).
 
-The C++ API documentation is integrated into the overall documentation
-that we host on ReadTheDocs using the
-[breathe](https://breathe.readthedocs.io/en/latest/) extension for Sphinx.
-See {ref}`working-on-documentation`
-for more information on how to build the documentation.
+The C++ API documentation is integrated into the overall documentation that we
+host on ReadTheDocs using the
+[breathe](https://breathe.readthedocs.io/en/latest/) extension for Sphinx. See
+{ref}`working-on-documentation` for more information on how to build the
+documentation.
 
 ## Working on the Python Package
 
 We use [{code}`nanobind`](https://nanobind.readthedocs.io/) to expose large
-parts of the C++ core library to Python.
-This allows us to keep the performance-critical parts of the code in C++
-while providing a convenient interface for Python users.
-All code related to C++-Python bindings is contained in the {code}`bindings`
-directory.
+parts of the C++ core library to Python. This allows us to keep the
+performance-critical parts of the code in C++ while providing a convenient
+interface for Python users. All code related to C++-Python bindings is contained
+in the {code}`bindings` directory.
 
 :::{tip}
 
-To build only the Python bindings,
-pass {code}`-DBUILD_MQT_DDSIM_BINDINGS=ON` to the CMake configure
-step.
-CMake will then try to find Python
-and the necessary dependencies ({code}`nanobind`) on your system
-and configure the respective targets.
-In [CLion][clion], you can enable an option to pass the current Python
-interpreter to CMake.
-Go to {code}`Preferences` -> {code}`Build, Execution, Deployment` ->
+To build only the Python bindings, pass
+{code}`-DBUILD_MQT_DDSIM_BINDINGS=ON` to the CMake configure step.
+CMake will then try to find Python and the necessary dependencies
+({code}`nanobind`) on your system and configure the respective targets. In
+[CLion][clion], you can enable an option to pass the current Python interpreter
+to CMake. Go to {code}`Preferences` -> {code}`Build, Execution, Deployment` ->
 {code}`CMake` -> {code}`Python Integration` and check the box
-{code}`Pass Python Interpreter to CMake`.
-Alternatively, you can pass {code}`-DPython_ROOT_DIR=<PATH_TO_PYTHON>` to the
-configure step to point CMake to a specific Python installation.
+{code}`Pass Python Interpreter to CMake`. Alternatively, you can pass
+{code}`-DPython_ROOT_DIR=<PATH_TO_PYTHON>` to the configure step to point CMake
+to a specific Python installation.
 
 :::
 
@@ -469,12 +425,10 @@ directory.
 
 The package lives in the {code}`src/mqt/ddsim` directory.
 
-We recommend using [{code}`nox`][nox]
-for development. {code}`nox` is a Python automation tool
-that allows you to define tasks in a {code}`noxfile.py` file
-and then run them with a single command.
-If you have not installed it yet,
-see our {ref}`installation guide for developers <development-setup>`.
+We recommend using [{code}`nox`][nox] for development. {code}`nox` is a Python
+automation tool that allows you to define tasks in a {code}`noxfile.py` file and
+then run them with a single command. If you have not installed it yet, see our
+{ref}`installation guide for developers <development-setup>`.
 
 We define some convenient {code}`nox` sessions in our {code}`noxfile.py`:
 
@@ -497,15 +451,14 @@ A {code}`nox` session is provided to conveniently run the Python tests.
 nox -s tests
 ```
 
-This command automatically builds the project
-and runs the tests on all supported Python versions.
-For each Python version, it will create a virtual environment
-(in the {code}`.nox` directory) and install the project into it.
-We take extra care to install the project without build isolation so
-that rebuilds are typically very fast.
+This command automatically builds the project and runs the tests on all
+supported Python versions. For each Python version, it will create a virtual
+environment (in the {code}`.nox` directory) and install the project into it. We
+take extra care to install the project without build isolation so that rebuilds
+are typically very fast.
 
-If you only want to run the tests on a specific Python version,
-you can pass the desired Python version to the {code}`nox` command.
+If you only want to run the tests on a specific Python version, you can pass the
+desired Python version to the {code}`nox` command.
 
 ```console
 nox -s tests-3.14
@@ -513,11 +466,10 @@ nox -s tests-3.14
 
 :::{note}
 
-If you do not want to use {code}`nox`,
-you can also run the tests directly using {code}`pytest`.
-This requires that you have the project
-and its test dependencies installed in your virtual environment
-(e.g., by running {code}`uv sync`).
+If you do not want to use {code}`nox`, you can also run the tests directly using
+{code}`pytest`. This requires that you have the project and its test
+dependencies installed in your virtual environment (e.g., by running
+{code}`uv sync`).
 
 ```console
 pytest
@@ -525,11 +477,11 @@ pytest
 
 :::
 
-We provide an additional nox session {code}`minimums`
-that makes use of {code}`uv`'s {code}`--resolution=lowest-direct` flag to
-install the lowest possible versions of the direct dependencies.
-This ensures that the project can still be built
-and the tests pass with the minimum required versions of the dependencies.
+We provide an additional nox session {code}`minimums` that makes use of
+{code}`uv`'s {code}`--resolution=lowest-direct` flag to install the lowest
+possible versions of the direct dependencies. This ensures that the project can
+still be built and the tests pass with the minimum required versions of the
+dependencies.
 
 ```console
 nox -s minimums
@@ -552,8 +504,7 @@ prek install
 ```
 
 This will install the hooks in the {code}`.git/hooks` directory of the
-repository.
-The hooks will be executed whenever you commit changes.
+repository. The hooks will be executed whenever you commit changes.
 
 You can also run the {code}`nox` session {code}`lint` to run the hooks manually.
 
@@ -563,8 +514,8 @@ nox -s lint
 
 :::{note}
 
-If you do not want to use {code}`nox`,
-you can also run the hooks manually by using [{code}`prek`][prek].
+If you do not want to use {code}`nox`, you can also run the hooks manually by
+using [{code}`prek`][prek].
 
 ```console
 prek run --all-files
@@ -576,27 +527,23 @@ prek run --all-files
 
 The Python code is documented using
 [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings).
-Every public function, class,
-and module should have a docstring that explains what it does
-and how to use it. {code}`ruff` will check for missing docstrings
+Every public function, class, and module should have a docstring that explains
+what it does and how to use it. {code}`ruff` will check for missing docstrings
 and will explicitly warn you if you forget to add one.
 
 We heavily rely on [type hints](https://docs.python.org/3/library/typing.html)
 to document the expected types of function arguments and return values.
-For the compiled parts of the code base,
-we provide type hints in the form of stub files in the
-{code}`python/mqt/ddsim` directory.
-These stub files are auto-generated.
-Do not edit them directly.
-Instead, you can use the {code}`nox` session {code}`stubs` to regenerate them
-automatically.
+For the compiled parts of the code base, we provide type hints in the form of
+stub files in the {code}`python/mqt/ddsim` directory. These stub files
+are auto-generated. Do not edit them directly. Instead, you can use the
+{code}`nox` session {code}`stubs` to regenerate them automatically.
 
 ```console
 nox -s stubs
 ```
 
-The Python API documentation is integrated into the overall documentation
-that we host on ReadTheDocs using the
+The Python API documentation is integrated into the overall documentation that
+we host on ReadTheDocs using the
 [{code}`sphinx-autoapi`](https://sphinx-autoapi.readthedocs.io/en/latest/)
 extension for Sphinx.
 
@@ -606,19 +553,16 @@ extension for Sphinx.
 
 The documentation is written in
 [MyST](https://myst-parser.readthedocs.io/en/latest/index.html) (a flavor of
-Markdown) and built using [Sphinx](https://www.sphinx-doc.org/en/master/).
-The documentation source files can be found in the {code}`docs/` directory.
+Markdown) and built using [Sphinx](https://www.sphinx-doc.org/en/master/). The
+documentation source files can be found in the {code}`docs/` directory.
 
-On top of the API documentation,
-we provide a set of tutorials and examples
-that demonstrate how to use the library.
-These are written in Markdown using
+On top of the API documentation, we provide a set of tutorials and examples that
+demonstrate how to use the library. These are written in Markdown using
 [myst-nb](https://myst-nb.readthedocs.io/en/latest/), which allows executing
-Python code blocks in the documentation.
-The code blocks are executed during the documentation build process,
-and the output is included in the documentation.
-This allows us to provide up-to-date examples and tutorials
-that are guaranteed to work with the latest version of the library.
+Python code blocks in the documentation. The code blocks are executed during the
+documentation build process, and the output is included in the documentation.
+This allows us to provide up-to-date examples and tutorials that are guaranteed
+to work with the latest version of the library.
 
 You can build the documentation using the {code}`nox` session {code}`docs`.
 
@@ -626,18 +570,16 @@ You can build the documentation using the {code}`nox` session {code}`docs`.
 nox -s docs
 ```
 
-This will install all dependencies
-for building the documentation in an isolated environment,
-build the Python package, and then build the documentation.
-It will then host the documentation on a local web server for you to view.
+This will install all dependencies for building the documentation in an isolated
+environment, build the Python package, and then build the documentation. It will
+then host the documentation on a local web server for you to view.
 
 :::{note}
 
-If you do not want to use {code}`nox`,
-you can also build the documentation directly using {code}`sphinx-build`.
-This requires that you have the project
-and its documentation dependencies installed in your virtual environment
-(e.g., by running {code}`uv sync`).
+If you do not want to use {code}`nox`, you can also build the documentation
+directly using {code}`sphinx-build`. This requires that you have the project and
+its documentation dependencies installed in your virtual environment (e.g., by
+running {code}`uv sync`).
 
 ```console
 sphinx-build -b html docs/ docs/_build
@@ -649,57 +591,49 @@ The docs can then be found in the {code}`docs/_build` directory.
 
 ## Tips for Development
 
-If something goes wrong, the CI pipeline will notify you.
-Here are some tips for finding the cause of certain failures:
+If something goes wrong, the CI pipeline will notify you. Here are some tips for
+finding the cause of certain failures:
 
-- If any of the {code}`CI / 🇨‌ Test` checks fail,
-  this indicates build errors or test failures in the C++ part of the code base.
-  Look through the respective logs on GitHub for any error or failure messages.
+- If any of the {code}`CI / 🇨‌ Test` checks fail, this indicates build errors or
+  test failures in the C++ part of the code base. Look through the respective
+  logs on GitHub for any error or failure messages.
 
-- If any of the {code}`CI / 🐍 Test` checks fail,
-  this indicates build errors
-  or test failures in the Python part of the code base.
-  Look through the respective logs on GitHub for any error or failure messages.
+- If any of the {code}`CI / 🐍 Test` checks fail, this indicates build errors or
+  test failures in the Python part of the code base. Look through the respective
+  logs on GitHub for any error or failure messages.
 
-- If any of the {code}`codecov/\*` checks fail,
-  this means that your changes are not appropriately covered by tests or
-  that the overall project coverage decreased too much.
-  Ensure that you include tests for all your changes in the PR.
+- If any of the {code}`codecov/\*` checks fail, this means that your changes are
+  not appropriately covered by tests or that the overall project coverage
+  decreased too much. Ensure that you include tests for all your changes in the
+  PR.
 
-- If {code}`cpp-linter` comments on your PR with a list of warnings,
-  these have been raised by {code}`clang-tidy`
-  when checking the C++ part of your changes for warnings
-  or style guideline violations.
-  The individual messages frequently provide helpful suggestions on how to fix
-  the warnings.
-  If you don't see any messages, but the {code}`🇨‌ Lint / 🚨 Lint` check is red,
-  click on the {code}`Details` link to see the full log of the check
-  and a step summary.
+- If {code}`cpp-linter` comments on your PR with a list of warnings, these have
+  been raised by {code}`clang-tidy` when checking the C++ part of your changes
+  for warnings or style guideline violations. The individual messages frequently
+  provide helpful suggestions on how to fix the warnings. If you don't see any
+  messages, but the {code}`🇨‌ Lint / 🚨 Lint` check is red, click on the
+  {code}`Details` link to see the full log of the check and a step summary.
 
-- If the {code}`pre-commit.ci` check fails,
-  some of the {code}`prek` checks failed
-  and could not be fixed automatically by the
-  [pre-commit.ci](https://pre-commit.ci) bot.
-  The individual log messages frequently provide helpful suggestions on how to
-  fix the warnings.
+- If the {code}`pre-commit.ci` check fails, some of the {code}`prek` checks
+  failed and could not be fixed automatically by the
+  [pre-commit.ci](https://pre-commit.ci) bot. The individual log messages
+  frequently provide helpful suggestions on how to fix the warnings.
 
-- If the {code}`docs/readthedocs.org:\*` check fails,
-  the documentation could not be built properly.
-  Inspect the corresponding log file for any errors.
+- If the {code}`docs/readthedocs.org:\*` check fails, the documentation could
+  not be built properly. Inspect the corresponding log file for any errors.
 
 (maintaining-changelog-upgrade-guide)=
 
 ## Maintaining the Changelog and Upgrade Guide
 
-MQT DDSIM adheres to [Semantic Versioning],
-with the exception that minor releases may include breaking changes.
-To inform users about changes to the project,
-we maintain a {doc}`changelog <CHANGELOG>`
-and an {doc}`upgrade guide <UPGRADING>`.
+MQT DDSIM adheres to [Semantic Versioning], with the exception that minor
+releases may include breaking changes. To inform users about changes to the
+project, we maintain a {doc}`changelog <CHANGELOG>` and an
+{doc}`upgrade guide <UPGRADING>`.
 
-If your PR includes noteworthy changes, please update the changelog.
-The format is based on a mixture of [Keep a Changelog] and [Common Changelog].
-There are the following categories:
+If your PR includes noteworthy changes, please update the changelog. The format
+is based on a mixture of [Keep a Changelog] and [Common Changelog]. There are
+the following categories:
 
 - {code}`Added` for new features.
 - {code}`Changed` for changes in existing functionality.
@@ -711,71 +645,63 @@ There are the following categories:
 When updating the changelog, follow these guidelines:
 
 - Add a changelog entry for every user-facing change in your PR.
-- Write entries in the imperative mood
-  (e.g., "Add support for X" or "Fix bug in Y").
+- Write entries in the imperative mood (e.g., "Add support for X" or "Fix bug in
+  Y").
 - A single PR may result in multiple changelog entries.
-- Entries in each category are sorted by merge time,
-  with the latest PR appearing first.
-- Each entry links to the PR and all contributing authors.
-  The links are defined at the bottom of the file.
-  If this is your first contribution to this project,
+- Entries in each category are sorted by merge time, with the latest PR
+  appearing first.
+- Each entry links to the PR and all contributing authors. The links are defined
+  at the bottom of the file. If this is your first contribution to this project,
   do not forget to add a link to your GitHub profile.
 
-If your PR introduces major or breaking changes,
-or if you think additional context would help users,
-please also add a section to the upgrade guide.
-The upgrade guide is intended to provide a general overview of significant
-changes in a more descriptive and prose-oriented form than the changelog.
-Use it to explain how users may need to adapt their usage of MQT DDSIM,
-highlight new workflows, or clarify the impact of important updates.
-Feel free to write in a style that is helpful and accessible
-for users seeking to understand the broader implications of recent changes.
+If your PR introduces major or breaking changes, or if you think additional
+context would help users, please also add a section to the upgrade guide. The
+upgrade guide is intended to provide a general overview of significant changes
+in a more descriptive and prose-oriented form than the changelog. Use it to
+explain how users may need to adapt their usage of MQT DDSIM, highlight new
+workflows, or clarify the impact of important updates. Feel free to write in a
+style that is helpful and accessible for users seeking to understand the broader
+implications of recent changes.
 
 ## Releasing a New Version
 
-When it is time to release a new version of MQT DDSIM,
-create a PR that prepares the release.
-This PR should:
+When it is time to release a new version of MQT DDSIM, create a PR that
+prepares the release. This PR should:
 
 - add new version titles in both the changelog and the upgrade guide,
 - add the release date to the changelog entry for the new version,
 - update the version links at the bottom of both files,
-- review and streamline all changelog and upgrade guide entries for clarity
-  and consistency,
+- review and streamline all changelog and upgrade guide entries for clarity and
+  consistency,
 - ensure that all links (to PRs, authors, etc.) are defined and correct,
-- double-check that the changelog comprehensively covers all changes
-  since the last release and that nothing is missing,
-- review the upgrade guide to ensure it covers all major or breaking changes
-  and provides helpful context, and
-- if the upgrade guide contains a section relevant to the release,
-  add a reference to it in the changelog.
+- double-check that the changelog comprehensively covers all changes since the
+  last release and that nothing is missing,
+- review the upgrade guide to ensure it covers all major or breaking changes and
+  provides helpful context, and
+- if the upgrade guide contains a section relevant to the release, add a
+  reference to it in the changelog.
 
-Before merging the PR preparing the release,
-check the GitHub release draft generated by the Release Drafter
-for unlabelled PRs.
+Before merging the PR preparing the release, check the GitHub release draft
+generated by the Release Drafter for unlabelled PRs.
 Unlabelled PRs would appear at the top of the release draft below the main
 heading.
-If you missed updating labels before merging,
-you can still update them and re-run the Release Drafter afterward.
+If you missed updating labels before merging, you can still update them and
+re-run the Release Drafter afterward.
 Furthermore, check whether the version number in the release draft is correct.
 The version number in the release draft is dictated by the presence of certain
-labels on the PRs involved in a release.
-By default, a patch release will be created.
-If any PR has the {code}`minor` or {code}`major` label,
-a minor or major release will be created, respectively.
+labels on the PRs involved in a release. By default, a patch release will be
+created. If any PR has the {code}`minor` or {code}`major` label, a minor or
+major release will be created, respectively.
 
 :::{note}
 
 Sometimes, Dependabot or Renovate will tag a PR updating a dependency with a
 {code}`minor` or {code}`major` label because the dependency update itself is a
-minor or major release.
-This does not mean that the dependency update itself is a breaking change
-for MQT DDSIM.
-If you are sure that the dependency update does not introduce any breaking
-changes for MQT DDSIM, you can remove the {code}`minor` or {code}`major`
-label from the PR.
-This will ensure that the respective PR does not influence the type of an
-upcoming release.
+minor or major release. This does not mean that the dependency update itself is
+a breaking change for MQT DDSIM. If you are sure that the dependency update
+does not introduce any breaking changes for MQT DDSIM, you can remove the
+{code}`minor` or {code}`major` label from the PR. This will ensure that the
+respective PR does not influence the type of an upcoming release.
 
 :::
 
