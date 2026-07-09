@@ -1,23 +1,26 @@
 # Noise-aware Simulator
 
-The tool also supports noise-aware quantum circuit simulation, based on a stochastic approach. It currently supports
-global decoherence and gate error noise effects. A detailed summary of the simulator is presented
-in {cite:p}`grurl2022`. Note that the simulator currently does not support simulating the integrated
-algorithms.
+The tool also supports noise-aware quantum circuit simulation, based on a
+stochastic approach. It currently supports global decoherence and gate error
+noise effects. A detailed summary of the simulator is presented in
+{cite:p}`grurl2022`. Note that the simulator currently does not support
+simulating the integrated algorithms.
 
 ## Usage in Python
 
 :::{note}
-The noise-aware simulators are exposed to Python, but are currently lacking documentation. Any contributions are welcome!
+The noise-aware simulators are exposed to Python, but are currently lacking
+documentation. Any contributions are welcome!
 :::
 
 ## Usage as Standalone Executable
 
-Building the simulator requires {code}`Threads::Threads`. It can be built by executing
+Building the simulator requires {code}`Threads::Threads`. It can be built by
+executing
 
 ```console
-$ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
-$ cmake --build build --config Release --target ddsim_noise_aware
+cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake --build build --config Release --target ddsim_noise_aware
 ```
 
 The simulator provides a help function which is called in the following way:
@@ -44,7 +47,9 @@ $ ./build/apps/ddsim_noise_aware --help
         --shots arg                         Specify the number of shots that shall be generated (default: 0)
 ```
 
-An example run of the stochastic simulator, with 1000 samples, amplitude damping, phase flip, and depolarization error enabled (each with a probability of 0.1% whenever a gate is applied) looks like this:
+An example run of the stochastic simulator, with 1000 samples, amplitude
+damping, phase flip, and depolarization error enabled (each with a probability
+of 0.1% whenever a gate is applied) looks like this:
 
 ```console
  $./build/apps/ddsim_noise_aware ./build/apps/ddsim_noise_aware --noise_effects APD --noise_prob 0.001 --shots 1000 --simulate_file adder_n4.qasm  --pm --ps
@@ -84,7 +89,9 @@ An example run of the stochastic simulator, with 1000 samples, amplitude damping
 }
 ```
 
-The deterministic simulator is run when the flag "--use_density_matrix_simulator" is set. The same run from above, using the deterministic simulator would look like this:
+The deterministic simulator is run when the flag
+"--use_density_matrix_simulator" is set. The same run from above, using the
+deterministic simulator would look like this:
 
 ```console
   $ ./build/apps/ddsim_noise_aware --noise_effects APD --noise_prob 0.001 --shots 1000 --simulate_file adder_n4.qasm  --pm --ps --use_density_matrix_simulator
