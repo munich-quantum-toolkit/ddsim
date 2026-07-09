@@ -383,7 +383,6 @@ guidelines and workflows, see {doc}`contributing`.
    ```
 
 <!-- Links -->
-
 [FetchContent]: https://cmake.org/cmake/help/latest/module/FetchContent.html
 [git-submodule]: https://git-scm.com/docs/git-submodule
 [nox]: https://nox.thea.codes/en/stable/
