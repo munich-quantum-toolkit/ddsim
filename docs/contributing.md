@@ -3,12 +3,11 @@
 
 # Contributing
 
-Thank you for your interest in contributing to MQT DDSIM! This document
-outlines the development guidelines and how to contribute.
+Thank you for your interest in contributing to MQT DDSIM! This document outlines
+the development guidelines and how to contribute.
 
-We use GitHub to
-[host code](https://github.com/munich-quantum-toolkit/ddsim), to
-[track issues and feature requests][issues], as well as accept
+We use GitHub to [host code](https://github.com/munich-quantum-toolkit/ddsim),
+to [track issues and feature requests][issues], as well as accept
 [pull requests](https://github.com/munich-quantum-toolkit/ddsim/pulls). See
 <https://docs.github.com/en/get-started/quickstart> for a general introduction
 to working with GitHub and contributing to projects.
@@ -73,9 +72,9 @@ Contributions that do not comply with these guidelines or violate our
 - Focus on a single feature or bug at a time and only touch relevant files.
   Split multiple features into separate contributions.
 - Add tests for new features to ensure they work as intended.
-- Document new features.
-  For user-facing changes, add a changelog entry; for breaking changes, update the
-  upgrade guide. For details, see {ref}`maintaining-changelog-upgrade-guide`.
+- Document new features. For user-facing changes, add a changelog entry; for
+  breaking changes, update the upgrade guide. For details, see
+  {ref}`maintaining-changelog-upgrade-guide`.
 - Add tests for bug fixes to demonstrate the fix.
 - Document your code thoroughly and ensure it is readable.
 - Keep your code clean by removing debug statements, leftover comments, and
@@ -99,9 +98,9 @@ any AI-assisted contribution. In short:
 your PR description.
 
 If you use an agent, it will automatically read the provided {code}`AGENTS.md`,
-which contains context and instructions to help the agent work on MQT DDSIM.
-For Claude Code, create a symlink with {code}`ln -s AGENTS.md CLAUDE.md` so
-Claude picks up the same file.
+which contains context and instructions to help the agent work on MQT DDSIM. For
+Claude Code, create a symlink with {code}`ln -s AGENTS.md CLAUDE.md` so Claude
+picks up the same file.
 
 ### Pull Request Workflow
 
@@ -304,11 +303,11 @@ If you want to disable configuring and building the C++ tests, you can pass
 :::
 
 Our CI pipeline on GitHub also collects code coverage information and uploads it
-to [Codecov](https://codecov.io/gh/munich-quantum-toolkit/ddsim). Our goal is
-to have new contributions at least maintain the current code coverage level,
-while striving for covering as much of the code as possible. Try to write
-meaningful tests that actually test the correctness of the code and not just
-exercise the code paths.
+to [Codecov](https://codecov.io/gh/munich-quantum-toolkit/ddsim). Our goal is to
+have new contributions at least maintain the current code coverage level, while
+striving for covering as much of the code as possible. Try to write meaningful
+tests that actually test the correctness of the code and not just exercise the
+code paths.
 
 If you want to enable coverage locally, you can use the `coverage` preset:
 
@@ -407,21 +406,20 @@ in the {code}`bindings` directory.
 
 :::{tip}
 
-To build only the Python bindings, pass
-{code}`-DBUILD_MQT_DDSIM_BINDINGS=ON` to the CMake configure step.
-CMake will then try to find Python and the necessary dependencies
-({code}`nanobind`) on your system and configure the respective targets. In
-[CLion][clion], you can enable an option to pass the current Python interpreter
-to CMake. Go to {code}`Preferences` -> {code}`Build, Execution, Deployment` ->
-{code}`CMake` -> {code}`Python Integration` and check the box
+To build only the Python bindings, pass {code}`-DBUILD_MQT_DDSIM_BINDINGS=ON` to
+the CMake configure step. CMake will then try to find Python and the necessary
+dependencies ({code}`nanobind`) on your system and configure the respective
+targets. In [CLion][clion], you can enable an option to pass the current Python
+interpreter to CMake. Go to {code}`Preferences` ->
+{code}`Build, Execution, Deployment` -> {code}`CMake` ->
+{code}`Python Integration` and check the box
 {code}`Pass Python Interpreter to CMake`. Alternatively, you can pass
 {code}`-DPython_ROOT_DIR=<PATH_TO_PYTHON>` to the configure step to point CMake
 to a specific Python installation.
 
 :::
 
-The Python package itself lives in the {code}`python/mqt/ddsim`
-directory.
+The Python package itself lives in the {code}`python/mqt/ddsim` directory.
 
 The package lives in the {code}`src/mqt/ddsim` directory.
 
@@ -443,9 +441,9 @@ These are explained in more detail in the following sections.
 ## Running the Python Tests
 
 The Python code is tested by unit tests using the
-[{code}`pytest`](https://docs.pytest.org/en/latest/) framework.
-The corresponding test files can be found in the {code}`test/python` directory.
-A {code}`nox` session is provided to conveniently run the Python tests.
+[{code}`pytest`](https://docs.pytest.org/en/latest/) framework. The
+corresponding test files can be found in the {code}`test/python` directory. A
+{code}`nox` session is provided to conveniently run the Python tests.
 
 ```console
 nox -s tests
@@ -532,11 +530,11 @@ what it does and how to use it. {code}`ruff` will check for missing docstrings
 and will explicitly warn you if you forget to add one.
 
 We heavily rely on [type hints](https://docs.python.org/3/library/typing.html)
-to document the expected types of function arguments and return values.
-For the compiled parts of the code base, we provide type hints in the form of
-stub files in the {code}`python/mqt/ddsim` directory. These stub files
-are auto-generated. Do not edit them directly. Instead, you can use the
-{code}`nox` session {code}`stubs` to regenerate them automatically.
+to document the expected types of function arguments and return values. For the
+compiled parts of the code base, we provide type hints in the form of stub files
+in the {code}`python/mqt/ddsim` directory. These stub files are auto-generated.
+Do not edit them directly. Instead, you can use the {code}`nox` session
+{code}`stubs` to regenerate them automatically.
 
 ```console
 nox -s stubs
@@ -665,8 +663,8 @@ implications of recent changes.
 
 ## Releasing a New Version
 
-When it is time to release a new version of MQT DDSIM, create a PR that
-prepares the release. This PR should:
+When it is time to release a new version of MQT DDSIM, create a PR that prepares
+the release. This PR should:
 
 - add new version titles in both the changelog and the upgrade guide,
 - add the release date to the changelog entry for the new version,
@@ -682,24 +680,22 @@ prepares the release. This PR should:
   reference to it in the changelog.
 
 Before merging the PR preparing the release, check the GitHub release draft
-generated by the Release Drafter for unlabelled PRs.
-Unlabelled PRs would appear at the top of the release draft below the main
-heading.
-If you missed updating labels before merging, you can still update them and
-re-run the Release Drafter afterward.
-Furthermore, check whether the version number in the release draft is correct.
-The version number in the release draft is dictated by the presence of certain
-labels on the PRs involved in a release. By default, a patch release will be
-created. If any PR has the {code}`minor` or {code}`major` label, a minor or
-major release will be created, respectively.
+generated by the Release Drafter for unlabelled PRs. Unlabelled PRs would appear
+at the top of the release draft below the main heading. If you missed updating
+labels before merging, you can still update them and re-run the Release Drafter
+afterward. Furthermore, check whether the version number in the release draft is
+correct. The version number in the release draft is dictated by the presence of
+certain labels on the PRs involved in a release. By default, a patch release
+will be created. If any PR has the {code}`minor` or {code}`major` label, a minor
+or major release will be created, respectively.
 
 :::{note}
 
 Sometimes, Dependabot or Renovate will tag a PR updating a dependency with a
 {code}`minor` or {code}`major` label because the dependency update itself is a
 minor or major release. This does not mean that the dependency update itself is
-a breaking change for MQT DDSIM. If you are sure that the dependency update
-does not introduce any breaking changes for MQT DDSIM, you can remove the
+a breaking change for MQT DDSIM. If you are sure that the dependency update does
+not introduce any breaking changes for MQT DDSIM, you can remove the
 {code}`minor` or {code}`major` label from the PR. This will ensure that the
 respective PR does not influence the type of an upcoming release.
 

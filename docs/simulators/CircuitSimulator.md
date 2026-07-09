@@ -13,18 +13,25 @@ mystnb:
 
 # Circuit Simulator
 
-The _Circuit Simulator_ is a Schrödinger-style simulator based on decision diagrams (DDs) as a data structure that can be used to:
+The _Circuit Simulator_ is a Schrödinger-style simulator based on decision
+diagrams (DDs) as a data structure that can be used to:
 
-- obtain the full state vector of the quantum circuit ("strong simulation") as originally proposed in {cite:p}`zulehner2019advanced`
-- sample from the output distribution of a quantum circuit ("weak simulation") as originally proposed in {cite:p}`DBLP:conf/dac/HillmichMW20`
+- obtain the full state vector of the quantum circuit ("strong simulation") as
+  originally proposed in {cite:p}`zulehner2019advanced`
+- sample from the output distribution of a quantum circuit ("weak simulation")
+  as originally proposed in {cite:p}`DBLP:conf/dac/HillmichMW20`
 
-To this end, it starts off with the decision diagram representation of the initial state (generally, $|0\dots 0\rangle$) and then applies the gates of the circuit one by one.
-The DD representation of the state vector is updated in each step.
-The simulator can handle (almost) arbitrary quantum circuits, including those with mid-circuit measurements and resets.
-For circuits with no non-unitary operations (except for measurements at the end of the circuit) the simulation is only done once.
-In that case, the requested number of samples is subsequently drawn from the final decision diagram, resulting in fast runtime.
+To this end, it starts off with the decision diagram representation of the
+initial state (generally, $|0\dots 0\rangle$) and then applies the gates of the
+circuit one by one. The DD representation of the state vector is updated in each
+step. The simulator can handle (almost) arbitrary quantum circuits, including
+those with mid-circuit measurements and resets. For circuits with no non-unitary
+operations (except for measurements at the end of the circuit) the simulation is
+only done once. In that case, the requested number of samples is subsequently
+drawn from the final decision diagram, resulting in fast runtime.
 
-For the purpose of this demonstration, we will use the following simple QASM circuit, which we save as `bell.qasm` in the current working directory:
+For the purpose of this demonstration, we will use the following simple QASM
+circuit, which we save as `bell.qasm` in the current working directory:
 
 ```{code-cell} ipython3
 from pathlib import Path
@@ -48,7 +55,8 @@ This circuit creates a Bell state and measures the qubits.
 
 ## Simulating a simple circuit
 
-Using the `CircuitSimulator` to simulate the circuit from the QASM file `bell.qasm` is straightforward.
+Using the `CircuitSimulator` to simulate the circuit from the QASM file
+`bell.qasm` is straightforward.
 
 ```{code-cell} ipython3
 from mqt.core import load
@@ -66,9 +74,11 @@ result = sim.simulate(shots=1024)
 print(result)
 ```
 
-As expected, the output distribution is approximately 50% for the states $|00\rangle$ and $|11\rangle$ each.
+As expected, the output distribution is approximately 50% for the states
+$|00\rangle$ and $|11\rangle$ each.
 
-If we would like to obtain the full state vector of the quantum circuit, we can query it after the simulation as follows:
+If we would like to obtain the full state vector of the quantum circuit, we can
+query it after the simulation as follows:
 
 ```{code-cell} ipython3
 import numpy as np
@@ -82,12 +92,18 @@ sv = np.array(vec, copy=False)
 print(sv)
 ```
 
-Note that getting the full state vector is only feasible for small circuits, as the memory and time requirements grow exponentially with the number of qubits.
-However, due to the nature of decision diagrams, the simulator can generally sample from the output distribution of much larger circuits than can be fully represented in memory.
+Note that getting the full state vector is only feasible for small circuits, as
+the memory and time requirements grow exponentially with the number of qubits.
+However, due to the nature of decision diagrams, the simulator can generally
+sample from the output distribution of much larger circuits than can be fully
+represented in memory.
 
-If you want to inspect the final decision diagram, you can get a Graphviz representation of it.
-For that, make sure that you have Graphviz installed and that the `graphviz` Python package is available.
-Then, you can call the `export_dd_to_graphviz_str` method on the simulator to obtain a Graphviz representation of the decision diagram. The following shows the default configuration options for the export.
+If you want to inspect the final decision diagram, you can get a Graphviz
+representation of it. For that, make sure that you have Graphviz installed and
+that the `graphviz` Python package is available. Then, you can call the
+`export_dd_to_graphviz_str` method on the simulator to obtain a Graphviz
+representation of the decision diagram. The following shows the default
+configuration options for the export.
 
 ```{code-cell} ipython3
 import graphviz
@@ -104,8 +120,9 @@ Path(filename).unlink()
 
 ## Using Qiskit `QuantumCircuit` objects as input
 
-The `CircuitSimulator` can also be directly used with Qiskit's `QuantumCircuit` objects, which can be more convenient for some users.
-The above computation can be done as follows:
+The `CircuitSimulator` can also be directly used with Qiskit's `QuantumCircuit`
+objects, which can be more convenient for some users. The above computation can
+be done as follows:
 
 ```{code-cell} ipython3
 from qiskit import QuantumCircuit
@@ -129,9 +146,12 @@ print(result)
 
 ## Simulating a circuit with mid-circuit measurements
 
-The `CircuitSimulator` can also handle circuits with mid-circuit measurements and resets. The following shows an example of Iterative Quantum Phase Estimation (IQPE) with a mid-circuit measurement.
-The circuit tries to iteratively estimate the phase of a unitary $U=p(3\pi/8)$ with 3-bit precision.
-We seek $\theta=3/16=0.0011_2$, which is not exactly representable using 3 bits, so the best we can expect is high probabilities for $0.c_2 c_1 c_0 = 001$ and $010$.
+The `CircuitSimulator` can also handle circuits with mid-circuit measurements
+and resets. The following shows an example of Iterative Quantum Phase Estimation
+(IQPE) with a mid-circuit measurement. The circuit tries to iteratively estimate
+the phase of a unitary $U=p(3\pi/8)$ with 3-bit precision. We seek
+$\theta=3/16=0.0011_2$, which is not exactly representable using 3 bits, so the
+best we can expect is high probabilities for $0.c_2 c_1 c_0 = 001$ and $010$.
 
 ```{code-cell} ipython3
 import locale
@@ -212,10 +232,13 @@ Path(filename).unlink()
 
 ## Usage as a Qiskit backend
 
-The `CircuitSimulator` can also be easily used as a backend for Qiskit.
-To this end, the `CircuitSimulator` class is wrapped to implement the `BackendV2` interface of Qiskit, which allows using it as a drop-in replacement for any other Qiskit backend, such as the `AerSimulator`.
+The `CircuitSimulator` can also be easily used as a backend for Qiskit. To this
+end, the `CircuitSimulator` class is wrapped to implement the `BackendV2`
+interface of Qiskit, which allows using it as a drop-in replacement for any
+other Qiskit backend, such as the `AerSimulator`.
 
-All of the backends available from mqt-ddsim are available from the `DDSIMProvider` class, which can be used to obtain a backend instance.
+All of the backends available from mqt-ddsim are available from the
+`DDSIMProvider` class, which can be used to obtain a backend instance.
 
 ```{code-cell} ipython3
 from mqt.ddsim import DDSIMProvider
@@ -223,7 +246,9 @@ from mqt.ddsim import DDSIMProvider
 provider = DDSIMProvider()
 ```
 
-The `CircuitSimulator` is offered as two separate backends, the `qasm_simulator` and the `statevector_simulator`, which perform weak and strong simulation, respectively.
+The `CircuitSimulator` is offered as two separate backends, the `qasm_simulator`
+and the `statevector_simulator`, which perform weak and strong simulation,
+respectively.
 
 Let's first create a simple quantum circuit again
 
@@ -253,7 +278,8 @@ result = job.result()
 print(result.get_counts())
 ```
 
-Again, we can also use the `statevector_simulator` backend to obtain the full state vector of the quantum circuit.
+Again, we can also use the `statevector_simulator` backend to obtain the full
+state vector of the quantum circuit.
 
 ```{code-cell} ipython3
 # get the backend
@@ -269,7 +295,9 @@ print(result.get_statevector())
 
 ## Usage as standalone C++ executable
 
-To build the standalone C++ simulator executable, build the `ddsim_simple` (the name stuck due to historical reasons ;) ) CMake target and run the resulting executable with options according to your needs.
+To build the standalone C++ simulator executable, build the `ddsim_simple` (the
+name stuck due to historical reasons;)) CMake target and run the resulting
+executable with options according to your needs.
 
 ```console
 $ ./ddsim_simple --help

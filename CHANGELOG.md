@@ -5,19 +5,27 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on a mixture of [Keep a Changelog] and [Common Changelog].
-This project adheres to [Semantic Versioning], with the exception that minor releases may include breaking changes.
+This project adheres to [Semantic Versioning], with the exception that minor
+releases may include breaking changes.
 
 ## [Unreleased]
 
 ### Added
 
-- 🚸 Add [CMake presets] to provide a standardized and reproducible way to configure builds ([#871]) ([**@denialhaag**])
+- 🚸 Add [CMake presets] to provide a standardized and reproducible way to
+  configure builds ([#871]) ([**@denialhaag**])
 
 ### Changed
 
 - ⬆️ Update `mqt-core` to version 3.7.0 ([#911]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 2.13.0 ([#911]) ([**@denialhaag**])
-- ⬆️ Update [munich-quantum-toolkit/workflows] to version `v2.0.1` ([#871]) ([**@denialhaag**])
+- ⬆️ Update [munich-quantum-toolkit/workflows] to version `v2.0.1` ([#871])
+  ([**@denialhaag**])
+
+### Removed
+
+- 📝 Remove support for generating LaTeX documentation ([#912])
+  ([**@denialhaag**])
 
 ## [2.3.0] - 2026-05-13
 
@@ -37,12 +45,17 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#220)._
 - ⬆️ Update `mqt-core` to version 3.4.1 ([#779]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 2.11.0 ([#779]) ([**@denialhaag**])
 - 🔧 Replace `mypy` with `ty` ([#770]) ([**@denialhaag**])
-- ♻️ Migrate Python bindings from `pybind11` to `nanobind` ([#766], [#773]) ([**@denialhaag**])
+- ♻️ Migrate Python bindings from `pybind11` to `nanobind` ([#766], [#773])
+  ([**@denialhaag**])
 - 📦️ Provide Stable ABI wheels for Python 3.12+ ([#766]) ([**@denialhaag**])
-- 👷 Stop testing on `ubuntu-22.04` and `ubuntu-22.04-arm` runners ([#740]) ([**@denialhaag**])
-- 👷 Stop testing with `clang-19` and start testing with `clang-21` ([#740]) ([**@denialhaag**])
-- 👷 Fix macOS tests with Homebrew Clang via new `munich-quantum-toolkit/workflows` version ([#740]) ([**@denialhaag**])
-- 👷 Re-enable macOS tests with GCC by disabling module scanning ([#740]) ([**@denialhaag**])
+- 👷 Stop testing on `ubuntu-22.04` and `ubuntu-22.04-arm` runners ([#740])
+  ([**@denialhaag**])
+- 👷 Stop testing with `clang-19` and start testing with `clang-21` ([#740])
+  ([**@denialhaag**])
+- 👷 Fix macOS tests with Homebrew Clang via new
+  `munich-quantum-toolkit/workflows` version ([#740]) ([**@denialhaag**])
+- 👷 Re-enable macOS tests with GCC by disabling module scanning ([#740])
+  ([**@denialhaag**])
 
 ### Removed
 
@@ -59,7 +72,8 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#210)._
 
 ### Changed
 
-- ⬆️ Bump minimum required `mqt-core` version to `3.3.1` ([#681]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `mqt-core` version to `3.3.1` ([#681])
+  ([**@denialhaag**])
 
 ### Removed
 
@@ -77,17 +91,25 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
 ### Changed
 
 - ♻️ Streamline names of Python modules and classes ([#614]) ([**@denialhaag**])
-- ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `mqt-core` version to `3.2.1` ([#610])
+  ([**@denialhaag**])
 - ⬆️ Require C++20 ([#610]) ([**@denialhaag**])
-- ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible) `py::native_enum` ([#607]) ([**@denialhaag**])
-- ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591]) ([**@denialhaag**])
-- ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591]) ([**@denialhaag**])
-- ♻️ Move the C++ code for the Python bindings to the top-level `bindings` directory ([#567]) ([**@denialhaag**])
-- ♻️ Move all Python code (no tests) to the top-level `python` directory ([#567]) ([**@denialhaag**])
+- ✨ Expose enums to Python via `pybind11`'s new (`enum.Enum`-compatible)
+  `py::native_enum` ([#607]) ([**@denialhaag**])
+- ⬆️ Bump minimum required `mqt-core` version to `3.1.0` ([#591])
+  ([**@denialhaag**])
+- ⬆️ Bump minimum required `pybind11` version to `3.0.0` ([#591])
+  ([**@denialhaag**])
+- ♻️ Move the C++ code for the Python bindings to the top-level `bindings`
+  directory ([#567]) ([**@denialhaag**])
+- ♻️ Move all Python code (no tests) to the top-level `python` directory
+  ([#567]) ([**@denialhaag**])
 - ⬆️ Support Qiskit 2.0 ([#571]) ([**@denialhaag**])
 - 🚚 Move MQT DDSIM to the [munich-quantum-toolkit] GitHub organization
-- ♻️ Use the `mqt-core` Python package for handling circuits ([#336]) ([**@burgholzer**])
-- ⬆️ Bump minimum required CMake version to `3.24.0` ([#538]) ([**@burgholzer**])
+- ♻️ Use the `mqt-core` Python package for handling circuits ([#336])
+  ([**@burgholzer**])
+- ⬆️ Bump minimum required CMake version to `3.24.0` ([#538])
+  ([**@burgholzer**])
 - 📝 Rework existing project documentation ([#556]) ([**@burgholzer**])
 
 ### Removed
@@ -95,11 +117,13 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
 - 🔥 Remove methods for querying maximum node count ([#591]) ([**@denialhaag**])
 - 🔥 Remove the TN flow from the path simulator ([#336]) ([**@burgholzer**])
 - 🔥 Remove some superfluous C++ executables ([#336]) ([**@burgholzer**])
-- 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538]) ([**@burgholzer**])
+- 🔥 Remove support for `.real`, `.qc`, `.tfc`, and `GRCS` files ([#538])
+  ([**@burgholzer**])
 
 ### Fixed
 
-- 🚸 Increase binary compatibility between `mqt-ddsim` and `mqt-core` ([#606]) ([**@denialhaag**])
+- 🚸 Increase binary compatibility between `mqt-ddsim` and `mqt-core` ([#606])
+  ([**@denialhaag**])
 
 ## [1.24.0] - 2024-10-10
 
@@ -116,6 +140,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#912]: https://github.com/munich-quantum-toolkit/ddsim/pull/912
 [#911]: https://github.com/munich-quantum-toolkit/ddsim/pull/911
 [#871]: https://github.com/munich-quantum-toolkit/ddsim/pull/871
 [#847]: https://github.com/munich-quantum-toolkit/ddsim/pull/847
@@ -127,7 +152,6 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [#681]: https://github.com/munich-quantum-toolkit/ddsim/pull/681
 [#674]: https://github.com/munich-quantum-toolkit/ddsim/pull/674
 [#645]: https://github.com/munich-quantum-toolkit/ddsim/pull/645
-[#640]: https://github.com/munich-quantum-toolkit/ddsim/pull/640
 [#614]: https://github.com/munich-quantum-toolkit/ddsim/pull/614
 [#610]: https://github.com/munich-quantum-toolkit/ddsim/pull/610
 [#608]: https://github.com/munich-quantum-toolkit/ddsim/pull/608

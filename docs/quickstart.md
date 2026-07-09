@@ -39,4 +39,5 @@ counts = job.result().get_counts(circ)
 print(counts)
 ```
 
-Check out the {doc}`reference documentation <api/mqt/ddsim/index>` for more information.
+Check out the {doc}`reference documentation <api/mqt/ddsim/index>` for more
+information.
