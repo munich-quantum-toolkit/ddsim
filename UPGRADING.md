@@ -6,6 +6,8 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+## [2.4.0]
+
 This release updates the minimum required `mqt-core` version to 3.7.0 as well as
 the `nanobind` version to 2.13.0.
 
@@ -135,7 +137,8 @@ standard.
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.0.0...v2.1.0
