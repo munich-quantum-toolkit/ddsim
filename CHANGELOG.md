@@ -15,6 +15,8 @@ This project adheres to [Semantic Versioning], with the exception that minor rel
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.7.0 ([#911]) ([**@denialhaag**])
+- ⬆️ Update `nanobind` to version 2.13.0 ([#911]) ([**@denialhaag**])
 - ⬆️ Update [munich-quantum-toolkit/workflows] to version `v2.0.1` ([#871]) ([**@denialhaag**])
 
 ## [2.3.0] - 2026-05-13
@@ -114,6 +116,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#911]: https://github.com/munich-quantum-toolkit/ddsim/pull/911
 [#871]: https://github.com/munich-quantum-toolkit/ddsim/pull/871
 [#847]: https://github.com/munich-quantum-toolkit/ddsim/pull/847
 [#779]: https://github.com/munich-quantum-toolkit/ddsim/pull/779

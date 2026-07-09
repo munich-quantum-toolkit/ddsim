@@ -4,6 +4,8 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## [Unreleased]
 
+This release updates the minimum required `mqt-core` version to 3.7.0 as well as the `nanobind` version to 2.13.0.
+
 ### CMake presets
 
 [CMake presets] have been added to provide a standardized and reproducible way to configure builds across different platforms.
@@ -23,7 +25,7 @@ If you are on Windows, use the `debug-windows` and `release-windows` presets.
 
 ## [2.3.0]
 
-This release updates the minimum required `mqt-core` version to `v3.6.0` as well as the `nanobind` version to `v2.12.0`.
+This release updates the minimum required `mqt-core` version to 3.6.0 as well as the `nanobind` version to 2.12.0.
 
 ## [2.2.0]
 
