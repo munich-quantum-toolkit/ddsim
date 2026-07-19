@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import unittest
 
+import pytest
 from qiskit import QuantumCircuit, QuantumRegister
 
 from mqt.ddsim.hybrid_qam_simulator_backend import HybridQasmSimulatorBackend
@@ -76,6 +77,7 @@ class MQTHybridQasmSimulatorTest(unittest.TestCase):
         assert counts_1 == {"0": shots}
         assert counts_2 == {"11": shots}
 
+    @pytest.mark.xdist_group("dd_mode")
     def test_dd_mode_simulation(self) -> None:
         """Test running a single circuit."""
         q = QuantumRegister(4)

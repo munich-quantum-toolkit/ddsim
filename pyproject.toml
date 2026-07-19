@@ -133,6 +133,7 @@ addopts = [
   "-ra",
   "--showlocals",
   "--numprocesses=auto", # Automatically use all available CPU cores for parallel testing
+  "--dist=loadgroup", # Ensure that certain tests are run on the same worker
 ]
 log_level = "INFO"
 filterwarnings = [
