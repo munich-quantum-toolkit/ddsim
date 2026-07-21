@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import unittest
 
+import pytest
 from mqt.core.ir import QuantumComputation
 
 from mqt.ddsim import HybridSimulator, HybridSimulatorMode
@@ -36,11 +37,13 @@ class MQTStandaloneHybridSimulatorTest(unittest.TestCase):
         result = sim.simulate(2048)
         assert len(result.keys()) == self.non_zeros_in_matrix
 
+    @pytest.mark.xdist_group("dd_mode")
     def test_standalone_dd_mode(self) -> None:
         sim = HybridSimulator(self.circuit, mode=HybridSimulatorMode.DD)
         result = sim.simulate(2048)
         assert len(result.keys()) == self.non_zeros_in_matrix
 
+    @pytest.mark.xdist_group("dd_mode")
     def test_standalone_dd_mode_with_seed(self) -> None:
         sim = HybridSimulator(self.circuit, seed=1337, mode=HybridSimulatorMode.DD)
         result = sim.simulate(2048)
