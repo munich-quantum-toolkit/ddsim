@@ -13,13 +13,13 @@ from __future__ import annotations
 import sys
 
 # under Windows, make sure to add the appropriate DLL directory to the PATH
-if sys.platform == "win32":  # noqa: RUF067 This is actually required on Windows
+if sys.platform == "win32":  # ruff:ignore[non-empty-init-module] This is actually required on Windows
 
     def _dll_patch() -> None:
         """Add the DLL directory to the PATH."""
-        import os  # noqa: PLC0415 because only needed on Windows
-        import sysconfig  # noqa: PLC0415 because only needed on Windows
-        from pathlib import Path  # noqa: PLC0415 because only needed on Windows
+        import os  # ruff:ignore[import-outside-top-level] because only needed on Windows
+        import sysconfig  # ruff:ignore[import-outside-top-level] because only needed on Windows
+        from pathlib import Path  # ruff:ignore[import-outside-top-level] because only needed on Windows
 
         site_packages = Path(sysconfig.get_paths()["purelib"])
         bin_dir = site_packages / "mqt" / "core" / "bin"

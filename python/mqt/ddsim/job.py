@@ -39,7 +39,7 @@ def requires_submit(func: Callable[..., Any]) -> Callable[..., Any]:
     """
 
     @functools.wraps(func)
-    def _wrapper(self: DDSIMJob, *args: Any, **kwargs: Any) -> Any:  # noqa: ANN401
+    def _wrapper(self: DDSIMJob, *args: Any, **kwargs: Any) -> Any:  # ruff:ignore[any-type]
         if self._future is None:
             msg = "Job not submitted yet!. You have to .submit() first!"
             raise JobError(msg)

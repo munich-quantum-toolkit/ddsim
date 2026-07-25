@@ -79,7 +79,7 @@ class Sampler(BaseSamplerV2):
         coerced_pubs = [SamplerPub.coerce(pub, shots) for pub in pubs]
 
         job = PrimitiveJob(self._run, coerced_pubs)
-        job._submit()  # noqa: SLF001
+        job._submit()  # ruff:ignore[private-member-access]
         return job
 
     def _run(self, pubs: Iterable[SamplerPub]) -> PrimitiveResult[SamplerPubResult]:
