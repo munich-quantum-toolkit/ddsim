@@ -223,8 +223,8 @@ Transactions on Computer-Aided Design of Integrated Circuits and Systems
 
 [[2]](https://www.cda.cit.tum.de/files/eda/2020_dac_weak_simulation_quantum_computation.pdf)
 S. Hillmich, I. L. Markov, and R. Wille. Just Like the Real Thing: Fast Weak
-Simulation of Quantum Computation. In _Design Automation Conference (DAC)_,
-2020.
+Simulation of Quantum Computation. In
+_Design Automation Conference (DAC)_, 2020.
 
 [[3]](https://www.cda.cit.tum.de/files/eda/2021_date_approximations_dd_baed_quantum_circuit_simulation.pdf)
 S. Hillmich, R. Kueng, I. L. Markov, and R. Wille. As Accurate as Needed, as
@@ -234,8 +234,7 @@ _Design, Automation and Test in Europe (DATE)_, 2021.
 [[4]](https://www.cda.cit.tum.de/files/eda/2021_qce_hybrid_schrodinger_feynman_simulation_with_decision_diagrams.pdf)
 L. Burgholzer, H. Bauer, and R. Wille. Hybrid Schrödinger–Feynman Simulation of
 Quantum Circuits with Decision Diagrams. In
-_IEEE International Conference on Quantum Computing and Engineering (QCE)_,
-2021.
+_IEEE International Conference on Quantum Computing and Engineering (QCE)_, 2021.
 
 [[5]](https://www.cda.cit.tum.de/files/eda/2022_date_exploiting_arbitrary_paths_simulation_quantum_circuits_decision_diagrams.pdf)
 L. Burgholzer, A. Ploier, and R. Wille. Exploiting Arbitrary Paths for the
