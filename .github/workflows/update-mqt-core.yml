@@ -21,7 +21,7 @@ concurrency:
 jobs:
   update-mqt-core:
     name: ⬆️ Update MQT Core
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@e7f84f39ce2d3b6c5d1d04526b8f94f98e455143 # v2.2.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@973217bac3ad300d9982fffdd3b37a9b5b3a51ea # v2.2.1
     with:
       update-to-head: ${{ github.event.inputs.update-to-head == 'true' }}
     secrets:
