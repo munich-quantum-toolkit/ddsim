@@ -95,13 +95,13 @@ the quantum computing community.
 To support this endeavor, please consider:
 
 - Starring and sharing our repositories:
-  [https://github.com/munich-quantum-toolkit](https://github.com/munich-quantum-toolkit)
+  <https://github.com/munich-quantum-toolkit>
 - Contributing code, documentation, tests, or examples via issues and pull
   requests
 - Citing the MQT in your publications (see {doc}`References <references>`)
 - Using the MQT in research and teaching, and sharing feedback and use cases
 - Sponsoring us on GitHub:
-  [https://github.com/sponsors/munich-quantum-toolkit](https://github.com/sponsors/munich-quantum-toolkit)
+  <https://github.com/sponsors/munich-quantum-toolkit>
 
 <p align="center">
 <iframe src="https://github.com/sponsors/munich-quantum-toolkit/button" title="Sponsor munich-quantum-toolkit" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
