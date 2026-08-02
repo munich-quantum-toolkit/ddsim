@@ -10,6 +10,8 @@
 
 #include "StochasticNoiseSimulator.hpp"
 
+#include "DensityDDPackage.hpp"
+#include "StochasticNoiseOperationTable.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"

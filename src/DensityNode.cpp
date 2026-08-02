@@ -24,6 +24,7 @@
 #include <complex>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <optional>
 #include <unordered_set>
 #include <utility>

@@ -17,6 +17,7 @@
 #include "dd/ComplexValue.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "dd/GateMatrixDefinitions.hpp"
+#include "dd/Node.hpp"
 #include "dd/Package.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/OpType.hpp"
@@ -26,6 +27,7 @@
 #include <array>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <random>
 #include <set>
@@ -275,8 +277,8 @@ void DeterministicNoiseFunctionality::applyNoiseEffects(
   nodeAfterNoise = applyNoiseEffects(originalEdge, usedQubits, false,
                                      static_cast<dd::Qubit>(nQubits));
   dEdge::revertDmChangesToEdge(originalEdge);
-  const auto r =
-      dEdge{nodeAfterNoise.p, package->package().cn.lookup(nodeAfterNoise.w)};
+  const auto r = dEdge{.p = nodeAfterNoise.p,
+                       .w = package->package().cn.lookup(nodeAfterNoise.w)};
   package->incRef(r);
   dEdge::alignDensityEdge(originalEdge);
   package->decRef(originalEdge);
@@ -293,7 +295,7 @@ dCachedEdge DeterministicNoiseFunctionality::applyNoiseEffects(
     return {originalEdge.p, originalWeight};
   }
 
-  auto originalCopy = dEdge{originalEdge.p, dd::Complex::one()};
+  auto originalCopy = dEdge{.p = originalEdge.p, .w = dd::Complex::one()};
   ArrayOfEdges newEdges{};
   const auto nextLevel = static_cast<dd::Qubit>(level - 1U);
   if (originalEdge.isIdentity()) {
