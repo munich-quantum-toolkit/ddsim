@@ -49,12 +49,12 @@ dEdge DensityDDPackage::makeDDNode(const dd::Qubit var,
          es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
       auto* ptr = es[0].p;
       mm.returnEntry(*e.p);
-      return dEdge{ptr, e.w};
+      return dEdge{.p = ptr, .w = e.w};
     }
   }
 
   auto* l = dUniqueTable.lookup(e.p);
-  return dEdge{l, e.w};
+  return dEdge{.p = l, .w = e.w};
 }
 
 dCachedEdge
@@ -172,7 +172,7 @@ dEdge DensityDDPackage::multiply(const dEdge& x, const dEdge& y,
 
   const auto e = multiply2(xCopy, yCopy, var, generateDensityMatrix);
   dEdge::revertDmChangesToEdges(xCopy, yCopy);
-  return dEdge{e.p, pkg->cn.lookup(e.w)};
+  return dEdge{.p = e.p, .w = pkg->cn.lookup(e.w)};
 }
 
 dCachedEdge DensityDDPackage::multiply2(const dEdge& x, const dEdge& y,
@@ -229,7 +229,7 @@ dCachedEdge DensityDDPackage::multiply2(const dEdge& x, const dEdge& y,
           e1 = x.p->e[xIdx];
         } else {
           if (xIdx == 0 || xIdx == 3) {
-            e1 = dEdge{x.p, dd::Complex::one()};
+            e1 = dEdge{.p = x.p, .w = dd::Complex::one()};
           } else {
             e1 = dEdge::zero();
           }
@@ -241,7 +241,7 @@ dCachedEdge DensityDDPackage::multiply2(const dEdge& x, const dEdge& y,
           e2 = y.p->e[yIdx];
         } else {
           if (yIdx == 0 || yIdx == 3) {
-            e2 = dEdge{y.p, dd::Complex::one()};
+            e2 = dEdge{.p = y.p, .w = dd::Complex::one()};
           } else {
             e2 = dEdge::zero();
           }
@@ -352,11 +352,12 @@ dCachedEdge DensityDDPackage::trace(const dEdge& a,
   }
 
   std::array<dCachedEdge, dd::NEDGE> edge{};
-  std::transform(a.p->e.cbegin(), a.p->e.cend(), edge.begin(),
-                 [this, &eliminate, &alreadyEliminated,
-                  &level](const dEdge& e) -> dCachedEdge {
-                   return trace(e, eliminate, level - 1, alreadyEliminated);
-                 });
+  std::ranges::transform(a.p->e, edge.begin(),
+                         [this, &eliminate, &alreadyEliminated,
+                          &level](const dEdge& e) -> dCachedEdge {
+                           return trace(e, eliminate, level - 1,
+                                        alreadyEliminated);
+                         });
   const auto adjustedV =
       static_cast<dd::Qubit>(static_cast<std::size_t>(a.p->v) -
                              (static_cast<std::size_t>(std::count(

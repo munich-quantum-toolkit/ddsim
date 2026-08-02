@@ -25,7 +25,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
-#include <string>
 #include <unordered_set>
 #include <utility>
 
@@ -178,7 +177,7 @@ auto dEdge::normalize(dNode* p, const std::array<dEdge, dd::NEDGE>& e,
   const auto zero = std::array{e[0].w.exactlyZero(), e[1].w.exactlyZero(),
                                e[2].w.exactlyZero(), e[3].w.exactlyZero()};
 
-  if (std::all_of(zero.begin(), zero.end(), [](auto b) { return b; })) {
+  if (std::ranges::all_of(zero, [](auto b) { return b; })) {
     mm.returnEntry(*p);
     return dEdge::zero();
   }
@@ -219,15 +218,15 @@ auto dEdge::normalize(dNode* p, const std::array<dEdge, dd::NEDGE>& e,
       continue;
     }
     if (i == argMaxValue) {
-      p->e[i] = {e[i].p, dd::Complex::one()};
+      p->e[i] = {.p = e[i].p, .w = dd::Complex::one()};
       continue;
     }
-    p->e[i] = {e[i].p, cn.lookup(weights[i] / argMaxWeight)};
+    p->e[i] = {.p = e[i].p, .w = cn.lookup(weights[i] / argMaxWeight)};
     if (p->e[i].w.exactlyZero()) {
       p->e[i].p = dNode::getTerminal();
     }
   }
-  return dEdge{p, maxVal};
+  return dEdge{.p = p, .w = maxVal};
 }
 
 ///-----------------------------------------------------------------------------
@@ -276,7 +275,8 @@ auto dEdge::getSparseProbabilityVectorStrKeys(const std::size_t numQubits,
 }
 
 void dEdge::traverseDiagonal(const dd::fp& prob, const std::size_t i,
-                             dd::ProbabilityFunc f, const std::size_t level,
+                             const dd::ProbabilityFunc& f,
+                             const std::size_t level,
                              const dd::fp threshold) const {
   // calculate new accumulated probability
   const auto c = static_cast<std::complex<dd::fp>>(w);
@@ -320,7 +320,7 @@ auto dCachedEdge::normalize(dNode* p,
       std::array{e[0].w.approximatelyZero(), e[1].w.approximatelyZero(),
                  e[2].w.approximatelyZero(), e[3].w.approximatelyZero()};
 
-  if (std::all_of(zero.begin(), zero.end(), [](auto b) { return b; })) {
+  if (std::ranges::all_of(zero, [](auto b) { return b; })) {
     mm.returnEntry(*p);
     return dCachedEdge::zero();
   }
@@ -357,10 +357,10 @@ auto dCachedEdge::normalize(dNode* p,
       continue;
     }
     if (i == argMaxValue) {
-      p->e[i] = {e[i].p, dd::Complex::one()};
+      p->e[i] = {.p = e[i].p, .w = dd::Complex::one()};
       continue;
     }
-    p->e[i] = {e[i].p, cn.lookup(e[i].w / maxVal)};
+    p->e[i] = {.p = e[i].p, .w = cn.lookup(e[i].w / maxVal)};
     if (p->e[i].w.exactlyZero()) {
       p->e[i].p = dNode::getTerminal();
     }

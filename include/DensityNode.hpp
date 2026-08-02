@@ -56,7 +56,7 @@ struct dEdge { // NOLINT(readability-identifier-naming)
   static constexpr dEdge one() { return terminal(dd::Complex::one()); }
   [[nodiscard]] static constexpr dEdge terminal(const dd::Complex& w);
 
-  [[nodiscard]] static constexpr bool trackingRequired(const dEdge& e) {
+  [[nodiscard]] static bool trackingRequired(const dEdge& e) {
     return !e.isTerminal() || !dd::constants::isStaticNumber(e.w.r) ||
            !dd::constants::isStaticNumber(e.w.i);
   }
@@ -123,7 +123,7 @@ private:
   size(std::unordered_set<const dNode*>& visited) const;
 
   void traverseDiagonal(const dd::fp& prob, std::size_t i,
-                        dd::ProbabilityFunc f, std::size_t level,
+                        const dd::ProbabilityFunc& f, std::size_t level,
                         dd::fp threshold = 0.) const;
 };
 
@@ -270,7 +270,7 @@ struct dNode final : dd::NodeBase { // NOLINT(readability-identifier-naming)
 
 /// Reinterpret a Core matrix edge as a density-matrix edge.
 inline dEdge densityFromMatrixEdge(const dd::mEdge& e) {
-  return dEdge{reinterpret_cast<dNode*>(e.p), e.w};
+  return dEdge{.p = reinterpret_cast<dNode*>(e.p), .w = e.w};
 }
 
 ///-----------------------------------------------------------------------------
@@ -278,7 +278,7 @@ inline dEdge densityFromMatrixEdge(const dd::mEdge& e) {
 ///-----------------------------------------------------------------------------
 
 constexpr dEdge dEdge::terminal(const dd::Complex& w) {
-  return dEdge{dNode::getTerminal(), w};
+  return dEdge{.p = dNode::getTerminal(), .w = w};
 }
 
 inline bool dEdge::isTerminal() const { return dNode::isTerminal(p); }
