@@ -6,6 +6,8 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+This release updates the minimum required `mqt-core` version to 3.8.0.
+
 ## [2.4.0]
 
 This release updates the minimum required `mqt-core` version to 3.7.0 as well as
