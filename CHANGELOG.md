@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- 🐍 Start building CPython 3.15 wheels ([#944]) ([**@denialhaag**])
+
 ### Changed
 
 - ⬆️ Update `mqt-core` to version 3.8.0 ([#939]) ([**@denialhaag**])
@@ -93,7 +97,7 @@ _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#200)._
 
 ### Added
 
-- 🐍 Build Python 3.14 wheels ([#608]) ([**@denialhaag**])
+- 🐍 Start building CPython 3.14 wheels ([#608]) ([**@denialhaag**])
 - ✨ Add Windows 11 ARM64 wheels and C++ testing ([#556]) ([**@burgholzer**])
 
 ### Changed
@@ -149,6 +153,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#944]: https://github.com/munich-quantum-toolkit/ddsim/pull/944
 [#939]: https://github.com/munich-quantum-toolkit/ddsim/pull/939
 [#912]: https://github.com/munich-quantum-toolkit/ddsim/pull/912
 [#911]: https://github.com/munich-quantum-toolkit/ddsim/pull/911
