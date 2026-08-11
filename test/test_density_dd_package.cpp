@@ -14,6 +14,7 @@
 #include "StochasticNoiseOperationTable.hpp"
 #include "dd/ComplexValue.hpp"
 #include "dd/DDDefinitions.hpp"
+#include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
 #include "ir/Definitions.hpp"
