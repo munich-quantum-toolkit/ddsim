@@ -294,7 +294,7 @@ dd::mEdge ShorSimulator::limitTo(std::uint64_t a) {
   } else {
     edges[0] = dd::mEdge::one();
   }
-  dd::Edge f = dd->makeDDNode(0, edges, false);
+  dd::Edge f = dd->makeDDNode(0, edges);
 
   edges[0] = edges[1] = edges[2] = edges[3] = dd::mEdge::zero();
 
@@ -305,7 +305,7 @@ dd::mEdge ShorSimulator::limitTo(std::uint64_t a) {
     } else {
       edges[0] = f;
     }
-    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
     edges[3] = dd::mEdge::zero();
   }
 
@@ -321,7 +321,7 @@ dd::mEdge ShorSimulator::addConst(std::uint64_t a) {
   while (((a >> p) & 1U) == 0U) {
     edges[0] = f;
     edges[3] = f;
-    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
     p++;
   }
 
@@ -330,10 +330,10 @@ dd::mEdge ShorSimulator::addConst(std::uint64_t a) {
 
   edges[0] = edges[1] = edges[2] = edges[3] = dd::mEdge::zero();
   edges[2] = f;
-  left = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+  left = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
   edges[2] = dd::mEdge::zero();
   edges[1] = f;
-  right = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+  right = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
   p++;
 
   dd::mEdge newLeft;
@@ -342,20 +342,20 @@ dd::mEdge ShorSimulator::addConst(std::uint64_t a) {
     edges[0] = edges[1] = edges[2] = edges[3] = dd::mEdge::zero();
     if (((a >> p) & 1U) != 0U) {
       edges[2] = left;
-      newLeft = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+      newLeft = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
       edges[2] = dd::mEdge::zero();
       edges[0] = right;
       edges[1] = left;
       edges[3] = right;
-      newRight = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+      newRight = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
     } else {
       edges[1] = right;
-      newRight = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+      newRight = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
       edges[1] = dd::mEdge::zero();
       edges[0] = left;
       edges[2] = right;
       edges[3] = left;
-      newLeft = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+      newLeft = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
     }
     left = newLeft;
     right = newRight;
@@ -366,7 +366,7 @@ dd::mEdge ShorSimulator::addConst(std::uint64_t a) {
   edges[2] = right;
   edges[3] = left;
 
-  return dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+  return dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
 }
 
 dd::mEdge ShorSimulator::addConstMod(std::uint64_t a) {
@@ -399,7 +399,7 @@ void ShorSimulator::uAEmulate(std::uint64_t a, std::int32_t q) {
   for (std::uint32_t p = 0; p < requiredBits; ++p) {
     edges[0] = f;
     edges[1] = f;
-    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+    f = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
   }
 
   // TODO: limitTo?
@@ -422,7 +422,7 @@ void ShorSimulator::uAEmulate(std::uint64_t a, std::int32_t q) {
       } else {
         edges[0] = edges[3] = active;
       }
-      active = dd->makeDDNode(static_cast<dd::Qubit>(p), edges, false);
+      active = dd->makeDDNode(static_cast<dd::Qubit>(p), edges);
     }
 
     active.w = dd->cn.lookup(-1, 0);
@@ -454,13 +454,13 @@ void ShorSimulator::uAEmulate(std::uint64_t a, std::int32_t q) {
       edges[3] = e;
       e = dd->makeDDNode(
           static_cast<dd::Qubit>(nQubits - 1 - static_cast<std::size_t>(i)),
-          edges, false);
+          edges);
     } else {
       edges[1] = edges[2] = dd::mEdge::zero();
       edges[0] = edges[3] = e;
       e = dd->makeDDNode(
           static_cast<dd::Qubit>(nQubits - 1 - static_cast<std::size_t>(i)),
-          edges, false);
+          edges);
     }
   }
 

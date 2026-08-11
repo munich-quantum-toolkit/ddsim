@@ -31,30 +31,32 @@ using CN = dd::ComplexNumbers;
 
 void DeterministicNoiseSimulator::initializeSimulation(
     const std::size_t nQubits) {
-  rootEdge = dd->makeZeroDensityOperator(static_cast<dd::Qubit>(nQubits));
+  rootEdge = densityDD.makeZeroDensityOperator(static_cast<dd::Qubit>(nQubits));
 }
 
 void DeterministicNoiseSimulator::applyOperationToState(
     std::unique_ptr<qc::Operation>& op) {
   auto operation = dd::getDD(*op, *Simulator::dd);
-  dd->applyOperationToDensity(DeterministicNoiseSimulator::rootEdge, operation);
+  densityDD.applyOperationToDensity(DeterministicNoiseSimulator::rootEdge,
+                                    operation);
   deterministicNoiseFunctionality.applyNoiseEffects(
       DeterministicNoiseSimulator::rootEdge, op);
+  densityDD.garbageCollect();
 }
 
 char DeterministicNoiseSimulator::measure(const dd::Qubit i) {
-  return Simulator::dd->measureOneCollapsing(
-      rootEdge, static_cast<dd::Qubit>(i), Simulator::mt);
+  return densityDD.measureOneCollapsing(rootEdge, static_cast<dd::Qubit>(i),
+                                        Simulator::mt);
 }
 
 void DeterministicNoiseSimulator::reset(qc::NonUnitaryOperation* nonUnitaryOp) {
   for (const auto& qubit : nonUnitaryOp->getTargets()) {
-    auto const result =
-        dd->measureOneCollapsing(rootEdge, static_cast<dd::Qubit>(qubit), mt);
+    auto const result = densityDD.measureOneCollapsing(
+        rootEdge, static_cast<dd::Qubit>(qubit), mt);
     if (result == '1') {
       const auto x = qc::StandardOperation(qubit, qc::X);
       const auto operation = dd::getDD(x, *dd);
-      rootEdge = dd->applyOperationToDensity(rootEdge, operation);
+      rootEdge = densityDD.applyOperationToDensity(rootEdge, operation);
     }
   }
 }

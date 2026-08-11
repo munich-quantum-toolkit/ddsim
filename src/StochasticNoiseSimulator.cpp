@@ -10,8 +10,9 @@
 
 #include "StochasticNoiseSimulator.hpp"
 
+#include "DensityDDPackage.hpp"
+#include "StochasticNoiseOperationTable.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/DDpackageConfig.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
@@ -78,10 +79,13 @@ void StochasticNoiseSimulator::runStochSimulationForId(
 
   for (std::size_t currentRun = 0U; currentRun < numberOfRuns; currentRun++) {
     auto localDD = std::make_unique<dd::Package>(
-        getNumberOfQubits(), dd::STOCHASTIC_NOISE_SIMULATOR_DD_PACKAGE_CONFIG);
-    auto stochasticNoiseFunctionality = dd::StochasticNoiseFunctionality(
+        getNumberOfQubits(),
+        dd::ddsim::STOCHASTIC_NOISE_SIMULATOR_DD_PACKAGE_CONFIG);
+    auto stochasticNoiseFunctionality = dd::ddsim::StochasticNoiseFunctionality(
         *localDD, static_cast<dd::Qubit>(nQubits), noiseProbability,
         amplitudeDampingProb, multiQubitGateFactor, noiseEffects);
+    dd::ddsim::StochasticNoiseOperationTable<dd::mEdge> gateCache(
+        getNumberOfQubits(), qc::OpType::OpTypeEnd);
 
     std::vector<bool> classicValues(qc->getNcbits(), false);
 
@@ -118,13 +122,12 @@ void StochasticNoiseSimulator::runStochSimulationForId(
       const auto& controls = op->getControls();
 
       if (targets.size() == 1 && controls.empty()) {
-        const auto* oper = localDD->stochasticNoiseOperationCache.lookup(
+        const auto* oper = gateCache.lookup(
             op->getType(), static_cast<dd::Qubit>(targets.front()));
         if (oper == nullptr) {
           operation = getDD(*op, *localDD);
-          localDD->stochasticNoiseOperationCache.insert(
-              op->getType(), static_cast<dd::Qubit>(targets.front()),
-              operation);
+          gateCache.insert(op->getType(),
+                           static_cast<dd::Qubit>(targets.front()), operation);
         } else {
           operation = *oper;
         }

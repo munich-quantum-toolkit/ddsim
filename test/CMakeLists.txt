@@ -16,6 +16,8 @@ package_add_test(
   test_hybridsim.cpp
   test_stoch_noise_sim.cpp
   test_det_noise_sim.cpp
+  test_density_dd_package.cpp
+  test_noise_functionality.cpp
   test_unitary_sim.cpp
   test_path_sim.cpp)
 

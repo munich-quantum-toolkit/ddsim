@@ -16,6 +16,8 @@ releases may include breaking changes.
 
 ### Changed
 
+- 🚚 Vendor density-matrix DD support used by the noise-aware simulators, as it
+  will be removed from `mqt-core` in version 4.0.0 ([#940]) ([**@denialhaag**])
 - ⬆️ Update `mqt-core` to version 3.8.0 ([#939]) ([**@denialhaag**])
 
 ## [2.4.0] - 2026-07-09
@@ -154,6 +156,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 <!-- PR links -->
 
 [#944]: https://github.com/munich-quantum-toolkit/ddsim/pull/944
+[#940]: https://github.com/munich-quantum-toolkit/ddsim/pull/940
 [#939]: https://github.com/munich-quantum-toolkit/ddsim/pull/939
 [#912]: https://github.com/munich-quantum-toolkit/ddsim/pull/912
 [#911]: https://github.com/munich-quantum-toolkit/ddsim/pull/911

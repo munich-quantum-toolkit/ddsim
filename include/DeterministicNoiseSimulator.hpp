@@ -11,11 +11,11 @@
 #pragma once
 
 #include "CircuitSimulator.hpp"
+#include "DensityDDPackage.hpp"
+#include "DensityNode.hpp"
+#include "NoiseFunctionality.hpp"
 #include "Simulator.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/DDpackageConfig.hpp"
-#include "dd/Node.hpp"
-#include "dd/NoiseFunctionality.hpp"
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
@@ -37,7 +37,7 @@ public:
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
       : CircuitSimulator(std::move(qc_), approximationInfo_,
-                         dd::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
+                         dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseEffects(std::move(noiseEffects_)),
         noiseProbSingleQubit(noiseProbability_),
         ampDampingProbSingleQubit(ampDampingProbability_
@@ -46,11 +46,12 @@ public:
         noiseProbMultiQubit(noiseProbability_ * multiQubitGateFactor_),
         ampDampingProbMultiQubit(ampDampingProbSingleQubit *
                                  multiQubitGateFactor_),
+        densityDD(*dd, CircuitSimulator::getNumberOfQubits()),
         deterministicNoiseFunctionality(
-            *dd, CircuitSimulator::getNumberOfQubits(), noiseProbSingleQubit,
-            noiseProbMultiQubit, ampDampingProbSingleQubit,
-            ampDampingProbMultiQubit, noiseEffects) {
-    dd::sanityCheckOfNoiseProbabilities(
+            densityDD, CircuitSimulator::getNumberOfQubits(),
+            noiseProbSingleQubit, noiseProbMultiQubit,
+            ampDampingProbSingleQubit, ampDampingProbMultiQubit, noiseEffects) {
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
         noiseProbability_, ampDampingProbSingleQubit, multiQubitGateFactor_);
   }
 
@@ -71,7 +72,7 @@ public:
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
       : CircuitSimulator(std::move(qc_), approximationInfo_, seed_,
-                         dd::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
+                         dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseEffects(std::move(noiseEffects_)),
         noiseProbSingleQubit(noiseProbability_),
         ampDampingProbSingleQubit(ampDampingProbability_
@@ -80,11 +81,12 @@ public:
         noiseProbMultiQubit(noiseProbability_ * multiQubitGateFactor_),
         ampDampingProbMultiQubit(ampDampingProbSingleQubit *
                                  multiQubitGateFactor_),
+        densityDD(*dd, CircuitSimulator::getNumberOfQubits()),
         deterministicNoiseFunctionality(
-            *dd, CircuitSimulator::getNumberOfQubits(), noiseProbSingleQubit,
-            noiseProbMultiQubit, ampDampingProbSingleQubit,
-            ampDampingProbMultiQubit, noiseEffects) {
-    dd::sanityCheckOfNoiseProbabilities(
+            densityDD, CircuitSimulator::getNumberOfQubits(),
+            noiseProbSingleQubit, noiseProbMultiQubit,
+            ampDampingProbSingleQubit, ampDampingProbMultiQubit, noiseEffects) {
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
         noiseProbability_, ampDampingProbSingleQubit, multiQubitGateFactor_);
   }
 
@@ -106,19 +108,17 @@ public:
                            std::size_t shots);
 
   [[nodiscard]] std::size_t getActiveNodeCount() const override {
-    const auto [vectorNodes, matrixNodes, densityNodes, realNumbers] =
-        dd->computeActiveCounts();
-    return densityNodes;
+    return densityDD.computeActiveNodeCount();
   }
 
   [[nodiscard]] std::size_t countNodesFromRoot() override {
-    dd::DensityMatrixDD::alignDensityEdge(rootEdge);
+    dd::ddsim::DensityMatrixDD::alignDensityEdge(rootEdge);
     const std::size_t tmp = rootEdge.size();
-    dd::DensityMatrixDD::setDensityMatrixTrue(rootEdge);
+    dd::ddsim::DensityMatrixDD::setDensityMatrixTrue(rootEdge);
     return tmp;
   }
 
-  dd::DensityMatrixDD rootEdge{};
+  dd::ddsim::DensityMatrixDD rootEdge{};
 
 private:
   std::string noiseEffects;
@@ -129,5 +129,6 @@ private:
   double ampDampingProbMultiQubit{};
 
   double measurementThreshold = 0.01;
-  dd::DeterministicNoiseFunctionality deterministicNoiseFunctionality;
+  dd::ddsim::DensityDDPackage densityDD;
+  dd::ddsim::DeterministicNoiseFunctionality deterministicNoiseFunctionality;
 };
