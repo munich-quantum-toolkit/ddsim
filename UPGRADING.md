@@ -11,12 +11,10 @@ This release updates the minimum required `mqt-core` version to 3.8.0.
 ### Vendored density-matrix decision-diagram support
 
 Support for density-matrix decision diagrams will be removed from `mqt-core` in
-version 4.0.0. Because the deterministic and stochastic noise-aware simulators
-depend on it, MQT DDSIM now vendors this functionality under the new `dd::ddsim`
-namespace. This is an internal change: the `DeterministicNoiseSimulator` and
-`StochasticNoiseSimulator` APIs are unaffected. If your C++ code previously used
-the density-matrix DD types (e.g. `dd::dEdge` or `dd::DensityMatrixDD`) through
-MQT DDSIM, switch to their `dd::ddsim::` counterparts.
+version 4.0.0. Because the noise-aware simulators depend on it, MQT DDSIM now
+vendors this functionality in the new `dd::ddsim` namespace. The simulator
+interfaces are unchanged, except that `DeterministicNoiseSimulator::rootEdge` is
+now a `dd::ddsim::DensityMatrixDD` instead of a `dd::DensityMatrixDD`.
 
 ## [2.4.0]
 
