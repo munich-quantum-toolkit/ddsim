@@ -95,21 +95,12 @@ struct dEdge { // NOLINT(readability-identifier-naming)
   static auto normalize(dNode* p, const std::array<dEdge, dd::NEDGE>& e,
                         dd::MemoryManager& mm, dd::ComplexNumbers& cn) -> dEdge;
 
-  [[maybe_unused]] static void setDensityConjugateTrue(dEdge& e);
-  [[maybe_unused]] static void setFirstEdgeDensityPathTrue(dEdge& e);
   static void setDensityMatrixTrue(dEdge& e);
   static void alignDensityEdge(dEdge& e);
   static void revertDmChangesToEdges(dEdge& x, dEdge& y);
   static void revertDmChangesToEdge(dEdge& x);
   static void applyDmChangesToEdges(dEdge& x, dEdge& y);
   static void applyDmChangesToEdge(dEdge& x);
-
-  /**
-   * @brief Get the sparse probability vector for the underlying density matrix.
-   */
-  [[nodiscard]] dd::SparsePVec
-  getSparseProbabilityVector(std::size_t numQubits,
-                             dd::fp threshold = 0.) const;
 
   /**
    * @brief Get the sparse probability vector using strings as keys.
@@ -283,12 +274,6 @@ constexpr dEdge dEdge::terminal(const dd::Complex& w) {
 
 inline bool dEdge::isTerminal() const { return dNode::isTerminal(p); }
 
-inline void dEdge::setDensityConjugateTrue(dEdge& e) {
-  dNode::setConjugateTempFlagTrue(e.p);
-}
-inline void dEdge::setFirstEdgeDensityPathTrue(dEdge& e) {
-  dNode::setNonReduceTempFlagTrue(e.p);
-}
 inline void dEdge::setDensityMatrixTrue(dEdge& e) {
   dNode::setDensityMatTempFlagTrue(e.p);
 }

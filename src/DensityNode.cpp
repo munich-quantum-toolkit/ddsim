@@ -234,26 +234,6 @@ auto dEdge::normalize(dNode* p, const std::array<dEdge, dd::NEDGE>& e,
 ///                 \n Methods for density matrix DDs \n
 ///-----------------------------------------------------------------------------
 
-auto dEdge::getSparseProbabilityVector(const std::size_t numQubits,
-                                       const dd::fp threshold) const
-    -> dd::SparsePVec {
-  if (numQubits == 0U) {
-    return {{0, static_cast<std::complex<dd::fp>>(w).real()}};
-  }
-
-  auto e = *this;
-  dEdge::alignDensityEdge(e);
-
-  auto probabilities = dd::SparsePVec{};
-  e.traverseDiagonal(
-      1, 0,
-      [&probabilities](const std::size_t i, const dd::fp& prob) {
-        probabilities[i] = prob;
-      },
-      numQubits, threshold);
-  return probabilities;
-}
-
 auto dEdge::getSparseProbabilityVectorStrKeys(const std::size_t numQubits,
                                               const dd::fp threshold) const
     -> dd::SparsePVecStrKeys {
