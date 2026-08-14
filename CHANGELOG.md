@@ -16,6 +16,8 @@ releases may include breaking changes.
 
 ### Changed
 
+- ➕ Depend on `nlohmann_json` directly instead of relying on `mqt-core` to
+  provide it ([#955]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 2.14.0 ([#953]) ([**@denialhaag**])
 - 🚚 Vendor density-matrix DD support used by the noise-aware simulators, as it
   will be removed from `mqt-core` in version 4.0.0 ([#940]) ([**@denialhaag**])
@@ -156,6 +158,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#955]: https://github.com/munich-quantum-toolkit/ddsim/pull/955
 [#953]: https://github.com/munich-quantum-toolkit/ddsim/pull/953
 [#944]: https://github.com/munich-quantum-toolkit/ddsim/pull/944
 [#940]: https://github.com/munich-quantum-toolkit/ddsim/pull/940
