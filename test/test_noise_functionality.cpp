@@ -26,6 +26,7 @@
 #include <gtest/gtest.h>
 #include <map>
 #include <memory>
+#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -60,6 +61,7 @@ protected:
   }
 
   qc::QuantumComputation qc;
+  std::mt19937_64 rng{0U};
   std::size_t stochRuns = 1000U;
 };
 
@@ -169,7 +171,7 @@ TEST_F(DDNoiseFunctionalityTest, testingMeasure) {
   EXPECT_NEAR(tmp["110"], prob, tolerance);
   EXPECT_NEAR(tmp["111"], prob, tolerance);
 
-  densityDD.measureOneCollapsing(rootEdge, 0, qc.getGenerator());
+  densityDD.measureOneCollapsing(rootEdge, 0, rng);
 
   auto tmp0 = rootEdge.getSparseProbabilityVectorStrKeys(qc.getNqubits());
   prob = 0.25;
@@ -179,7 +181,7 @@ TEST_F(DDNoiseFunctionalityTest, testingMeasure) {
   EXPECT_TRUE(std::fabs(tmp0["100"] + tmp0["101"] - prob) < tolerance);
   EXPECT_TRUE(std::fabs(tmp0["110"] + tmp0["111"] - prob) < tolerance);
 
-  densityDD.measureOneCollapsing(rootEdge, 1, qc.getGenerator());
+  densityDD.measureOneCollapsing(rootEdge, 1, rng);
 
   auto tmp1 = rootEdge.getSparseProbabilityVectorStrKeys(qc.getNqubits());
   prob = 0.5;
@@ -188,7 +190,7 @@ TEST_F(DDNoiseFunctionalityTest, testingMeasure) {
   EXPECT_TRUE(std::fabs(tmp0["100"] + tmp0["101"] + tmp0["110"] + tmp0["111"] -
                         prob) < tolerance);
 
-  densityDD.measureOneCollapsing(rootEdge, 2, qc.getGenerator());
+  densityDD.measureOneCollapsing(rootEdge, 2, rng);
 
   auto tmp2 = rootEdge.getSparseProbabilityVectorStrKeys(qc.getNqubits());
   EXPECT_TRUE(std::fabs(tmp2["000"] - 1) < tolerance ||
@@ -221,8 +223,8 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4TrackAPD) {
     for (auto const& op : qc) {
       auto operation = dd::getDD(*op, *dd);
       auto usedQubits = op->getUsedQubits();
-      stochasticNoiseFunctionality.applyNoiseOperation(
-          usedQubits, operation, rootEdge, qc.getGenerator());
+      stochasticNoiseFunctionality.applyNoiseOperation(usedQubits, operation,
+                                                       rootEdge, rng);
     }
 
     const auto amplitudes = rootEdge.getVector();
@@ -274,7 +276,7 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4IdentityError) {
     for (auto const& op : qc) {
       auto operation = dd::getDD(*op, *dd);
       stochasticNoiseFunctionality.applyNoiseOperation(
-          op->getUsedQubits(), operation, rootEdge, qc.getGenerator());
+          op->getUsedQubits(), operation, rootEdge, rng);
     }
 
     const auto amplitudes = rootEdge.getVector();
