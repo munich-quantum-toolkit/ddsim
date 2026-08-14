@@ -14,11 +14,8 @@
 #include "dd/Node.hpp"
 #include "dd/statistics/UniqueTableStatistics.hpp"
 
-#include <algorithm>
 #include <cstddef>
-#include <nlohmann/json.hpp>
 #include <numeric>
-#include <string>
 
 namespace dd::ddsim {
 
@@ -101,39 +98,6 @@ void DensityUniqueTable::clear() {
 const dd::UniqueTableStatistics&
 DensityUniqueTable::getStats(const std::size_t idx) const noexcept {
   return stats.at(idx);
-}
-
-nlohmann::basic_json<>
-DensityUniqueTable::getStatsJson(const bool includeIndividualTables) const {
-  if (std::ranges::all_of(stats, [](const dd::UniqueTableStatistics& stat) {
-        return stat.peakNumEntries == 0U;
-      })) {
-    return "unused";
-  }
-
-  dd::UniqueTableStatistics totalStats;
-  for (const auto& stat : stats) {
-    totalStats.entrySize = std::max(totalStats.entrySize, stat.entrySize);
-    totalStats.numBuckets += stat.numBuckets;
-    totalStats.numEntries += stat.numEntries;
-    totalStats.peakNumEntries += stat.peakNumEntries;
-    totalStats.collisions += stat.collisions;
-    totalStats.hits += stat.hits;
-    totalStats.lookups += stat.lookups;
-    totalStats.inserts += stat.inserts;
-    totalStats.gcRuns = std::max(totalStats.gcRuns, stat.gcRuns);
-  }
-
-  nlohmann::basic_json<> j;
-  j["total"] = totalStats.json();
-  if (includeIndividualTables) {
-    std::size_t v = 0U;
-    for (const auto& stat : stats) {
-      j[std::to_string(v)] = stat.json();
-      ++v;
-    }
-  }
-  return j;
 }
 
 std::size_t DensityUniqueTable::getNumEntries() const noexcept {

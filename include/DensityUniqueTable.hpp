@@ -29,7 +29,6 @@
 
 #include <cstddef>
 #include <functional>
-#include <nlohmann/json.hpp>
 #include <vector>
 
 namespace dd::ddsim {
@@ -92,8 +91,6 @@ public:
   [[nodiscard]] const auto& getStats() const noexcept { return stats; }
   [[nodiscard]] const dd::UniqueTableStatistics&
   getStats(std::size_t idx) const noexcept;
-  [[nodiscard]] nlohmann::basic_json<>
-  getStatsJson(bool includeIndividualTables = false) const;
   [[nodiscard]] std::size_t getNumEntries() const noexcept;
   [[nodiscard]] std::size_t countMarkedEntries() const noexcept;
   [[nodiscard]] bool possiblyNeedsCollection() const;

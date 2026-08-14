@@ -20,10 +20,10 @@ if(NOT TARGET MQT::DDSim)
   target_include_directories(${MQT_DDSIM_TARGET_NAME}
                              PUBLIC $<BUILD_INTERFACE:${MQT_DDSIM_INCLUDE_BUILD_DIR}>)
 
-  # link to the MQT::Core and Taskflow libraries
+  # link to the MQT::Core, Taskflow, and nlohmann_json libraries
   target_link_libraries(
     ${MQT_DDSIM_TARGET_NAME}
-    PUBLIC MQT::CoreDD MQT::CoreCircuitOptimizer Taskflow
+    PUBLIC MQT::CoreDD MQT::CoreCircuitOptimizer Taskflow nlohmann_json::nlohmann_json
     PRIVATE MQT::ProjectWarnings MQT::ProjectOptions)
 
   # the following sets the SYSTEM flag for the include dirs of the taskflow libs
