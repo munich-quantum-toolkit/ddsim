@@ -20,10 +20,7 @@ if(NOT TARGET MQT::DDSim)
   target_include_directories(${MQT_DDSIM_TARGET_NAME}
                              PUBLIC $<BUILD_INTERFACE:${MQT_DDSIM_INCLUDE_BUILD_DIR}>)
 
-  # link to the MQT::Core and Taskflow libraries
-  #
-  # nlohmann_json is part of DDSIM's own public API (the path simulator configuration), so it is
-  # linked publicly here instead of being picked up transitively from MQT::Core.
+  # link to the MQT::Core, Taskflow, and nlohmann_json libraries
   target_link_libraries(
     ${MQT_DDSIM_TARGET_NAME}
     PUBLIC MQT::CoreDD MQT::CoreCircuitOptimizer Taskflow nlohmann_json::nlohmann_json
