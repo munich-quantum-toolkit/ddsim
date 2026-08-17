@@ -10,8 +10,6 @@
 
 from __future__ import annotations
 
-import os
-import subprocess
 import warnings
 from importlib import metadata
 from pathlib import Path
@@ -68,7 +66,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxcontrib.bibtex",
-    "sphinxcontrib.inkscapeconverter",
     "sphinxext.opengraph",
 ]
 
@@ -166,14 +163,6 @@ napoleon_numpy_docstring = False
 
 breathe_projects = {"mqt.ddsim": "_build/doxygen/xml"}
 breathe_default_project = "mqt.ddsim"
-
-read_the_docs_build = os.environ.get("READTHEDOCS", None) == "True"
-if read_the_docs_build:
-    subprocess.call("mkdir -p _build/doxygen && doxygen", shell=True)  # ruff:ignore[subprocess-popen-with-shell-equals-true, start-process-with-partial-path]
-    subprocess.call(  # ruff:ignore[subprocess-popen-with-shell-equals-true]
-        "mkdir -p api/cpp && breathe-apidoc -o api/cpp -m -f -g file _build/doxygen/xml/",  # ruff:ignore[start-process-with-partial-path]
-        shell=True,
-    )
 
 # -- Options for HTML output -------------------------------------------------
 
