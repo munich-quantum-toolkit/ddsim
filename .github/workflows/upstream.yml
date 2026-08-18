@@ -12,6 +12,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   qiskit-upstream-tests:
     name: 🐍⚛️
@@ -22,6 +24,8 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-tests.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
     with:
       runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
 
   create-issue-on-failure:
     name: Create issue on failure

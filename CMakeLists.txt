@@ -7,7 +7,7 @@
 # Licensed under the MIT License
 
 # set required cmake version
-cmake_minimum_required(VERSION 3.24...4.0)
+cmake_minimum_required(VERSION 3.24...4.4)
 
 project(
   mqt-ddsim

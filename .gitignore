@@ -130,7 +130,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# setuptools_scm
+# vcs-versioning
 python/**/_version.py
 
 # SKBuild cache dir
