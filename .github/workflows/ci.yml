@@ -23,7 +23,7 @@ jobs:
   cpp-tests-ubuntu:
     name: 🇨 Test 🐧
     needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
     strategy:
       fail-fast: false
       matrix:
@@ -45,7 +45,7 @@ jobs:
   cpp-tests-macos:
     name: 🇨 Test 🍎
     needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
     strategy:
       fail-fast: false
       matrix:
@@ -67,7 +67,7 @@ jobs:
   cpp-tests-windows:
     name: 🇨 Test 🏁
     needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
+    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
     strategy:
       fail-fast: false
       matrix:
@@ -78,68 +78,6 @@ jobs:
           - runs-on: windows-2025
             compiler: msvc
             preset: debug-windows
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-windows.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-    permissions:
-      contents: read
-
-  # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
-  cpp-tests-extensive-ubuntu:
-    name: 🇨 Test (Extensive) 🐧
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [ubuntu-24.04, ubuntu-24.04-arm]
-        compiler: [gcc, clang, clang-20, clang-21]
-        preset: [release, debug]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-    permissions:
-      contents: read
-
-  # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
-  cpp-tests-extensive-macos:
-    name: 🇨 Test (Extensive) 🍎
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [macos-15, macos-15-intel, macos-26, macos-26-intel]
-        compiler: [clang, clang-20, clang-21, gcc-14, gcc-15]
-        preset: [release, debug]
-        exclude:
-          - runs-on: macos-15
-            compiler: gcc-14
-          - runs-on: macos-15
-            compiler: gcc-15
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-macos.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-    permissions:
-      contents: read
-
-  # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
-  cpp-tests-extensive-windows:
-    name: 🇨 Test (Extensive) 🏁
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests) && github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci')
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [windows-2022, windows-2025, windows-11-arm]
-        compiler: [msvc, clang]
-        preset: [release-windows, debug-windows]
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-windows.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
     with:
       runs-on: ${{ matrix.runs-on }}
@@ -202,21 +140,6 @@ jobs:
       contents: read
       id-token: write
 
-  # run extensive Python tests on PRs labeled with the `extensive-python-ci` label
-  python-tests-extensive:
-    name: 🐍 Test (Extensive)
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-python-tests) && github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'extensive-python-ci')
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [macos-15, macos-15-intel, windows-2025]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
-    with:
-      runs-on: ${{ matrix.runs-on }}
-    permissions:
-      contents: read
-
   python-linter:
     name: 🐍 Lint
     needs: change-detection
@@ -268,14 +191,10 @@ jobs:
       - cpp-tests-ubuntu
       - cpp-tests-macos
       - cpp-tests-windows
-      - cpp-tests-extensive-ubuntu
-      - cpp-tests-extensive-macos
-      - cpp-tests-extensive-windows
       - cpp-coverage
       - cpp-linter
       - python-tests
       - python-linter
-      - python-tests-extensive
       - build-sdist
       - build-wheel
     runs-on: ubuntu-slim
@@ -285,12 +204,8 @@ jobs:
         with:
           allowed-skips: >-
             ${{
-              (!fromJSON(needs.change-detection.outputs.run-cpp-tests) || contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci'))
+              !fromJSON(needs.change-detection.outputs.run-cpp-tests)
               && 'cpp-tests-ubuntu,cpp-tests-macos,cpp-tests-windows,' || ''
-            }}
-            ${{
-              (!fromJSON(needs.change-detection.outputs.run-cpp-tests) || github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'extensive-cpp-ci'))
-              && 'cpp-tests-extensive-ubuntu,cpp-tests-extensive-macos,cpp-tests-extensive-windows,' || ''
             }}
             ${{
               !fromJSON(needs.change-detection.outputs.run-cpp-tests)
@@ -303,10 +218,6 @@ jobs:
             ${{
               !fromJSON(needs.change-detection.outputs.run-python-tests)
               && 'python-tests,python-coverage,' || ''
-            }}
-            ${{
-              (!fromJSON(needs.change-detection.outputs.run-python-tests) || github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'extensive-python-ci'))
-              && 'python-tests-extensive,' || ''
             }}
             ${{
               !fromJSON(needs.change-detection.outputs.run-python-linter)
