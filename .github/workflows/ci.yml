@@ -11,10 +11,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   change-detection:
     name: 🔍 Change
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-change-detection.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
+    permissions:
+      contents: read
 
   cpp-tests-ubuntu:
     name: 🇨 Test 🐧
@@ -35,6 +39,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   cpp-tests-macos:
     name: 🇨 Test 🍎
@@ -55,6 +61,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   cpp-tests-windows:
     name: 🇨 Test 🏁
@@ -75,6 +83,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
   cpp-tests-extensive-ubuntu:
@@ -92,6 +102,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
   cpp-tests-extensive-macos:
@@ -114,6 +126,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   # run extensive C++ tests on PRs labeled with the `extensive-cpp-ci` label
   cpp-tests-extensive-windows:
@@ -131,6 +145,8 @@ jobs:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
       preset-name: ${{ matrix.preset }}
+    permissions:
+      contents: read
 
   cpp-coverage:
     name: 🇨 Coverage
@@ -152,6 +168,9 @@ jobs:
       install-pkgs: "nanobind==2.14.0"
       setup-python: true
       cpp-linter-extra-args: "-std=c++20"
+    permissions:
+      contents: read
+      pull-requests: write # Needed to post review comments
 
   python-tests:
     name: 🐍 Test
@@ -171,6 +190,8 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
     with:
       runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
 
   python-coverage:
     name: 🐍 Coverage
@@ -193,6 +214,8 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
     with:
       runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
 
   python-linter:
     name: 🐍 Lint
@@ -203,12 +226,16 @@ jobs:
       check-stubs: true
       enable-mypy: false
       enable-ty: true
+    permissions:
+      contents: read
 
   build-sdist:
     name: 🚀 CD
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-cd)
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
+    permissions:
+      contents: read
 
   build-wheel:
     name: 🚀 CD
@@ -229,6 +256,8 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@579203ef22082fa5d5483412f442e50d0c5ff4a7 # v2.2.2
     with:
       runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
 
   # this job does nothing and is only used for branch protection
   required-checks-pass:
