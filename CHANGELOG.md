@@ -10,19 +10,23 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-08-20
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#250)._
+
 ### Added
 
 - 🐍 Start building CPython 3.15 wheels ([#944]) ([**@denialhaag**])
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.9.0 ([#966]) ([**@denialhaag**])
+- ⬆️ Update `nanobind` to version 2.15.0 ([#966]) ([**@denialhaag**])
 - ➕ Depend on `nlohmann_json` directly instead of relying on `mqt-core` to
   provide it ([#955]) ([**@denialhaag**])
 - ♻️ Own the noise-functionality test RNG ([#954]) ([**@simon1hofmann**])
-- ⬆️ Update `nanobind` to version 2.14.0 ([#953]) ([**@denialhaag**])
 - 🚚 Vendor density-matrix DD support used by the noise-aware simulators, as it
   will be removed from `mqt-core` in version 4.0.0 ([#940]) ([**@denialhaag**])
-- ⬆️ Update `mqt-core` to version 3.8.0 ([#939]) ([**@denialhaag**])
 
 ## [2.4.0] - 2026-07-09
 
@@ -149,7 +153,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.4.0
 [2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.3.0
 [2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.2.0
@@ -159,12 +164,11 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966
 [#955]: https://github.com/munich-quantum-toolkit/ddsim/pull/955
 [#954]: https://github.com/munich-quantum-toolkit/ddsim/pull/954
-[#953]: https://github.com/munich-quantum-toolkit/ddsim/pull/953
 [#944]: https://github.com/munich-quantum-toolkit/ddsim/pull/944
 [#940]: https://github.com/munich-quantum-toolkit/ddsim/pull/940
-[#939]: https://github.com/munich-quantum-toolkit/ddsim/pull/939
 [#912]: https://github.com/munich-quantum-toolkit/ddsim/pull/912
 [#911]: https://github.com/munich-quantum-toolkit/ddsim/pull/911
 [#871]: https://github.com/munich-quantum-toolkit/ddsim/pull/871

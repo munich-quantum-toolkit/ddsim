@@ -8,10 +8,10 @@
 
 [build-system]
 requires = [
-  "nanobind~=2.14.0",
+  "nanobind~=2.15.0",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
-  "mqt.core~=3.8.0",
+  "mqt.core~=3.9.0",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -51,7 +51,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "mqt.core[qiskit]~=3.8.0",
+    "mqt.core[qiskit]~=3.9.0",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -246,7 +246,7 @@ known-first-party = ["mqt.ddsim"]
 "test/python/**" = ["T20", "ANN", "D10"]
 "docs/**" = ["T20"]
 "noxfile.py" = ["T20", "TID251"]
-"*.pyi" = ["D418", "E501", "PYI021"]
+"*.pyi" = ["D301", "D418", "E501", "PYI021"]
 "*.ipynb" = [
     "D",    # pydocstyle
     "E402", # Allow imports to appear anywhere in Jupyter notebooks
@@ -305,10 +305,10 @@ test-skip = [
 environment = { DEPLOY = "ON" }
 # The SOVERSION needs to be updated when the shared libraries are updated.
 repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
---exclude libmqt-core-ir.so.3.8 \
---exclude libmqt-core-qasm.so.3.8 \
---exclude libmqt-core-circuit-optimizer.so.3.8 \
---exclude libmqt-core-dd.so.3.8"""
+--exclude libmqt-core-ir.so.3.9 \
+--exclude libmqt-core-qasm.so.3.9 \
+--exclude libmqt-core-circuit-optimizer.so.3.9 \
+--exclude libmqt-core-dd.so.3.9"""
 
 [tool.cibuildwheel.macos]
 environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }
@@ -335,10 +335,10 @@ mqt-ddsim = { workspace = true }
 
 [dependency-groups]
 build = [
-  "nanobind~=2.14.0",
+  "nanobind~=2.15.0",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
-  "mqt.core~=3.8.0",
+  "mqt.core~=3.9.0",
 ]
 docs = [
   "breathe>=4.36.0",
