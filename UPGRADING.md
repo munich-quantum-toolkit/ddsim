@@ -6,7 +6,10 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
-This release updates the minimum required `mqt-core` version to 3.8.0.
+## [2.5.0]
+
+This release updates the minimum required `mqt-core` version to 3.9.0 and
+`nanobind` to 2.15.0.
 
 ### Vendored density-matrix decision-diagram support
 
@@ -147,7 +150,8 @@ standard.
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.1.0...v2.2.0
