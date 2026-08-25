@@ -36,7 +36,7 @@ jobs:
           - runs-on: ubuntu-24.04
             compiler: gcc
             preset: debug
-            run-on-draft: false
+            run-on-draft: true
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@063c90c8e7e094bfffb73f8436eb55341c1e820f # v2.3.0
     with:
       runs-on: ${{ matrix.runs-on }}
