@@ -6,6 +6,16 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+### macOS support
+
+MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
+newer. The new deployment target enables `std::format` in libc++.
+
+### Python support
+
+MQT DDSIM now requires Python 3.11 or newer. Upgrade the Python environment
+before installing this release.
+
 ## [2.5.0]
 
 This release updates the minimum required `mqt-core` version to 3.9.0 and
