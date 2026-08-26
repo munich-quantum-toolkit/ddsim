@@ -10,6 +10,11 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- 🚚 Move recursive unitary construction from MQT Core to MQT DDSIM ([#975])
+  ([**@simon1hofmann**])
+
 ## [2.5.0] - 2026-08-20
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#250)._
@@ -164,6 +169,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966
 [#955]: https://github.com/munich-quantum-toolkit/ddsim/pull/955
 [#954]: https://github.com/munich-quantum-toolkit/ddsim/pull/954
