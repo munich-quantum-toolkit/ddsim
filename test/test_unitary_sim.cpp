@@ -9,6 +9,7 @@
  */
 
 #include "UnitarySimulator.hpp"
+#include "dd/Node.hpp"
 #include "ir/QuantumComputation.hpp"
 
 #include <cstddef>
