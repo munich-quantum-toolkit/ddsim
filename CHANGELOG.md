@@ -20,6 +20,8 @@ releases may include breaking changes.
   compatible wheels ([#995]) ([**@denialhaag**])
 - 💥 Raise the minimum Qiskit version from 1.1.0 to 2.1.0 ([#995])
   ([**@denialhaag**])
+- ♻️ Normalize circuits with `QuantumComputation` member operations ([#995])
+  ([**@simon1hofmann**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
   ([#976]) ([**@denialhaag**])
 - ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
