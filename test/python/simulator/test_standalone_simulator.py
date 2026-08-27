@@ -1,9 +1,19 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 from __future__ import annotations
 
 import pathlib
 import unittest
 
-from qiskit import QuantumCircuit
+import numpy as np
+from mqt.core import load
+from mqt.core.ir import QuantumComputation
 
 from mqt.ddsim import CircuitSimulator
 
@@ -14,7 +24,8 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
 
     def test_truly_standalone(self) -> None:
         filename = str(pathlib.Path(__file__).with_name("ghz_03.qasm").absolute())
-        sim = CircuitSimulator(filename)
+        circ = load(filename)
+        sim = CircuitSimulator(circ)
         result = sim.simulate(1000)
         print(result)
         assert len(result.keys()) == self.nonzero_states_ghz
@@ -22,7 +33,7 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
         assert "111" in result
 
     def test_standalone(self) -> None:
-        circ = QuantumCircuit(3)
+        circ = QuantumComputation(3)
         circ.h(0)
         circ.cx(0, 1)
         circ.cx(0, 2)
@@ -34,7 +45,7 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
         assert "111" in result
 
     def test_standalone_with_seed(self) -> None:
-        circ = QuantumCircuit(3)
+        circ = QuantumComputation(3)
         circ.h(0)
         circ.cx(0, 1)
         circ.cx(0, 2)
@@ -46,14 +57,13 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
         assert "111" in result
 
     def test_standalone_simple_approximation(self) -> None:
-        import numpy as np
 
         # creates a state with <2% probability of measuring |1x>
-        circ = QuantumCircuit(2)
+        circ = QuantumComputation(2)
         circ.h(0)
         circ.cry(np.pi / 8, 0, 1)
-        circ.id(0)
-        circ.id(0)
+        circ.i(0)
+        circ.i(0)
 
         # create a simulator that approximates once and by at most 2%
         sim = CircuitSimulator(circ, approximation_step_fidelity=0.98, approximation_steps=1)
@@ -66,17 +76,15 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
 
     @staticmethod
     def test_native_two_qubit_gates() -> None:
-        from qiskit.circuit.library import XXMinusYYGate, XXPlusYYGate
-
-        qc = QuantumCircuit(2)
+        qc = QuantumComputation(2)
         qc.dcx(0, 1)
         qc.ecr(0, 1)
         qc.rxx(0.5, 0, 1)
         qc.rzz(0.5, 0, 1)
         qc.ryy(0.5, 0, 1)
         qc.rzx(0.5, 0, 1)
-        qc.append(XXMinusYYGate(0.5, 0.25), [0, 1])
-        qc.append(XXPlusYYGate(0.5, 0.25), [0, 1])
+        qc.xx_minus_yy(0.5, 0.25, 0, 1)
+        qc.xx_plus_yy(0.5, 0.25, 0, 1)
         print(qc)
         print(qc.global_phase)
         sim = CircuitSimulator(qc)
@@ -85,34 +93,32 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
 
     @staticmethod
     def test_expectation_value_local_operators() -> None:
-        import numpy as np
 
         max_qubits = 3
         for qubits in range(1, max_qubits + 1):
-            qc = QuantumCircuit(qubits)
+            qc = QuantumComputation(qubits)
             sim = CircuitSimulator(qc)
             for i in range(qubits):
-                x_observable = QuantumCircuit(qubits)
+                x_observable = QuantumComputation(qubits)
                 x_observable.x(i)
                 assert sim.expectation_value(x_observable) == 0
-                z_observable = QuantumCircuit(qubits)
+                z_observable = QuantumComputation(qubits)
                 z_observable.z(i)
                 assert sim.expectation_value(z_observable) == 1
-                h_observable = QuantumCircuit(qubits)
+                h_observable = QuantumComputation(qubits)
                 h_observable.h(i)
                 assert np.allclose(sim.expectation_value(h_observable), 1 / np.sqrt(2))
 
     @staticmethod
     def test_expectation_value_global_operators() -> None:
-        import numpy as np
 
         max_qubits = 3
         for qubits in range(1, max_qubits + 1):
-            qc = QuantumCircuit(qubits)
+            qc = QuantumComputation(qubits)
             sim = CircuitSimulator(qc)
-            x_observable = QuantumCircuit(qubits)
-            z_observable = QuantumCircuit(qubits)
-            h_observable = QuantumCircuit(qubits)
+            x_observable = QuantumComputation(qubits)
+            z_observable = QuantumComputation(qubits)
+            h_observable = QuantumComputation(qubits)
             for i in range(qubits):
                 x_observable.x(i)
                 z_observable.z(i)

@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #include "CircuitSimulator.hpp"
 #include "HybridSchrodingerFeynmanSimulator.hpp"
 #include "ir/QuantumComputation.hpp"
@@ -24,7 +34,7 @@ TEST(HybridSimTest, TrivialParallelDD) {
   };
 
   HybridSchrodingerFeynmanSimulator ddsim(
-      quantumComputation(), HybridSchrodingerFeynmanSimulator<>::Mode::DD);
+      quantumComputation(), HybridSchrodingerFeynmanSimulator::Mode::DD);
 
   auto resultDD = ddsim.simulate(8192);
   for (const auto& entry : resultDD) {
@@ -59,8 +69,7 @@ TEST(HybridSimTest, TrivialParallelAmplitude) {
   };
 
   HybridSchrodingerFeynmanSimulator ddsim(
-      quantumComputation(),
-      HybridSchrodingerFeynmanSimulator<>::Mode::Amplitude);
+      quantumComputation(), HybridSchrodingerFeynmanSimulator::Mode::Amplitude);
 
   auto resultAmp = ddsim.simulate(8192);
   for (const auto& entry : resultAmp) {
@@ -84,9 +93,9 @@ TEST(HybridSimTest, TrivialParallelAmplitude) {
 
 TEST(HybridSimTest, TooManyQubitsForVectorTest) {
   auto qc = std::make_unique<qc::QuantumComputation>(61);
-  const HybridSchrodingerFeynmanSimulator<> ddsim(
+  const HybridSchrodingerFeynmanSimulator ddsim(
       std::move(qc), ApproximationInfo{},
-      HybridSchrodingerFeynmanSimulator<>::Mode::Amplitude);
+      HybridSchrodingerFeynmanSimulator::Mode::Amplitude);
   EXPECT_THROW(
       { [[maybe_unused]] auto _ = ddsim.getVectorFromHybridSimulation(); },
       std::range_error);
@@ -104,7 +113,7 @@ TEST(HybridSimTest, RegressionTestDDModeUnevenChunks) {
   qc->cx(1, 0);
   qc->cx(0, 1);
 
-  const auto mode = HybridSchrodingerFeynmanSimulator<>::Mode::DD;
+  const auto mode = HybridSchrodingerFeynmanSimulator::Mode::DD;
   const auto nthreads = 3U;
 
   HybridSchrodingerFeynmanSimulator ddsim(std::move(qc), ApproximationInfo{},
@@ -127,7 +136,7 @@ TEST(HybridSimTest, RegressionTestAmplitudeModeUnevenChunks) {
   qc->cx(1, 0);
   qc->cx(0, 1);
 
-  const auto mode = HybridSchrodingerFeynmanSimulator<>::Mode::Amplitude;
+  const auto mode = HybridSchrodingerFeynmanSimulator::Mode::Amplitude;
   const auto nthreads = 3U;
 
   HybridSchrodingerFeynmanSimulator ddsim(std::move(qc), ApproximationInfo{},
@@ -154,7 +163,7 @@ TEST(HybridSimTest, RegressionTestDDModeMoreChunksAsThreads) {
   qc->cx(1, 0);
   qc->cx(0, 1);
 
-  const auto mode = HybridSchrodingerFeynmanSimulator<>::Mode::DD;
+  const auto mode = HybridSchrodingerFeynmanSimulator::Mode::DD;
   const auto nthreads = 2U;
 
   HybridSchrodingerFeynmanSimulator ddsim(std::move(qc), ApproximationInfo{},
@@ -183,7 +192,7 @@ TEST(HybridSimTest, RegressionTestAmplitudeModeMoreChunksAsThreads) {
   qc->cx(0, 1);
   qc->cx(1, 0);
 
-  const auto mode = HybridSchrodingerFeynmanSimulator<>::Mode::Amplitude;
+  const auto mode = HybridSchrodingerFeynmanSimulator::Mode::Amplitude;
   const auto nthreads = 2U;
 
   HybridSchrodingerFeynmanSimulator ddsim(std::move(qc), ApproximationInfo{},
@@ -198,7 +207,7 @@ TEST(HybridSimTest, DynamicCircuitSupport) {
   auto qc = std::make_unique<qc::QuantumComputation>(1, 1);
   qc->h(0);
   qc->measure(0, 0);
-  qc->classicControlled(qc::X, 0, {0, 1}, 1);
+  qc->if_(qc::X, 0, 0, true);
   std::cout << *qc << "\n";
 
   HybridSchrodingerFeynmanSimulator sim(std::move(qc));

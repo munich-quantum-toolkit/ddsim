@@ -1,8 +1,17 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #pragma once
 
 #include "Simulator.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/DDpackageConfig.hpp"
 #include "dd/Node.hpp"
 
 #include <cmath>
@@ -13,8 +22,7 @@
 #include <utility>
 #include <vector>
 
-template <class Config = dd::DDPackageConfig>
-class ShorFastSimulator : public Simulator<Config> {
+class ShorFastSimulator final : public Simulator {
   static std::uint64_t modpow(std::uint64_t base, std::uint64_t exp,
                               std::uint64_t modulus) {
     base %= modulus;
@@ -83,7 +91,7 @@ class ShorFastSimulator : public Simulator<Config> {
 public:
   ShorFastSimulator(const std::uint32_t compositeNumber,
                     const std::uint32_t coprimeA_, const bool verbose_ = false)
-      : Simulator<Config>(), compositeN(compositeNumber), coprimeA(coprimeA_),
+      : compositeN(compositeNumber), coprimeA(coprimeA_),
         requiredBits(
             static_cast<std::size_t>(std::ceil(std::log2(compositeNumber)))),
         nQubits(static_cast<std::size_t>(std::ceil(std::log2(compositeN))) + 1),
@@ -94,9 +102,9 @@ public:
   ShorFastSimulator(const std::uint32_t compositeNumber,
                     const std::uint32_t coprimeA_, const std::uint64_t seed_,
                     const bool verbose_ = false)
-      : Simulator<Config>(seed_), compositeN(compositeNumber),
-        coprimeA(coprimeA_), requiredBits(static_cast<std::size_t>(
-                                 std::ceil(std::log2(compositeNumber)))),
+      : Simulator(seed_), compositeN(compositeNumber), coprimeA(coprimeA_),
+        requiredBits(
+            static_cast<std::size_t>(std::ceil(std::log2(compositeNumber)))),
         nQubits(static_cast<std::size_t>(std::ceil(std::log2(compositeN))) + 1),
         verbose(verbose_) {
     nodesOnLevel.resize(nQubits);

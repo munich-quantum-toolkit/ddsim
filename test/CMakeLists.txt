@@ -1,3 +1,11 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 package_add_test(
   mqt-ddsim-test
   MQT::DDSim
@@ -8,9 +16,10 @@ package_add_test(
   test_hybridsim.cpp
   test_stoch_noise_sim.cpp
   test_det_noise_sim.cpp
+  test_density_dd_package.cpp
+  test_noise_functionality.cpp
   test_unitary_sim.cpp
   test_path_sim.cpp
-  test_output_ddvis.cpp
   test_reorder_without_reordering.cpp)
 
 target_link_libraries(mqt-ddsim-test PRIVATE MQT::CoreAlgorithms)

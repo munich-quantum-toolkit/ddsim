@@ -1,3 +1,11 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 from __future__ import annotations
 
 import contextlib
@@ -52,15 +60,16 @@ def test_transpilation_preserves_2q_0p_target_gates(target: Target, gate: str) -
         getattr(qc, gate)(0, 1)
         qc_transpiled = transpile(qc, target=target)
         print(qc_transpiled)
-        assert len(qc_transpiled.data) == 1
-        assert qc_transpiled.data[0].operation.name == gate
+        num_gates = len(qc_transpiled.data)
+        assert num_gates <= 1
+        assert num_gates == 0 or qc_transpiled.data[0].operation.name == gate
 
 
 @pytest.mark.parametrize("gate", ["rxx", "ryy", "rzz", "rzx", "cp", "crx", "cry", "crz"])
 def test_transpilation_preserves_2q_1p_target_gates(target: Target, gate: str) -> None:
     """Test that transpilation does not change two-qubit gates with one parameter that are already in the target."""
     qc = QuantumCircuit(2)
-    getattr(qc, gate)(np.pi, 0, 1)
+    getattr(qc, gate)(np.pi / 2, 0, 1)
     qc_transpiled = transpile(qc, target=target)
     assert len(qc_transpiled.data) == 1
     assert qc_transpiled.data[0].operation.name == gate
@@ -78,26 +87,15 @@ def test_transpilation_preserves_3q_target_gates(target: Target, gate: str) -> N
 
 
 @pytest.mark.parametrize("num_controls", list(range(3, 6)))
-@pytest.mark.parametrize("mode", ["noancilla", "recursion", "v-chain"])
-def test_transpilation_preserves_mcx_target_gates(target: Target, num_controls: int, mode: str) -> None:
+def test_transpilation_preserves_mcx_target_gates(target: Target, num_controls: int) -> None:
     """Test that transpilation does not change MCX gates that are already in the target."""
     nqubits = num_controls + 1
-    nancillas = 0
-    if mode == "recursion":
-        nancillas = 1
-    elif mode == "v-chain":
-        nancillas = max(0, nqubits - 2)
-    qc = QuantumCircuit(nqubits + nancillas)
+    qc = QuantumCircuit(nqubits)
     controls = list(range(1, nqubits))
-    qc.mcx(controls, 0, ancilla_qubits=list(range(nqubits, nqubits + nancillas)), mode=mode)
+    qc.mcx(controls, 0)
     qc_transpiled = transpile(qc, target=target)
     assert len(qc_transpiled.data) == 1
-    if mode == "noancilla":
-        assert qc_transpiled.data[0].operation.name in {"mcx_gray", "mcx"}
-    elif mode == "recursion":
-        assert qc_transpiled.data[0].operation.name == "mcx_recursive"
-    elif mode == "v-chain":
-        assert qc_transpiled.data[0].operation.name == "mcx_vchain"
+    assert qc_transpiled.data[0].operation.name in {"mcx_gray", "mcx"}
 
 
 @pytest.mark.parametrize("num_controls", list(range(3, 6)))

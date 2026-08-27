@@ -1,5 +1,15 @@
-#include "Definitions.hpp"
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #include "StochasticNoiseSimulator.hpp"
+#include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -15,7 +25,10 @@
  * These tests may have to be adjusted if something about the random-number
  * generation changes.
  */
+
 using namespace qc::literals;
+
+namespace {
 
 std::unique_ptr<qc::QuantumComputation> stochGetAdder4Circuit() {
   // circuit taken from https://github.com/pnnl/qasmbench
@@ -50,6 +63,8 @@ std::unique_ptr<qc::QuantumComputation> stochGetAdder4Circuit() {
   quantumComputation->measure(3, 3);
   return quantumComputation;
 }
+
+} // namespace
 
 TEST(StochNoiseSimTest, SingleOneQubitGateOnTwoQubitCircuit) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
@@ -116,12 +131,12 @@ TEST(StochNoiseSimTest, Reordering) {
   ddsim.simulate(1);
 }
 
-TEST(StochNoiseSimTest, SimulateClassicControlledOpWithError) {
+TEST(StochNoiseSimTest, SimulateIfElseOpWithError) {
   auto quantumComputation = std::make_unique<qc::QuantumComputation>(2, 2);
   quantumComputation->x(0);
   quantumComputation->measure(0, 0);
   quantumComputation->h(0);
-  quantumComputation->classicControlled(qc::X, 1U, {0, 1});
+  quantumComputation->if_(qc::X, 1U, {0, 1});
 
   for (qc::Qubit i = 0; i < 2; i++) {
     quantumComputation->measure(i, i);
@@ -303,7 +318,6 @@ TEST(StochNoiseSimTest,
   EXPECT_NEAR(static_cast<double>(m.find("0011")->second), 35, tolerance);
   EXPECT_NEAR(static_cast<double>(m.find("1011")->second), 24, tolerance);
 
-  EXPECT_EQ(ddsim.getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim.getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim.countNodesFromRoot(), 0);
   auto statistics = ddsim.additionalStatistics();
@@ -367,8 +381,6 @@ TEST(StochNoiseSimTest, TestingSimulatorFunctionality) {
 
   EXPECT_EQ(ddsim.getNumberOfQubits(), 4);
   EXPECT_EQ(ddsim.getActiveNodeCount(), 0);
-  EXPECT_EQ(ddsim.getMaxNodeCount(), 0);
-  EXPECT_EQ(ddsim.getMaxMatrixNodeCount(), 0);
   EXPECT_EQ(ddsim.getMatrixActiveNodeCount(), 0);
   EXPECT_EQ(ddsim.countNodesFromRoot(), 0);
   std::cout << ddsim.getName() << "\n";

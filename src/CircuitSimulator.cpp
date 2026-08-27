@@ -1,12 +1,22 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #include "CircuitSimulator.hpp"
 
-#include "Simulator.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/DDpackageConfig.hpp"
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
-#include "ir/operations/ClassicControlledOperation.hpp"
+#include "dd/StateGeneration.hpp"
+#include "ir/Definitions.hpp"
+#include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -19,10 +29,9 @@
 #include <stdexcept>
 #include <string>
 
-template <class Config>
 std::map<std::string, std::size_t>
-CircuitSimulator<Config>::simulate(std::size_t shots) {
-  const auto analysis = CircuitSimulator<Config>::analyseCircuit();
+CircuitSimulator::simulate(std::size_t shots) {
+  const auto analysis = analyseCircuit();
 
   // easiest case: all gates are unitary --> simulate once and sample away on
   // all qubits
@@ -73,12 +82,11 @@ CircuitSimulator<Config>::simulate(std::size_t shots) {
   return measurementCounter;
 }
 
-template <class Config>
-auto CircuitSimulator<Config>::analyseCircuit() -> CircuitAnalysis {
+auto CircuitSimulator::analyseCircuit() -> CircuitAnalysis {
   auto analysis = CircuitAnalysis{};
 
   for (auto& op : *qc) {
-    if (op->isClassicControlledOperation() || op->getType() == qc::Reset) {
+    if (op->isIfElseOperation() || op->getType() == qc::Reset) {
       analysis.isDynamic = true;
     }
     if (const auto* measure = dynamic_cast<qc::NonUnitaryOperation*>(op.get());
@@ -105,66 +113,37 @@ auto CircuitSimulator<Config>::analyseCircuit() -> CircuitAnalysis {
   return analysis;
 }
 
-template <class Config>
-dd::fp CircuitSimulator<Config>::expectationValue(
-    const qc::QuantumComputation& observable) {
+dd::fp
+CircuitSimulator::expectationValue(const qc::QuantumComputation& observable) {
   // simulate the circuit to get the state vector
   singleShot(true);
 
   // construct the DD for the observable
-  const auto observableDD =
-      dd::buildFunctionality(&observable, *Simulator<Config>::dd);
+  const auto observableDD = dd::buildFunctionality(observable, *dd);
 
   // calculate the expectation value
-  return Simulator<Config>::dd->expectationValue(observableDD,
-                                                 Simulator<Config>::rootEdge);
+  return dd->expectationValue(observableDD, rootEdge);
 }
 
-template <class Config>
-void CircuitSimulator<Config>::initializeSimulation(const std::size_t nQubits) {
-  Simulator<Config>::rootEdge =
-      Simulator<Config>::dd->makeZeroState(static_cast<dd::Qubit>(nQubits));
-  Simulator<Config>::dd->incRef(Simulator<Config>::rootEdge);
+void CircuitSimulator::initializeSimulation(const std::size_t nQubits) {
+  rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *dd);
 }
 
-template <class Config>
-char CircuitSimulator<Config>::measure(const dd::Qubit i) {
-  return Simulator<Config>::measureOneCollapsing(i);
+char CircuitSimulator::measure(const dd::Qubit i) {
+  return dd->measureOneCollapsing(rootEdge, static_cast<dd::Qubit>(i), mt);
 }
 
-template <class Config>
-void CircuitSimulator<Config>::reset(qc::NonUnitaryOperation* nonUnitaryOp) {
-  const auto& qubits = nonUnitaryOp->getTargets();
-  for (const auto& qubit : qubits) {
-    auto bit = Simulator<Config>::dd->measureOneCollapsing(
-        Simulator<Config>::rootEdge, static_cast<dd::Qubit>(qubit), true,
-        Simulator<Config>::mt);
-    // apply an X operation whenever the measured result is one
-    if (bit == '1') {
-      const auto x = qc::StandardOperation(qubit, qc::X);
-      auto tmp = Simulator<Config>::dd->multiply(
-          dd::getDD(&x, *Simulator<Config>::dd), Simulator<Config>::rootEdge);
-      Simulator<Config>::dd->incRef(tmp);
-      Simulator<Config>::dd->decRef(Simulator<Config>::rootEdge);
-      Simulator<Config>::rootEdge = tmp;
-      Simulator<Config>::dd->garbageCollect();
-    }
-  }
+void CircuitSimulator::reset(qc::NonUnitaryOperation* nonUnitaryOp) {
+  rootEdge = dd::applyReset(*nonUnitaryOp, rootEdge, *dd, mt);
 }
 
-template <class Config>
-void CircuitSimulator<Config>::applyOperationToState(
+void CircuitSimulator::applyOperationToState(
     std::unique_ptr<qc::Operation>& op) {
-  auto ddOp = dd::getDD(op.get(), *Simulator<Config>::dd);
-  auto tmp = Simulator<Config>::dd->multiply(ddOp, Simulator<Config>::rootEdge);
-  Simulator<Config>::dd->incRef(tmp);
-  Simulator<Config>::dd->decRef(Simulator<Config>::rootEdge);
-  Simulator<Config>::rootEdge = tmp;
+  rootEdge = dd::applyUnitaryOperation(*op, rootEdge, *dd);
 }
 
-template <class Config>
 std::map<std::size_t, bool>
-CircuitSimulator<Config>::singleShot(const bool ignoreNonUnitaries) {
+CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
   singleShots++;
   const auto nQubits = qc->getNqubits();
 
@@ -178,7 +157,7 @@ CircuitSimulator<Config>::singleShot(const bool ignoreNonUnitaries) {
                 (static_cast<double>(approximationInfo.stepNumber + 1))));
 
   for (auto& op : *qc) {
-    if (op->isNonUnitaryOperation()) {
+    if (op->isNonUnitaryOperation() && !op->isIfElseOperation()) {
       if (ignoreNonUnitaries) {
         continue;
       }
@@ -206,67 +185,89 @@ CircuitSimulator<Config>::singleShot(const bool ignoreNonUnitaries) {
       } else {
         throw std::runtime_error("Dynamic cast to NonUnitaryOperation failed.");
       }
-      Simulator<Config>::dd->garbageCollect();
+      dd->garbageCollect();
     } else {
-      if (op->isClassicControlledOperation()) {
-        if (auto* classicallyControlledOp =
-                dynamic_cast<qc::ClassicControlledOperation*>(op.get())) {
-          const auto startIndex = static_cast<std::uint16_t>(
-              classicallyControlledOp->getParameter().at(0));
-          const auto length = static_cast<std::uint16_t>(
-              classicallyControlledOp->getParameter().at(1));
-          const auto expectedValue =
-              classicallyControlledOp->getExpectedValue();
-          unsigned int actualValue = 0;
+      if (op->isIfElseOperation()) {
+        if (auto* ifElseOp = dynamic_cast<qc::IfElseOperation*>(op.get())) {
+          const auto& comparisonKind = ifElseOp->getComparisonKind();
+
+          std::size_t startIndex = 0;
+          std::size_t length = 0;
+          std::uint64_t expectedValue = 0;
+          if (ifElseOp->getControlBit().has_value()) {
+            startIndex = ifElseOp->getControlBit().value();
+            length = 1;
+            expectedValue = ifElseOp->getExpectedValueBit() ? 1U : 0U;
+          } else {
+            startIndex = ifElseOp->getControlRegister()->getStartIndex();
+            length = ifElseOp->getControlRegister()->getSize();
+            expectedValue = ifElseOp->getExpectedValueRegister();
+          }
+
+          std::uint64_t actualValue = 0;
           for (std::size_t i = 0; i < length; i++) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          // std::clog << "expected " << expected_value << " and actual value
-          // was " << actual_value << "\n";
+          const auto control = [actualValue, expectedValue, comparisonKind]() {
+            switch (comparisonKind) {
+            case qc::ComparisonKind::Eq:
+              return actualValue == expectedValue;
+            case qc::ComparisonKind::Neq:
+              return actualValue != expectedValue;
+            case qc::ComparisonKind::Lt:
+              return actualValue < expectedValue;
+            case qc::ComparisonKind::Leq:
+              return actualValue <= expectedValue;
+            case qc::ComparisonKind::Gt:
+              return actualValue > expectedValue;
+            case qc::ComparisonKind::Geq:
+              return actualValue >= expectedValue;
+            }
+            qc::unreachable();
+          }();
 
-          if (actualValue != expectedValue) {
+          if (control) {
+            auto thenOp = ifElseOp->getThenOp()->clone();
+            applyOperationToState(thenOp);
+          } else if (ifElseOp->getElseOp() != nullptr) {
+            auto elseOp = ifElseOp->getElseOp()->clone();
+            applyOperationToState(elseOp);
+          } else {
             continue;
           }
         } else {
-          throw std::runtime_error(
-              "Dynamic cast to ClassicControlledOperation failed.");
+          throw std::runtime_error("Dynamic cast to IfElseOperation failed.");
         }
+      } else {
+        applyOperationToState(op);
       }
-      applyOperationToState(op);
 
       if (approximationInfo.stepNumber > 0 &&
           approximationInfo.stepFidelity < 1.0) {
         if (approximationInfo.strategy == ApproximationInfo::FidelityDriven &&
             (opNum + 1) % approxMod == 0 &&
             approximationRuns < approximationInfo.stepNumber) {
-          [[maybe_unused]] const auto sizeBefore =
-              Simulator<Config>::rootEdge.size();
-          const auto apFid = Simulator<Config>::approximateByFidelity(
+          [[maybe_unused]] const auto sizeBefore = rootEdge.size();
+          const auto apFid = approximateByFidelity(
               approximationInfo.stepFidelity, false, true);
           approximationRuns++;
           finalFidelity *= static_cast<long double>(apFid);
         } else if (approximationInfo.strategy ==
                    ApproximationInfo::MemoryDriven) {
-          [[maybe_unused]] const auto sizeBefore =
-              Simulator<Config>::rootEdge.size();
-          if (Simulator<Config>::dd->template getUniqueTable<dd::vNode>()
+          [[maybe_unused]] const auto sizeBefore = rootEdge.size();
+          if (dd->template getUniqueTable<dd::vNode>()
                   .possiblyNeedsCollection()) {
-            const auto apFid = Simulator<Config>::approximateByFidelity(
+            const auto apFid = approximateByFidelity(
                 approximationInfo.stepFidelity, false, true);
             approximationRuns++;
             finalFidelity *= static_cast<long double>(apFid);
           }
         }
       }
-      Simulator<Config>::dd->garbageCollect();
+      dd->garbageCollect();
     }
     opNum++;
   }
   return classicValues;
 }
-
-template class CircuitSimulator<dd::DDPackageConfig>;
-template class CircuitSimulator<dd::UnitarySimulatorDDPackageConfig>;
-template class CircuitSimulator<dd::DensityMatrixSimulatorDDPackageConfig>;
-template class CircuitSimulator<dd::StochasticNoiseSimulatorDDPackageConfig>;

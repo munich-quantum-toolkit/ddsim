@@ -1,9 +1,19 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #pragma once
 
 #include "CircuitSimulator.hpp"
-#include "Definitions.hpp"
-#include "dd/DDpackageConfig.hpp"
-#include "dd/NoiseFunctionality.hpp"
+#include "DensityDDPackage.hpp"
+#include "NoiseFunctionality.hpp"
+#include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 
 #include <cstddef>
@@ -16,8 +26,7 @@
 #include <utility>
 #include <vector>
 
-class StochasticNoiseSimulator
-    : public CircuitSimulator<dd::StochasticNoiseSimulatorDDPackageConfig> {
+class StochasticNoiseSimulator final : public CircuitSimulator {
 public:
   StochasticNoiseSimulator(
       std::unique_ptr<qc::QuantumComputation>&& qc_,
@@ -25,7 +34,9 @@ public:
       std::string noiseEffects_ = "APD", double noiseProbability_ = 0.001,
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
-      : CircuitSimulator(std::move(qc_), approximationInfo_),
+      : CircuitSimulator(
+            std::move(qc_), approximationInfo_,
+            dd::ddsim::STOCHASTIC_NOISE_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseProbability(noiseProbability_),
         amplitudeDampingProb((ampDampingProbability_)
                                  ? ampDampingProbability_.value()
@@ -35,8 +46,8 @@ public:
                          ? std::thread::hardware_concurrency() - 4
                          : 1),
         noiseEffects(std::move(noiseEffects_)) {
-    dd::sanityCheckOfNoiseProbabilities(noiseProbability, amplitudeDampingProb,
-                                        multiQubitGateFactor);
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
+        noiseProbability, amplitudeDampingProb, multiQubitGateFactor);
   }
 
   explicit StochasticNoiseSimulator(
@@ -54,7 +65,9 @@ public:
       std::string noiseEffects_ = "APD", double noiseProbability_ = 0.001,
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
-      : CircuitSimulator(std::move(qc_), approximationInfo_, seed_),
+      : CircuitSimulator(
+            std::move(qc_), approximationInfo_, seed_,
+            dd::ddsim::STOCHASTIC_NOISE_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseProbability(noiseProbability_),
         amplitudeDampingProb((ampDampingProbability_)
                                  ? ampDampingProbability_.value()
@@ -64,8 +77,8 @@ public:
                          ? std::thread::hardware_concurrency() - 4
                          : 1),
         noiseEffects(std::move(noiseEffects_)) {
-    dd::sanityCheckOfNoiseProbabilities(noiseProbability, amplitudeDampingProb,
-                                        multiQubitGateFactor);
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
+        noiseProbability, amplitudeDampingProb, multiQubitGateFactor);
   }
 
   std::vector<std::map<std::string, size_t>> classicalMeasurementsMaps;
@@ -73,9 +86,6 @@ public:
 
   std::map<std::string, std::size_t> simulate(std::size_t shots) override;
 
-  [[nodiscard]] std::size_t getMaxMatrixNodeCount() const override {
-    return 0U;
-  } // Not available for stochastic simulation
   [[nodiscard]] std::size_t getMatrixActiveNodeCount() const override {
     return 0U;
   } // Not available for stochastic simulation

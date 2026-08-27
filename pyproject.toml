@@ -1,8 +1,17 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 [build-system]
 requires = [
-  "scikit-build-core>=0.10.1",
-  "setuptools-scm>=8.1",
-  "pybind11>=2.13.5",
+  "nanobind~=2.15.0",
+  "scikit-build-core>=1.0.3",
+  "vcs-versioning>=2.3.0",
+  "mqt.core~=3.9.0",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -15,67 +24,42 @@ authors = [
     { name = "Stefan Hillmich", email = "stefan.hillmich@scch.at" },
 ]
 keywords = ["MQT", "quantum-computing", "design-automation", "quantum-circuit-sim", "simulation"]
-license = { file = "LICENSE.md" }
+license = "MIT"
+license-files = ["LICENSE"]
 
 classifiers = [
-    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Information Technology",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
-    "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
-    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: C++",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Topic :: Scientific/Engineering :: Quantum Computing",
+    "Typing :: Typed",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
-    "qiskit[qasm3-import]>=1.0.0"
+    "mqt.core[qiskit]~=3.9.0",
+    "qiskit>=1.1",
 ]
 dynamic = ["version"]
 
-[project.optional-dependencies]
-tnflow = [
-    "cotengra",
-    "sparse",
-    "opt-einsum",
-    "quimb",
-    "pandas",
-    "numpy",
-    "kahypar",
-    "networkx",
-]
-test = ["pytest>=7.2"]
-coverage = ["mqt.ddsim[test]", "pytest-cov>=4"]
-docs = [
-    "mqt.ddsim[tnflow]",
-    "furo>=2023.9.10",
-    "setuptools-scm>=8.1",
-    "sphinxcontrib-bibtex>=2.4.2",
-    "sphinx-copybutton>=0.5",
-    "ipykernel",
-    "nbsphinx",
-    "breathe",
-    "sphinxext-opengraph>=0.9",
-    "sphinx-autodoc-typehints",
-    "qiskit[visualization]",
-    "graphviz",
-]
-dev = ["mqt.ddsim[tnflow, coverage, docs]"]
-
 [project.urls]
-Homepage = "https://github.com/cda-tum/mqt-ddsim"
+Homepage = "https://github.com/munich-quantum-toolkit/ddsim"
 Documentation = "https://mqt.readthedocs.io/projects/ddsim"
-Issues = "https://github.com/cda-tum/mqt-ddsim/issues"
-Discussions = "https://github.com/cda-tum/mqt-ddsim/discussions"
+Issues = "https://github.com/munich-quantum-toolkit/ddsim/issues"
+Discussions = "https://github.com/munich-quantum-toolkit/ddsim/discussions"
 
 
 [tool.scikit-build]
@@ -86,7 +70,10 @@ minimum-version = "build-system.requires"
 wheel.install-dir = "mqt/ddsim"
 
 # Explicitly set the package directory
-wheel.packages = ["src/mqt"]
+wheel.packages = ["python/mqt"]
+
+# Enable Stable ABI builds for CPython 3.12+
+wheel.py-api = "cp312"
 
 # Set required Ninja version
 ninja.version = ">=1.10"
@@ -95,13 +82,11 @@ ninja.version = ">=1.10"
 build-dir = "build/{wheel_tag}/{build_type}"
 
 # Only build the Python bindings target
-build.targets = ["pyddsim"]
+build.targets = ["mqt-ddsim-bindings"]
 
 # Only install the Python package component
 install.components = ["mqt-ddsim_Python"]
-
-metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
-sdist.include = ["src/mqt/ddsim/_version.py"]
+sdist.include = ["python/mqt/ddsim/_version.py"]
 sdist.exclude = [
     "**/.github",
     "**/doc",
@@ -116,6 +101,7 @@ sdist.exclude = [
 BUILD_MQT_DDSIM_TESTS = "OFF"
 BUILD_MQT_DDSIM_BINDINGS = "ON"
 BUILD_MQT_DDSIM_CLI = "OFF"
+ENABLE_IPO = "ON"
 
 [[tool.scikit-build.overrides]]
 if.python-version = ">=3.13"
@@ -125,8 +111,12 @@ inherit.cmake.define = "append"
 cmake.define.DISABLE_GIL = "1"
 
 
+[[tool.dynamic-metadata]]
+provider = "vcs_versioning"
+
+
 [tool.check-sdist]
-sdist-only = ["src/mqt/ddsim/_version.py"]
+sdist-only = ["python/mqt/ddsim/_version.py"]
 git-only = [
     "docs/*",
     "extern/*",
@@ -135,47 +125,68 @@ git-only = [
 ]
 
 
-[tool.setuptools_scm]
-write_to = "src/mqt/ddsim/_version.py"
+[tool.vcs-versioning]
+write_to = "python/mqt/ddsim/_version.py"
 
 
-[tool.pytest.ini_options]
-minversion = "7.2"
+[tool.pytest]
+minversion = "9.0"
 testpaths = ["test/python"]
-addopts = ["-ra", "--strict-markers", "--strict-config", "--showlocals"]
-log_cli_level = "INFO"
-xfail_strict = true
+strict = true
+addopts = [
+  "-ra",
+  "--showlocals",
+  "--numprocesses=auto", # Automatically use all available CPU cores for parallel testing
+  "--dist=loadgroup", # Ensure that certain tests are run on the same worker
+]
+log_level = "INFO"
 filterwarnings = [
   "error",
   'ignore:.*datetime\.datetime\.utcfromtimestamp.*:DeprecationWarning:',
-  # The warning filters below are only temporary and should be removed once the Sampler and the Estimator are updated
-  'ignore:.*BaseSamplerV1.*:DeprecationWarning:',
-  'ignore:.*BaseEstimatorV1.*:DeprecationWarning:',
-  'ignore:.*qiskit\.primitives\.utils.*:DeprecationWarning:',
+  # Qiskit 1.3 deprecations
+  'ignore:.*``qiskit.circuit.library.standard_gates.x.*`` is pending deprecation as of qiskit 1.3.*:PendingDeprecationWarning:',
+  'ignore:.*``qiskit.circuit.library.n_local.*`` is pending deprecation as of qiskit 1.3.*:PendingDeprecationWarning:',
+  # Qiskit 2.1 deprecations
+  'ignore:.*``qiskit.circuit.library.n_local.*`` is deprecated as of Qiskit 2.1.*:DeprecationWarning:',
+  'ignore:.*``qiskit.circuit.library.blueprintcircuit.BlueprintCircuit`` is deprecated as of Qiskit 2.1',
 ]
+
 
 [tool.coverage]
 run.source = ["mqt.ddsim"]
+run.core = "sysmon"
+run.parallel = true
 report.exclude_also = [
-    '\.\.\.',
-    'if TYPE_CHECKING:',
+  '\.\.\.',
+  'if TYPE_CHECKING:',
+]
+run.disable_warnings = [
+  "no-sysmon",
 ]
 
 
-[tool.mypy]
-files = ["src/mqt", "test/python", "noxfile.py"]
-mypy_path = ["$MYPY_CONFIG_FILE_DIR/src"]
-python_version = "3.9"
-warn_unused_configs = true
-enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
-strict = true
-explicit_package_bases = true
-warn_unreachable = true
+[tool.ty.terminal]
+# Error if ty emits any warning-level diagnostics.
+error-on-warning = true
+
+[tool.ty.src]
+exclude = [
+    "docs/**",
+]
+
 
 [tool.ruff]
 line-length = 120
+namespace-packages = ["mqt"]
 preview = true
+fix = true
 unsafe-fixes = true
+show-fixes = true
+src = ["python"]
+
+[tool.ruff.format]
+preview = true
+docstring-code-format = true
 
 [tool.ruff.lint]
 extend-select = [
@@ -183,7 +194,7 @@ extend-select = [
     "ANN",         # flake8-annotations
     "ARG",         # flake8-unused-arguments
     "ASYNC",       # flake8-async
-    "B",  "B904",  # flake8-bugbear
+    "B",           # flake8-bugbear
     "C4",          # flake8-comprehensions
     "D",           # pydocstyle
     "EM",          # flake8-errmsg
@@ -213,37 +224,28 @@ extend-select = [
     "SLOT",        # flake8-slots
     "SIM",         # flake8-simplify
     "T20",         # flake8-print
-    "TCH",         # flake8-type-checking
+    "TC",          # flake8-type-checking
     "TID",         # flake8-tidy-imports
     "TRY",         # tryceratops
     "UP",          # pyupgrade
     "YTT",         # flake8-2020
 ]
 ignore = [
-    "ANN101",  # Missing type annotation for `self` in method
-    "ANN102",  # Missing type annotation for `cls` in classmethod
-    "ISC001",  # Conflicts with formatter
     "PLR09",   # Too many <...>
     "PLR2004", # Magic value used in comparison
-    "PLC0415", # Import should be at top of file
-    "PT004",   # Incorrect, just usefixtures instead.
     "S101",    # Use of assert detected
     "S404",    # `subprocess` module is possibly insecure
 ]
-isort.required-imports = ["from __future__ import annotations"]
+future-annotations = true
 
-[tool.ruff.lint.flake8-tidy-imports.banned-api]
-"typing.Callable".msg = "Use collections.abc.Callable instead."
-"typing.Iterator".msg = "Use collections.abc.Iterator instead."
-"typing.Mapping".msg = "Use collections.abc.Mapping instead."
-"typing.Sequence".msg = "Use collections.abc.Sequence instead."
-"typing.Set".msg = "Use collections.abc.Set instead."
+[tool.ruff.lint.isort]
+known-first-party = ["mqt.ddsim"]
 
 [tool.ruff.lint.per-file-ignores]
 "test/python/**" = ["T20", "ANN", "D10"]
 "docs/**" = ["T20"]
 "noxfile.py" = ["T20", "TID251"]
-"*.pyi" = ["D418", "PYI021"]  # pydocstyle
+"*.pyi" = ["D301", "D418", "E501", "PYI021"]
 "*.ipynb" = [
     "D",    # pydocstyle
     "E402", # Allow imports to appear anywhere in Jupyter notebooks
@@ -273,40 +275,97 @@ wille = "wille"
 mone = "mone"
 anc = "anc"
 optin = "optin"
+iz = "iz"
 
 
-[tool.repo-review]
-ignore = ["GH200"]
+[tool.repo-review.ignore]
+GH200 = "We use Renovate instead of Dependabot"
+PC160 = "We use a mirror of crate-ci/typos"
+PC170 = "We do not use rST files anymore"
 
 
 [tool.cibuildwheel]
 build = "cp3*"
-skip = "*-musllinux_*"
+skip = ["*-musllinux_*"]
 archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
-test-skip = ["cp313*"] # skip testing on Python 3.13 until our dependencies are ready
-build-frontend = "build[uv]"
-free-threaded-support = true
-manylinux-x86_64-image = "manylinux_2_28"
-manylinux-aarch64-image = "manylinux_2_28"
-manylinux-ppc64le-image = "manylinux_2_28"
-manylinux-s390x-image = "manylinux_2_28"
+build-frontend = "uv"
+test-skip = [
+    "cp3??t-*", # no freethreading qiskit wheels
+    "cp*-win_arm64", # no numpy, qiskit, ... wheels
+    "cp315*", # no 3.15 wheels yet
+]
+
+# The mqt-core shared libraries are provided by the mqt-core Python package.
+# They should not be vendorized into the mqt-qcec wheel. This requires
+# excluding the shared libraries from the repair process.
 
 [tool.cibuildwheel.linux]
 environment = { DEPLOY = "ON" }
+# The SOVERSION needs to be updated when the shared libraries are updated.
+repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
+--exclude libmqt-core-ir.so.3.9 \
+--exclude libmqt-core-qasm.so.3.9 \
+--exclude libmqt-core-circuit-optimizer.so.3.9 \
+--exclude libmqt-core-dd.so.3.9"""
 
 [tool.cibuildwheel.macos]
-environment = { MACOSX_DEPLOYMENT_TARGET = "10.15" }
+environment = { MACOSX_DEPLOYMENT_TARGET = "13.3" }
+repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel} --ignore-missing-dependencies"
 
 [tool.cibuildwheel.windows]
-before-build = "pip install delvewheel>=1.7.3"
-repair-wheel-command = "delvewheel repair -v -w {dest_dir} {wheel} --namespace-pkg mqt"
-environment = { CMAKE_ARGS = "-T ClangCL" }
-
-[[tool.cibuildwheel.overrides]]
-select = "*-macosx_arm64"
-environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }
-
+repair-wheel-command = """delvewheel repair -w {dest_dir} {wheel} --namespace-pkg mqt \
+--exclude mqt-core-ir.dll \
+--exclude mqt-core-qasm.dll \
+--exclude mqt-core-circuit-optimizer.dll \
+--exclude mqt-core-dd.dll"""
 
 [tool.uv]
-reinstall-package = ["mqt.ddsim"]
+required-version = ">=0.5.20"
+cache-keys = [
+  { file = "pyproject.toml" },
+  { git = { commit = true, tags = true } },
+  { file = "bindings/**/*.cpp"},
+]
+
+[tool.uv.sources]
+mqt-ddsim = { workspace = true }
+
+
+[dependency-groups]
+build = [
+  "nanobind~=2.15.0",
+  "scikit-build-core>=1.0.3",
+  "vcs-versioning>=2.3.0",
+  "mqt.core~=3.9.0",
+]
+docs = [
+  "breathe>=4.36.0",
+  "furo>=2025.09.25",
+  "graphviz>=0.21.0",
+  "myst-nb>=1.3.0",
+  "sphinx>=8.2.3",
+  "sphinx-autoapi>=3.6.0",
+  "sphinx-copybutton>=0.5.2",
+  "sphinx-design>=0.6.1",
+  "sphinx-llm>=0.4.1",
+  "sphinxcontrib-bibtex>=2.6.5",
+  "sphinxext-opengraph>=0.13.0",
+  "qiskit[visualization]>=1.0.0",
+]
+test = [
+  "pytest>=9.0.3",
+  "pytest-cov>=7.1.0",
+  "pytest-sugar>=1.1.1",
+  "pytest-xdist>=3.8.0",
+  "numpy>=1.24",
+  "numpy>=1.26; python_version >= '3.12'",
+  "numpy>=2.1; python_version >= '3.13'",
+  "numpy>=2.3.2; python_version >= '3.14'",
+  "qiskit>=1.1",
+]
+dev = [
+  {include-group = "build"},
+  {include-group = "test"},
+  "nox>=2025.11.12",
+]

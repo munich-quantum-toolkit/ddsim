@@ -1,3 +1,11 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 from __future__ import annotations
 
 import math
@@ -5,7 +13,7 @@ import math
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.quantum_info import Statevector, state_fidelity
 
-from mqt.ddsim.statevectorsimulator import StatevectorSimulatorBackend
+from mqt.ddsim.statevector_simulator_backend import StatevectorSimulatorBackend
 
 
 def test_circuit_multi() -> None:
@@ -25,16 +33,13 @@ def test_circuit_multi() -> None:
     meas.measure(qreg1, creg1)
 
     qc = meas.compose(circ, front=True)
+    assert qc is not None
 
     backend_sim = StatevectorSimulatorBackend()
 
     result = backend_sim.run(qc).result()
     counts = result.get_counts(qc)
-
-    target = {"01 10": 1024}
-
-    result = backend_sim.run(circ).result()
     state = result.get_statevector()
 
-    assert counts == target
+    assert counts == {"01 10": 1024}
     assert math.isclose(state_fidelity(Statevector.from_label("0110"), state), 1.0, abs_tol=0.000001)

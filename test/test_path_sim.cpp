@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #include "PathSimulator.hpp"
 #include "algorithms/Grover.hpp"
 #include "dd/DDDefinitions.hpp"
@@ -15,60 +25,52 @@
 using namespace qc::literals;
 
 TEST(TaskBasedSimTest, Configuration) {
-  EXPECT_EQ(PathSimulator<>::Configuration::modeToString(
-                PathSimulator<>::Configuration::Mode::Sequential),
+  EXPECT_EQ(PathSimulator::Configuration::modeToString(
+                PathSimulator::Configuration::Mode::Sequential),
             "sequential");
-  EXPECT_EQ(
-      PathSimulator<>::Configuration::modeToString(
-          PathSimulator<>::Configuration::Mode::PairwiseRecursiveGrouping),
-      "pairwise_recursive");
-  EXPECT_EQ(PathSimulator<>::Configuration::modeToString(
-                PathSimulator<>::Configuration::Mode::BracketGrouping),
+  EXPECT_EQ(PathSimulator::Configuration::modeToString(
+                PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping),
+            "pairwise_recursive");
+  EXPECT_EQ(PathSimulator::Configuration::modeToString(
+                PathSimulator::Configuration::Mode::BracketGrouping),
             "bracket");
-  EXPECT_EQ(PathSimulator<>::Configuration::modeToString(
-                PathSimulator<>::Configuration::Mode::Alternating),
+  EXPECT_EQ(PathSimulator::Configuration::modeToString(
+                PathSimulator::Configuration::Mode::Alternating),
             "alternating");
-  EXPECT_EQ(PathSimulator<>::Configuration::modeToString(
-                PathSimulator<>::Configuration::Mode::Cotengra),
-            "cotengra");
-  EXPECT_EQ(PathSimulator<>::Configuration::modeToString(
-                PathSimulator<>::Configuration::Mode::GateCost),
+  EXPECT_EQ(PathSimulator::Configuration::modeToString(
+                PathSimulator::Configuration::Mode::GateCost),
             "gate_cost");
   EXPECT_THROW(
-      PathSimulator<>::Configuration::modeToString(
+      PathSimulator::Configuration::modeToString(
           // NOLINTNEXTLINE(clang-analyzer-optin.core.EnumCastOutOfRange)
-          PathSimulator<>::Configuration::Mode(32)),
+          PathSimulator::Configuration::Mode(32)),
       std::invalid_argument);
 
-  EXPECT_EQ(PathSimulator<>::Configuration::modeFromString("sequential"),
-            PathSimulator<>::Configuration::Mode::Sequential);
-  EXPECT_EQ(
-      PathSimulator<>::Configuration::modeFromString("pairwise_recursive"),
-      PathSimulator<>::Configuration::Mode::PairwiseRecursiveGrouping);
-  EXPECT_EQ(PathSimulator<>::Configuration::modeFromString("bracket"),
-            PathSimulator<>::Configuration::Mode::BracketGrouping);
-  EXPECT_EQ(PathSimulator<>::Configuration::modeFromString("alternating"),
-            PathSimulator<>::Configuration::Mode::Alternating);
-  EXPECT_EQ(PathSimulator<>::Configuration::modeFromString("cotengra"),
-            PathSimulator<>::Configuration::Mode::Cotengra);
-  EXPECT_EQ(PathSimulator<>::Configuration::modeFromString("gate_cost"),
-            PathSimulator<>::Configuration::Mode::GateCost);
-  EXPECT_THROW(
-      PathSimulator<>::Configuration::modeFromString("invalid argument"),
-      std::invalid_argument);
+  EXPECT_EQ(PathSimulator::Configuration::modeFromString("sequential"),
+            PathSimulator::Configuration::Mode::Sequential);
+  EXPECT_EQ(PathSimulator::Configuration::modeFromString("pairwise_recursive"),
+            PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping);
+  EXPECT_EQ(PathSimulator::Configuration::modeFromString("bracket"),
+            PathSimulator::Configuration::Mode::BracketGrouping);
+  EXPECT_EQ(PathSimulator::Configuration::modeFromString("alternating"),
+            PathSimulator::Configuration::Mode::Alternating);
+  EXPECT_EQ(PathSimulator::Configuration::modeFromString("gate_cost"),
+            PathSimulator::Configuration::Mode::GateCost);
+  EXPECT_THROW(PathSimulator::Configuration::modeFromString("invalid argument"),
+               std::invalid_argument);
 
-  auto config = PathSimulator<>::Configuration{};
+  auto config = PathSimulator::Configuration{};
   config.seed = 12345U;
 
-  config.mode = PathSimulator<>::Configuration::Mode::BracketGrouping;
+  config.mode = PathSimulator::Configuration::Mode::BracketGrouping;
   config.bracketSize = 3;
   std::cout << config.toString() << "\n";
 
-  config.mode = PathSimulator<>::Configuration::Mode::Alternating;
+  config.mode = PathSimulator::Configuration::Mode::Alternating;
   config.startingPoint = 13;
   std::cout << config.toString() << "\n";
 
-  config.mode = PathSimulator<>::Configuration::Mode::GateCost;
+  config.mode = PathSimulator::Configuration::Mode::GateCost;
   config.startingPoint = 2;
   config.gateCost = {2, 2, 1, 1};
   std::cout << config.toString() << "\n";
@@ -80,7 +82,7 @@ TEST(TaskBasedSimTest, SimpleCircuit) {
   qc->cx(1, 0);
 
   // construct simulator and generate sequential contraction plan
-  PathSimulator tbs(std::move(qc), PathSimulator<>::Configuration());
+  PathSimulator tbs(std::move(qc), PathSimulator::Configuration());
 
   // simulate circuit
   auto counts = tbs.simulate(1024);
@@ -100,7 +102,7 @@ TEST(TaskBasedSimTest, SimpleCircuitArgumentConstructor) {
 
   // construct simulator and generate sequential contraction plan
   PathSimulator tbs(std::move(qc),
-                    PathSimulator<>::Configuration::Mode::Sequential, 2, 0, {},
+                    PathSimulator::Configuration::Mode::Sequential, 2, 0, {},
                     12345U);
 
   // simulate circuit
@@ -118,9 +120,9 @@ TEST(TaskBasedSimTest, SimpleCircuitAssumeFalseOrder) {
   auto qc = std::make_unique<qc::QuantumComputation>(2);
   qc->h(1U);
   qc->cx(1, 0);
-  PathSimulator tbs(std::move(qc), PathSimulator<>::Configuration());
+  PathSimulator tbs(std::move(qc), PathSimulator::Configuration());
   // construct simulator and generate sequential contraction plan
-  PathSimulator<>::SimulationPath::Components path{};
+  PathSimulator::SimulationPath::Components path{};
   path.emplace_back(1, 0);
   path.emplace_back(3, 2);
   tbs.setSimulationPath(path, false);
@@ -143,8 +145,8 @@ TEST(TaskBasedSimTest, SimpleCircuitBracket) {
   qc->cx(1, 0);
 
   // construct simulator and generate bracketing contraction plan
-  auto config = PathSimulator<>::Configuration{};
-  config.mode = PathSimulator<>::Configuration::Mode::BracketGrouping;
+  auto config = PathSimulator::Configuration{};
+  config.mode = PathSimulator::Configuration::Mode::BracketGrouping;
   config.bracketSize = 3;
   PathSimulator tbs(std::move(qc), config);
 
@@ -157,14 +159,14 @@ TEST(TaskBasedSimTest, SimpleCircuitBracket) {
 }
 
 TEST(TaskBasedSimTest, GroverCircuitBracket) {
-  std::unique_ptr<qc::QuantumComputation> qc =
-      std::make_unique<qc::Grover>(4, 12345);
-  auto* grover = dynamic_cast<qc::Grover*>(qc.get());
-  auto targetValue = grover->targetValue;
+  const auto* const expected = "1111";
+  const auto targetValue = qc::GroverBitString{expected};
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      qc::createGrover(4, targetValue));
 
   // construct simulator and generate bracketing contraction plan
-  auto config = PathSimulator<>::Configuration{};
-  config.mode = PathSimulator<>::Configuration::Mode::BracketGrouping;
+  auto config = PathSimulator::Configuration{};
+  config.mode = PathSimulator::Configuration::Mode::BracketGrouping;
   config.bracketSize = 3;
   PathSimulator tbs(std::move(qc), config);
 
@@ -183,14 +185,14 @@ TEST(TaskBasedSimTest, GroverCircuitBracket) {
 }
 
 TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
-  std::unique_ptr<qc::QuantumComputation> qc =
-      std::make_unique<qc::Grover>(4, 12345);
-  auto* grover = dynamic_cast<qc::Grover*>(qc.get());
-  auto targetValue = grover->targetValue;
+  const auto* const expected = "1111";
+  const auto targetValue = qc::GroverBitString{expected};
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      qc::createGrover(4, targetValue));
 
   // construct simulator and generate alternating contraction plan
-  auto config = PathSimulator<>::Configuration{};
-  config.mode = PathSimulator<>::Configuration::Mode::Alternating;
+  auto config = PathSimulator::Configuration{};
+  config.mode = PathSimulator::Configuration::Mode::Alternating;
   PathSimulator tbs(std::move(qc), config);
 
   // simulate circuit
@@ -208,14 +210,14 @@ TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
 }
 
 TEST(TaskBasedSimTest, GroverCircuitPairwiseGrouping) {
-  std::unique_ptr<qc::QuantumComputation> qc =
-      std::make_unique<qc::Grover>(4, 12345);
-  auto* grover = dynamic_cast<qc::Grover*>(qc.get());
-  auto targetValue = grover->targetValue;
+  const auto* const expected = "1111";
+  const auto targetValue = qc::GroverBitString{expected};
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      qc::createGrover(4, targetValue));
 
   // construct simulator and generate pairwise recursive contraction plan
-  auto config = PathSimulator<>::Configuration{};
-  config.mode = PathSimulator<>::Configuration::Mode::PairwiseRecursiveGrouping;
+  auto config = PathSimulator::Configuration{};
+  config.mode = PathSimulator::Configuration::Mode::PairwiseRecursiveGrouping;
   PathSimulator tbs(std::move(qc), config);
 
   // simulate circuit
@@ -260,9 +262,8 @@ TEST(TaskBasedSimTest, SimpleCircuitGatecost) {
   qc->cx(1, 0);
 
   // construct simulator and generate gatecost contraction plan
-  PathSimulator tbs(std::move(qc),
-                    PathSimulator<>::Configuration::Mode::GateCost, 2, 2,
-                    {1, 1}, 12345U);
+  PathSimulator tbs(std::move(qc), PathSimulator::Configuration::Mode::GateCost,
+                    2, 2, {1, 1}, 12345U);
 
   // simulate circuit
   auto counts = tbs.simulate(1024);
@@ -283,8 +284,8 @@ TEST(TaskBasedSimTest, SimpleCircuitGatecostConfigurationObject) {
   qc->cx(1, 0);
 
   // construct simulator and generate gatecost contraction plan
-  auto config = PathSimulator<>::Configuration{};
-  config.mode = PathSimulator<>::Configuration::Mode::GateCost;
+  auto config = PathSimulator::Configuration{};
+  config.mode = PathSimulator::Configuration::Mode::GateCost;
   config.startingPoint = 5;
   config.gateCost = {1, 1};
   PathSimulator tbs(std::move(qc), config);
@@ -301,7 +302,7 @@ TEST(TaskBasedSimTest, DynamicCircuitSupport) {
   auto qc = std::make_unique<qc::QuantumComputation>(1, 1);
   qc->h(0);
   qc->measure(0, 0);
-  qc->classicControlled(qc::X, 0, {0, 1}, 1);
+  qc->if_(qc::X, 0, 0, true);
   std::cout << *qc << "\n";
 
   PathSimulator sim(std::move(qc));

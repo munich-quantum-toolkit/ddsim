@@ -130,15 +130,14 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# setuptools_scm
-src/*/_version.py
+# vcs-versioning
+python/**/_version.py
 
 # SKBuild cache dir
 _skbuild/
 
 # Any build dirs in the tests
 test/**/build/
-/src/mqt/**/_version.py
 
 # Common editor files
 *~
@@ -151,6 +150,10 @@ test/**/build/
 
 # ruff
 .ruff_cache/
+
+# Claude
+CLAUDE.md
+.claude/
 
 # OS specific stuff
 .DS_Store

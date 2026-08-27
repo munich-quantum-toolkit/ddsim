@@ -1,15 +1,25 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #include "CircuitSimulator.hpp"
 #include "GroverSimulator.hpp"
 #include "HybridSchrodingerFeynmanSimulator.hpp"
 #include "ShorFastSimulator.hpp"
 #include "ShorSimulator.hpp"
 #include "Simulator.hpp"
-#include "algorithms/Entanglement.hpp"
+#include "algorithms/GHZState.hpp"
 #include "algorithms/Grover.hpp"
 #include "algorithms/QFT.hpp"
-#include "dd/DDpackageConfig.hpp"
 #include "dd/Export.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "qasm3/Importer.hpp"
 
 #include <chrono>
 #include <complex>
@@ -29,17 +39,17 @@ namespace nl = nlohmann;
 
 namespace std {
 template <class T>
-void to_json( // NOLINT(readability-identifier-naming)
-    nl::basic_json<>& j, const std::complex<T>& p) {
+// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
+void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
   j = nl::basic_json<>{p.real(), p.imag()};
 }
 template <class T>
-void from_json( // NOLINT(readability-identifier-naming)
-    const nl::basic_json<>& j, std::complex<T>& p) {
+// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
+void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
   p.real(j.at(0));
   p.imag(j.at(1));
 }
-} /* namespace std */
+} // namespace std
 
 int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   cxxopts::Options options(
@@ -55,8 +65,8 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         ("pcomplex", "print additional statistics on complex numbers")
         ("dump_complex", "dump edge weights in final state DD to file", cxxopts::value<std::string>())
         ("verbose", "Causes some simulators to print additional information to STDERR")
-        ("simulate_file", "simulate a quantum circuit given by file (detection by the file extension)", cxxopts::value<std::string>())
-        ("simulate_file_hybrid", "simulate a quantum circuit given by file (detection by the file extension) using the hybrid Schrodinger-Feynman simulator", cxxopts::value<std::string>())
+        ("simulate_file", "simulate a quantum circuit given by an OpenQASM file", cxxopts::value<std::string>())
+        ("simulate_file_hybrid", "simulate a quantum circuit given by an OpenQASM file using the hybrid Schrodinger-Feynman simulator", cxxopts::value<std::string>())
         ("hybrid_mode", "mode used for hybrid Schrodinger-Feynman simulation (*amplitude*, dd)", cxxopts::value<std::string>())
         ("nthreads", "#threads used for hybrid simulation", cxxopts::value<unsigned int>()->default_value("2"))
         ("simulate_qft", "simulate Quantum Fourier Transform for given number of qubits", cxxopts::value<unsigned int>())
@@ -77,7 +87,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   auto vm = options.parse(argc, argv);
   if (vm.count("help") > 0) {
     std::cout << options.help();
-    std::exit(0);
+    return 0;
   }
 
   const auto seed = vm["seed"].as<std::uint64_t>();
@@ -86,91 +96,93 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   const auto approxSteps = vm["steps"].as<unsigned int>();
   const auto stepFidelity = vm["step_fidelity"].as<double>();
 
-  auto mode = HybridSchrodingerFeynmanSimulator<>::Mode::Amplitude;
+  auto mode = HybridSchrodingerFeynmanSimulator::Mode::Amplitude;
 
   const auto strategy =
       ApproximationInfo::fromString(vm["approx_when"].as<std::string>());
 
   std::unique_ptr<qc::QuantumComputation> quantumComputation;
-  std::unique_ptr<Simulator<dd::DDPackageConfig>> ddsim{nullptr};
+  std::unique_ptr<Simulator> ddsim{nullptr};
   const ApproximationInfo approximationInfo(stepFidelity, approxSteps,
                                             strategy);
   const bool verbose = vm.count("verbose") > 0;
 
   if (vm.count("simulate_file") > 0) {
     const std::string fname = vm["simulate_file"].as<std::string>();
-    quantumComputation = std::make_unique<qc::QuantumComputation>(fname);
-    ddsim = std::make_unique<CircuitSimulator<dd::DDPackageConfig>>(
-        std::move(quantumComputation), approximationInfo, seed);
+    quantumComputation = std::make_unique<qc::QuantumComputation>(
+        qasm3::Importer::importf(fname));
+    ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
+                                               approximationInfo, seed);
   } else if (vm.count("simulate_file_hybrid") > 0) {
     const std::string fname = vm["simulate_file_hybrid"].as<std::string>();
-    quantumComputation = std::make_unique<qc::QuantumComputation>(fname);
+    quantumComputation = std::make_unique<qc::QuantumComputation>(
+        qasm3::Importer::importf(fname));
     if (vm.count("hybrid_mode") > 0) {
       const std::string mname = vm["hybrid_mode"].as<std::string>();
       if (mname == "amplitude") {
-        mode = HybridSchrodingerFeynmanSimulator<
-            dd::DDPackageConfig>::Mode::Amplitude;
+        mode = HybridSchrodingerFeynmanSimulator::Mode::Amplitude;
       } else if (mname == "dd") {
-        mode = HybridSchrodingerFeynmanSimulator<dd::DDPackageConfig>::Mode::DD;
+        mode = HybridSchrodingerFeynmanSimulator::Mode::DD;
       }
     }
     if (seed != 0) {
-      ddsim = std::make_unique<
-          HybridSchrodingerFeynmanSimulator<dd::DDPackageConfig>>(
+      ddsim = std::make_unique<HybridSchrodingerFeynmanSimulator>(
           std::move(quantumComputation), approximationInfo, seed, mode,
           nthreads);
     } else {
-      ddsim = std::make_unique<
-          HybridSchrodingerFeynmanSimulator<dd::DDPackageConfig>>(
+      ddsim = std::make_unique<HybridSchrodingerFeynmanSimulator>(
           std::move(quantumComputation), mode, nthreads);
     }
   } else if (vm.count("simulate_qft") > 0) {
     const unsigned int nQubits = vm["simulate_qft"].as<unsigned int>();
-    quantumComputation = std::make_unique<qc::QFT>(nQubits);
-    ddsim = std::make_unique<CircuitSimulator<>>(std::move(quantumComputation),
-                                                 approximationInfo, seed);
+    quantumComputation =
+        std::make_unique<qc::QuantumComputation>(qc::createQFT(nQubits));
+    ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
+                                               approximationInfo, seed);
   } else if (vm.count("simulate_fast_shor") > 0) {
     const unsigned int compositeNumber =
         vm["simulate_fast_shor"].as<unsigned int>();
     const unsigned int coprime =
         vm["simulate_fast_shor_coprime"].as<unsigned int>();
     if (seed == 0) {
-      ddsim = std::make_unique<ShorFastSimulator<dd::DDPackageConfig>>(
-          compositeNumber, coprime, verbose);
+      ddsim = std::make_unique<ShorFastSimulator>(compositeNumber, coprime,
+                                                  verbose);
     } else {
-      ddsim = std::make_unique<ShorFastSimulator<dd::DDPackageConfig>>(
-          compositeNumber, coprime, seed, verbose);
+      ddsim = std::make_unique<ShorFastSimulator>(compositeNumber, coprime,
+                                                  seed, verbose);
     }
   } else if (vm.count("simulate_shor") > 0) {
     const unsigned int compositeNumber = vm["simulate_shor"].as<unsigned int>();
     const unsigned int coprime = vm["simulate_shor_coprime"].as<unsigned int>();
     if (seed == 0) {
-      ddsim = std::make_unique<ShorSimulator<dd::DDPackageConfig>>(
-          compositeNumber, coprime, verbose, stepFidelity < 1);
+      ddsim = std::make_unique<ShorSimulator>(compositeNumber, coprime, verbose,
+                                              stepFidelity < 1);
     } else {
-      ddsim = std::make_unique<ShorSimulator<dd::DDPackageConfig>>(
-          compositeNumber, coprime, seed, verbose, stepFidelity < 1);
+      ddsim = std::make_unique<ShorSimulator>(compositeNumber, coprime, seed,
+                                              verbose, stepFidelity < 1);
     }
   } else if (vm.count("simulate_grover") > 0) {
     const unsigned int nQubits = vm["simulate_grover"].as<unsigned int>();
-    quantumComputation = std::make_unique<qc::Grover>(nQubits, seed);
-    ddsim = std::make_unique<CircuitSimulator<>>(std::move(quantumComputation),
-                                                 approximationInfo, seed);
+    quantumComputation = std::make_unique<qc::QuantumComputation>(
+        qc::createGrover(nQubits, seed));
+    ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
+                                               approximationInfo, seed);
   } else if (vm.count("simulate_grover_emulated") > 0) {
-    ddsim = std::make_unique<GroverSimulator<dd::DDPackageConfig>>(
+    ddsim = std::make_unique<GroverSimulator>(
         vm["simulate_grover_emulated"].as<unsigned int>(), seed);
   } else if (vm.count("simulate_grover_oracle_emulated") > 0) {
-    ddsim = std::make_unique<GroverSimulator<dd::DDPackageConfig>>(
+    ddsim = std::make_unique<GroverSimulator>(
         vm["simulate_grover_oracle_emulated"].as<std::string>(), seed);
   } else if (vm.count("simulate_ghz") > 0) {
     const unsigned int nQubits = vm["simulate_ghz"].as<unsigned int>();
-    quantumComputation = std::make_unique<qc::Entanglement>(nQubits);
-    ddsim = std::make_unique<CircuitSimulator<>>(std::move(quantumComputation),
-                                                 approximationInfo, seed);
+    quantumComputation =
+        std::make_unique<qc::QuantumComputation>(qc::createGHZState(nQubits));
+    ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
+                                               approximationInfo, seed);
   } else {
     std::cerr << "Did not find anything to simulate. See help below.\n"
               << options.help() << "\n";
-    std::exit(1);
+    return 1;
   }
 
   if (ddsim->getNumberOfQubits() > 100) {
@@ -255,10 +267,10 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
 
   if (vm.count("pv") > 0) {
     if (auto* hsfSim =
-            dynamic_cast<HybridSchrodingerFeynmanSimulator<>*>(ddsim.get())) {
+            dynamic_cast<HybridSchrodingerFeynmanSimulator*>(ddsim.get())) {
       outputObj["state_vector"] = hsfSim->getVectorFromHybridSimulation();
     } else {
-      outputObj["state_vector"] = ddsim->getVector();
+      outputObj["state_vector"] = ddsim->getCurrentDD().getVector();
     }
   }
 
@@ -268,7 +280,6 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         {"benchmark", ddsim->getName()},
         {"n_qubits", +ddsim->getNumberOfQubits()},
         {"applied_gates", ddsim->getNumberOfOps()},
-        {"max_nodes", ddsim->getMaxNodeCount()},
         {"shots", shots},
         {"distinct_results", m.size()},
         {"seed", ddsim->getSeed()},

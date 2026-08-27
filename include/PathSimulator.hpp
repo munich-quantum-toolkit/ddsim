@@ -1,10 +1,19 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #pragma once
 
 #include "CircuitSimulator.hpp"
 #include "Simulator.hpp"
 #include "circuit_optimizer/CircuitOptimizer.hpp"
-#include "dd/DDpackageConfig.hpp"
-#include "dd/Package_fwd.hpp"
+#include "dd/Node.hpp"
 #include "ir/QuantumComputation.hpp"
 
 #include <cstddef>
@@ -13,7 +22,7 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 #include <taskflow/core/async.hpp> // IWYU pragma: keep
@@ -25,8 +34,7 @@
 #include <variant>
 #include <vector>
 
-template <class Config = dd::DDPackageConfig>
-class PathSimulator : public CircuitSimulator<Config> {
+class PathSimulator final : public CircuitSimulator {
 public:
   struct SimulationPath {
     struct Step {
@@ -67,7 +75,6 @@ public:
       PairwiseRecursiveGrouping,
       BracketGrouping,
       Alternating,
-      Cotengra,
       GateCost
     };
 
@@ -106,10 +113,7 @@ public:
       if (mode == "alternating" || mode == "3") {
         return Mode::Alternating;
       }
-      if (mode == "cotengra" || mode == "4") {
-        return Mode::Cotengra;
-      }
-      if (mode == "gate_cost" || mode == "5") {
+      if (mode == "gate_cost" || mode == "4") {
         return Mode::GateCost;
       }
 
@@ -126,8 +130,6 @@ public:
         return "bracket";
       case Mode::Alternating:
         return "alternating";
-      case Mode::Cotengra:
-        return "cotengra";
       case Mode::GateCost:
         return "gate_cost";
       default:
@@ -157,21 +159,19 @@ public:
 
   explicit PathSimulator(std::unique_ptr<qc::QuantumComputation>&& qc_,
                          Configuration configuration = Configuration())
-      : CircuitSimulator<Config>(std::move(qc_)), executor(1) {
+      : CircuitSimulator(std::move(qc_)), executor(1) {
     if (configuration.seed != 0) {
       // override seed in case a non-trivial one is given
-      Simulator<Config>::mt.seed(Simulator<Config>::seed);
+      Simulator::mt.seed(Simulator::seed);
     }
 
     // remove final measurements implement measurement support for task-based
     // simulation
-    qc::CircuitOptimizer::removeFinalMeasurements(
-        *(CircuitSimulator<Config>::qc));
+    qc::CircuitOptimizer::removeFinalMeasurements(*(CircuitSimulator::qc));
 
     // case distinction for the starting point of the alternating strategy
     if (configuration.startingPoint == 0) {
-      configuration.startingPoint =
-          (CircuitSimulator<Config>::qc->getNops()) / 2;
+      configuration.startingPoint = (CircuitSimulator::qc->getNops()) / 2;
     }
 
     // Add new strategies here
@@ -181,8 +181,6 @@ public:
       break;
     case Configuration::Mode::PairwiseRecursiveGrouping:
       generatePairwiseRecursiveGroupingSimulationPath();
-      break;
-    case Configuration::Mode::Cotengra:
       break;
     case Configuration::Mode::Alternating:
       generateAlternatingSimulationPath(configuration.startingPoint);
@@ -212,8 +210,8 @@ public:
   void setSimulationPath(const typename SimulationPath::Components& components,
                          bool assumeCorrectOrder = false) {
     simulationPath =
-        SimulationPath(CircuitSimulator<Config>::qc->getNops() + 1, components,
-                       CircuitSimulator<Config>::qc.get(), assumeCorrectOrder);
+        SimulationPath(CircuitSimulator::qc->getNops() + 1, components,
+                       CircuitSimulator::qc.get(), assumeCorrectOrder);
   }
 
   // Add new strategies here
@@ -226,7 +224,7 @@ public:
 
 private:
   std::unordered_map<std::size_t, tf::Task> tasks;
-  std::unordered_map<std::size_t, std::variant<qc::VectorDD, qc::MatrixDD>>
+  std::unordered_map<std::size_t, std::variant<dd::VectorDD, dd::MatrixDD>>
       results;
 
   tf::Taskflow taskflow;

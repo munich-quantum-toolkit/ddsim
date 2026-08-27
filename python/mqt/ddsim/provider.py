@@ -1,0 +1,86 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
+"""Provider for DDSIM backends."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+from qiskit.providers.exceptions import QiskitBackendNotFoundError
+from qiskit.providers.providerutils import filter_backends
+
+from .deterministic_noise_simulator_backend import DeterministicNoiseSimulatorBackend
+from .hybrid_qam_simulator_backend import HybridQasmSimulatorBackend
+from .hybrid_statevector_simulator_backend import HybridStatevectorSimulatorBackend
+from .path_qasm_simulator_backend import PathQasmSimulatorBackend
+from .path_statevector_simulator_backend import PathStatevectorSimulatorBackend
+from .qasm_simulator_backend import QasmSimulatorBackend
+from .statevector_simulator_backend import StatevectorSimulatorBackend
+from .stochastic_noise_simulator_backend import StochasticNoiseSimulatorBackend
+from .unitary_simulator_backend import UnitarySimulatorBackend
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from qiskit.providers import Backend, BackendV2
+
+
+class DDSIMProvider:
+    """Provider for DDSIM backends."""
+
+    _BACKENDS: tuple[tuple[str, type[BackendV2]], ...] = (
+        ("qasm_simulator", QasmSimulatorBackend),
+        ("statevector_simulator", StatevectorSimulatorBackend),
+        ("hybrid_qasm_simulator", HybridQasmSimulatorBackend),
+        ("hybrid_statevector_simulator", HybridStatevectorSimulatorBackend),
+        ("path_qasm_simulator", PathQasmSimulatorBackend),
+        ("path_statevector_simulator", PathStatevectorSimulatorBackend),
+        ("unitary_simulator", UnitarySimulatorBackend),
+        ("stochastic_noise_simulator", StochasticNoiseSimulatorBackend),
+        ("deterministic_noise_simulator", DeterministicNoiseSimulatorBackend),
+    )
+
+    def get_backend(self, name: str | None = None, **kwargs: Any) -> BackendV2:
+        """Return a backend matching the specified criteria.
+
+        Args:
+            name: Name of the backend.
+            kwargs: Additional filtering criteria.
+        """
+        backends = self.backends(name, **kwargs)
+        if len(backends) > 1:
+            msg = "More than one backend matches the criteria"
+            raise QiskitBackendNotFoundError(msg)
+        if not backends:
+            msg = "No backend matches the criteria"
+            raise QiskitBackendNotFoundError(msg)
+
+        return backends[0]
+
+    def backends(
+        self,
+        name: str | None = None,
+        filters: Callable[[Backend], bool] | None = None,
+        **kwargs: Any,
+    ) -> list[BackendV2]:
+        """Return a list of backends matching the specified criteria.
+
+        Args:
+            name: Name of the backend.
+            filters: Additional filtering criteria.
+            kwargs: Additional filtering criteria.
+        """
+        backends: list[Backend] = [
+            backend_cls() for backend_name, backend_cls in self._BACKENDS if name is None or backend_name == name
+        ]
+        return filter_backends(backends, filters=filters, **kwargs)  # ty: ignore[invalid-return-type]
+
+    def __str__(self) -> str:
+        """Return the provider name."""
+        return "DDSIMProvider"

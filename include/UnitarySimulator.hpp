@@ -1,17 +1,24 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #pragma once
 
 #include "CircuitSimulator.hpp"
-#include "dd/DDpackageConfig.hpp"
-#include "dd/Package_fwd.hpp"
+#include "dd/Node.hpp"
 #include "ir/QuantumComputation.hpp"
 
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <ostream>
 
-class UnitarySimulator
-    : public CircuitSimulator<dd::UnitarySimulatorDDPackageConfig> {
+class UnitarySimulator final : public CircuitSimulator {
 public:
   enum class Mode : std::uint8_t { Sequential, Recursive };
 
@@ -29,19 +36,12 @@ public:
   void construct();
 
   [[nodiscard]] Mode getMode() const { return mode; }
-  [[nodiscard]] qc::MatrixDD getConstructedDD() const { return e; }
+  [[nodiscard]] dd::MatrixDD getConstructedDD() const { return e; }
   [[nodiscard]] double getConstructionTime() const { return constructionTime; }
   [[nodiscard]] std::size_t getFinalNodeCount() const { return e.size(); }
-  [[nodiscard]] std::size_t getMaxNodeCount() const override;
-
-protected:
-  /// See Simulator<Config>::exportDDtoGraphviz
-  void exportDDtoGraphviz(std::ostream& os, bool colored, bool edgeLabels,
-                          bool classic, bool memory,
-                          bool formatAsPolar) override;
 
 private:
-  qc::MatrixDD e{};
+  dd::MatrixDD e{};
 
   Mode mode = Mode::Recursive;
 

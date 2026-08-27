@@ -1,11 +1,21 @@
+/*
+ * Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+ * Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Licensed under the MIT License
+ */
+
 #pragma once
 
 #include "CircuitSimulator.hpp"
+#include "DensityDDPackage.hpp"
+#include "DensityNode.hpp"
+#include "NoiseFunctionality.hpp"
 #include "Simulator.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/DDpackageConfig.hpp"
-#include "dd/Node.hpp"
-#include "dd/NoiseFunctionality.hpp"
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
@@ -18,8 +28,7 @@
 #include <string>
 #include <utility>
 
-class DeterministicNoiseSimulator
-    : public CircuitSimulator<dd::DensityMatrixSimulatorDDPackageConfig> {
+class DeterministicNoiseSimulator : public CircuitSimulator {
 public:
   DeterministicNoiseSimulator(
       std::unique_ptr<qc::QuantumComputation>&& qc_,
@@ -27,7 +36,8 @@ public:
       std::string noiseEffects_ = "APD", double noiseProbability_ = 0.001,
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
-      : CircuitSimulator(std::move(qc_), approximationInfo_),
+      : CircuitSimulator(std::move(qc_), approximationInfo_,
+                         dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseEffects(std::move(noiseEffects_)),
         noiseProbSingleQubit(noiseProbability_),
         ampDampingProbSingleQubit(ampDampingProbability_
@@ -36,10 +46,12 @@ public:
         noiseProbMultiQubit(noiseProbability_ * multiQubitGateFactor_),
         ampDampingProbMultiQubit(ampDampingProbSingleQubit *
                                  multiQubitGateFactor_),
+        densityDD(*dd, CircuitSimulator::getNumberOfQubits()),
         deterministicNoiseFunctionality(
-            dd, getNumberOfQubits(), noiseProbSingleQubit, noiseProbMultiQubit,
+            densityDD, CircuitSimulator::getNumberOfQubits(),
+            noiseProbSingleQubit, noiseProbMultiQubit,
             ampDampingProbSingleQubit, ampDampingProbMultiQubit, noiseEffects) {
-    dd::sanityCheckOfNoiseProbabilities(
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
         noiseProbability_, ampDampingProbSingleQubit, multiQubitGateFactor_);
   }
 
@@ -59,7 +71,8 @@ public:
       std::string noiseEffects_ = "APD", double noiseProbability_ = 0.001,
       std::optional<double> ampDampingProbability_ = std::nullopt,
       double multiQubitGateFactor_ = 2)
-      : CircuitSimulator(std::move(qc_), approximationInfo_, seed_),
+      : CircuitSimulator(std::move(qc_), approximationInfo_, seed_,
+                         dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG),
         noiseEffects(std::move(noiseEffects_)),
         noiseProbSingleQubit(noiseProbability_),
         ampDampingProbSingleQubit(ampDampingProbability_
@@ -68,10 +81,12 @@ public:
         noiseProbMultiQubit(noiseProbability_ * multiQubitGateFactor_),
         ampDampingProbMultiQubit(ampDampingProbSingleQubit *
                                  multiQubitGateFactor_),
+        densityDD(*dd, CircuitSimulator::getNumberOfQubits()),
         deterministicNoiseFunctionality(
-            dd, getNumberOfQubits(), noiseProbSingleQubit, noiseProbMultiQubit,
+            densityDD, CircuitSimulator::getNumberOfQubits(),
+            noiseProbSingleQubit, noiseProbMultiQubit,
             ampDampingProbSingleQubit, ampDampingProbMultiQubit, noiseEffects) {
-    dd::sanityCheckOfNoiseProbabilities(
+    dd::ddsim::sanityCheckOfNoiseProbabilities(
         noiseProbability_, ampDampingProbSingleQubit, multiQubitGateFactor_);
   }
 
@@ -93,22 +108,17 @@ public:
                            std::size_t shots);
 
   [[nodiscard]] std::size_t getActiveNodeCount() const override {
-    return Simulator::dd->template getUniqueTable<dd::dNode>()
-        .getNumActiveEntries();
-  }
-  [[nodiscard]] std::size_t getMaxNodeCount() const override {
-    return Simulator::dd->template getUniqueTable<dd::dNode>()
-        .getPeakNumActiveEntries();
+    return densityDD.computeActiveNodeCount();
   }
 
   [[nodiscard]] std::size_t countNodesFromRoot() override {
-    qc::DensityMatrixDD::alignDensityEdge(rootEdge);
+    dd::ddsim::DensityMatrixDD::alignDensityEdge(rootEdge);
     const std::size_t tmp = rootEdge.size();
-    qc::DensityMatrixDD::setDensityMatrixTrue(rootEdge);
+    dd::ddsim::DensityMatrixDD::setDensityMatrixTrue(rootEdge);
     return tmp;
   }
 
-  qc::DensityMatrixDD rootEdge{};
+  dd::ddsim::DensityMatrixDD rootEdge{};
 
 private:
   std::string noiseEffects;
@@ -119,5 +129,6 @@ private:
   double ampDampingProbMultiQubit{};
 
   double measurementThreshold = 0.01;
-  dd::DeterministicNoiseFunctionality deterministicNoiseFunctionality;
+  dd::ddsim::DensityDDPackage densityDD;
+  dd::ddsim::DeterministicNoiseFunctionality deterministicNoiseFunctionality;
 };

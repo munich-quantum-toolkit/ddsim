@@ -1,16 +1,23 @@
+# Copyright (c) 2023 - 2026 Chair for Design Automation, TUM
+# Copyright (c) 2025 - 2026 Munich Quantum Software Company GmbH
+# All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+# Licensed under the MIT License
+
 from __future__ import annotations
 
 import numpy as np
 import pytest
 from qiskit import (
-    AncillaRegister,
     ClassicalRegister,
     QuantumCircuit,
     QuantumRegister,
 )
 from qiskit.circuit import Parameter
 
-from mqt.ddsim.qasmsimulator import QasmSimulatorBackend
+from mqt.ddsim.qasm_simulator_backend import QasmSimulatorBackend
 
 
 @pytest.fixture
@@ -93,7 +100,7 @@ def test_qasm_simulator_support_parametrized_gates(backend: QasmSimulatorBackend
         ValueError,
         match=r"Mismatching number of values and parameters.*",
     ):
-        backend.run([bare_circuit], [[np.pi]], shots=shots).result()
+        backend.run([bare_circuit], parameter_values=[[np.pi]], shots=shots).result()
 
     with pytest.raises(
         ValueError,
@@ -105,10 +112,10 @@ def test_qasm_simulator_support_parametrized_gates(backend: QasmSimulatorBackend
         ValueError,
         match=r"The number of circuits \(2\) does not match the number of provided parameter sets \(1\)\.",
     ):
-        backend.run([circuit_1, circuit_2], [[np.pi / 2]], shots=shots).result()
+        backend.run([circuit_1, circuit_2], parameter_values=[[np.pi / 2]], shots=shots).result()
 
     # Test backend's correct functionality with multiple circuit
-    result = backend.run([circuit_1, circuit_2], [[np.pi], [np.pi / 2, np.pi]], shots=shots).result()
+    result = backend.run([circuit_1, circuit_2], parameter_values=[[np.pi], [np.pi / 2, np.pi]], shots=shots).result()
     assert result.success
 
     counts_1 = result.get_counts(circuit_1)
@@ -187,59 +194,17 @@ def test_qasm_simulator_portfolioqaoa(backend: QasmSimulatorBackend, shots: int)
 
 @pytest.mark.parametrize("num_controls", list(range(1, 8)))
 def test_qasm_simulator_mcx_no_ancilla(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate with no ancilla qubits."""
+    """Test MCX gate."""
     nqubits = num_controls + 1
     q = QuantumRegister(nqubits)
     c = ClassicalRegister(nqubits)
     circuit = QuantumCircuit(q, c)
     controls = q[1:nqubits]
     circuit.x(controls)
-    circuit.mcx(controls, q[0], mode="noancilla")
+    circuit.mcx(controls, q[0])
     circuit.measure(q, c)
 
     print(backend.target.operation_names)
-
-    result = backend.run(circuit, shots=shots).result()
-    assert result.success
-
-    counts = result.get_counts()
-    assert len(counts) == 1
-    assert counts["1" * nqubits] == shots
-
-
-@pytest.mark.parametrize("num_controls", list(range(1, 8)))
-def test_qasm_simulator_mcx_recursion(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate in recursion mode."""
-    nqubits = num_controls + 1
-    q = QuantumRegister(nqubits)
-    c = ClassicalRegister(nqubits)
-    anc = AncillaRegister(1)
-    circuit = QuantumCircuit(q, c, anc)
-    controls = q[1:nqubits]
-    circuit.x(controls)
-    circuit.mcx(controls, q[0], ancilla_qubits=anc, mode="recursion")
-    circuit.measure(q, c)
-
-    result = backend.run(circuit, shots=shots).result()
-    assert result.success
-
-    counts = result.get_counts()
-    assert len(counts) == 1
-    assert counts["1" * nqubits] == shots
-
-
-@pytest.mark.parametrize("num_controls", list(range(1, 8)))
-def test_qasm_simulator_mcx_vchain(backend: QasmSimulatorBackend, num_controls: int, shots: int) -> None:
-    """Test MCX gate in v-chain mode."""
-    nqubits = num_controls + 1
-    q = QuantumRegister(nqubits)
-    c = ClassicalRegister(nqubits)
-    anc = AncillaRegister(max(0, num_controls - 2))
-    circuit = QuantumCircuit(q, c, anc)
-    controls = q[1:nqubits]
-    circuit.x(controls)
-    circuit.mcx(controls, q[0], ancilla_qubits=anc, mode="v-chain")
-    circuit.measure(q, c)
 
     result = backend.run(circuit, shots=shots).result()
     assert result.success

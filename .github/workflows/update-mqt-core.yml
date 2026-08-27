@@ -18,9 +18,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   update-mqt-core:
     name: ⬆️ Update MQT Core
-    uses: cda-tum/mqt-workflows/.github/workflows/reusable-mqt-core-update.yml@v1.4
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@063c90c8e7e094bfffb73f8436eb55341c1e820f # v2.3.0
     with:
       update-to-head: ${{ github.event.inputs.update-to-head == 'true' }}
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+    permissions:
+      contents: write # Needed to push the update branch
+      pull-requests: write # Needed to open the update pull request
