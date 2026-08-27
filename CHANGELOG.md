@@ -10,6 +10,12 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- ✨ Add a DD-aware input permutation optimizer ([#407])
+  ([**@DuenzingerClaudia**], [**@ystade**], [**@burgholzer**],
+  [**@denialhaag**])
+
 ### Changed
 
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
@@ -203,13 +209,16 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [#567]: https://github.com/munich-quantum-toolkit/ddsim/pull/567
 [#556]: https://github.com/munich-quantum-toolkit/ddsim/pull/556
 [#538]: https://github.com/munich-quantum-toolkit/ddsim/pull/538
+[#407]: https://github.com/munich-quantum-toolkit/ddsim/pull/407
 [#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
 
 <!-- Contributor -->
 
 [**@burgholzer**]: https://github.com/burgholzer
 [**@denialhaag**]: https://github.com/denialhaag
+[**@DuenzingerClaudia**]: https://github.com/DuenzingerClaudia
 [**@simon1hofmann**]: https://github.com/simon1hofmann
+[**@ystade**]: https://github.com/ystade
 
 <!-- General links -->
 
