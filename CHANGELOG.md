@@ -10,6 +10,14 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- 💥 Drop support for x86 macOS and stop publishing the respective wheels
+  ([#976]) ([**@denialhaag**])
+- ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
+  ([#976]) ([**@denialhaag**])
+- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
+
 ## [2.5.0] - 2026-08-20
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#250)._
@@ -164,6 +172,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966
 [#955]: https://github.com/munich-quantum-toolkit/ddsim/pull/955
 [#954]: https://github.com/munich-quantum-toolkit/ddsim/pull/954
