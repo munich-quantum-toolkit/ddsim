@@ -12,6 +12,9 @@ releases may include breaking changes.
 
 ### Changed
 
+- 🚚 Move the high-level `sample` and `simulate_statevector` helpers from MQT
+  Core to `mqt.ddsim`, and consolidate exact DD circuit execution in Core
+  ([#978]) ([**@simon1hofmann**])
 - ♻️ Migrate circuit normalization to the MQT Core v4 API ([#977])
   ([**@simon1hofmann**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
@@ -176,6 +179,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#978]: https://github.com/munich-quantum-toolkit/ddsim/pull/978
 [#977]: https://github.com/munich-quantum-toolkit/ddsim/pull/977
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
