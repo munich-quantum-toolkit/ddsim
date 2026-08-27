@@ -12,10 +12,11 @@ import pathlib
 import unittest
 
 import numpy as np
+import pytest
 from mqt.core import load
 from mqt.core.ir import QuantumComputation
 
-from mqt.ddsim import CircuitSimulator
+from mqt.ddsim import CircuitSimulator, sample, simulate_statevector
 
 
 class MQTStandaloneSimulatorTests(unittest.TestCase):
@@ -55,6 +56,34 @@ class MQTStandaloneSimulatorTests(unittest.TestCase):
         assert len(result.keys()) == self.nonzero_states_ghz
         assert "000" in result
         assert "111" in result
+
+    @staticmethod
+    def test_sampling_helper() -> None:
+        circ = QuantumComputation(1, 2)
+        circ.x(0)
+        circ.measure(0, 0)
+        circ.measure(0, 1)
+
+        assert sample(circ, shots=16, seed=1337) == {"11": 16}
+
+        with pytest.raises(ValueError, match="seed must be between 0 and"):
+            sample(circ, shots=16, seed=-1)
+
+    @staticmethod
+    def test_statevector_helper() -> None:
+        circ = QuantumComputation(1)
+        circ.x(0)
+        circ.gphase(np.pi / 2)
+
+        assert np.allclose(simulate_statevector(circ), np.array([0, 1j]))
+
+    @staticmethod
+    def test_statevector_helper_rejects_nonunitary_circuits() -> None:
+        circ = QuantumComputation(1, 1)
+        circ.measure(0, 0)
+
+        with pytest.raises(ValueError, match="DD for non-unitary operation not available"):
+            simulate_statevector(circ)
 
     def test_standalone_simple_approximation(self) -> None:
 

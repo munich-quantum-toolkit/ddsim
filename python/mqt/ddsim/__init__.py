@@ -28,6 +28,7 @@ if sys.platform == "win32":  # ruff:ignore[non-empty-init-module] This is actual
     _dll_patch()
     del _dll_patch
 
+from ._simulation import sample, simulate_statevector
 from ._version import version as __version__
 from .provider import DDSIMProvider
 from .pyddsim import (
@@ -56,4 +57,6 @@ __all__ = [
     "UnitarySimulator",
     "UnitarySimulatorMode",
     "__version__",
+    "sample",
+    "simulate_statevector",
 ]

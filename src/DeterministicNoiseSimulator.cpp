@@ -31,7 +31,12 @@ using CN = dd::ComplexNumbers;
 
 void DeterministicNoiseSimulator::initializeSimulation(
     const std::size_t nQubits) {
+  if (densityStateInitialized) {
+    dd::ddsim::DensityMatrixDD::alignDensityEdge(rootEdge);
+    densityDD.decRef(rootEdge);
+  }
   rootEdge = densityDD.makeZeroDensityOperator(static_cast<dd::Qubit>(nQubits));
+  densityStateInitialized = true;
 }
 
 void DeterministicNoiseSimulator::applyOperationToState(

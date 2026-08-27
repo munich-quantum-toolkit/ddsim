@@ -98,6 +98,10 @@ public:
         shots);
   }
 
+  std::map<std::string, std::size_t> simulate(std::size_t shots) override {
+    return simulateWithHooks(shots);
+  }
+
   void initializeSimulation(std::size_t nQubits) override;
   char measure(dd::Qubit i) override;
   void reset(qc::NonUnitaryOperation* nonUnitaryOp) override;
@@ -131,4 +135,5 @@ private:
   double measurementThreshold = 0.01;
   dd::ddsim::DensityDDPackage densityDD;
   dd::ddsim::DeterministicNoiseFunctionality deterministicNoiseFunctionality;
+  bool densityStateInitialized = false;
 };

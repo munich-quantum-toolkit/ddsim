@@ -77,6 +77,25 @@ print(result)
 As expected, the output distribution is approximately 50% for the states
 $|00\rangle$ and $|11\rangle$ each.
 
+For one-off simulations, the package also provides convenience functions:
+
+```{code-cell} ipython3
+from mqt.core.ir import QuantumComputation
+
+from mqt.ddsim import sample, simulate_statevector
+
+counts = sample(qc, shots=1024)
+
+unitary_qc = QuantumComputation(2)
+unitary_qc.h(0)
+unitary_qc.cx(0, 1)
+statevector = simulate_statevector(unitary_qc)
+```
+
+The `sample` helper supports terminal and mid-circuit measurements, resets, and
+classical control. The `simulate_statevector` helper is intended for unitary
+circuits and returns an independent NumPy array.
+
 If we would like to obtain the full state vector of the quantum circuit, we can
 query it after the simulation as follows:
 

@@ -14,6 +14,7 @@
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
+#include "dd/Simulation.hpp"
 #include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/IfElseOperation.hpp"
@@ -28,9 +29,34 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <typeinfo>
 
 std::map<std::string, std::size_t>
 CircuitSimulator::simulate(std::size_t shots) {
+  // Derived simulators customize the hook-based execution path. Approximation
+  // also depends on its established per-operation scheduling.
+  if (typeid(*this) != typeid(CircuitSimulator) ||
+      (approximationInfo.stepNumber > 0U &&
+       approximationInfo.stepFidelity < 1.0)) {
+    return simulateWithHooks(shots);
+  }
+
+  const auto& roots = dd->getRootSet<dd::vNode>();
+  const auto previousRoot = rootEdge;
+  const auto previousRootIsRegistered = roots.contains(previousRoot);
+
+  auto result =
+      dd::sample(*qc, dd::makeZeroState(qc->getNqubits(), *dd), *dd, shots, mt);
+  if (previousRootIsRegistered) {
+    dd->decRef(previousRoot);
+  }
+  rootEdge = result.state;
+  singleShots += result.executions;
+  return std::move(result.counts);
+}
+
+std::map<std::string, std::size_t>
+CircuitSimulator::simulateWithHooks(std::size_t shots) {
   const auto analysis = analyseCircuit();
 
   // easiest case: all gates are unitary --> simulate once and sample away on
@@ -53,7 +79,8 @@ CircuitSimulator::simulate(std::size_t shots) {
     for (const auto& [bit_string, count] : measureAllNonCollapsing(shots)) {
       std::string resultString(qc->getNcbits(), '0');
 
-      for (auto const& [qubit_index, bitIndex] : analysis.measurementMap) {
+      for (const auto& [qubit_index, bitIndex] :
+           analysis.terminalMeasurements) {
         resultString[cbits - bitIndex - 1] =
             bit_string[qubits - qubit_index - 1];
       }
@@ -102,7 +129,8 @@ auto CircuitSimulator::analyseCircuit() -> CircuitAnalysis {
       }
 
       for (unsigned int i = 0; i < quantum.size(); ++i) {
-        analysis.measurementMap[quantum.at(i)] = classic.at(i);
+        analysis.terminalMeasurements.emplace_back(quantum.at(i),
+                                                   classic.at(i));
       }
     }
 
@@ -126,6 +154,10 @@ CircuitSimulator::expectationValue(const qc::QuantumComputation& observable) {
 }
 
 void CircuitSimulator::initializeSimulation(const std::size_t nQubits) {
+  const auto& roots = dd->getRootSet<dd::vNode>();
+  if (roots.contains(rootEdge)) {
+    dd->decRef(rootEdge);
+  }
   rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *dd);
 }
 

@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 struct ApproximationInfo {
   enum ApproximationStrategy : std::uint8_t { FidelityDriven, MemoryDriven };
@@ -130,10 +131,12 @@ protected:
   std::size_t approximationRuns{0};
   long double finalFidelity{1.0L};
 
+  std::map<std::string, std::size_t> simulateWithHooks(std::size_t shots);
+
   struct CircuitAnalysis {
     bool isDynamic = false;
     bool hasMeasurements = false;
-    std::map<qc::Qubit, size_t> measurementMap;
+    std::vector<std::pair<qc::Qubit, std::size_t>> terminalMeasurements;
   };
 
   CircuitAnalysis analyseCircuit();

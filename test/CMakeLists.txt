@@ -9,6 +9,7 @@
 package_add_test(
   mqt-ddsim-test
   MQT::DDSim
+  test_circuit_execution.cpp
   test_circuit_sim.cpp
   test_shor_sim.cpp
   test_fast_shor_sim.cpp

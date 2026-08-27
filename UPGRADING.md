@@ -6,6 +6,13 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+### MQT Core v4 simulation helpers
+
+Import the high-level `sample` and `simulate_statevector` helpers from
+`mqt.ddsim` instead of `mqt.core.dd`. The package-aware Core DD primitives
+remain available for applications that manage their own `DDPackage` and input
+state.
+
 ### macOS support
 
 MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
