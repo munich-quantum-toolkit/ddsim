@@ -12,6 +12,11 @@ releases may include breaking changes.
 
 ### Changed
 
+- 💥 Drop support for x86 macOS and stop publishing the respective wheels
+  ([#976]) ([**@denialhaag**])
+- ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
+  ([#976]) ([**@denialhaag**])
+- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
 - 🚚 Move recursive unitary construction from MQT Core to MQT DDSIM ([#975])
   ([**@simon1hofmann**])
 
@@ -169,6 +174,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966
 [#955]: https://github.com/munich-quantum-toolkit/ddsim/pull/955
