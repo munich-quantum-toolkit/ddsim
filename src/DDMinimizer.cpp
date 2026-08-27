@@ -148,7 +148,7 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
   //             l | 0  1  2  3           l | 3  2  1  0
 
   if (cXIndex.has_value() && (!xCIndex.has_value() || *cXIndex < *xCIndex)) {
-    std::reverse(layout.begin(), layout.end());
+    std::ranges::reverse(layout);
     if (prioCh == 0 && prioXl == 0) {
       if (stairsCh > 0) {
         layout = rotateRight(layout, stairsCh);
@@ -160,7 +160,7 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
              (!cXIndex.has_value() || *cXIndex > *xCIndex)) {
     if (prioCl == 0 && prioXh == 0) {
       if (isFullLadder(cLIndex) || isFullLadder(xHIndex)) {
-        std::reverse(layout.begin(), layout.end());
+        std::ranges::reverse(layout);
       } else if (stairsCl > 0) {
         layout = rotateLeft(layout, stairsCl);
       } else if (stairsXh > 0) {
@@ -168,7 +168,7 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
       }
     }
   } else if ((isFullLadder(xHIndex) || isFullLadder(cLIndex))) {
-    std::reverse(layout.begin(), layout.end());
+    std::ranges::reverse(layout);
   } else {
     // in case no full pattern was identified, call fallback function to
     // determine ordering based on singular controlled operations
@@ -276,9 +276,8 @@ std::vector<Qubit> DDMinimizer::rotateLeft(std::vector<Qubit> layout,
     return layout;
   }
   stairs %= layout.size();
-  std::rotate(layout.begin(),
-              layout.begin() + static_cast<std::ptrdiff_t>(stairs),
-              layout.end());
+  std::ranges::rotate(layout,
+                      layout.begin() + static_cast<std::ptrdiff_t>(stairs));
   return layout;
 }
 
@@ -289,9 +288,8 @@ std::vector<Qubit> DDMinimizer::rotateRight(std::vector<Qubit> layout,
   }
   stairs %= layout.size();
   if (stairs != 0) {
-    std::rotate(layout.begin(),
-                layout.end() - static_cast<std::ptrdiff_t>(stairs),
-                layout.end());
+    std::ranges::rotate(layout,
+                        layout.end() - static_cast<std::ptrdiff_t>(stairs));
   }
   return layout;
 }
@@ -314,7 +312,7 @@ DDMinimizer::createControlBasedPermutation(const QuantumComputation& circuit) {
                                       op->getTargets().end()};
 
     for (const auto& control : controls) {
-      if (controlToTargets.find(control.qubit) == controlToTargets.end()) {
+      if (!controlToTargets.contains(control.qubit)) {
         // If the control does not exist in the map, add it with the current set
         // of targetInts
         controlToTargets[control.qubit] = targets;
