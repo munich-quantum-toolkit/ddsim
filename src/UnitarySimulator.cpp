@@ -15,12 +15,66 @@
 #include "dd/DDpackageConfig.hpp"
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Node.hpp"
+#include "dd/Operations.hpp"
+#include "dd/Package.hpp"
+#include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "ir/operations/OpType.hpp"
 
+#include <bit>
 #include <chrono>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <utility>
+
+namespace {
+dd::MatrixDD buildFunctionalityPairwise(const qc::QuantumComputation& qc,
+                                        const std::size_t begin,
+                                        const std::size_t count,
+                                        qc::Permutation& permutation,
+                                        dd::Package& package) {
+  if (count == 1U) {
+    auto e = dd::Package::makeIdent();
+    if (const auto& op = qc.at(begin);
+        op->getType() == qc::OpType::SWAP && !op->isControlled()) {
+      const auto& targets = op->getTargets();
+      std::swap(permutation.at(targets[0U]), permutation.at(targets[1U]));
+    } else {
+      e = dd::getDD(*op, package, permutation);
+    }
+    package.incRef(e);
+    return e;
+  }
+
+  const auto leftCount = std::bit_floor(count - 1U);
+  const auto left =
+      buildFunctionalityPairwise(qc, begin, leftCount, permutation, package);
+  const auto right = buildFunctionalityPairwise(
+      qc, begin + leftCount, count - leftCount, permutation, package);
+  const auto result = package.multiply(right, left);
+  package.incRef(result);
+  package.decRef(left);
+  package.decRef(right);
+  package.garbageCollect();
+  return result;
+}
+
+dd::MatrixDD buildFunctionalityPairwise(const qc::QuantumComputation& qc,
+                                        dd::Package& package) {
+  if (qc.getNqubits() == 0U || qc.size() < 2U) {
+    return dd::buildFunctionality(qc, package);
+  }
+
+  auto permutation = qc.initialLayout;
+  auto e = buildFunctionalityPairwise(qc, 0U, qc.size(), permutation, package);
+
+  dd::changePermutation(e, permutation, qc.outputPermutation, package);
+  e = package.reduceAncillae(e, qc.getAncillary());
+  e = package.reduceGarbage(e, qc.getGarbage());
+  return e;
+}
+} // namespace
 
 void UnitarySimulator::construct() {
   // carry out actual computation
@@ -28,7 +82,7 @@ void UnitarySimulator::construct() {
   if (mode == Mode::Sequential) {
     e = dd::buildFunctionality(*qc, *dd);
   } else if (mode == Mode::Recursive) {
-    e = dd::buildFunctionalityRecursive(*qc, *dd);
+    e = buildFunctionalityPairwise(*qc, *dd);
   }
   auto end = std::chrono::steady_clock::now();
   constructionTime = std::chrono::duration<double>(end - start).count();
