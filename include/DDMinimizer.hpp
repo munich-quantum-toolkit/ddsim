@@ -16,211 +16,144 @@
 
 #include <cstddef>
 #include <map>
-#include <set>
+#include <optional>
 #include <utility>
 #include <vector>
 
 namespace qc {
+/**
+ * @brief Heuristically reorder circuit qubits for decision-diagram simulation.
+ */
 class DDMinimizer {
-
 public:
   /**
-   * @brief Changes the order of qubits in a QuantumComputation to heuristically
-   * optimize for short running times of the DD-simulator.
-   * @detail Computes an initialLayout for the QuantumComputation based on a
-   * heuristic to optimize the running time of the DD-simulator. After that, the
-   * initialLayout is applied, i.e. the qubits in the QuantumComputation are
-   * re-ordered such that the resulting QuantumComputation's initialLayout is
-   * the identity again. The current implementation is based on patterns found
-   * in the controlled gates.
-   * @param param qc is the QuantumComputation to optimize the layout for
+   * @brief Optimize the input permutation of a quantum computation.
+   * @details Canonicalizes any existing input permutation, computes a new
+   * permutation from controlled-gate patterns, and applies it to the circuit.
+   * The resulting input permutation is the identity and the output permutation
+   * is adjusted accordingly. Since the input mapping is deliberately changed,
+   * equivalence assumes the permutation-invariant all-zero input state used by
+   * the simulators. Empty circuits and circuits with ancillary or garbage
+   * qubits are left unchanged.
+   * @param circuit The quantum computation to optimize.
    */
-  static void optimizeInputPermutation(qc::QuantumComputation& qc);
+  static void optimizeInputPermutation(QuantumComputation& circuit);
 
   /**
-   * @details First collects operation indices of controlled operation for
-   * patterns (s. makeDataStructure). Then, based on the pattern of the
-   * controlled gates, the layout is adjusted. If no pattern is found, the
-   * control based permutation is created.
-   * @param qc is the QuantumComputation to optimize the layout for
-   * @return the qc::Permutation The computed permutation to be used as the
-   * initialLayout for a QuantumComputation
+   * @brief Compute a DD-friendly input permutation.
+   * @details Collects the instruction indices of controlled-gate patterns and
+   * derives a permutation from the most prominent complete pattern.
+   * Controlled-Z operations are ignored. If no complete pattern is found, a
+   * deterministic control-dependency ordering is used instead.
+   * Circuits with ancillary or garbage qubits retain their existing input
+   * layout.
+   * @param circuit The quantum computation for which to compute a permutation.
+   * @return The computed input permutation.
+   * @pre Operations use dense qubit indices from zero to `getNqubits() - 1`.
+   * @pre The input layout is the identity permutation. Use
+   * `optimizeInputPermutation` for circuits with arbitrary input layouts.
    */
-  static qc::Permutation createGateBasedPermutation(qc::QuantumComputation& qc);
+  [[nodiscard]] static Permutation
+  createGateBasedPermutation(const QuantumComputation& circuit);
 
 private:
-  // The data structure for the pattern analysis of controlled gates:
+  using InstructionIndex = std::optional<std::size_t>;
+  using GatePattern = std::map<std::pair<Qubit, Qubit>, InstructionIndex>;
+
   /**
-   *The ladder x_c and c_x describe for three qubits the following controlled
-   gates (c: control qubit, x: target qubit):
+   * @brief Adjacent controlled-gate patterns.
+   * @details The ladders x_c and c_x describe for four qubits the following
+   * controlled gates (c: control qubit, x: target qubit):
 
-    * c_x: c | 0  1  2
-           x | 1  2  3
+   * c_x: c | 0  1  2
+   *      x | 1  2  3
 
-    * x_c: c | 1  2  3
-           x | 0  1  2
+   * x_c: c | 1  2  3
+   *      x | 0  1  2
    */
-  std::map<std::pair<Qubit, Qubit>, int> xCMap;
-  std::map<std::pair<Qubit, Qubit>, int> cXMap;
+  GatePattern xCMap;
+  GatePattern cXMap;
 
   /**
-    *The ladders c_l, c_r, x_l, x_r consist of several steps, hence the vector
-    of maps. They describe for three qubits the following controlled gates (c:
-    control qubit, x: target qubit):
-    * c_l_1: c | 0  0  0  and  c_l_2: c | 1  1  and  c_l_3: c | 2
-             x | 1  2  3              x | 2  3              x | 3
+   * @brief Staircase controlled-gate patterns.
+   * @details The ladders c_l, c_r, x_l, and x_r consist of several steps,
+   * hence the vector of maps. They describe for four qubits the following
+   * controlled gates (c: control qubit, x: target qubit):
+   *
+   * c_l_1: c | 0  0  0  and  c_l_2: c | 1  1  and  c_l_3: c | 2
+   *        x | 1  2  3              x | 2  3              x | 3
 
-    * c_r_1: c | 3  3  3  and  c_r_2: c | 2  2  and  c_r_3: c | 1
-             x | 0  1  2              x | 0  1              x | 0
+   * c_r_1: c | 3  3  3  and  c_r_2: c | 2  2  and  c_r_3: c | 1
+   *        x | 0  1  2              x | 0  1              x | 0
 
-    * x_l_1: c | 1  2  3  and  x_l_2: c | 2  3  and  x_l_3: c | 3
-             x | 0  0  0              x | 1  1              x | 2
+   * x_l_1: c | 1  2  3  and  x_l_2: c | 2  3  and  x_l_3: c | 3
+   *        x | 0  0  0              x | 1  1              x | 2
 
-    * x_r_1: c | 0  1  2  and  x_r_2: c | 0  1  and  x_r_3: c | 0
-             x | 3  3  3              x | 2  2              x | 1
+   * x_r_1: c | 0  1  2  and  x_r_2: c | 0  1  and  x_r_3: c | 0
+   *        x | 3  3  3              x | 2  2              x | 1
    */
-  std::vector<std::map<std::pair<Qubit, Qubit>, int>> cLMap;
-  std::vector<std::map<std::pair<Qubit, Qubit>, int>> cHMap;
-  std::vector<std::map<std::pair<Qubit, Qubit>, int>> xLMap;
-  std::vector<std::map<std::pair<Qubit, Qubit>, int>> xHMap;
-
-  // Helper functions for createGateBasedPermutation
-  /**
-  * @brief creates a data structure for the pattern analysis of controlled gates
-  * @details the data structure consists of two maps:
-  * 1. map: string of ladder (step) name to control and target bit to the index
-    of the operation
-  * 2. map: string of ladder name to vector: max index of operation for each
-    step or the c_x or x_c ladder
-  * for c_l and x_l position 0 in the vector marks the line of c(x) at 0 -> we
-    count the left most as the first
-  * for c_r and x_r position 0 in the vector marks the line of c(x) at bits - 1
-    -> we count theright most as the first
-  *
-  * The ladder (steps) describe the following controlled gates (c: control
-    qubit, x: target qubit): e.g. for three qubits
-        * c_x: c | 0  1  2
-               x | 1  2  3
-
-        * x_c: c | 1  2  3
-               x | 0  1  2
-
-        * c_l_1: c | 0  0  0  and  c_l_2: c | 1  1  and  c_l_3: c | 2
-                 x | 1  2  3              x | 2  3              x | 3
-
-        * c_r_1: c | 3  3  3  and  c_r_2: c | 2  2  and  c_r_3: c | 1
-                 x | 0  1  2              x | 0  1              x | 0
-
-        * x_l_1: c | 1  2  3  and  x_l_2: c | 2  3  and  x_l_3: c | 3
-                 x | 0  0  0              x | 1  1              x | 2
-
-        * x_r_1: c | 0  1  2  and  x_r_2: c | 0  1  and  x_r_3: c | 0
-                 x | 3  3  3              x | 2  2              x | 1
-  */
+  std::vector<GatePattern> cLMap;
+  std::vector<GatePattern> cHMap;
+  std::vector<GatePattern> xLMap;
+  std::vector<GatePattern> xHMap;
 
   /**
-   * @brief initializes the data structure for the pattern analysis of
-   * controlled gates
-   * @details The function sets the qubits of the xCMap, cXMap, cLMap, cHMap,
-   * xLMap, xHMap depending on the number of qubits in the QuantumComputation
-   * @param bits is the number of qubits in the QuantumComputation
+   * @brief Initialize the controlled-gate pattern maps.
+   * @param bits The number of qubits in the quantum computation.
+   * @pre `bits >= 2`.
    */
   void initializeDataStructure(std::size_t bits);
 
   /**
-   * @brief Helper function to find the maximum Instruction index of the
-   * complete patterns
-   * @details Returns the max index if the pattern is complete, otherwise -1
-   * @param map of the pattern map
-   * @return the maximum index
+   * @brief Find the final instruction index of a complete pattern.
+   * @details A missing instruction index for any required gate marks the
+   * pattern as incomplete, in which case this function returns `std::nullopt`.
+   * @param pattern The pattern map to inspect.
+   * @return The maximum instruction index, or `std::nullopt` for an incomplete
+   * pattern.
    */
-  static int findMaxIndex(const std::map<std::pair<Qubit, Qubit>, int>& map);
+  static InstructionIndex getCompletePatternEnd(const GatePattern& pattern);
 
   // Functions to analyze the pattern of the controlled gates
-  static bool isFullLadder(const std::vector<int>& vec);
-  static std::size_t getStairCount(const std::vector<int>& vec);
-  static int getLadderPosition(const std::vector<int>& vec, int ladder);
+  static bool isFullLadder(const std::vector<InstructionIndex>& vec);
+  static std::size_t getStairCount(const std::vector<InstructionIndex>& vec);
+  static std::size_t
+  countPriorCompleteSteps(const std::vector<InstructionIndex>& steps,
+                          const InstructionIndex& ladderEnd);
 
   // Functions to adjust the layout based on the pattern of the controlled
   // gates:
 
   /**
-   * @brief Helper function to reverse the layout (q: qubit, l: layer)
-   * @details q | 0  1  2  3  turns to q | 0  1  2  3
-   *          l | 0  1  2  3           l | 3  2  1  0
-   * @param layout
-   * @return the reversed layout
-   */
-  static std::vector<Qubit> reverseLayout(std::vector<Qubit>& layout);
-
-  /**
-   * @brief Helper function to rotate the layout to the right (q: qubit, l:
-   * layer)
-   * @details q | 0  1  2  3 and 1 stairs turns to q | 0  1  2  3
-   *          l | 0  1  2  3                       l | 1  2  3  0
-   * @param layout, stairs (number of steps to rotate)
-   * @return the rotated layout
-   */
-  static std::vector<Qubit> rotateRight(std::vector<Qubit> layout,
-                                        std::size_t stairs);
-
-  /**
-   * @brief Helper function to rotate the layout to the left (q: qubit, l:
-   * layer)
-   * @details q | 0  1  2  3 and 2 stairs turns to q | 0  1  2  3
-   *          l | 0  1  2  3                       l | 3  0  1  2
-   * @param layout, stairs (number of steps to rotate)
-   * @return the rotated layout
+   * @brief Rotate a layout to the left.
+   * @details `[0, 1, 2, 3]` rotated one step becomes `[1, 2, 3, 0]`.
+   * @param layout The layout to rotate.
+   * @param stairs The number of positions to rotate.
+   * @return The rotated layout.
    */
   static std::vector<Qubit> rotateLeft(std::vector<Qubit> layout,
                                        std::size_t stairs);
 
   /**
-   * @brief creates a Heuristic based initialLayout for the QuantumComputation.
-     This implementation is based on which qubits are controlled by whichqubits
-   * @details The function creates a map of each qubit to all the qubits it
-   controls.
-   * Based on the control to target relationship, a weight for each qubit is
-   calculated.
-   * The qubits are then sorted based on the weight in increasing order,
-   * each controlling qubit is placed after its targets
-   * @param QuantumComputation
-   * @return the qc::Permutation
+   * @brief Rotate a layout to the right.
+   * @details `[0, 1, 2, 3]` rotated one step becomes `[3, 0, 1, 2]`.
+   * @param layout The layout to rotate.
+   * @param stairs The number of positions to rotate.
+   * @return The rotated layout.
    */
-  static qc::Permutation
-  createControlBasedPermutation(qc::QuantumComputation& qc);
-
-  // Helper function for createControlBasedPermutation
+  static std::vector<Qubit> rotateRight(std::vector<Qubit> layout,
+                                        std::size_t stairs);
 
   /**
-   * @brief recursively adjusts the weights of the qubits based on the control
-   * and target qubits
-   * @param map of qubit to weight, current set of target qubits, current
-   * control qubit, overall map of control qubit to target qubits, count of
-   * recoursive calls
-   * @return adjusted map of qubit to weight
+   * @brief Create a permutation from control dependencies.
+   * @details Orders each target before the qubits that control it. Controlled-Z
+   * operations are ignored. If the dependency graph contains a cycle, the
+   * existing input permutation is returned unchanged.
+   * @param circuit The quantum computation to inspect.
+   * @return The control-dependency-based input permutation.
    */
-  static std::map<Qubit, int>
-  adjustWeights(std::map<Qubit, int> qubitWeights,
-                const std::set<Qubit>& targets, Qubit ctrl,
-                const std::map<Qubit, std::set<Qubit>>& controlToTargets,
-                int count);
-
-  /**
-  * @brief creates a vector of all possible permutations of the initialLayout
-            used for first implementation of testing all Permutations and
-  drawing conclusions
-  * @param QuantumComputation
-  */
-  static std::vector<qc::Permutation>
-  createAllPermutations(qc::QuantumComputation& qc);
-
-  /**
-   * @brief Helper function to compute how many permutations there are for a set
-   *        number of qubits
-   * @param number of Bits
-   */
-  static std::size_t factorial(std::size_t n);
+  static Permutation
+  createControlBasedPermutation(const QuantumComputation& circuit);
 
 }; // class DDMinimizer
 } // namespace qc
