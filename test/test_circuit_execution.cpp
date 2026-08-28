@@ -13,7 +13,9 @@
 #include "dd/Node.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
+#include "ir/operations/Operation.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -22,11 +24,14 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace {
 
 class HookedCircuitSimulator final : public CircuitSimulator {
 public:
+  // Inherited constructors forward their arguments.
+  // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
   using CircuitSimulator::CircuitSimulator;
 
   [[nodiscard]] bool operationHookWasCalled() const noexcept {

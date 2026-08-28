@@ -29,7 +29,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-#include <typeinfo>
+#include <utility>
 
 std::map<std::string, std::size_t>
 CircuitSimulator::simulate(std::size_t shots) {

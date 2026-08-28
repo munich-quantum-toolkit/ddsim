@@ -10,6 +10,7 @@
 
 #include "DeterministicNoiseSimulator.hpp"
 
+#include "DensityNode.hpp"
 #include "Simulator.hpp"
 #include "dd/ComplexNumbers.hpp"
 #include "dd/DDDefinitions.hpp"
