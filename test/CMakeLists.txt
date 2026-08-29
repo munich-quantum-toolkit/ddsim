@@ -19,6 +19,7 @@ package_add_test(
   test_density_dd_package.cpp
   test_noise_functionality.cpp
   test_unitary_sim.cpp
-  test_path_sim.cpp)
+  test_path_sim.cpp
+  test_reorder_without_reordering.cpp)
 
 target_link_libraries(mqt-ddsim-test PRIVATE MQT::CoreAlgorithms)
