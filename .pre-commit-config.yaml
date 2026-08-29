@@ -158,7 +158,7 @@ repos:
 
   ## Check Python types with ty
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.73
+    rev: v0.0.74
     hooks:
       - id: ty
         args: [--only-dev]
