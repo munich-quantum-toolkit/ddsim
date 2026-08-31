@@ -12,6 +12,8 @@ releases may include breaking changes.
 
 ### Changed
 
+- ♻️ Migrate circuit normalization to the MQT Core v4 API ([#977])
+  ([**@simon1hofmann**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
   ([#976]) ([**@denialhaag**])
 - ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
@@ -174,6 +176,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#977]: https://github.com/munich-quantum-toolkit/ddsim/pull/977
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966

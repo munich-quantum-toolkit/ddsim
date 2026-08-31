@@ -11,7 +11,6 @@
 #pragma once
 
 #include "CircuitSimulator.hpp"
-#include "circuit_optimizer/CircuitOptimizer.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "dd/Node.hpp"
 #include "dd/Package.hpp"
@@ -38,9 +37,9 @@ public:
       const std::size_t nthreads_ = 2)
       : CircuitSimulator(std::move(qc_), approxInfo_), mode(mode_),
         nthreads(nthreads_) {
-    qc::CircuitOptimizer::flattenOperations(*qc);
+    qc->flattenOperations();
     // remove final measurements
-    qc::CircuitOptimizer::removeFinalMeasurements(*qc);
+    qc->removeFinalMeasurements();
   }
 
   explicit HybridSchrodingerFeynmanSimulator(
@@ -56,8 +55,8 @@ public:
       : CircuitSimulator(std::move(qc_), approxInfo_, seed_), mode(mode_),
         nthreads(nthreads_) {
     // remove final measurements
-    qc::CircuitOptimizer::flattenOperations(*qc);
-    qc::CircuitOptimizer::removeFinalMeasurements(*qc);
+    qc->flattenOperations();
+    qc->removeFinalMeasurements();
   }
 
   std::map<std::string, std::size_t> simulate(std::size_t shots) override;

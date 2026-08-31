@@ -306,7 +306,6 @@ environment = { DEPLOY = "ON" }
 repair-wheel-command = """auditwheel repair -w {dest_dir} {wheel} \
 --exclude libmqt-core-ir.so.3.9 \
 --exclude libmqt-core-qasm.so.3.9 \
---exclude libmqt-core-circuit-optimizer.so.3.9 \
 --exclude libmqt-core-dd.so.3.9"""
 
 [tool.cibuildwheel.macos]
@@ -317,7 +316,6 @@ repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest
 repair-wheel-command = """delvewheel repair -w {dest_dir} {wheel} --namespace-pkg mqt \
 --exclude mqt-core-ir.dll \
 --exclude mqt-core-qasm.dll \
---exclude mqt-core-circuit-optimizer.dll \
 --exclude mqt-core-dd.dll"""
 
 [tool.uv]
