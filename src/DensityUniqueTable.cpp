@@ -10,8 +10,8 @@
 
 #include "DensityUniqueTable.hpp"
 
+#include "DensityNode.hpp"
 #include "dd/MemoryManager.hpp"
-#include "dd/Node.hpp"
 #include "dd/statistics/UniqueTableStatistics.hpp"
 
 #include <cstddef>
