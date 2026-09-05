@@ -292,6 +292,10 @@ archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
 build-frontend = "uv"
 
+[[tool.cibuildwheel.overrides]]
+select = ["cp*-win_arm64", "cp315*"]
+test-command = ""
+
 # The mqt-core shared libraries are provided by the mqt-core Python package.
 # They should not be vendorized into the mqt-ddsim wheel. This requires
 # excluding the shared libraries from the repair process.
