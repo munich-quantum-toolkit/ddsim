@@ -8,8 +8,8 @@
  * Licensed under the MIT License
  */
 
+#include "CircuitGenerators.hpp"
 #include "PathSimulator.hpp"
-#include "algorithms/Grover.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "dd/Export.hpp"
 #include "ir/QuantumComputation.hpp"
@@ -160,9 +160,9 @@ TEST(TaskBasedSimTest, SimpleCircuitBracket) {
 
 TEST(TaskBasedSimTest, GroverCircuitBracket) {
   const auto* const expected = "1111";
-  const auto targetValue = qc::GroverBitString{expected};
+  const auto targetValue = ddsim::detail::GroverBitString{expected};
   auto qc = std::make_unique<qc::QuantumComputation>(
-      qc::createGrover(4, targetValue));
+      ddsim::detail::createGrover(4, targetValue));
 
   // construct simulator and generate bracketing contraction plan
   auto config = PathSimulator::Configuration{};
@@ -186,9 +186,9 @@ TEST(TaskBasedSimTest, GroverCircuitBracket) {
 
 TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
   const auto* const expected = "1111";
-  const auto targetValue = qc::GroverBitString{expected};
+  const auto targetValue = ddsim::detail::GroverBitString{expected};
   auto qc = std::make_unique<qc::QuantumComputation>(
-      qc::createGrover(4, targetValue));
+      ddsim::detail::createGrover(4, targetValue));
 
   // construct simulator and generate alternating contraction plan
   auto config = PathSimulator::Configuration{};
@@ -211,9 +211,9 @@ TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
 
 TEST(TaskBasedSimTest, GroverCircuitPairwiseGrouping) {
   const auto* const expected = "1111";
-  const auto targetValue = qc::GroverBitString{expected};
+  const auto targetValue = ddsim::detail::GroverBitString{expected};
   auto qc = std::make_unique<qc::QuantumComputation>(
-      qc::createGrover(4, targetValue));
+      ddsim::detail::createGrover(4, targetValue));
 
   // construct simulator and generate pairwise recursive contraction plan
   auto config = PathSimulator::Configuration{};

@@ -8,18 +8,18 @@
  * Licensed under the MIT License
  */
 
+#include "CircuitGenerators.hpp"
 #include "CircuitSimulator.hpp"
-#include "algorithms/BernsteinVazirani.hpp"
-#include "algorithms/QFT.hpp"
-#include "algorithms/QPE.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/IfElseOperation.hpp"
+#include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/OpType.hpp"
 #include "ir/operations/StandardOperation.hpp"
 
 #include <cmath>
+#include <complex>
 #include <cstddef>
 #include <cstdlib>
 #include <gtest/gtest.h>
@@ -414,10 +414,11 @@ TEST(CircuitSimTest, ToleranceTest) {
 
 TEST(CircuitSimTest, BernsteinVaziraniDynamicTest) {
   constexpr std::size_t n = 3;
-  const auto* const expectedString = "101";
-  const qc::BVBitString expected{expectedString};
+  const auto* const expectedString = "110";
+  const ddsim::detail::BernsteinVaziraniBitString expected{expectedString};
   auto qc = std::make_unique<qc::QuantumComputation>(
-      qc::createIterativeBernsteinVazirani(expected, n));
+      ddsim::detail::createIterativeBernsteinVazirani(expected, n));
+  EXPECT_EQ(qc->getName(), "iterative_bv_110");
   const auto circSim = std::make_unique<CircuitSimulator>(std::move(qc), 23);
   const auto result = circSim->simulate(1024U);
   EXPECT_EQ(result.size(), 1);
@@ -426,7 +427,8 @@ TEST(CircuitSimTest, BernsteinVaziraniDynamicTest) {
 
 TEST(CircuitSimTest, QPEDynamicTest) {
   constexpr std::size_t n = 3;
-  auto qc = std::make_unique<qc::QuantumComputation>(qc::createIterativeQPE(n));
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      ddsim::detail::createIterativeQPE(n));
   const auto circSim = std::make_unique<CircuitSimulator>(std::move(qc), 23);
   const auto result = circSim->simulate(1024U);
   EXPECT_GE(result.size(), 1);
@@ -434,10 +436,65 @@ TEST(CircuitSimTest, QPEDynamicTest) {
 
 TEST(CircuitSimTest, QFTDynamicTest) {
   constexpr std::size_t n = 3;
-  auto qc = std::make_unique<qc::QuantumComputation>(qc::createIterativeQFT(n));
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      ddsim::detail::createIterativeQFT(n));
   const auto circSim = std::make_unique<CircuitSimulator>(std::move(qc), 23);
   const auto result = circSim->simulate(1024U);
   EXPECT_GE(result.size(), 1);
+}
+
+TEST(CircuitGeneratorTest, GHZState) {
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      ddsim::detail::createGHZState(3));
+  CircuitSimulator ddsim(std::move(qc));
+  ddsim.simulate(1);
+
+  const auto state = ddsim.getCurrentDD().getVector();
+  ASSERT_EQ(state.size(), 8);
+  EXPECT_NEAR(std::norm(state[0]), 0.5, 1e-10);
+  EXPECT_NEAR(std::norm(state[7]), 0.5, 1e-10);
+  for (std::size_t i = 1; i < state.size() - 1; ++i) {
+    EXPECT_NEAR(std::norm(state[i]), 0., 1e-10);
+  }
+}
+
+TEST(CircuitGeneratorTest, QFTState) {
+  constexpr std::size_t n = 3;
+  auto qc = std::make_unique<qc::QuantumComputation>(
+      ddsim::detail::createQFT(n, false));
+  CircuitSimulator ddsim(std::move(qc));
+  ddsim.simulate(1);
+
+  const auto state = ddsim.getCurrentDD().getVector();
+  ASSERT_EQ(state.size(), 1U << n);
+  for (const auto& amplitude : state) {
+    EXPECT_NEAR(std::norm(amplitude), 1. / static_cast<double>(state.size()),
+                1e-10);
+  }
+}
+
+TEST(CircuitGeneratorTest, QFTMeasurements) {
+  constexpr qc::Qubit n = 3;
+  const auto qc = ddsim::detail::createQFT(n);
+  ASSERT_GE(qc.getNops(), n);
+  for (qc::Qubit i = 0; i < n; ++i) {
+    const auto& operation = qc.at(qc.getNops() - n + i);
+    ASSERT_EQ(operation->getType(), qc::Measure);
+    const auto* measurement =
+        dynamic_cast<const qc::NonUnitaryOperation*>(operation.get());
+    ASSERT_NE(measurement, nullptr);
+    ASSERT_EQ(measurement->getTargets().size(), 1);
+    EXPECT_EQ(measurement->getTargets().front(), i);
+    ASSERT_EQ(measurement->getClassics().size(), 1);
+    EXPECT_EQ(measurement->getClassics().front(), n - 1 - i);
+  }
+}
+
+TEST(CircuitGeneratorTest, SeededGroverIsDeterministic) {
+  const auto first = ddsim::detail::createGrover(5, std::size_t{23});
+  const auto second = ddsim::detail::createGrover(5, std::size_t{23});
+  EXPECT_EQ(first.getName(), second.getName());
+  EXPECT_EQ(first, second);
 }
 
 TEST(CircuitSimTest, GetVectorBeforeSimulate) {

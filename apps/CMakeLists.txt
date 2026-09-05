@@ -13,7 +13,7 @@ macro(ADD_SIM_EXECUTABLE appname)
 endmacro()
 
 add_sim_executable(simple cxxopts::cxxopts)
-target_link_libraries(mqt-ddsim-simple PRIVATE MQT::CoreAlgorithms)
+target_include_directories(mqt-ddsim-simple PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 if(Threads_FOUND)
   add_sim_executable(noise_aware cxxopts::cxxopts)

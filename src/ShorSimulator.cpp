@@ -18,6 +18,7 @@
 #include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/operations/OpType.hpp"
+#include "ir/operations/StandardOperation.hpp"
 
 #include <array>
 #include <cassert>

@@ -15,7 +15,6 @@
 #include "dd/ComplexNumbers.hpp"
 #include "dd/ComplexValue.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/GateMatrixDefinitions.hpp"
 #include "dd/Node.hpp"
 #include "dd/Package.hpp"
 
@@ -24,6 +23,11 @@
 #include <cstddef>
 #include <random>
 #include <vector>
+
+namespace {
+constexpr dd::GateMatrix MEAS_ZERO_MATRIX{1, 0, 0, 0};
+constexpr dd::GateMatrix MEAS_ONE_MATRIX{0, 0, 0, 1};
+} // namespace
 
 namespace dd::ddsim {
 
@@ -403,7 +407,7 @@ char DensityDDPackage::measureOneCollapsing(dEdge& e, const dd::Qubit index,
   const auto nrQubits = e.p->v + 1U;
   dEdge::setDensityMatrixTrue(e);
 
-  auto const measZeroDd = pkg->makeGateDD(dd::MEAS_ZERO_MAT, index);
+  auto const measZeroDd = pkg->makeGateDD(MEAS_ZERO_MATRIX, index);
 
   auto tmp0 = pkg->conjugateTranspose(measZeroDd);
   auto tmp1 = multiply(e, dd::ddsim::densityFromMatrixEdge(tmp0), false);
@@ -413,7 +417,7 @@ char DensityDDPackage::measureOneCollapsing(dEdge& e, const dd::Qubit index,
 
   std::uniform_real_distribution<dd::fp> dist(0., 1.);
   if (const auto threshold = dist(mt); threshold > densityMatrixTrace.r) {
-    auto const measOneDd = pkg->makeGateDD(dd::MEAS_ONE_MAT, index);
+    auto const measOneDd = pkg->makeGateDD(MEAS_ONE_MATRIX, index);
     tmp0 = pkg->conjugateTranspose(measOneDd);
     tmp1 = multiply(e, dd::ddsim::densityFromMatrixEdge(tmp0), false);
     tmp2 = multiply(dd::ddsim::densityFromMatrixEdge(measOneDd), tmp1, true);
