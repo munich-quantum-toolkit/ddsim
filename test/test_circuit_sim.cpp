@@ -25,6 +25,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <memory>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -495,6 +496,23 @@ TEST(CircuitGeneratorTest, SeededGroverIsDeterministic) {
   const auto second = ddsim::detail::createGrover(5, std::size_t{23});
   EXPECT_EQ(first.getName(), second.getName());
   EXPECT_EQ(first, second);
+}
+
+TEST(CircuitGeneratorTest, ZeroSeedSelectsRandomGroverTargets) {
+  auto names = std::set<std::string>{};
+  for (std::size_t i = 0; i < 8; ++i) {
+    names.emplace(ddsim::detail::createGrover(8, std::size_t{0}).getName());
+  }
+  EXPECT_GT(names.size(), 1);
+}
+
+TEST(CircuitGeneratorTest, ZeroSeedSelectsRandomQPEPhases) {
+  auto names = std::set<std::string>{};
+  for (std::size_t i = 0; i < 8; ++i) {
+    names.emplace(
+        ddsim::detail::createIterativeQPE(8, true, std::size_t{0}).getName());
+  }
+  EXPECT_GT(names.size(), 1);
 }
 
 TEST(CircuitSimTest, GetVectorBeforeSimulate) {

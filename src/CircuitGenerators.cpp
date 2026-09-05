@@ -17,6 +17,7 @@
 #include "ir/operations/OpType.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -34,6 +35,23 @@ using qc::Controls;
 using qc::fp;
 using qc::QuantumComputation;
 using qc::Qubit;
+
+[[nodiscard]] auto createGenerator(const std::size_t seed) -> std::mt19937_64 {
+  auto generator = std::mt19937_64{};
+  if (seed != 0) {
+    generator.seed(seed);
+    return generator;
+  }
+
+  auto randomData =
+      std::array<std::mt19937_64::result_type, std::mt19937_64::state_size>{};
+  auto randomDevice = std::random_device{};
+  std::ranges::generate(randomData,
+                        [&randomDevice]() { return randomDevice(); });
+  auto seedSequence = std::seed_seq(randomData.begin(), randomData.end());
+  generator.seed(seedSequence);
+  return generator;
+}
 
 auto appendGroverInitialization(QuantumComputation& circuit) -> void {
   const auto nDataQubits = static_cast<Qubit>(circuit.getNqubits() - 1);
@@ -265,7 +283,7 @@ auto createGrover(const qc::Qubit nq, const GroverBitString& targetValue)
 
 auto createGrover(const qc::Qubit nq, const std::size_t seed)
     -> qc::QuantumComputation {
-  auto generator = std::mt19937_64(seed);
+  auto generator = createGenerator(seed);
   auto circuit = QuantumComputation{};
   constructGroverCircuit(circuit, nq, generateGroverTarget(nq, generator));
   return circuit;
@@ -345,7 +363,7 @@ auto createIterativeQFT(const qc::Qubit nq) -> qc::QuantumComputation {
 
 auto createIterativeQPE(const qc::Qubit nq, const bool exact,
                         const std::size_t seed) -> qc::QuantumComputation {
-  auto generator = std::mt19937_64(seed);
+  auto generator = createGenerator(seed);
   const auto lambda = exact ? createExactPhase(nq, generator)
                             : createInexactPhase(nq, generator);
   auto circuit = QuantumComputation{};
