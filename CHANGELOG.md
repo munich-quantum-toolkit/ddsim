@@ -17,8 +17,8 @@ releases may include breaking changes.
 - 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
 - 📦 Publish one split-mode `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
   newer ([#995]) ([**@denialhaag**])
-- 💥 Stop publishing free-threaded Python wheels because Qiskit does not provide
-  compatible wheels ([#995]) ([**@denialhaag**])
+- 📦 Publish one `cp315-abi3t` wheel for free-threaded CPython 3.15 and newer
+  ([#995]) ([**@denialhaag**])
 - 💥 Raise the minimum Qiskit version from 1.1.0 to 2.1.0 ([#995])
   ([**@denialhaag**])
 - ♻️ Own the circuit generators and DD gate matrices used by the command-line

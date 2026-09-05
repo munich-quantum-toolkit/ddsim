@@ -79,6 +79,9 @@ wheel.py-api = "cp311"
 # Set required Ninja version
 ninja.version = ">=1.10"
 
+# CMake 4.4 detects free-threaded Python and supplies Py_GIL_DISABLED on Windows
+cmake.version = ">=4.4.1"
+
 # Setuptools-style build caching in a local directory
 build-dir = "build/{wheel_tag}/{build_type}"
 
@@ -103,6 +106,11 @@ BUILD_MQT_DDSIM_TESTS = "OFF"
 BUILD_MQT_DDSIM_BINDINGS = "ON"
 BUILD_MQT_DDSIM_CLI = "OFF"
 ENABLE_IPO = "ON"
+
+[[tool.scikit-build.overrides]]
+if.python-version = ">=3.15"
+if.abi-flags = "t"
+wheel.py-api = "cp315t"
 
 [[tool.dynamic-metadata]]
 provider = "vcs_versioning"
@@ -279,11 +287,10 @@ PC170 = "We do not use rST files anymore"
 
 [tool.cibuildwheel]
 build = "cp3*"
-skip = ["*-musllinux_*", "cp3??t-*"] # no Qiskit wheels for free-threaded CPython
+skip = ["*-musllinux_*", "cp314t-*"]
 archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
 build-frontend = "uv"
-test-skip = ["cp*-win_arm64"] # no Qiskit wheels
 
 # The mqt-core shared libraries are provided by the mqt-core Python package.
 # They should not be vendorized into the mqt-ddsim wheel. This requires
@@ -321,6 +328,7 @@ mqt-ddsim = { workspace = true }
 
 [dependency-groups]
 build = [
+  "cmake>=4.4.1",
   "nanobind~=3.0.1",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",

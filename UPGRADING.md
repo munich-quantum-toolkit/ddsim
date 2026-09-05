@@ -24,10 +24,9 @@ MQT DDSIM now requires Python 3.11 or newer. Upgrade the Python environment
 before installing this release.
 
 MQT DDSIM now publishes one `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
-newer.
-
-MQT DDSIM no longer publishes free-threaded Python wheels because Qiskit does
-not provide compatible wheels.
+newer. Free-threaded support starts with CPython 3.15 in a separate
+`cp315-abi3t` wheel. MQT DDSIM no longer publishes free-threaded CPython 3.13 or
+3.14 wheels.
 
 This release updates `nanobind` to 3.0.1, which changes the `nanobind` ABI.
 
