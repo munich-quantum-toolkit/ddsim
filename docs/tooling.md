@@ -25,15 +25,14 @@ understand the project's ecosystem.
 | **scikit-build-core** | Build backend for Python package.                              | [Documentation](https://scikit-build-core.readthedocs.io/en/latest/).                                                                     |
 | **cibuildwheel**      | Builds wheels for all supported platforms and Python versions. | [Documentation](https://cibuildwheel.pypa.io/en/stable/). Configured in {code}`pyproject.toml`.                                           |
 
-By using `nanobind`, we can take advantage of the
-[Stable ABI](https://docs.python.org/3/c-api/stable.html) for Python 3.12+. This
-means that, starting from Python 3.12, we only need to build one wheel per
-platform, which can be used across all Python 3.12+ versions. We still build
-separate wheels for older supported Python versions.
+Projects use `nanobind`'s split mode to build one `cp311-abi3` wheel per
+platform for GIL-enabled CPython 3.11 and newer. The `nanobind-backend` package
+supplies the interpreter-specific runtime.
 
-Additionally, we support the free-threading version of Python that is no longer
-marked experimental as of Python 3.14. The corresponding wheels are built
-separately since there is no stable ABI for free-threading Python yet.
+Free-threaded CPython uses the separate
+[Stable ABI for Free-Threaded Builds (`abi3t`)](https://peps.python.org/pep-0803/).
+One `cp315-abi3t` wheel per platform supports free-threaded CPython 3.15 and
+newer.
 
 ## Python
 
