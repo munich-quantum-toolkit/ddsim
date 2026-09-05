@@ -14,6 +14,7 @@ releases may include breaking changes.
 
 - ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 3.0.1 ([#995]) ([**@denialhaag**])
+- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
 - 📦 Publish one split-mode `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
   newer ([#995]) ([**@denialhaag**])
 - 💥 Stop publishing free-threaded Python wheels because Qiskit does not provide
@@ -24,13 +25,11 @@ releases may include breaking changes.
   interface, tests, and noise simulation ([#995]) ([**@denialhaag**])
 - ♻️ Normalize circuits with `QuantumComputation` member operations ([#995])
   ([**@simon1hofmann**])
+- ♻️ Own recursive unitary construction ([#975]) ([**@simon1hofmann**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
   ([#976]) ([**@denialhaag**])
 - ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
   ([#976]) ([**@denialhaag**])
-- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
-- 🚚 Move recursive unitary construction from MQT Core to MQT DDSIM ([#975])
-  ([**@simon1hofmann**])
 
 ## [2.5.0] - 2026-08-20
 
