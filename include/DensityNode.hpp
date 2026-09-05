@@ -182,6 +182,30 @@ struct dNode final : dd::NodeBase { // NOLINT(readability-identifier-naming)
   /// Getter for the terminal object
   static constexpr dNode* getTerminal() noexcept { return nullptr; }
 
+  /// Mark flag used for mark-and-sweep garbage collection.
+  static constexpr std::uint16_t MARK_FLAG = 0b10000U;
+
+  /// Check whether the node is marked as used.
+  [[nodiscard]] bool isMarked() const noexcept {
+    return (flags & MARK_FLAG) != 0U;
+  }
+
+  /// Mark the node as used.
+  void mark() noexcept { flags |= MARK_FLAG; }
+
+  /// Unmark the node.
+  void unmark() noexcept { flags &= static_cast<std::uint16_t>(~MARK_FLAG); }
+
+  /**
+   * @brief Check whether a pointer represents a terminal density node.
+   * @details Density nodes encode temporary state in the three least
+   * significant pointer bits. These bits do not make a terminal pointer
+   * non-terminal.
+   */
+  [[nodiscard]] static bool isTerminal(const dNode* p) noexcept {
+    return (reinterpret_cast<std::uintptr_t>(p) & (~7ULL)) == 0ULL;
+  }
+
   [[nodiscard]] [[maybe_unused]] static constexpr bool
   tempDensityMatrixFlagsEqual(const std::uint8_t a,
                               const std::uint8_t b) noexcept {

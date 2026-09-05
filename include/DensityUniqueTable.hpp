@@ -67,7 +67,7 @@ public:
   // Only normalized nodes shall be stored.
   [[nodiscard]] dNode* lookup(dNode* p) {
     // there are unique terminal nodes
-    if (dd::NodeBase::isTerminal(p)) {
+    if (dNode::isTerminal(p)) {
       return p;
     }
 
@@ -98,7 +98,7 @@ public:
   void clear();
 
 private:
-  using Bucket = dd::NodeBase*;
+  using Bucket = dNode*;
   using Table = std::vector<Bucket>;
 
   UniqueTableConfig cfg;
@@ -109,7 +109,7 @@ private:
 
   [[nodiscard]] dNode* searchTable(dNode& p, const std::size_t& key) {
     const auto v = p.v;
-    auto* bucket = static_cast<dNode*>(tables[v][key]);
+    auto* bucket = tables[v][key];
     while (bucket != nullptr) {
       if (nodesAreEqual(p, *bucket)) {
         // Match found

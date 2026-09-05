@@ -54,11 +54,11 @@ std::size_t DensityUniqueTable::garbageCollect(const bool force) {
     auto& stat = stats[v];
     ++stat.gcRuns;
     for (auto& bucket : table) {
-      dd::NodeBase* p = bucket;
-      dd::NodeBase* lastp = nullptr;
+      dNode* p = bucket;
+      dNode* lastp = nullptr;
       while (p != nullptr) {
         if (!p->isMarked()) {
-          dd::NodeBase* next = p->next();
+          dNode* next = p->next();
           if (lastp == nullptr) {
             bucket = next;
           } else {
