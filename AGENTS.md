@@ -48,8 +48,9 @@
 
 ### Python
 
-- Python 3.10+
-- Stable ABI wheels for 3.12+; free-threading support for 3.14+
+- Python 3.11+
+- Split-mode Stable ABI wheels: `cp311-abi3` for GIL-enabled CPython 3.11+ and
+  `cp315-abi3t` for free-threaded CPython 3.15+
 - `scikit-build-core` as build backend
 - `nanobind` for bindings
 - `uv` for installation, packaging, and tooling
