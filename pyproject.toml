@@ -11,7 +11,7 @@ requires = [
   "nanobind~=2.15.0",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
-  "mqt.core~=3.9.0",
+  "mqt.core~=3.10.0",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -50,7 +50,7 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "mqt.core[qiskit]~=3.9.0",
+    "mqt.core[qiskit]~=3.10.0",
     "qiskit>=1.1",
 ]
 dynamic = ["version"]
@@ -337,7 +337,7 @@ build = [
   "nanobind~=2.15.0",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
-  "mqt.core~=3.9.0",
+  "mqt.core~=3.10.0",
 ]
 docs = [
   "breathe>=4.36.0",
