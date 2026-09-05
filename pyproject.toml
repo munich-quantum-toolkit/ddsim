@@ -8,7 +8,7 @@
 
 [build-system]
 requires = [
-  "nanobind~=2.15.0",
+  "nanobind~=3.0.1",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
   "mqt.core~=3.10.0",
@@ -51,6 +51,7 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
     "mqt.core[qiskit]~=3.10.0",
+    "nanobind-backend>=1.0",
     "qiskit>=2.1.0",
 ]
 dynamic = ["version"]
@@ -72,8 +73,8 @@ wheel.install-dir = "mqt/ddsim"
 # Explicitly set the package directory
 wheel.packages = ["python/mqt"]
 
-# Enable Stable ABI builds for CPython 3.12+
-wheel.py-api = "cp312"
+# Build one split-mode Stable ABI wheel for GIL-enabled CPython 3.11+
+wheel.py-api = "cp311"
 
 # Set required Ninja version
 ninja.version = ">=1.10"
@@ -102,14 +103,6 @@ BUILD_MQT_DDSIM_TESTS = "OFF"
 BUILD_MQT_DDSIM_BINDINGS = "ON"
 BUILD_MQT_DDSIM_CLI = "OFF"
 ENABLE_IPO = "ON"
-
-[[tool.scikit-build.overrides]]
-if.python-version = ">=3.13"
-if.abi-flags = "t"
-if.platform-system = "win32"
-inherit.cmake.define = "append"
-cmake.define.DISABLE_GIL = "1"
-
 
 [[tool.dynamic-metadata]]
 provider = "vcs_versioning"
@@ -286,18 +279,14 @@ PC170 = "We do not use rST files anymore"
 
 [tool.cibuildwheel]
 build = "cp3*"
-skip = ["*-musllinux_*"]
+skip = ["*-musllinux_*", "cp3??t-*"] # no Qiskit wheels for free-threaded CPython
 archs = "auto64"
 test-command = "python -c \"from mqt import ddsim\""
 build-frontend = "uv"
-test-skip = [
-    "cp3??t-*", # no freethreading qiskit wheels
-    "cp*-win_arm64", # no numpy, qiskit, ... wheels
-    "cp315*", # no 3.15 wheels yet
-]
+test-skip = ["cp*-win_arm64"] # no Qiskit wheels
 
 # The mqt-core shared libraries are provided by the mqt-core Python package.
-# They should not be vendorized into the mqt-qcec wheel. This requires
+# They should not be vendorized into the mqt-ddsim wheel. This requires
 # excluding the shared libraries from the repair process.
 
 [tool.cibuildwheel.linux]
@@ -334,7 +323,7 @@ mqt-ddsim = { workspace = true }
 
 [dependency-groups]
 build = [
-  "nanobind~=2.15.0",
+  "nanobind~=3.0.1",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3.0",
   "mqt.core~=3.10.0",

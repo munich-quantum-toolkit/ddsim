@@ -18,10 +18,22 @@ newer. The new deployment target enables `std::format` in libc++.
 The minimum Qiskit version increases from **1.1.0 to 2.1.0**, dropping support
 for all Qiskit 1.x releases and Qiskit 2.0. Upgrade Qiskit to 2.1.0 or newer.
 
-### Python support
+### Python 3.11 and Stable ABI wheels
 
 MQT DDSIM now requires Python 3.11 or newer. Upgrade the Python environment
 before installing this release.
+
+MQT DDSIM now publishes one `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
+newer.
+
+MQT DDSIM no longer publishes free-threaded Python wheels because Qiskit does
+not provide compatible wheels.
+
+This release updates `nanobind` to 3.0.1, which changes the `nanobind` ABI.
+
+The Python bindings depend on `nanobind-backend`, which supplies the
+interpreter-specific `nanobind` runtime. This dependency does not change the C++
+API or the Python import paths.
 
 ## [2.5.0]
 

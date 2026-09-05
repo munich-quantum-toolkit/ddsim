@@ -13,6 +13,11 @@ releases may include breaking changes.
 ### Changed
 
 - ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
+- ⬆️ Update `nanobind` to version 3.0.1 ([#995]) ([**@denialhaag**])
+- 📦 Publish one split-mode `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
+  newer ([#995]) ([**@denialhaag**])
+- 💥 Stop publishing free-threaded Python wheels because Qiskit does not provide
+  compatible wheels ([#995]) ([**@denialhaag**])
 - 💥 Raise the minimum Qiskit version from 1.1.0 to 2.1.0 ([#995])
   ([**@denialhaag**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
