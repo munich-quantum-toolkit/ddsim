@@ -12,6 +12,9 @@ releases may include breaking changes.
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
+- 💥 Raise the minimum Qiskit version from 1.1.0 to 2.1.0 ([#995])
+  ([**@denialhaag**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
   ([#976]) ([**@denialhaag**])
 - ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
@@ -174,6 +177,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#995]: https://github.com/munich-quantum-toolkit/ddsim/pull/995
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966

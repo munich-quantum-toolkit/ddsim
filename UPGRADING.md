@@ -6,10 +6,17 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+This release updates the minimum required `mqt-core` version to 3.10.0.
+
 ### macOS support
 
 MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
 newer. The new deployment target enables `std::format` in libc++.
+
+### Qiskit 2.1 minimum
+
+The minimum Qiskit version increases from **1.1.0 to 2.1.0**, dropping support
+for all Qiskit 1.x releases and Qiskit 2.0. Upgrade Qiskit to 2.1.0 or newer.
 
 ### Python support
 
