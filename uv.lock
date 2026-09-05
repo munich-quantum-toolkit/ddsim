@@ -1509,13 +1509,13 @@ requires-dist = [
 [package.metadata.requires-dev]
 build = [
     { name = "mqt-core", specifier = "~=3.9.0" },
-    { name = "nanobind", specifier = "~=2.15.0" },
+    { name = "nanobind", specifier = "~=3.0.1" },
     { name = "scikit-build-core", specifier = ">=1.0.3" },
     { name = "vcs-versioning", specifier = ">=2.3.0" },
 ]
 dev = [
     { name = "mqt-core", specifier = "~=3.9.0" },
-    { name = "nanobind", specifier = "~=2.15.0" },
+    { name = "nanobind", specifier = "~=3.0.1" },
     { name = "nox", specifier = ">=2025.11.12" },
     { name = "numpy", specifier = ">=1.24" },
     { name = "numpy", marker = "python_full_version >= '3.12'", specifier = ">=1.26" },
@@ -1597,11 +1597,11 @@ wheels = [
 
 [[package]]
 name = "nanobind"
-version = "2.15.0"
+version = "3.0.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0d/08/cef3343279d2bde0baa57aadaacf7196ee336f12449c50c27f799c45b3f7/nanobind-2.15.0.tar.gz", hash = "sha256:3eace37a3b8cdadd531fcc6145263985b29821467161d34ff722b0644cf445b5", size = 1060056, upload-time = "2026-08-15T19:01:04.369Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/11/69cf231c4f3ac4fa724a0b1933c3650fb65aff6b9d7a4c2573b9e4e40077/nanobind-3.0.1.tar.gz", hash = "sha256:f7f0a889c8fb80deaacb95e918d88e05148850a32d2b8eda28446291b2bf7c35", size = 1142340, upload-time = "2026-08-27T22:45:21.806Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d8/72/16a606cbea58be568475f450ece121b3fd62cffb390fd0f8eb8b410904f5/nanobind-2.15.0-py3-none-any.whl", hash = "sha256:91dae9305c6242cf63ab11a5c41594e234e7a22fd9fcc2c5c4ba80724abc1787", size = 271648, upload-time = "2026-08-15T19:01:02.477Z" },
+    { url = "https://files.pythonhosted.org/packages/1c/cf/261b8281d410d99b22ce47559ce56f98c7548dccf8c25ed70a51fbf42d1f/nanobind-3.0.1-py3-none-any.whl", hash = "sha256:4b49491fe8bf483a5e0342125b8fe56237e490ba642c7e296170b8cd256a7764", size = 316363, upload-time = "2026-08-27T22:45:20.155Z" },
 ]
 
 [[package]]
