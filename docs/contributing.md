@@ -194,7 +194,7 @@ instructions on how to set up your development environment.
 
 Building the project requires a C++20-capable
 [C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.24 or newer. As of August 2025, our CI
+and [CMake](https://cmake.org/) 3.28 or newer. As of August 2025, our CI
 pipeline on GitHub continuously tests the library across the following matrix of
 systems and compilers:
 

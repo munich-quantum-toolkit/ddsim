@@ -6,7 +6,8 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
-This release updates the minimum required `mqt-core` version to 3.10.0.
+This release updates the minimum required `mqt-core` version to 3.10.0 and
+requires CMake 3.28 or newer.
 
 ### macOS support
 
