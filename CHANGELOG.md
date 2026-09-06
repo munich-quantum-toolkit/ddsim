@@ -12,13 +12,24 @@ releases may include breaking changes.
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
+- ⬆️ Update `nanobind` to version 3.0.1 ([#995]) ([**@denialhaag**])
+- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
+- 📦 Publish one split-mode `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
+  newer ([#995]) ([**@denialhaag**])
+- 📦 Publish one `cp315-abi3t` wheel for free-threaded CPython 3.15 and newer
+  ([#995]) ([**@denialhaag**])
+- 💥 Raise the minimum Qiskit version from 1.1.0 to 2.1.0 ([#995])
+  ([**@denialhaag**])
+- ♻️ Own the circuit generators and DD gate matrices used by the command-line
+  interface, tests, and noise simulation ([#995]) ([**@denialhaag**])
+- ♻️ Normalize circuits with `QuantumComputation` member operations ([#995])
+  ([**@simon1hofmann**])
 - 💥 Drop support for x86 macOS and stop publishing the respective wheels
   ([#976]) ([**@denialhaag**])
 - ⬆️ Raise the macOS deployment target to 13.3 to enable `std::format` in libc++
   ([#976]) ([**@denialhaag**])
-- 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
-- 🚚 Move recursive unitary construction from MQT Core to MQT DDSIM ([#975])
-  ([**@simon1hofmann**])
+- ♻️ Own recursive unitary construction ([#975]) ([**@simon1hofmann**])
 
 ## [2.5.0] - 2026-08-20
 
@@ -174,6 +185,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#995]: https://github.com/munich-quantum-toolkit/ddsim/pull/995
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
 [#966]: https://github.com/munich-quantum-toolkit/ddsim/pull/966

@@ -6,15 +6,33 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+This release updates the minimum required `mqt-core` version to 3.10.0.
+
 ### macOS support
 
 MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
 newer. The new deployment target enables `std::format` in libc++.
 
-### Python support
+### Qiskit 2.1 minimum
+
+The minimum Qiskit version increases from **1.1.0 to 2.1.0**, dropping support
+for all Qiskit 1.x releases and Qiskit 2.0. Upgrade Qiskit to 2.1.0 or newer.
+
+### Python 3.11 and Stable ABI wheels
 
 MQT DDSIM now requires Python 3.11 or newer. Upgrade the Python environment
 before installing this release.
+
+MQT DDSIM now publishes one `cp311-abi3` wheel for GIL-enabled CPython 3.11 and
+newer. Free-threaded support starts with CPython 3.15 in a separate
+`cp315-abi3t` wheel. MQT DDSIM no longer publishes free-threaded CPython 3.13 or
+3.14 wheels.
+
+This release updates `nanobind` to 3.0.1, which changes the `nanobind` ABI.
+
+The Python bindings depend on `nanobind-backend`, which supplies the
+interpreter-specific `nanobind` runtime. This dependency does not change the C++
+API or the Python import paths.
 
 ## [2.5.0]
 
