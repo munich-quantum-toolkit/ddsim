@@ -7,7 +7,7 @@
 # Licensed under the MIT License
 
 # set required cmake version
-cmake_minimum_required(VERSION 3.24...4.4)
+cmake_minimum_required(VERSION 3.28...4.4)
 
 project(
   mqt-ddsim
@@ -15,6 +15,7 @@ project(
   DESCRIPTION "MQT DDSIM - A quantum circuit simulator based on decision diagrams")
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 option(BUILD_MQT_DDSIM_BINDINGS "Build the MQT DDSIM Python bindings" OFF)
 if(BUILD_MQT_DDSIM_BINDINGS)
@@ -48,18 +49,6 @@ endif()
 option(BUILD_MQT_DDSIM_TESTS "Also build tests for the MQT DDSIM project"
        ${MQT_DDSIM_MASTER_PROJECT})
 option(BUILD_MQT_DDSIM_CLI "Build the MQT DDSIM command line interface" ${MQT_DDSIM_MASTER_PROJECT})
-
-# on macOS with GCC, disable module scanning
-# https://www.reddit.com/r/cpp_questions/comments/1kwlkom/comment/ni5angh/
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.28")
-    set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-  else()
-    message(WARNING "CMake 3.28+ is required to disable C++ module scanning on macOS with GCC. "
-                    "Current version: ${CMAKE_VERSION}. "
-                    "Consider upgrading CMake to avoid potential build issues.")
-  endif()
-endif()
 
 include(cmake/ExternalDependencies.cmake)
 

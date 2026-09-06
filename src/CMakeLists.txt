@@ -26,11 +26,6 @@ if(NOT TARGET MQT::DDSim)
     PUBLIC MQT::CoreDD Taskflow nlohmann_json::nlohmann_json
     PRIVATE MQT::ProjectWarnings MQT::ProjectOptions)
 
-  # the following sets the SYSTEM flag for the include dirs of the taskflow libs
-  set_target_properties(
-    Taskflow PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES
-                        $<TARGET_PROPERTY:Taskflow,INTERFACE_INCLUDE_DIRECTORIES>)
-
   # add MQT alias
   add_library(MQT::DDSim ALIAS ${MQT_DDSIM_TARGET_NAME})
 endif()
