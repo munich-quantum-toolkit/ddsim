@@ -39,7 +39,7 @@
 - Targets Linux (glibc 2.28+), macOS (11.0+), and Windows on x86_64 and arm64
   architectures
 - C++20
-- CMake 3.24+
+- CMake 3.28+
 - `FetchContent` for dependency management (configured in
   `cmake/ExternalDependencies.cmake`)
 - `clang-format` and `clang-tidy` for formatting/linting (see `.clang-format`
