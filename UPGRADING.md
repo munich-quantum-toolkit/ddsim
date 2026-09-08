@@ -6,13 +6,7 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
-This release updates the minimum required `mqt-core` version to 3.10.0 and
-requires CMake 3.28 or newer.
-
-### macOS support
-
-MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
-newer. The new deployment target enables `std::format` in libc++.
+This release updates the minimum required `mqt-core` version to 3.10.0.
 
 ### Qiskit 2.1 minimum
 
@@ -31,9 +25,15 @@ newer. Free-threaded support starts with CPython 3.15 in a separate
 
 This release updates `nanobind` to 3.0.1, which changes the `nanobind` ABI.
 
-The Python bindings depend on `nanobind-backend`, which supplies the
-interpreter-specific `nanobind` runtime. This dependency does not change the C++
-API or the Python import paths.
+### macOS support
+
+MQT DDSIM no longer supports x86 macOS. Use Apple silicon with macOS 13.3 or
+newer. The new deployment target enables `std::format` in libc++.
+
+### CMake 3.28 minimum
+
+MQT DDSIM now requires CMake 3.28 or newer. Upgrade CMake before building this
+release.
 
 ## [2.5.0]
 
