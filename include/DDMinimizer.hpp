@@ -65,13 +65,13 @@ private:
    * @brief Adjacent controlled-gate patterns.
    * @details The ladders x_c and c_x describe for four qubits the following
    * controlled gates (c: control qubit, x: target qubit):
-   * @verbatim
+   * @code{.unparsed}
    * c_x: c | 0  1  2
    *      x | 1  2  3
    *
    * x_c: c | 1  2  3
    *      x | 0  1  2
-   * @endverbatim
+   * @endcode
    */
   GatePattern xCMap;
   GatePattern cXMap;
@@ -81,7 +81,7 @@ private:
    * @details The ladders c_l, c_r, x_l, and x_r consist of several steps,
    * hence the vector of maps. They describe for four qubits the following
    * controlled gates (c: control qubit, x: target qubit):
-   * @verbatim
+   * @code{.unparsed}
    * c_l_1: c | 0  0  0  and  c_l_2: c | 1  1  and  c_l_3: c | 2
    *        x | 1  2  3              x | 2  3              x | 3
    *
@@ -93,7 +93,7 @@ private:
    *
    * x_r_1: c | 0  1  2  and  x_r_2: c | 0  1  and  x_r_3: c | 0
    *        x | 3  3  3              x | 2  2              x | 1
-   * @endverbatim
+   * @endcode
    */
   std::vector<GatePattern> cLMap;
   std::vector<GatePattern> cHMap;
