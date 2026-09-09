@@ -8,15 +8,13 @@
  * Licensed under the MIT License
  */
 
+#include "CircuitGenerators.hpp"
 #include "CircuitSimulator.hpp"
 #include "GroverSimulator.hpp"
 #include "HybridSchrodingerFeynmanSimulator.hpp"
 #include "ShorFastSimulator.hpp"
 #include "ShorSimulator.hpp"
 #include "Simulator.hpp"
-#include "algorithms/GHZState.hpp"
-#include "algorithms/Grover.hpp"
-#include "algorithms/QFT.hpp"
 #include "dd/Export.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "qasm3/Importer.hpp"
@@ -135,8 +133,8 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
     }
   } else if (vm.count("simulate_qft") > 0) {
     const unsigned int nQubits = vm["simulate_qft"].as<unsigned int>();
-    quantumComputation =
-        std::make_unique<qc::QuantumComputation>(qc::createQFT(nQubits));
+    quantumComputation = std::make_unique<qc::QuantumComputation>(
+        ddsim::detail::createQFT(nQubits));
     ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
                                                approximationInfo, seed);
   } else if (vm.count("simulate_fast_shor") > 0) {
@@ -164,7 +162,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   } else if (vm.count("simulate_grover") > 0) {
     const unsigned int nQubits = vm["simulate_grover"].as<unsigned int>();
     quantumComputation = std::make_unique<qc::QuantumComputation>(
-        qc::createGrover(nQubits, seed));
+        ddsim::detail::createGrover(nQubits, seed));
     ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
                                                approximationInfo, seed);
   } else if (vm.count("simulate_grover_emulated") > 0) {
@@ -175,8 +173,8 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         vm["simulate_grover_oracle_emulated"].as<std::string>(), seed);
   } else if (vm.count("simulate_ghz") > 0) {
     const unsigned int nQubits = vm["simulate_ghz"].as<unsigned int>();
-    quantumComputation =
-        std::make_unique<qc::QuantumComputation>(qc::createGHZState(nQubits));
+    quantumComputation = std::make_unique<qc::QuantumComputation>(
+        ddsim::detail::createGHZState(nQubits));
     ddsim = std::make_unique<CircuitSimulator>(std::move(quantumComputation),
                                                approximationInfo, seed);
   } else {

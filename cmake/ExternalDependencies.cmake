@@ -33,11 +33,11 @@ if(BUILD_MQT_DDSIM_BINDINGS)
 endif()
 
 # cmake-format: off
-set(MQT_CORE_MINIMUM_VERSION 3.9.0
+set(MQT_CORE_MINIMUM_VERSION 3.10.0
     CACHE STRING "MQT Core minimum version")
-set(MQT_CORE_VERSION 3.9.1
+set(MQT_CORE_VERSION 3.10.0
     CACHE STRING "MQT Core version")
-set(MQT_CORE_REV "24ed6a2ec6a740d54a122be04b634c5ce8c289fd"
+set(MQT_CORE_REV "e9e2c959b3c81fda10ea8db34b908b638e61ba49"
     CACHE STRING "MQT Core identifier (tag, branch or commit hash)")
 set(MQT_CORE_REPO_OWNER "munich-quantum-toolkit"
     CACHE STRING "MQT Core repository owner (change when using a fork)")
@@ -46,17 +46,14 @@ FetchContent_Declare(
   mqt-core
   GIT_REPOSITORY https://github.com/${MQT_CORE_REPO_OWNER}/core.git
   GIT_TAG ${MQT_CORE_REV}
-  FIND_PACKAGE_ARGS ${MQT_CORE_MINIMUM_VERSION})
+  EXCLUDE_FROM_ALL FIND_PACKAGE_ARGS ${MQT_CORE_MINIMUM_VERSION})
 list(APPEND FETCH_PACKAGES mqt-core)
 
 set(JSON_VERSION
     3.12.0
     CACHE STRING "nlohmann_json version")
 set(JSON_URL https://github.com/nlohmann/json/releases/download/v${JSON_VERSION}/json.tar.xz)
-set(JSON_SystemInclude
-    ON
-    CACHE INTERNAL "Treat the library headers like system headers")
-FetchContent_Declare(nlohmann_json URL ${JSON_URL} FIND_PACKAGE_ARGS ${JSON_VERSION})
+FetchContent_Declare(nlohmann_json URL ${JSON_URL} SYSTEM FIND_PACKAGE_ARGS ${JSON_VERSION})
 list(APPEND FETCH_PACKAGES nlohmann_json)
 
 if(BUILD_MQT_DDSIM_TESTS)
@@ -84,7 +81,7 @@ set(TF_VERSION
     3.7.0
     CACHE STRING "Taskflow version")
 set(TF_URL https://github.com/taskflow/taskflow/archive/refs/tags/v${TF_VERSION}.tar.gz)
-FetchContent_Declare(taskflow URL ${TF_URL} FIND_PACKAGE_ARGS)
+FetchContent_Declare(taskflow URL ${TF_URL} SYSTEM FIND_PACKAGE_ARGS)
 list(APPEND FETCH_PACKAGES taskflow)
 
 if(BUILD_MQT_DDSIM_CLI)

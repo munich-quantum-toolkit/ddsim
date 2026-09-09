@@ -11,9 +11,11 @@
 #include "DensityComputeTable.hpp"
 #include "DensityDDPackage.hpp"
 #include "DensityNode.hpp"
+#include "DensityUniqueTable.hpp"
 #include "StochasticNoiseOperationTable.hpp"
 #include "dd/ComplexValue.hpp"
 #include "dd/DDDefinitions.hpp"
+#include "dd/MemoryManager.hpp"
 #include "dd/Node.hpp"
 #include "dd/Operations.hpp"
 #include "dd/Package.hpp"
@@ -74,6 +76,37 @@ TEST(DensityDDPackageTest, TraceOfZeroDensityOperatorIsOne) {
   static constexpr dd::fp TOLERANCE = 1e-10;
   EXPECT_NEAR(trace.r, 1., TOLERANCE);
   EXPECT_NEAR(trace.i, 0., TOLERANCE);
+}
+
+TEST(DensityNodeTest, TaggedTerminalRemainsTerminal) {
+  auto edge = dd::ddsim::dEdge::one();
+
+  dd::ddsim::dNode::setConjugateTempFlagTrue(edge.p);
+  EXPECT_TRUE(edge.isTerminal());
+  dd::ddsim::dNode::setNonReduceTempFlagTrue(edge.p);
+  EXPECT_TRUE(edge.isTerminal());
+  dd::ddsim::dNode::setDensityMatTempFlagTrue(edge.p);
+  EXPECT_TRUE(edge.isTerminal());
+  EXPECT_TRUE(edge.isIdentity());
+
+  auto memoryManager = dd::MemoryManager::create<dd::ddsim::dNode>(1U);
+  dd::ddsim::DensityUniqueTable uniqueTable(memoryManager,
+                                            {.nVars = 1U, .nBuckets = 1U});
+  EXPECT_EQ(uniqueTable.lookup(edge.p), edge.p);
+}
+
+TEST(DensityNodeTest, MarkingPreservesDensityFlags) {
+  auto node = dd::ddsim::dNode{};
+  node.flags = 0b1111U;
+
+  EXPECT_FALSE(node.isMarked());
+  node.mark();
+  EXPECT_TRUE(node.isMarked());
+  EXPECT_EQ(node.flags, 0b11111U);
+
+  node.unmark();
+  EXPECT_FALSE(node.isMarked());
+  EXPECT_EQ(node.flags, 0b1111U);
 }
 
 TEST(DensityDDPackageTest, ReferenceCountingKeepsNodesAliveDuringCollection) {

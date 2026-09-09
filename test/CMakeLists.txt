@@ -22,4 +22,4 @@ package_add_test(
   test_path_sim.cpp
   test_dd_minimizer.cpp)
 
-target_link_libraries(mqt-ddsim-test PRIVATE MQT::CoreAlgorithms)
+target_include_directories(mqt-ddsim-test PRIVATE ${PROJECT_SOURCE_DIR}/src)

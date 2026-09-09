@@ -11,7 +11,6 @@
 #include "UnitarySimulator.hpp"
 
 #include "CircuitSimulator.hpp"
-#include "circuit_optimizer/CircuitOptimizer.hpp"
 #include "dd/DDpackageConfig.hpp"
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Node.hpp"
@@ -95,7 +94,7 @@ UnitarySimulator::UnitarySimulator(
                        dd::UNITARY_SIMULATOR_DD_PACKAGE_CONFIG),
       mode(simMode) {
   // remove final measurements
-  qc::CircuitOptimizer::removeFinalMeasurements(*qc);
+  qc->removeFinalMeasurements();
 }
 
 UnitarySimulator::UnitarySimulator(
@@ -110,5 +109,5 @@ UnitarySimulator::UnitarySimulator(
                        dd::UNITARY_SIMULATOR_DD_PACKAGE_CONFIG),
       mode(simMode) {
   // remove final measurements
-  qc::CircuitOptimizer::removeFinalMeasurements(*qc);
+  qc->removeFinalMeasurements();
 }

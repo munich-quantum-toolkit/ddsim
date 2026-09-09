@@ -115,11 +115,11 @@ picks up the same file.
 - Use a clear title, reference related issues by number, and describe the
   changes. Follow the PR template; only omit the issue reference if not
   applicable.
-- CI runs on all supported platforms and Python versions to build, test, format,
-  and lint. All checks must pass before merging.
-- When ready, convert the draft to a regular PR and request a review from a
-  maintainer. If unsure, ask in PR comments. If you are a first-time
-  contributor, mention a maintainer in a comment to request a review.
+- Draft PRs may use a reduced test matrix, while all other CI checks still run.
+  Converting a draft to a regular PR triggers the full test matrix.
+- After the full test matrix passes, request a review from a maintainer. If
+  unsure, ask in the PR comments. If you are a first-time contributor, mention a
+  maintainer in a comment to request a review.
 - If your PR gets a "Changes requested" review, address the feedback and push
   updates to the same branch. Do not close and reopen a new PR. Respond to
   comments to signal that you have addressed the feedback. Do not resolve review
@@ -194,7 +194,7 @@ instructions on how to set up your development environment.
 
 Building the project requires a C++20-capable
 [C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.24 or newer. As of August 2025, our CI
+and [CMake](https://cmake.org/) 3.28 or newer. As of August 2025, our CI
 pipeline on GitHub continuously tests the library across the following matrix of
 systems and compilers:
 
@@ -203,7 +203,6 @@ systems and compilers:
 - {code}`ubuntu-24.04-arm`: {code}`Release` build using {code}`gcc`
 - {code}`macos-26`: {code}`Release` and {code}`Debug` builds using
   {code}`AppleClang`
-- {code}`macos-26-intel`: {code}`Release` build using {code}`AppleClang`
 - {code}`windows-2025`: {code}`Release` and {code}`Debug` builds using
   {code}`msvc`
 - {code}`windows-11-arm`: {code}`Release` build using {code}`msvc`
@@ -211,10 +210,8 @@ systems and compilers:
 To access the latest build logs, visit the
 [GitHub Actions page](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
 
-Additionally, we regularly run extensive tests with an even wider matrix of
-compilers and operating systems. We are not aware of any issues with other
-compilers or operating systems. If you encounter any problems, please
-[open an issue][issues] and let us know.
+We are not aware of any issues with other compilers or operating systems. If you
+encounter any problems, please [open an issue][issues] and let us know.
 
 ### Configure and Build
 

@@ -16,11 +16,9 @@
 #include "dd/ComplexNumbers.hpp"
 #include "dd/ComplexValue.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/GateMatrixDefinitions.hpp"
 #include "dd/Node.hpp"
 #include "dd/Package.hpp"
 #include "ir/Definitions.hpp"
-#include "ir/operations/OpType.hpp"
 #include "ir/operations/Operation.hpp"
 
 #include <algorithm>
@@ -36,6 +34,10 @@
 #include <vector>
 
 namespace {
+
+constexpr dd::GateMatrix X_MATRIX{0, 1, 1, 0};
+constexpr dd::GateMatrix Y_MATRIX{0, {0, -1}, {0, 1}, 0};
+constexpr dd::GateMatrix Z_MATRIX{1, 0, 0, -1};
 
 std::vector<dd::ddsim::NoiseOperations>
 initializeNoiseEffects(const std::string& cNoiseEffects) {
@@ -188,18 +190,15 @@ dd::mEdge StochasticNoiseFunctionality::generateNoiseOperation(
       break;
     }
     case StochX: {
-      operation = stackOperation(operation, target, effect,
-                                 dd::opToSingleQubitGateMatrix(qc::X));
+      operation = stackOperation(operation, target, effect, X_MATRIX);
       break;
     }
     case StochY: {
-      operation = stackOperation(operation, target, effect,
-                                 dd::opToSingleQubitGateMatrix(qc::Y));
+      operation = stackOperation(operation, target, effect, Y_MATRIX);
       break;
     }
     case StochZ: {
-      operation = stackOperation(operation, target, effect,
-                                 dd::opToSingleQubitGateMatrix(qc::Z));
+      operation = stackOperation(operation, target, effect, Z_MATRIX);
       break;
     }
     default: {

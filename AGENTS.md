@@ -39,7 +39,7 @@
 - Targets Linux (glibc 2.28+), macOS (11.0+), and Windows on x86_64 and arm64
   architectures
 - C++20
-- CMake 3.24+
+- CMake 3.28+
 - `FetchContent` for dependency management (configured in
   `cmake/ExternalDependencies.cmake`)
 - `clang-format` and `clang-tidy` for formatting/linting (see `.clang-format`
@@ -48,8 +48,9 @@
 
 ### Python
 
-- Python 3.10+
-- Stable ABI wheels for 3.12+; free-threading support for 3.14+
+- Python 3.11+
+- Split-mode Stable ABI wheels: `cp311-abi3` for GIL-enabled CPython 3.11+ and
+  `cp315-abi3t` for free-threaded CPython 3.15+
 - `scikit-build-core` as build backend
 - `nanobind` for bindings
 - `uv` for installation, packaging, and tooling
@@ -77,6 +78,9 @@
   `ty`, formatting, and metadata checks). All hooks must pass before submitting.
 - MUST add or update tests for every code change, even if not explicitly
   requested.
+- MUST write tests that protect intended behavior or reproduce a concrete
+  regression. NEVER test provisional implementation choices that are not part of
+  the supported contract.
 - MUST place tests in the repository's corresponding test tree, organized by the
   component that owns the behavior. NEVER place tests or test fixtures in
   production source or tool directories. Reserve tool- or CLI-level subprocess
@@ -85,6 +89,37 @@
   build; avoid promoting an otherwise optional production tool into the default
   build solely for subprocess testing.
 - MUST follow existing code style by checking neighboring files for patterns.
+- MUST write code comments, documentation, tests, changelog entries, and public
+  text for the final design. NEVER preserve prompts, review chronology, former
+  names, or abandoned approaches unless they remain necessary user-facing
+  context.
+- MUST apply
+  [Orwell's six rules for writing](https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/)
+  to every category of prose, including reasoning, descriptions, commit
+  messages, documentation, docstrings, comments, test text, diagnostics, and
+  handoffs:
+
+  1. Do not use a familiar metaphor, simile, or other figure of speech.
+  2. Use a short word when it has the same meaning as a long word.
+  3. Remove every word that does not add meaning.
+  4. Use active voice when possible.
+  5. Use everyday English instead of a foreign phrase, scientific word, or
+     jargon term when this does not reduce precision.
+  6. Break a rule before it makes the text unclear, incorrect, or needlessly
+     difficult to read.
+
+- MUST apply the relevant principles of
+  [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/): use
+  short, direct sentences; give each sentence one main idea; use one term for
+  one meaning; and use explicit nouns instead of vague pronouns. These are
+  mandatory style rules, not a claim of formal ASD-STE100 compliance.
+- MUST base terminology and phrasing on existing usage in the repository and on
+  established precedents in the communities the repository draws from. Use the
+  established term that most precisely matches the concept. If communities use
+  different terms, explain the mapping once. NEVER invent synonyms for variety.
+- MUST remove obsolete scaffolding and diagnostic suppressions before handoff.
+  Keep a workaround or suppression only when it is still necessary, scope it as
+  narrowly as possible, and document the technical reason.
 - MUST update `CHANGELOG.md` and `UPGRADING.md` when changes are user-facing,
   breaking, or otherwise noteworthy.
 - MUST format changelog entries with the pull request reference and every

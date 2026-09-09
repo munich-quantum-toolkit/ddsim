@@ -12,7 +12,6 @@
 
 #include "CircuitSimulator.hpp"
 #include "Simulator.hpp"
-#include "circuit_optimizer/CircuitOptimizer.hpp"
 #include "dd/Node.hpp"
 #include "ir/QuantumComputation.hpp"
 
@@ -167,7 +166,7 @@ public:
 
     // remove final measurements implement measurement support for task-based
     // simulation
-    qc::CircuitOptimizer::removeFinalMeasurements(*(CircuitSimulator::qc));
+    CircuitSimulator::qc->removeFinalMeasurements();
 
     // case distinction for the starting point of the alternating strategy
     if (configuration.startingPoint == 0) {
