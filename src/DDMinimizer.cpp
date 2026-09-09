@@ -10,10 +10,10 @@
 
 #include "DDMinimizer.hpp"
 
-#include "circuit_optimizer/CircuitOptimizer.hpp"
 #include "ir/Definitions.hpp"
 #include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "ir/operations/CompoundOperation.hpp"
 #include "ir/operations/Control.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -28,6 +28,59 @@
 #include <vector>
 
 namespace ddsim {
+namespace {
+template <class Container>
+void elidePermutations(Container& container, qc::Permutation& permutation) {
+  for (auto it = container.begin(); it != container.end();) {
+    auto& op = *it;
+    if (auto* compound = dynamic_cast<qc::CompoundOperation*>(op.get())) {
+      elidePermutations(*compound, permutation);
+      if (compound->empty()) {
+        it = container.erase(it);
+        continue;
+      }
+      if (compound->isConvertibleToSingleOperation()) {
+        *it = compound->collapseToSingleOperation();
+      } else {
+        compound->getControls() = permutation.apply(compound->getControls());
+      }
+      ++it;
+      continue;
+    }
+
+    if (op->getType() == qc::SWAP && !op->isControlled()) {
+      const auto& targets = op->getTargets();
+      assert(targets.size() == 2U);
+      assert(permutation.find(targets[0]) != permutation.end());
+      assert(permutation.find(targets[1]) != permutation.end());
+      std::swap(permutation[targets[0]], permutation[targets[1]]);
+      it = container.erase(it);
+      continue;
+    }
+
+    op->apply(permutation);
+    ++it;
+  }
+}
+
+void elidePermutations(qc::QuantumComputation& circuit) {
+  auto permutation = circuit.initialLayout;
+  elidePermutations(circuit, permutation);
+
+  qc::Permutation initialLayout;
+  for (const auto& [physical, logical] : circuit.initialLayout) {
+    initialLayout[logical] = logical;
+  }
+  circuit.initialLayout = initialLayout;
+
+  qc::Permutation outputPermutation;
+  for (const auto& [physical, logical] : circuit.outputPermutation) {
+    assert(permutation.find(physical) != permutation.end());
+    outputPermutation[permutation[physical]] = logical;
+  }
+  circuit.outputPermutation = outputPermutation;
+}
+} // namespace
 
 void DDMinimizer::optimizeInputPermutation(qc::QuantumComputation& circuit) {
   const auto isSet = [](const bool value) { return value; };
@@ -38,10 +91,10 @@ void DDMinimizer::optimizeInputPermutation(qc::QuantumComputation& circuit) {
 
   // Normalize any existing physical-to-logical mapping before calculating a
   // new permutation on the circuit's logical qubits.
-  qc::CircuitOptimizer::elidePermutations(circuit);
+  elidePermutations(circuit);
 
   circuit.initialLayout = createGateBasedPermutation(circuit);
-  qc::CircuitOptimizer::elidePermutations(circuit);
+  elidePermutations(circuit);
 }
 
 qc::Permutation

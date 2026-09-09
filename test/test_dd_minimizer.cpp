@@ -299,6 +299,22 @@ TEST(DDMinimizerTest, NormalizesExistingSparseLayoutBeforeOptimization) {
   }
 }
 
+TEST(DDMinimizerTest, ElidesSwapsInCompoundOperations) {
+  qc::QuantumComputation circuit(2);
+  qc::QuantumComputation compound(2);
+  compound.swap(0, 1);
+  circuit.emplace_back(compound.asCompoundOperation());
+  circuit.h(1);
+
+  ddsim::DDMinimizer::optimizeInputPermutation(circuit);
+
+  ASSERT_EQ(circuit.size(), 1);
+  EXPECT_EQ(circuit.front()->getType(), qc::H);
+  EXPECT_EQ(circuit.front()->getTargets().front(), 0);
+  EXPECT_EQ(circuit.initialLayout, (qc::Permutation{{0, 0}, {1, 1}}));
+  EXPECT_EQ(circuit.outputPermutation, (qc::Permutation{{0, 1}, {1, 0}}));
+}
+
 TEST(DDMinimizerTest, LeavesAncillaryQubitsUnchanged) {
   qc::QuantumComputation circuit(4);
   circuit.cx(0, 1);
