@@ -27,13 +27,9 @@
 #include <utility>
 #include <vector>
 
-namespace qc {
+namespace ddsim {
 
-/***
- * Public Methods
- ***/
-
-void DDMinimizer::optimizeInputPermutation(QuantumComputation& circuit) {
+void DDMinimizer::optimizeInputPermutation(qc::QuantumComputation& circuit) {
   const auto isSet = [](const bool value) { return value; };
   if (circuit.empty() || std::ranges::any_of(circuit.getAncillary(), isSet) ||
       std::ranges::any_of(circuit.getGarbage(), isSet)) {
@@ -42,14 +38,14 @@ void DDMinimizer::optimizeInputPermutation(QuantumComputation& circuit) {
 
   // Normalize any existing physical-to-logical mapping before calculating a
   // new permutation on the circuit's logical qubits.
-  CircuitOptimizer::elidePermutations(circuit);
+  qc::CircuitOptimizer::elidePermutations(circuit);
 
   circuit.initialLayout = createGateBasedPermutation(circuit);
-  CircuitOptimizer::elidePermutations(circuit);
+  qc::CircuitOptimizer::elidePermutations(circuit);
 }
 
-Permutation
-DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
+qc::Permutation
+DDMinimizer::createGateBasedPermutation(const qc::QuantumComputation& circuit) {
   // create the data structure to store the indices in the pattern maps as well
   // as the max indices of the ladders
 
@@ -65,11 +61,11 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
   minimizer.initializeDataStructure(bits);
 
   // iterate over all the ops and mark the index of the found x-c pairs in the
-  // map.
+  // map
   std::size_t instructionIndex = 0;
   bool found = false;
   for (const auto& op : circuit) {
-    if (!op->isStandardOperation() || op->getType() == Z) {
+    if (!op->isStandardOperation() || op->getType() == qc::Z) {
       continue;
     }
 
@@ -131,7 +127,7 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
   }
 
   // create the permutation based on the order of max index in the complete maps
-  std::vector<Qubit> layout(bits);
+  std::vector<qc::Qubit> layout(bits);
   std::iota(layout.begin(), layout.end(), 0);
 
   const std::size_t prioCh = countPriorCompleteSteps(cHIndex, xCIndex);
@@ -176,9 +172,8 @@ DDMinimizer::createGateBasedPermutation(const QuantumComputation& circuit) {
   }
 
   // transform layout into permutation
-  // Permutation is std::map<Qubit, Qubit>
-  Permutation perm;
-  for (Qubit i = 0; i < bits; i++) {
+  qc::Permutation perm;
+  for (qc::Qubit i = 0; i < bits; i++) {
     perm[i] = layout[i];
   }
   return perm;
@@ -270,8 +265,8 @@ DDMinimizer::countPriorCompleteSteps(const std::vector<InstructionIndex>& steps,
       }));
 }
 
-std::vector<Qubit> DDMinimizer::rotateLeft(std::vector<Qubit> layout,
-                                           std::size_t stairs) {
+std::vector<qc::Qubit> DDMinimizer::rotateLeft(std::vector<qc::Qubit> layout,
+                                               std::size_t stairs) {
   if (layout.empty()) {
     return layout;
   }
@@ -281,8 +276,8 @@ std::vector<Qubit> DDMinimizer::rotateLeft(std::vector<Qubit> layout,
   return layout;
 }
 
-std::vector<Qubit> DDMinimizer::rotateRight(std::vector<Qubit> layout,
-                                            std::size_t stairs) {
+std::vector<qc::Qubit> DDMinimizer::rotateRight(std::vector<qc::Qubit> layout,
+                                                std::size_t stairs) {
   if (layout.empty()) {
     return layout;
   }
@@ -296,20 +291,20 @@ std::vector<Qubit> DDMinimizer::rotateRight(std::vector<Qubit> layout,
 
 // Fallback function to create a control based permutation if no pattern is
 // found in the controlled gates
-Permutation
-DDMinimizer::createControlBasedPermutation(const QuantumComputation& circuit) {
+qc::Permutation DDMinimizer::createControlBasedPermutation(
+    const qc::QuantumComputation& circuit) {
   // create and fill a map of each qubit to all the qubits it controls
-  std::map<Qubit, std::set<Qubit>> controlToTargets;
+  std::map<qc::Qubit, std::set<qc::Qubit>> controlToTargets;
 
   // iterate over all the ops to mark which qubits are controlled by which
   // qubits
   for (const auto& op : circuit) {
-    if (!op->isStandardOperation() || op->getType() == Z) {
+    if (!op->isStandardOperation() || op->getType() == qc::Z) {
       continue;
     }
-    const Controls controls = op->getControls();
-    const std::set<Qubit>& targets = {op->getTargets().begin(),
-                                      op->getTargets().end()};
+    const qc::Controls controls = op->getControls();
+    const std::set<qc::Qubit>& targets = {op->getTargets().begin(),
+                                          op->getTargets().end()};
 
     for (const auto& control : controls) {
       if (!controlToTargets.contains(control.qubit)) {
@@ -329,7 +324,7 @@ DDMinimizer::createControlBasedPermutation(const QuantumComputation& circuit) {
 
   const std::size_t bits = circuit.getNqubits();
   std::vector<std::size_t> remainingTargets(bits, 0);
-  std::vector<std::set<Qubit>> targetToControls(bits);
+  std::vector<std::set<qc::Qubit>> targetToControls(bits);
   for (const auto& [control, targets] : controlToTargets) {
     if (control >= bits) {
       return circuit.initialLayout;
@@ -343,17 +338,17 @@ DDMinimizer::createControlBasedPermutation(const QuantumComputation& circuit) {
     }
   }
 
-  std::set<Qubit> ready;
-  for (Qubit qubit = 0; qubit < bits; ++qubit) {
+  std::set<qc::Qubit> ready;
+  for (qc::Qubit qubit = 0; qubit < bits; ++qubit) {
     if (remainingTargets[qubit] == 0) {
       ready.insert(qubit);
     }
   }
 
-  std::vector<Qubit> layout;
+  std::vector<qc::Qubit> layout;
   layout.reserve(bits);
   while (!ready.empty()) {
-    const Qubit target = *ready.begin();
+    const qc::Qubit target = *ready.begin();
     ready.erase(ready.begin());
     layout.emplace_back(target);
 
@@ -370,11 +365,11 @@ DDMinimizer::createControlBasedPermutation(const QuantumComputation& circuit) {
     return circuit.initialLayout;
   }
 
-  Permutation permutation;
-  for (Qubit physical = 0; physical < bits; ++physical) {
+  qc::Permutation permutation;
+  for (qc::Qubit physical = 0; physical < bits; ++physical) {
     permutation[physical] = layout[physical];
   }
   return permutation;
 }
 
-} // namespace qc
+} // namespace ddsim

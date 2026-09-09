@@ -20,7 +20,7 @@
 #include <utility>
 #include <vector>
 
-namespace qc {
+namespace ddsim {
 /**
  * @brief Heuristically reorder circuit qubits for decision-diagram simulation.
  */
@@ -37,7 +37,7 @@ public:
    * qubits are left unchanged.
    * @param circuit The quantum computation to optimize.
    */
-  static void optimizeInputPermutation(QuantumComputation& circuit);
+  static void optimizeInputPermutation(qc::QuantumComputation& circuit);
 
   /**
    * @brief Compute a DD-friendly input permutation.
@@ -53,23 +53,25 @@ public:
    * @pre The input layout is the identity permutation. Use
    * `optimizeInputPermutation` for circuits with arbitrary input layouts.
    */
-  [[nodiscard]] static Permutation
-  createGateBasedPermutation(const QuantumComputation& circuit);
+  [[nodiscard]] static qc::Permutation
+  createGateBasedPermutation(const qc::QuantumComputation& circuit);
 
 private:
   using InstructionIndex = std::optional<std::size_t>;
-  using GatePattern = std::map<std::pair<Qubit, Qubit>, InstructionIndex>;
+  using GatePattern =
+      std::map<std::pair<qc::Qubit, qc::Qubit>, InstructionIndex>;
 
   /**
    * @brief Adjacent controlled-gate patterns.
    * @details The ladders x_c and c_x describe for four qubits the following
    * controlled gates (c: control qubit, x: target qubit):
-
+   * @verbatim
    * c_x: c | 0  1  2
    *      x | 1  2  3
-
+   *
    * x_c: c | 1  2  3
    *      x | 0  1  2
+   * @endverbatim
    */
   GatePattern xCMap;
   GatePattern cXMap;
@@ -79,18 +81,19 @@ private:
    * @details The ladders c_l, c_r, x_l, and x_r consist of several steps,
    * hence the vector of maps. They describe for four qubits the following
    * controlled gates (c: control qubit, x: target qubit):
-   *
+   * @verbatim
    * c_l_1: c | 0  0  0  and  c_l_2: c | 1  1  and  c_l_3: c | 2
    *        x | 1  2  3              x | 2  3              x | 3
-
+   *
    * c_r_1: c | 3  3  3  and  c_r_2: c | 2  2  and  c_r_3: c | 1
    *        x | 0  1  2              x | 0  1              x | 0
-
+   *
    * x_l_1: c | 1  2  3  and  x_l_2: c | 2  3  and  x_l_3: c | 3
    *        x | 0  0  0              x | 1  1              x | 2
-
+   *
    * x_r_1: c | 0  1  2  and  x_r_2: c | 0  1  and  x_r_3: c | 0
    *        x | 3  3  3              x | 2  2              x | 1
+   * @endverbatim
    */
   std::vector<GatePattern> cLMap;
   std::vector<GatePattern> cHMap;
@@ -131,8 +134,8 @@ private:
    * @param stairs The number of positions to rotate.
    * @return The rotated layout.
    */
-  static std::vector<Qubit> rotateLeft(std::vector<Qubit> layout,
-                                       std::size_t stairs);
+  static std::vector<qc::Qubit> rotateLeft(std::vector<qc::Qubit> layout,
+                                           std::size_t stairs);
 
   /**
    * @brief Rotate a layout to the right.
@@ -141,8 +144,8 @@ private:
    * @param stairs The number of positions to rotate.
    * @return The rotated layout.
    */
-  static std::vector<Qubit> rotateRight(std::vector<Qubit> layout,
-                                        std::size_t stairs);
+  static std::vector<qc::Qubit> rotateRight(std::vector<qc::Qubit> layout,
+                                            std::size_t stairs);
 
   /**
    * @brief Create a permutation from control dependencies.
@@ -152,8 +155,8 @@ private:
    * @param circuit The quantum computation to inspect.
    * @return The control-dependency-based input permutation.
    */
-  static Permutation
-  createControlBasedPermutation(const QuantumComputation& circuit);
+  static qc::Permutation
+  createControlBasedPermutation(const qc::QuantumComputation& circuit);
 
 }; // class DDMinimizer
-} // namespace qc
+} // namespace ddsim

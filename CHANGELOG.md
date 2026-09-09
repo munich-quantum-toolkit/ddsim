@@ -12,9 +12,8 @@ releases may include breaking changes.
 
 ### Added
 
-- ✨ Add a DD-aware input permutation optimizer ([#407])
-  ([**@DuenzingerClaudia**], [**@ystade**], [**@burgholzer**],
-  [**@denialhaag**])
+- ✨ Add heuristic qubit reordering for DD simulation ([#407])
+  ([**@DuenzingerClaudia**])
 
 ### Changed
 
@@ -218,8 +217,6 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [**@denialhaag**]: https://github.com/denialhaag
 [**@DuenzingerClaudia**]: https://github.com/DuenzingerClaudia
 [**@simon1hofmann**]: https://github.com/simon1hofmann
-[**@ystade**]: https://github.com/ystade
-
 <!-- General links -->
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/

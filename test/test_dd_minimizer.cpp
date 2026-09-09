@@ -39,7 +39,7 @@ TEST(DDMinimizerTest, ReorderXc) {
   circuit.cx(3, 2);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 0}, {1, 1}, {2, 2}, {3, 3}};
 
@@ -53,7 +53,7 @@ TEST(DDMinimizerTest, ReorderCx) {
   circuit.cx(2, 3);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 3}, {1, 2}, {2, 1}, {3, 0}};
 
@@ -70,7 +70,7 @@ TEST(DDMinimizerTest, ReorderXcCl) {
   circuit.cx(0, 3);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 1}, {1, 2}, {2, 3}, {3, 0}};
 
@@ -87,7 +87,7 @@ TEST(DDMinimizerTest, ReorderXcXh) {
   circuit.cx(2, 3);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 3}, {1, 0}, {2, 1}, {3, 2}};
 
@@ -104,7 +104,7 @@ TEST(DDMinimizerTest, ReorderCxCh) {
   circuit.cx(3, 0);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 2}, {1, 1}, {2, 0}, {3, 3}};
 
@@ -121,7 +121,7 @@ TEST(DDMinimizerTest, ReorderCxXl) {
   circuit.cx(3, 2);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 0}, {1, 3}, {2, 2}, {3, 1}};
 
@@ -135,7 +135,7 @@ TEST(DDMinimizerTest, ReorderInterlacedQubits) {
   circuit.cx(3, 2);
 
   const qc::Permutation perm =
-      qc::DDMinimizer::createGateBasedPermutation(circuit);
+      ddsim::DDMinimizer::createGateBasedPermutation(circuit);
 
   const qc::Permutation expectedPerm = {{0, 2}, {1, 3}, {2, 1}, {3, 0}};
 
@@ -145,11 +145,11 @@ TEST(DDMinimizerTest, ReorderInterlacedQubits) {
 TEST(DDMinimizerTest, HandlesFewerThanTwoQubits) {
   const qc::QuantumComputation emptyCircuit;
   EXPECT_TRUE(
-      qc::DDMinimizer::createGateBasedPermutation(emptyCircuit).empty());
+      ddsim::DDMinimizer::createGateBasedPermutation(emptyCircuit).empty());
 
   const qc::QuantumComputation singleQubitCircuit(1);
   const qc::Permutation identity = {{0, 0}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(singleQubitCircuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(singleQubitCircuit),
             identity);
 }
 
@@ -157,13 +157,13 @@ TEST(DDMinimizerTest, HandlesCompletePatternAtFirstInstruction) {
   qc::QuantumComputation ascendingCircuit(2);
   ascendingCircuit.cx(0, 1);
   const qc::Permutation reverse = {{0, 1}, {1, 0}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(ascendingCircuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(ascendingCircuit),
             reverse);
 
   qc::QuantumComputation descendingCircuit(2);
   descendingCircuit.cx(1, 0);
   const qc::Permutation identity = {{0, 0}, {1, 1}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(descendingCircuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(descendingCircuit),
             identity);
 }
 
@@ -179,7 +179,7 @@ TEST(DDMinimizerTest, ReorderXcClTwoStairs) {
   circuit.cx(1, 3);
 
   const qc::Permutation expected = {{0, 2}, {1, 3}, {2, 0}, {3, 1}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), expected);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), expected);
 }
 
 TEST(DDMinimizerTest, ReorderXcXhTwoStairs) {
@@ -194,7 +194,7 @@ TEST(DDMinimizerTest, ReorderXcXhTwoStairs) {
   circuit.cx(1, 2);
 
   const qc::Permutation expected = {{0, 2}, {1, 3}, {2, 0}, {3, 1}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), expected);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), expected);
 }
 
 TEST(DDMinimizerTest, ReorderDescendingLadderWithPriority) {
@@ -209,7 +209,7 @@ TEST(DDMinimizerTest, ReorderDescendingLadderWithPriority) {
   circuit.cx(2, 3);
 
   const qc::Permutation identity = {{0, 0}, {1, 1}, {2, 2}, {3, 3}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), identity);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), identity);
 }
 
 TEST(DDMinimizerTest, AscendingPriorityDominatesOtherStairFamilies) {
@@ -224,7 +224,7 @@ TEST(DDMinimizerTest, AscendingPriorityDominatesOtherStairFamilies) {
   circuit.cx(3, 0);
 
   const qc::Permutation reverse = {{0, 3}, {1, 2}, {2, 1}, {3, 0}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), reverse);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), reverse);
 }
 
 TEST(DDMinimizerTest, DescendingPriorityDominatesOtherStairFamilies) {
@@ -239,7 +239,7 @@ TEST(DDMinimizerTest, DescendingPriorityDominatesOtherStairFamilies) {
   circuit.cx(0, 3);
 
   const qc::Permutation identity = {{0, 0}, {1, 1}, {2, 2}, {3, 3}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), identity);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), identity);
 }
 
 TEST(DDMinimizerTest, OrdersTargetsBeforeControlsInFallback) {
@@ -249,7 +249,7 @@ TEST(DDMinimizerTest, OrdersTargetsBeforeControlsInFallback) {
   circuit.cx(1, 3);
 
   const qc::Permutation expected = {{0, 2}, {1, 3}, {2, 1}, {3, 0}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), expected);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), expected);
 }
 
 TEST(DDMinimizerTest, PreservesIdentityLayoutForCyclicFallback) {
@@ -257,7 +257,7 @@ TEST(DDMinimizerTest, PreservesIdentityLayoutForCyclicFallback) {
   circuit.cx(0, 1);
   circuit.cx(1, 0);
 
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit),
             circuit.initialLayout);
 }
 
@@ -267,7 +267,7 @@ TEST(DDMinimizerTest, IgnoresControlledZOperationsInFallback) {
   circuit.cz(2, 0);
 
   const qc::Permutation expected = {{0, 1}, {1, 2}, {2, 0}};
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit), expected);
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit), expected);
 }
 
 TEST(DDMinimizerTest, NormalizesExistingSparseLayoutBeforeOptimization) {
@@ -285,8 +285,8 @@ TEST(DDMinimizerTest, NormalizesExistingSparseLayoutBeforeOptimization) {
   sparseCircuit.cx(2, 5);
   sparseCircuit.cx(5, 7);
 
-  qc::DDMinimizer::optimizeInputPermutation(canonicalCircuit);
-  qc::DDMinimizer::optimizeInputPermutation(sparseCircuit);
+  ddsim::DDMinimizer::optimizeInputPermutation(canonicalCircuit);
+  ddsim::DDMinimizer::optimizeInputPermutation(sparseCircuit);
 
   EXPECT_EQ(sparseCircuit.initialLayout, canonicalCircuit.initialLayout);
   EXPECT_EQ(sparseCircuit.outputPermutation,
@@ -307,9 +307,9 @@ TEST(DDMinimizerTest, LeavesAncillaryQubitsUnchanged) {
   circuit.setLogicalQubitAncillary(0);
   const qc::QuantumComputation original = circuit;
 
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit),
             circuit.initialLayout);
-  qc::DDMinimizer::optimizeInputPermutation(circuit);
+  ddsim::DDMinimizer::optimizeInputPermutation(circuit);
 
   expectCircuitUnchanged(circuit, original);
 }
@@ -322,9 +322,9 @@ TEST(DDMinimizerTest, LeavesGarbageQubitsUnchanged) {
   circuit.setLogicalQubitGarbage(1);
   const qc::QuantumComputation original = circuit;
 
-  EXPECT_EQ(qc::DDMinimizer::createGateBasedPermutation(circuit),
+  EXPECT_EQ(ddsim::DDMinimizer::createGateBasedPermutation(circuit),
             circuit.initialLayout);
-  qc::DDMinimizer::optimizeInputPermutation(circuit);
+  ddsim::DDMinimizer::optimizeInputPermutation(circuit);
 
   expectCircuitUnchanged(circuit, original);
 }
