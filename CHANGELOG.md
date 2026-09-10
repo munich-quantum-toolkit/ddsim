@@ -12,8 +12,9 @@ releases may include breaking changes.
 
 ### Added
 
-- ✨ Add heuristic qubit reordering for DD simulation ([#407])
-  ([**@DuenzingerClaudia**], [**@denialhaag**])
+- ✨ Add deterministic control-dependency qubit ordering for ideal circuit
+  simulation and track input/output layouts in `CircuitSimulator` ([#407])
+  ([**@DuenzingerClaudia**], [**@denialhaag**], [**@burgholzer**])
 
 ### Changed
 

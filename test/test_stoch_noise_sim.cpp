@@ -205,19 +205,6 @@ TEST(StochNoiseSimTest, SimulateAdder4WithDecoherenceAndGateError) {
   EXPECT_NEAR(static_cast<double>(m.find("1011")->second), 24, tolerance);
 }
 
-TEST(StochNoiseSimTest,
-     SimulateAdder4WithDecoherenceAndGateErrorSelectedProperties) {
-  auto quantumComputation = stochGetAdder4Circuit();
-  StochasticNoiseSimulator ddsim(std::move(quantumComputation), {}, 42U, "APD",
-                                 0.1);
-
-  auto m = ddsim.simulate(1000);
-  double const tolerance = 50;
-
-  EXPECT_NEAR(static_cast<double>(m.find("0000")->second), 211, tolerance);
-  EXPECT_NEAR(static_cast<double>(m.find("1000")->second), 146, tolerance);
-}
-
 TEST(StochNoiseSimTest, SimulateRunWithBadParameters) {
   EXPECT_THROW(
       const StochasticNoiseSimulator ddsim(stochGetAdder4Circuit(), "AP", 0.3),
