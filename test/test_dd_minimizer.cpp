@@ -11,6 +11,7 @@
 #include "DDMinimizer.hpp"
 #include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "ir/operations/OpType.hpp"
 
 #include <gtest/gtest.h>
 
