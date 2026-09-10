@@ -167,7 +167,7 @@ TEST(StochNoiseSimTest, CheckQubitOrder) {
   const auto m = ddsim.simulate(1000);
 
   double const tolerance = 50;
-  EXPECT_NEAR(static_cast<double>(m.find("0001")->second), 951, tolerance);
+  EXPECT_NEAR(static_cast<double>(m.find("0001")->second), 950, tolerance);
 }
 
 TEST(StochNoiseSimTest, SimulateAdder4WithoutNoise) {

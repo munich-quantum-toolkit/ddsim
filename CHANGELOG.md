@@ -13,7 +13,7 @@ releases may include breaking changes.
 ### Added
 
 - ✨ Add heuristic qubit reordering for DD simulation ([#407])
-  ([**@DuenzingerClaudia**])
+  ([**@DuenzingerClaudia**], [**@denialhaag**])
 
 ### Changed
 
