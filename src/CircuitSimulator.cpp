@@ -50,12 +50,12 @@ CircuitSimulator::simulate(std::size_t shots) {
 
     // MeasureAllNonCollapsing returns a map from measurement over all qubits to
     // the number of occurrences
-    for (const auto& [bit_string, count] : measureAllNonCollapsing(shots)) {
+    for (const auto& [bitString, count] : measureAllNonCollapsing(shots)) {
       std::string resultString(qc->getNcbits(), '0');
 
-      for (auto const& [qubit_index, bitIndex] : analysis.measurementMap) {
-        resultString[cbits - bitIndex - 1] =
-            bit_string[qubits - qubit_index - 1];
+      for (auto const& [qubitIndex, bitIndex] : analysis.measurementMap) {
+        resultString.at(cbits - bitIndex - 1) =
+            bitString.at(qubits - permutation.apply(qubitIndex) - 1);
       }
 
       measurementCounter[resultString] += count;
@@ -126,20 +126,26 @@ CircuitSimulator::expectationValue(const qc::QuantumComputation& observable) {
 }
 
 void CircuitSimulator::initializeSimulation(const std::size_t nQubits) {
+  permutation = qc->initialLayout;
   rootEdge = dd::makeZeroState(static_cast<dd::Qubit>(nQubits), *dd);
 }
 
 char CircuitSimulator::measure(const dd::Qubit i) {
-  return dd->measureOneCollapsing(rootEdge, static_cast<dd::Qubit>(i), mt);
+  return dd->measureOneCollapsing(
+      rootEdge, static_cast<dd::Qubit>(permutation.apply(i)), mt);
 }
 
 void CircuitSimulator::reset(qc::NonUnitaryOperation* nonUnitaryOp) {
-  rootEdge = dd::applyReset(*nonUnitaryOp, rootEdge, *dd, mt);
+  rootEdge = dd::applyReset(*nonUnitaryOp, rootEdge, *dd, mt, permutation);
 }
 
 void CircuitSimulator::applyOperationToState(
     std::unique_ptr<qc::Operation>& op) {
-  rootEdge = dd::applyUnitaryOperation(*op, rootEdge, *dd);
+  if (dd::isExecutableVirtually(*op)) {
+    dd::applyVirtualOperation(*op, permutation);
+  } else {
+    rootEdge = dd::applyUnitaryOperation(*op, rootEdge, *dd, permutation);
+  }
 }
 
 std::map<std::size_t, bool>
@@ -268,6 +274,9 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
       dd->garbageCollect();
     }
     opNum++;
+  }
+  if (!permutation.empty()) {
+    dd::changePermutation(rootEdge, permutation, qc->outputPermutation, *dd);
   }
   return classicValues;
 }

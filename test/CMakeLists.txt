@@ -19,6 +19,7 @@ package_add_test(
   test_density_dd_package.cpp
   test_noise_functionality.cpp
   test_unitary_sim.cpp
-  test_path_sim.cpp)
+  test_path_sim.cpp
+  test_dd_minimizer.cpp)
 
 target_include_directories(mqt-ddsim-test PRIVATE ${PROJECT_SOURCE_DIR}/src)

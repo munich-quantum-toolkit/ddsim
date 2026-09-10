@@ -14,6 +14,7 @@
 #include "dd/DDDefinitions.hpp"
 #include "dd/DDpackageConfig.hpp"
 #include "ir/Definitions.hpp"
+#include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
 #include "ir/operations/Operation.hpp"
@@ -125,6 +126,10 @@ public:
 protected:
   std::unique_ptr<qc::QuantumComputation> qc;
   std::size_t singleShots{0};
+
+  /// Physical circuit qubits to current DD levels. Only the ideal state-vector
+  /// initialization populates this map; noise engines use their own state.
+  qc::Permutation permutation;
 
   ApproximationInfo approximationInfo;
   std::size_t approximationRuns{0};

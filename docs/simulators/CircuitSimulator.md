@@ -230,6 +230,41 @@ print(result)
 Path(filename).unlink()
 ```
 
+## Qubit layouts
+
+`CircuitSimulator` tracks the circuit's input layout while applying gates,
+measurements, and resets. Uncontrolled SWAP gates update this mapping without
+changing the DD. The simulator restores the output order before returning the
+state vector or computing an observable. Explicit measurements retain their
+classical bit destinations.
+
+C++ callers can opt into control-dependency ordering before simulation:
+
+```cpp
+#include "CircuitSimulator.hpp"
+#include "DDMinimizer.hpp"
+
+#include <memory>
+
+qc::QuantumComputation circuit(2);
+circuit.x(1);
+circuit.cx(0, 1);
+ddsim::DDMinimizer::optimizeInputPermutation(circuit);
+CircuitSimulator sim(std::make_unique<qc::QuantumComputation>(circuit));
+auto counts = sim.simulate(100); /// All results are "10".
+```
+
+The optimizer changes only the input layout. It preserves gates, register
+metadata, and the output permutation, including for sparse physical indices. It
+orders targets below their controls, traverses compound operations, and ignores
+controlled-Z and classically controlled operations. Ties retain the existing
+logical qubit order. Cycles and circuits with ancillary or garbage qubits keep
+their existing layout.
+
+This heuristic assumes the all-zero input of ideal `CircuitSimulator` and does
+not guarantee a smaller DD or faster simulation. It is not enabled automatically
+and is not supported by the noise, hybrid, or path simulators.
+
 ## Usage as a Qiskit backend
 
 The `CircuitSimulator` can also be easily used as a backend for Qiskit. To this

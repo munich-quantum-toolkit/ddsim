@@ -8,6 +8,13 @@ of changes including minor and patch releases, please refer to the
 
 This release updates the minimum required `mqt-core` version to 3.10.0.
 
+### Ideal circuit layouts
+
+`CircuitSimulator` now honors `initialLayout` and `outputPermutation`. Returned
+state vectors and observables use the output order; explicit measurements keep
+their classical bit destinations. Remove manual relabeling that compensated for
+previously ignored layouts. This change applies to the ideal circuit simulator.
+
 ### Qiskit 2.1 minimum
 
 The minimum Qiskit version increases from **1.1.0 to 2.1.0**, dropping support

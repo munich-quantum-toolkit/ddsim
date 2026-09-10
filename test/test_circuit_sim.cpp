@@ -10,8 +10,13 @@
 
 #include "CircuitGenerators.hpp"
 #include "CircuitSimulator.hpp"
+#include "DDMinimizer.hpp"
 #include "dd/DDDefinitions.hpp"
+#include "dd/Package.hpp"
+#include "dd/Simulation.hpp"
+#include "dd/StateGeneration.hpp"
 #include "ir/Definitions.hpp"
+#include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/IfElseOperation.hpp"
 #include "ir/operations/NonUnitaryOperation.hpp"
@@ -520,4 +525,134 @@ TEST(CircuitSimTest, GetVectorBeforeSimulate) {
   const CircuitSimulator ddsim(std::move(qc));
   const auto vec = ddsim.getCurrentDD().getVector();
   EXPECT_EQ(vec[0], 1.);
+}
+
+TEST(CircuitSimTest, TracksInputAndOutputLayouts) {
+  auto circuit = std::make_unique<qc::QuantumComputation>(3);
+  circuit->initialLayout = {{0, 2}, {1, 0}, {2, 1}};
+  circuit->outputPermutation = {{0, 1}, {1, 2}, {2, 0}};
+  circuit->x(0);
+  CircuitSimulator sim(std::move(circuit), 42U);
+
+  EXPECT_EQ(sim.simulate(16).at("010"), 16);
+  EXPECT_EQ(sim.measureAll(false), "010");
+  EXPECT_NEAR(std::norm(sim.getCurrentDD().getVector().at(2)), 1., 1e-12);
+  qc::QuantumComputation observable(3);
+  observable.z(1);
+  EXPECT_NEAR(sim.expectationValue(observable), -1., 1e-12);
+}
+
+TEST(CircuitSimTest, TracksFinalMeasurementsWithOutputLayout) {
+  auto circuit = std::make_unique<qc::QuantumComputation>(3, 5);
+  circuit->initialLayout = {{0, 2}, {1, 0}, {2, 1}};
+  circuit->outputPermutation = {{0, 1}, {1, 2}, {2, 0}};
+  circuit->x(0);
+  circuit->measure(0, 4);
+  circuit->measure(1, 1);
+  circuit->measure(2, 0);
+  CircuitSimulator sim(std::move(circuit), 42U);
+
+  EXPECT_EQ(sim.simulate(16).at("10000"), 16);
+  EXPECT_NEAR(std::norm(sim.getCurrentDD().getVector().at(2)), 1., 1e-12);
+}
+
+TEST(CircuitSimTest, ResetsVirtualSwapPermutationBetweenRuns) {
+  auto circuit = std::make_unique<qc::QuantumComputation>(3);
+  circuit->initialLayout = {{0, 1}, {1, 2}, {2, 0}};
+  circuit->x(0);
+  circuit->swap(0, 2);
+  circuit->cx(2, 1);
+  CircuitSimulator sim(std::move(circuit), 42U);
+
+  for (int run = 0; run < 2; ++run) {
+    EXPECT_EQ(sim.simulate(16).at("110"), 16);
+    EXPECT_NEAR(std::norm(sim.getCurrentDD().getVector().at(6)), 1., 1e-12);
+  }
+}
+
+TEST(CircuitSimTest, OptimizedStatesMatchCoreForFlatAndCompoundCircuits) {
+  for (const bool grouped : {false, true}) {
+    qc::QuantumComputation circuit(4);
+    circuit.h(0);
+    circuit.ry(0.3, 1);
+    circuit.cx(0, 1);
+    circuit.cx(1, 3);
+    circuit.cx(3, 2);
+    circuit.t(3);
+    circuit.swap(0, 2);
+    circuit.cz(1, 2);
+    circuit.outputPermutation = {{0, 2}, {1, 0}, {2, 3}, {3, 1}};
+    if (grouped) {
+      auto compound = circuit.asCompoundOperation();
+      circuit.emplace_back(std::move(compound));
+    }
+    const auto package = std::make_unique<dd::Package>(4);
+    const auto expected =
+        dd::simulate(circuit, dd::makeZeroState(4, *package), *package)
+            .getVector();
+    const auto initialLayout = circuit.initialLayout;
+    ddsim::DDMinimizer::optimizeInputPermutation(circuit);
+    ASSERT_NE(circuit.initialLayout, initialLayout);
+    CircuitSimulator sim(std::make_unique<qc::QuantumComputation>(circuit),
+                         42U);
+
+    EXPECT_TRUE(sim.simulate(0).empty());
+    const auto actual = sim.getCurrentDD().getVector();
+    ASSERT_EQ(actual.size(), expected.size());
+    for (std::size_t i = 0; i < actual.size(); ++i) {
+      EXPECT_NEAR(std::abs(actual.at(i) - expected.at(i)), 0., 1e-12);
+    }
+  }
+}
+
+TEST(CircuitSimTest, SimulatesOptimizedSparseLayouts) {
+  for (const bool measured : {false, true}) {
+    auto circuit = std::make_unique<qc::QuantumComputation>();
+    circuit->addQubit(0, 0, 0);
+    circuit->addQubit(1, 2, 1);
+    circuit->addQubit(2, 5, 2);
+    circuit->addQubit(3, 7, 3);
+    circuit->x(5);
+    circuit->cx(0, 2);
+    circuit->cx(2, 5);
+    circuit->cx(5, 7);
+    if (measured) {
+      circuit->addClassicalRegister(4);
+      circuit->measure(0, 3);
+      circuit->measure(2, 1);
+      circuit->measure(5, 0);
+      circuit->measure(7, 2);
+    }
+    ddsim::DDMinimizer::optimizeInputPermutation(*circuit);
+    CircuitSimulator sim(std::move(circuit), 42U);
+
+    EXPECT_EQ(sim.simulate(16).at(measured ? "0101" : "1100"), 16);
+    EXPECT_NEAR(std::norm(sim.getCurrentDD().getVector().at(12)), 1., 1e-12);
+  }
+}
+
+TEST(CircuitSimTest, TracksDynamicMeasurementsResetsAndBranches) {
+  for (const bool takeThen : {false, true}) {
+    auto circuit = std::make_unique<qc::QuantumComputation>(3, 3);
+    circuit->initialLayout = {{0, 2}, {1, 0}, {2, 1}};
+    if (takeThen) {
+      circuit->x(0);
+    }
+    circuit->swap(0, 1);
+    circuit->measure(1, 0);
+    circuit->reset(1);
+    circuit->ifElse(std::make_unique<qc::StandardOperation>(2U, qc::X), nullptr,
+                    0U, true, qc::Eq);
+    circuit->measure(2, 1);
+    circuit->ifElse(
+        std::make_unique<qc::StandardOperation>(qc::Targets{0, 2}, qc::SWAP),
+        std::make_unique<qc::StandardOperation>(0U, qc::X), 0U, true, qc::Eq);
+    circuit->measure(0, 2);
+    CircuitSimulator sim(std::move(circuit), 42U);
+
+    for (int run = 0; run < 2; ++run) {
+      EXPECT_EQ(sim.simulate(16).at(takeThen ? "111" : "100"), 16);
+      EXPECT_NEAR(std::norm(sim.getCurrentDD().getVector().at(1)), 1., 1e-12);
+    }
+  }
 }

@@ -10,6 +10,12 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- ✨ Add deterministic control-dependency qubit ordering for ideal circuit
+  simulation and track input/output layouts in `CircuitSimulator` ([#407])
+  ([**@DuenzingerClaudia**], [**@denialhaag**], [**@burgholzer**])
+
 ### Changed
 
 - ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
@@ -215,14 +221,15 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [#567]: https://github.com/munich-quantum-toolkit/ddsim/pull/567
 [#556]: https://github.com/munich-quantum-toolkit/ddsim/pull/556
 [#538]: https://github.com/munich-quantum-toolkit/ddsim/pull/538
+[#407]: https://github.com/munich-quantum-toolkit/ddsim/pull/407
 [#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
 
 <!-- Contributor -->
 
 [**@burgholzer**]: https://github.com/burgholzer
 [**@denialhaag**]: https://github.com/denialhaag
+[**@DuenzingerClaudia**]: https://github.com/DuenzingerClaudia
 [**@simon1hofmann**]: https://github.com/simon1hofmann
-
 <!-- General links -->
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
