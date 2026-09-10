@@ -586,9 +586,9 @@ TEST(CircuitSimTest, OptimizedStatesMatchCoreForFlatAndCompoundCircuits) {
       auto compound = circuit.asCompoundOperation();
       circuit.emplace_back(std::move(compound));
     }
-    dd::Package package(4);
+    const auto package = std::make_unique<dd::Package>(4);
     const auto expected =
-        dd::simulate(circuit, dd::makeZeroState(4, package), package)
+        dd::simulate(circuit, dd::makeZeroState(4, *package), *package)
             .getVector();
     const auto initialLayout = circuit.initialLayout;
     ddsim::DDMinimizer::optimizeInputPermutation(circuit);
