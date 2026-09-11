@@ -6,6 +6,8 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+## [2.6.0]
+
 This release updates the minimum required `mqt-core` version to 3.10.0.
 
 ### Ideal circuit layouts
@@ -200,7 +202,8 @@ standard.
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.2.0...v2.3.0

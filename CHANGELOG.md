@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-09-12
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#260)._
+
 ### Added
 
 - ✨ Add deterministic control-dependency qubit ordering for ideal circuit
@@ -20,6 +24,8 @@ releases may include breaking changes.
 
 - 🔧 Use Ninja and shared CMake presets on all platforms, removing `-windows`
   from preset names ([#1004]) ([**@denialhaag**])
+- 💥 Require CMake 3.28 or newer for source builds and embedded projects
+  ([#998]) ([**@burgholzer**])
 - ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 3.0.1 ([#995]) ([**@denialhaag**])
 - 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
@@ -182,7 +188,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.6.0
 [2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.4.0
 [2.3.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.3.0
@@ -194,6 +201,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 <!-- PR links -->
 
 [#1004]: https://github.com/munich-quantum-toolkit/ddsim/pull/1004
+[#998]: https://github.com/munich-quantum-toolkit/ddsim/pull/998
 [#995]: https://github.com/munich-quantum-toolkit/ddsim/pull/995
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
