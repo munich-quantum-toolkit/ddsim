@@ -18,6 +18,8 @@ releases may include breaking changes.
 
 ### Changed
 
+- 🔧 Use Ninja and shared CMake presets on all platforms, removing `-windows`
+  from preset names ([#1004]) ([**@denialhaag**])
 - ⬆️ Update `mqt-core` to version 3.10.0 ([#995]) ([**@denialhaag**])
 - ⬆️ Update `nanobind` to version 3.0.1 ([#995]) ([**@denialhaag**])
 - 💥 Require Python 3.11 or newer ([#976]) ([**@denialhaag**])
@@ -191,6 +193,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1004]: https://github.com/munich-quantum-toolkit/ddsim/pull/1004
 [#995]: https://github.com/munich-quantum-toolkit/ddsim/pull/995
 [#976]: https://github.com/munich-quantum-toolkit/ddsim/pull/976
 [#975]: https://github.com/munich-quantum-toolkit/ddsim/pull/975
@@ -230,6 +233,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [**@denialhaag**]: https://github.com/denialhaag
 [**@DuenzingerClaudia**]: https://github.com/DuenzingerClaudia
 [**@simon1hofmann**]: https://github.com/simon1hofmann
+
 <!-- General links -->
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
