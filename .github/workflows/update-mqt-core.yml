@@ -23,7 +23,7 @@ permissions: {}
 jobs:
   update-mqt-core:
     name: ⬆️ Update MQT Core
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@ae4c1005796fedc123c3c70cdba94ce643c9fcae # v2.3.1
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@3cbd664d352731ddf77bbe65569adb9621bb2fa0 # v2.4.0
     with:
       update-to-head: ${{ github.event.inputs.update-to-head == 'true' }}
     secrets:

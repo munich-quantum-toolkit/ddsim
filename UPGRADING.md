@@ -42,6 +42,20 @@ newer. The new deployment target enables `std::format` in libc++.
 MQT DDSIM now requires CMake 3.28 or newer. Upgrade CMake before building this
 release.
 
+### CMake presets on Windows
+
+All CMake presets now use Ninja. On Windows, remove `-windows` from preset names
+when configuring, building, and testing:
+
+| Previous preset   | Replacement |
+| ----------------- | ----------- |
+| `debug-windows`   | `debug`     |
+| `release-windows` | `release`   |
+
+Install Ninja and run CMake from a Visual Studio developer shell for the target
+architecture. Use a new build directory if an existing directory uses the Visual
+Studio generator.
+
 ## [2.5.0]
 
 This release updates the minimum required `mqt-core` version to 3.9.0 and
