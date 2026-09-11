@@ -842,15 +842,6 @@ wheels = [
 ]
 
 [[package]]
-name = "graphviz"
-version = "0.21"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f8/b3/3ac91e9be6b761a4b30d66ff165e54439dcd48b83f4e20d644867215f6ca/graphviz-0.21.tar.gz", hash = "sha256:20743e7183be82aaaa8ad6c93f8893c923bd6658a04c32ee115edb3c8a835f78", size = 200434, upload-time = "2025-06-15T09:35:05.824Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/4c/e0ce1ef95d4000ebc1c11801f9b944fa5910ecc15b5e351865763d8657f8/graphviz-0.21-py3-none-any.whl", hash = "sha256:54f33de9f4f911d7e84e4191749cac8cc5653f815b06738c54db9a15ab8b1e42", size = 47300, upload-time = "2025-06-15T09:35:04.433Z" },
-]
-
-[[package]]
 name = "greenlet"
 version = "3.5.5"
 source = { registry = "https://pypi.org/simple" }
@@ -1512,7 +1503,6 @@ dev = [
 docs = [
     { name = "breathe" },
     { name = "furo" },
-    { name = "graphviz" },
     { name = "myst-nb" },
     { name = "qiskit", extra = ["visualization"] },
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -1537,8 +1527,8 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "mqt-core", extras = ["qiskit"], specifier = "~=3.10.0" },
-    { name = "nanobind-backend", specifier = ">=1.0" },
-    { name = "qiskit", specifier = ">=2.1.0" },
+    { name = "nanobind-backend", specifier = ">=1" },
+    { name = "qiskit", specifier = ">=2.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -1547,7 +1537,7 @@ build = [
     { name = "mqt-core", specifier = "~=3.10.0" },
     { name = "nanobind", specifier = "~=3.0.1" },
     { name = "scikit-build-core", specifier = ">=1.0.3" },
-    { name = "vcs-versioning", specifier = ">=2.3.0" },
+    { name = "vcs-versioning", specifier = ">=2.3" },
 ]
 dev = [
     { name = "cmake", specifier = ">=4.4.1" },
@@ -1559,26 +1549,25 @@ dev = [
     { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1" },
     { name = "numpy", marker = "python_full_version >= '3.14'", specifier = ">=2.3.2" },
     { name = "pytest", specifier = ">=9.0.3" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
-    { name = "pytest-xdist", specifier = ">=3.8.0" },
-    { name = "qiskit", specifier = ">=2.1.0" },
+    { name = "pytest-xdist", specifier = ">=3.8" },
+    { name = "qiskit", specifier = ">=2.1" },
     { name = "scikit-build-core", specifier = ">=1.0.3" },
-    { name = "vcs-versioning", specifier = ">=2.3.0" },
+    { name = "vcs-versioning", specifier = ">=2.3" },
 ]
 docs = [
-    { name = "breathe", specifier = ">=4.36.0" },
-    { name = "furo", specifier = ">=2025.9.25" },
-    { name = "graphviz", specifier = ">=0.21.0" },
-    { name = "myst-nb", specifier = ">=1.3.0" },
-    { name = "qiskit", extras = ["visualization"], specifier = ">=2.1.0" },
-    { name = "sphinx", specifier = ">=8.2.3" },
-    { name = "sphinx-autoapi", specifier = ">=3.6.0" },
+    { name = "breathe", specifier = ">=4.36" },
+    { name = "furo", specifier = ">=2025.12.19" },
+    { name = "myst-nb", specifier = ">=1.4" },
+    { name = "qiskit", extras = ["visualization"], specifier = ">=2.1" },
+    { name = "sphinx", specifier = ">=9" },
+    { name = "sphinx-autoapi", specifier = ">=3.6" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
-    { name = "sphinx-design", specifier = ">=0.6.1" },
-    { name = "sphinx-llm", specifier = ">=0.4.1" },
-    { name = "sphinxcontrib-bibtex", specifier = ">=2.6.5" },
-    { name = "sphinxext-opengraph", specifier = ">=0.13.0" },
+    { name = "sphinx-design", specifier = ">=0.7" },
+    { name = "sphinx-llm", specifier = ">=1" },
+    { name = "sphinxcontrib-bibtex", specifier = ">=2.7" },
+    { name = "sphinxext-opengraph", specifier = ">=0.13" },
 ]
 test = [
     { name = "numpy", specifier = ">=1.24" },
@@ -1586,10 +1575,10 @@ test = [
     { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1" },
     { name = "numpy", marker = "python_full_version >= '3.14'", specifier = ">=2.3.2" },
     { name = "pytest", specifier = ">=9.0.3" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
-    { name = "pytest-xdist", specifier = ">=3.8.0" },
-    { name = "qiskit", specifier = ">=2.1.0" },
+    { name = "pytest-xdist", specifier = ">=3.8" },
+    { name = "qiskit", specifier = ">=2.1" },
 ]
 
 [[package]]

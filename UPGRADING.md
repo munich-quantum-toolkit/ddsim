@@ -197,5 +197,5 @@ standard.
 <!-- Other links -->
 
 [#336]: https://github.com/munich-quantum-toolkit/ddsim/pull/336
-[MQT SyReC]: https://github.com/cda-tum/mqt-syrec
+[MQT SyReC]: https://github.com/munich-quantum-toolkit/syrec
 [CMake presets]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html

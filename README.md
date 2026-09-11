@@ -31,49 +31,49 @@ backbone of the MQT.
 ## Key Features
 
 - Decision-diagram–based circuit simulation:
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html)—strong
+  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)—strong
   (statevector) and weak (sampling), incl. mid‑circuit measurements and resets;
   Qiskit backends
-  ([qasm_simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)
+  ([qasm_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)
   and
-  [statevector_simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)).
-  [Quickstart](https://mqt.readthedocs.io/projects/ddsim/en/latest/quickstart.html)
+  [statevector_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)).
+  [Quickstart](https://mqt.readthedocs.io/projects/ddsim/en/stable/quickstart.html)
   •
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/latest/api/mqt/ddsim/index.html)
+  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
 - Unitary simulation:
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html)
+  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html)
   with an optional
-  [alternative recursive construction](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html#alternative-construction-sequence)
+  [alternative recursive construction](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html#alternative-construction-sequence)
   for improved intermediate compactness.
 - Hybrid Schrödinger–Feynman simulation:
-  [Hybrid simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/HybridSchrodingerFeynman.html)
+  [Hybrid simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/HybridSchrodingerFeynman.html)
   trading memory for runtime with DD and amplitude modes plus multithreading;
   also available as a statevector backend.
 - Simulation Path Framework:
-  [Path-based simulation](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html)
+  [Path-based simulation](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html)
   with strategies
-  [sequential](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#simulating-a-simple-circuit),
-  [pairwise_recursive](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration),
-  [bracket](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration),
+  [sequential](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#simulating-a-simple-circuit),
+  [pairwise_recursive](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
+  [bracket](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
   and
-  [alternating](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/SimulationPathFramework.html#configuration).
+  [alternating](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration).
 - Noise-aware simulation:
-  [Stochastic and deterministic noise](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/NoiseAwareSimulator.html)
+  [Stochastic and deterministic noise](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/NoiseAwareSimulator.html)
   (amplitude damping, depolarization, phase flip; density-matrix mode) for
   global decoherence and gate errors.
 - Qiskit-native API: Provider backends and Primitives
-  ([Sampler](https://mqt.readthedocs.io/projects/ddsim/en/latest/primitives.html#sampler)
+  ([Sampler](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#sampler)
   and
-  [Estimator](https://mqt.readthedocs.io/projects/ddsim/en/latest/primitives.html#estimator))
+  [Estimator](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#estimator))
   for algorithm-friendly workflows.
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/latest/api/mqt/ddsim/index.html)
+  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
 - Decision-diagram visualization: inspect states/unitaries via Graphviz export;
   see
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html)
+  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)
   and
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/UnitarySimulator.html).
+  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html).
 - Standalone CLI: fast C++ executables with JSON output; e.g.,
-  [ddsim_simple](https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html#usage-as-standalone-c-executable).
+  [ddsim_simple](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-standalone-c-executable).
 - Efficient and portable: C++20 core with DD engines; prebuilt wheels for
   Linux/macOS/Windows via [PyPI](https://pypi.org/project/mqt.ddsim/).
 
@@ -119,7 +119,7 @@ To support this endeavor, please consider:
   requests
 - Citing the MQT in your publications (see [Cite This](#cite-this))
 - Citing our research in your publications (see
-  [References](https://mqt.readthedocs.io/projects/ddsim/en/latest/references.html))
+  [References](https://mqt.readthedocs.io/projects/ddsim/en/stable/references.html))
 - Using the MQT in research and teaching, and sharing feedback and use cases
 - Sponsoring us on GitHub: <https://github.com/sponsors/munich-quantum-toolkit>
 

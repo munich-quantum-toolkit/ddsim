@@ -98,19 +98,17 @@ However, due to the nature of decision diagrams, the simulator can generally
 sample from the output distribution of much larger circuits than can be fully
 represented in memory.
 
-If you want to inspect the final decision diagram, you can get a Graphviz
-representation of it. For that, make sure that you have Graphviz installed and
-that the `graphviz` Python package is available. Then, you can call the
-`export_dd_to_graphviz_str` method on the simulator to obtain a Graphviz
-representation of the decision diagram. The following shows the default
-configuration options for the export.
+If [Graphviz](https://www.graphviz.org/) is installed, use
+{py:meth}`~mqt.core.dd.VectorDD.to_svg` to export the final decision diagram as
+SVG. IPython can display the resulting file in a notebook. The following shows
+the default configuration options for the export.
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 
-dot = dd.to_dot(colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
+dd.to_svg("bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
 
-graphviz.Source(source=dot)
+SVG(filename="bell_state.svg")
 ```
 
 ```{code-cell} ipython3
