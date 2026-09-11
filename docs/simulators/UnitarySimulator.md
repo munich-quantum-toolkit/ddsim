@@ -52,7 +52,7 @@ qc.draw(output="mpl", style="iqp")
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -66,9 +66,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -98,7 +98,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -112,9 +112,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -138,7 +138,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -152,9 +152,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -182,7 +182,7 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -196,9 +196,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -227,7 +227,7 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -241,9 +241,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -279,7 +279,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[2, 1, 0])
 ```
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -293,9 +293,9 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
 
 ```{code-cell} ipython3
@@ -356,7 +356,7 @@ Using the alternative construction sequence is as simple as setting
 the `backend.run` method when using the Qiskit backend.
 
 ```{code-cell} ipython3
-import graphviz
+from IPython.display import SVG
 from mqt.core import load
 from qiskit import QuantumCircuit
 
@@ -377,7 +377,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dot = dd.to_dot(colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
-graphviz.Source(source=dot)
+SVG(filename="unitary.svg")
 ```
