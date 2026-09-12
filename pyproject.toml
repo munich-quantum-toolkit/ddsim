@@ -9,7 +9,7 @@
 [build-system]
 build-backend = "scikit_build_core.build"
 requires = [
-  "mqt-core~=3.10.0",
+  "mqt-core~=4.0.0",
   "nanobind~=3.0.1",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3",
@@ -47,7 +47,7 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 dependencies = [
-  "mqt-core[qiskit]~=3.10.0",
+  "mqt-core[qiskit]~=4.0.0",
   "nanobind-backend>=1",
   "qiskit>=2.1",
 ]
@@ -99,7 +99,7 @@ docs = [
 ]
 build = [
   "cmake>=4.4.1",
-  "mqt-core~=3.10.0",
+  "mqt-core~=4.0.0",
   "nanobind~=3.0.1",
   "scikit-build-core>=1.0.3",
   "vcs-versioning>=2.3",
