@@ -98,15 +98,19 @@ However, due to the nature of decision diagrams, the simulator can generally
 sample from the output distribution of much larger circuits than can be fully
 represented in memory.
 
-If [Graphviz](https://www.graphviz.org/) is installed, use
-{py:meth}`~mqt.core.dd.VectorDD.to_svg` to export the final decision diagram as
-SVG. IPython can display the resulting file in a notebook. The following shows
-the default configuration options for the export.
+Use {py:meth}`~mqt.core.dd.VectorDD.to_dot` to export the final decision diagram
+as DOT, then render it as SVG with [PyGraphviz](https://pygraphviz.github.io/).
+PyGraphviz 2 or later wheels bundle Graphviz; source installations require
+[Graphviz to be installed separately](https://pygraphviz.github.io/documentation/stable/install.html).
+IPython can display the resulting file in a notebook. The following shows the
+default configuration options for the export.
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 
-dd.to_svg("bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
+dot = dd.to_dot(colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
+AGraph(dot).draw("bell_state.svg", prog="dot", format="svg")
 
 SVG(filename="bell_state.svg")
 ```

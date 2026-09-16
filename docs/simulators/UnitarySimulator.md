@@ -53,6 +53,7 @@ qc.draw(output="mpl", style="iqp")
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -66,7 +67,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -99,6 +100,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -112,7 +114,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -139,6 +141,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -152,7 +155,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -183,6 +186,7 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -196,7 +200,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -228,6 +232,7 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -241,7 +246,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -280,6 +285,7 @@ qc.draw(output="mpl", style="iqp", wire_order=[2, 1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -293,7 +299,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
@@ -357,6 +363,7 @@ the `backend.run` method when using the Qiskit backend.
 
 ```{code-cell} ipython3
 from IPython.display import SVG
+from pygraphviz import AGraph
 from mqt.core import load
 from qiskit import QuantumCircuit
 
@@ -377,7 +384,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
+AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
 
 SVG(filename="unitary.svg")
 ```
