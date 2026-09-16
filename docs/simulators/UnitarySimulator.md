@@ -51,9 +51,24 @@ qc.x(0)
 qc.draw(output="mpl", style="iqp")
 ```
 
+The following helper uses {py:meth}`~mqt.core.dd.MatrixDD.to_dot` and
+[PyGraphviz](https://pygraphviz.github.io/) to render decision diagrams as SVG.
+
+```{code-cell} ipython3
+from pygraphviz import AGraph
+
+
+def to_svg(dd, filename, **options):
+    """Render a decision diagram as SVG with PyGraphviz."""
+    AGraph(dd.to_dot(**options)).draw(filename, prog="dot", format="svg")
+```
+
+This temporary helper will be replaced by MQT Core's `to_svg()` method once
+DDSIM requires a version with PyGraphviz support (see
+[the tracking issue](https://github.com/munich-quantum-toolkit/ddsim/issues/1013)).
+
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -67,7 +82,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -100,7 +115,6 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -114,7 +128,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -141,7 +155,6 @@ qc.draw(output="mpl", style="iqp", wire_order=[1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -155,7 +168,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -186,7 +199,6 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -200,7 +212,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -232,7 +244,6 @@ qc.draw(output="mpl", style="iqp", wire_order=list(reversed(range(num_qubits))))
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -246,7 +257,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -285,7 +296,6 @@ qc.draw(output="mpl", style="iqp", wire_order=[2, 1, 0])
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
@@ -299,7 +309,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -363,7 +373,6 @@ the `backend.run` method when using the Qiskit backend.
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 from mqt.core import load
 from qiskit import QuantumCircuit
 
@@ -384,7 +393,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-AGraph(dd.to_dot(colored=True, edge_labels=True, classic=False)).draw("unitary.svg", prog="dot", format="svg")
+to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```

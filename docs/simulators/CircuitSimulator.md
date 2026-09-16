@@ -98,17 +98,30 @@ However, due to the nature of decision diagrams, the simulator can generally
 sample from the output distribution of much larger circuits than can be fully
 represented in memory.
 
-Use {py:meth}`~mqt.core.dd.VectorDD.to_dot` to export the final decision diagram
-as DOT, then render it as SVG with [PyGraphviz](https://pygraphviz.github.io/).
+The following helper uses {py:meth}`~mqt.core.dd.VectorDD.to_dot` and
+[PyGraphviz](https://pygraphviz.github.io/) to render the final decision diagram
+as SVG.
+
+```{code-cell} ipython3
+from pygraphviz import AGraph
+
+
+def to_svg(dd, filename, **options):
+    """Render a decision diagram as SVG with PyGraphviz."""
+    AGraph(dd.to_dot(**options)).draw(filename, prog="dot", format="svg")
+```
+
+This temporary helper will be replaced by MQT Core's `to_svg()` method once
+DDSIM requires a version with PyGraphviz support (see
+[the tracking issue](https://github.com/munich-quantum-toolkit/ddsim/issues/1013)).
+
 IPython can display the resulting file in a notebook. The following shows the
 default configuration options for the export.
 
 ```{code-cell} ipython3
 from IPython.display import SVG
-from pygraphviz import AGraph
 
-dot = dd.to_dot(colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
-AGraph(dot).draw("bell_state.svg", prog="dot", format="svg")
+to_svg(dd, "bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
 
 SVG(filename="bell_state.svg")
 ```
