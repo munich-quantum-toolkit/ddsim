@@ -100,8 +100,6 @@ represented in memory.
 
 Use {py:meth}`~mqt.core.dd.VectorDD.to_dot` to export the final decision diagram
 as DOT, then render it as SVG with [PyGraphviz](https://pygraphviz.github.io/).
-PyGraphviz 2 or later wheels bundle Graphviz; source installations require
-[Graphviz to be installed separately](https://pygraphviz.github.io/documentation/stable/install.html).
 IPython can display the resulting file in a notebook. The following shows the
 default configuration options for the export.
 
