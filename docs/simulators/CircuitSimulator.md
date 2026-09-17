@@ -98,15 +98,17 @@ However, due to the nature of decision diagrams, the simulator can generally
 sample from the output distribution of much larger circuits than can be fully
 represented in memory.
 
-If [Graphviz](https://www.graphviz.org/) is installed, use
-{py:meth}`~mqt.core.dd.VectorDD.to_svg` to export the final decision diagram as
-SVG. IPython can display the resulting file in a notebook. The following shows
-the default configuration options for the export.
+Use `to_svg` to render a decision diagram as SVG. It uses
+[PyGraphviz](https://pygraphviz.github.io/documentation/stable/install.html) 2
+or later when installed, or the `dot` command otherwise. IPython can display the
+resulting file in a notebook.
 
 ```{code-cell} ipython3
 from IPython.display import SVG
 
-dd.to_svg("bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
+from mqt.ddsim.utils import to_svg
+
+to_svg(dd, "bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
 
 SVG(filename="bell_state.svg")
 ```

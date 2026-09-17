@@ -13,7 +13,6 @@ build:
   apt_packages:
     - cmake
     - doxygen
-    - graphviz
   jobs:
     pre_build:
       # Build the C++ API docs before Sphinx starts
