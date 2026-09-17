@@ -51,6 +51,11 @@ qc.x(0)
 qc.draw(output="mpl", style="iqp")
 ```
 
+Use `to_svg` to render a decision diagram as SVG. It uses
+[PyGraphviz](https://pygraphviz.github.io/documentation/stable/install.html) 2
+or later when installed, or the `dot` command otherwise. IPython can display the
+resulting file in a notebook.
+
 ```{code-cell} ipython3
 from IPython.display import SVG
 from mqt.core import load
