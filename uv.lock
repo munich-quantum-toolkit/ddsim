@@ -1639,7 +1639,7 @@ test = [
 requires-dist = [
     { name = "mqt-core", extras = ["qiskit"], specifier = "~=3.10.0" },
     { name = "nanobind-backend", specifier = ">=1" },
-    { name = "qiskit", specifier = ">=2.1" },
+    { name = "qiskit", specifier = ">=2.1,<3" },
 ]
 
 [package.metadata.requires-dev]
@@ -1663,7 +1663,7 @@ dev = [
     { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8" },
-    { name = "qiskit", specifier = ">=2.1" },
+    { name = "qiskit", specifier = ">=2.1,<3" },
     { name = "scikit-build-core", specifier = ">=1.0.3" },
     { name = "vcs-versioning", specifier = ">=2.3" },
 ]
@@ -1672,7 +1672,7 @@ docs = [
     { name = "furo", specifier = ">=2025.12.19" },
     { name = "myst-nb", specifier = ">=1.4" },
     { name = "pygraphviz", specifier = ">=2" },
-    { name = "qiskit", extras = ["visualization"], specifier = ">=2.1" },
+    { name = "qiskit", extras = ["visualization"], specifier = ">=2.1,<3" },
     { name = "sphinx", specifier = ">=9" },
     { name = "sphinx-autoapi", specifier = ">=3.6" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
@@ -1690,7 +1690,7 @@ test = [
     { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8" },
-    { name = "qiskit", specifier = ">=2.1" },
+    { name = "qiskit", specifier = ">=2.1,<3" },
 ]
 
 [[package]]
