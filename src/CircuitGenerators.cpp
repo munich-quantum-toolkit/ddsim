@@ -46,8 +46,7 @@ using qc::Qubit;
   auto randomData =
       std::array<std::mt19937_64::result_type, std::mt19937_64::state_size>{};
   auto randomDevice = std::random_device{};
-  std::ranges::generate(randomData,
-                        [&randomDevice]() { return randomDevice(); });
+  std::ranges::generate(randomData, [&randomDevice] { return randomDevice(); });
   auto seedSequence = std::seed_seq(randomData.begin(), randomData.end());
   generator.seed(seedSequence);
   return generator;

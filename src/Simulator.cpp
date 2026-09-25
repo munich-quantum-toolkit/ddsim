@@ -101,8 +101,8 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
         q.push(ptr->e.at(0).p);
         probsMone[ptr->e.at(0).p] = 0;
       }
-      probsMone[ptr->e.at(0).p] =
-          probsMone.at(ptr->e.at(0).p) + parentProb * CN::mag2(ptr->e.at(0).w);
+      probsMone[ptr->e.at(0).p] = probsMone.at(ptr->e.at(0).p) +
+                                  (parentProb * CN::mag2(ptr->e.at(0).w));
     }
 
     if (ptr->e.at(1).p != nullptr && !ptr->e.at(1).w.exactlyZero()) {
@@ -110,8 +110,8 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
         q.push(ptr->e.at(1).p);
         probsMone[ptr->e.at(1).p] = 0;
       }
-      probsMone[ptr->e.at(1).p] =
-          probsMone.at(ptr->e.at(1).p) + parentProb * CN::mag2(ptr->e.at(1).w);
+      probsMone[ptr->e.at(1).p] = probsMone.at(ptr->e.at(1).p) +
+                                  (parentProb * CN::mag2(ptr->e.at(1).w));
     }
   }
 

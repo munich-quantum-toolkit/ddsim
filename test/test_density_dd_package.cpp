@@ -60,7 +60,7 @@ TEST(DensityDDPackageTest, ApplyOperationToDensityYieldsUniformDistribution) {
       state.getSparseProbabilityVectorStrKeys(nrQubits, 0.001);
   EXPECT_EQ(probabilities.size(), 1U << nrQubits);
   static constexpr dd::fp TOLERANCE = 1e-10;
-  for (const auto& [state_, probability] : probabilities) {
+  for (const auto& [basisState, probability] : probabilities) {
     EXPECT_NEAR(probability, 0.125, TOLERANCE);
   }
 }

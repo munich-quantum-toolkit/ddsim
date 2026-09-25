@@ -423,7 +423,7 @@ void ShorFastSimulator::uAEmulate2(const std::uint64_t a) {
         const auto node0 =
             addConstMod(ts.at(static_cast<std::size_t>(it->first->v)));
         const auto& node1 = nodesOnLevel.at(i - 1)[it->first->e.at(1).p];
-        const auto node2 = dd::vEdge{node1.p, dd->cn.lookup(node1.w)};
+        const auto node2 = dd::vEdge{.p = node1.p, .w = dd->cn.lookup(node1.w)};
         const auto res = dd->multiply(node0, node2);
         right = {res.p, res.w * it->first->e.at(1).w};
       }
@@ -452,7 +452,7 @@ void ShorFastSimulator::uAEmulate2(const std::uint64_t a) {
   result = dd->makeDDNode(rootEdge.p->v, std::array{tmp, result});
 
   result.w = result.w * rootEdge.w;
-  const auto res = dd::vEdge{result.p, dd->cn.lookup(result.w)};
+  const auto res = dd::vEdge{.p = result.p, .w = dd->cn.lookup(result.w)};
   dd->incRef(res);
   dd->decRef(rootEdge);
   rootEdge = res;

@@ -80,8 +80,8 @@ DeterministicNoiseSimulator::sampleFromProbabilityMap(
   std::map<std::string, std::size_t> results;
   for (size_t n = 0; n < shots; ++n) {
     const auto sampleIdx = d(mt);
-    const auto state = (std::next(resultProbabilityMap.begin(),
-                                  static_cast<std::int64_t>(sampleIdx)))
+    const auto state = std::next(resultProbabilityMap.begin(),
+                                 static_cast<std::int64_t>(sampleIdx))
                            ->first;
     results[state] += 1;
   }

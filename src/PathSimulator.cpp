@@ -224,7 +224,7 @@ void PathSimulator::generatePairwiseRecursiveGroupingSimulationPath() {
     }
 
     offset = id;
-    elements >>= 1;
+    elements >>= 1U;
     id += elements;
   }
   // Adding the remaining element
@@ -267,19 +267,19 @@ void PathSimulator::generateBracketSimulationPath(std::size_t bracketSize) {
         opMemory++;
         if (startElemBracket + 1 == qc->getNops()) {
           strayElem = qc->getNops() + bracketSize + 1 +
-                      (bracketSize * bracketMemory - bracketMemory);
+                      ((bracketSize * bracketMemory) - bracketMemory);
           rightSingle = true;
           break;
         }
       } else {
         components.emplace_back(
             qc->getNops() + bracketSize + i +
-                (bracketSize * bracketMemory - bracketMemory),
+                ((bracketSize * bracketMemory) - bracketMemory),
             startElemBracket + 1 + i);
         opMemory++;
         if (startElemBracket + 1 + i >= qc->getNops()) {
           strayElem = qc->getNops() + bracketSize + i +
-                      (bracketSize * bracketMemory - bracketMemory) + 1;
+                      ((bracketSize * bracketMemory) - bracketMemory) + 1;
           rightSingle = true;
           break;
         }
@@ -470,7 +470,7 @@ void PathSimulator::constructTaskGraph() {
 
     // add final task for storing the result
     if (i == path.size() - 1) {
-      const auto runner = [this, resultStep]() {
+      const auto runner = [this, resultStep] {
         if (const auto* res =
                 std::get_if<dd::VectorDD>(&results.at(resultStep.id))) {
           rootEdge = *res;
@@ -488,7 +488,7 @@ void PathSimulator::constructTaskGraph() {
 
 void PathSimulator::addSimulationTask(std::size_t leftID, std::size_t rightID,
                                       std::size_t resultID) {
-  const auto runner = [this, leftID, rightID, resultID]() {
+  const auto runner = [this, leftID, rightID, resultID] {
     /// Enable the following statement for printing execution order
     //            std::cout << "Executing " << leftID << " " << rightID << " ->
     //            " << resultID << std::endl;

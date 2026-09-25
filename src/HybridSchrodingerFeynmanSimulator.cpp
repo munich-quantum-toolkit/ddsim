@@ -333,14 +333,14 @@ void HybridSchrodingerFeynmanSimulator::simulateHybridTaskflow(
             current.second = std::min(current.second,
                                       static_cast<std::size_t>(secondResult));
             executor.silent_async(
-                [&computePair, current]() { computePair(current); });
+                [&computePair, current] { computePair(current); });
           }
         }
       };
 
   for (std::uint64_t i = 0U; i < maxControl; i += nslicesOnOneCpu) {
     executor.silent_async(
-        [&computePair, i]() { computePair(std::make_pair(0, i)); });
+        [&computePair, i] { computePair(std::make_pair(0, i)); });
   }
   executor.wait_for_all();
 
@@ -371,7 +371,7 @@ void HybridSchrodingerFeynmanSimulator::simulateHybridAmplitudes(
   for (std::size_t control = 0, i = 0; control < maxControl;
        control += nslicesOnOneCpu, i++) {
     executor.silent_async([this, i, &amplitudes, nslicesOnOneCpu, control,
-                           splitQubit, maxControl]() {
+                           splitQubit, maxControl] {
       const auto currentThread = i;
       std::vector<std::complex<dd::fp>>& threadAmplitudes =
           amplitudes.at(currentThread);

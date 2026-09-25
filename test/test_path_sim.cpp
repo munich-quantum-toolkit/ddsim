@@ -173,7 +173,7 @@ TEST(TaskBasedSimTest, GroverCircuitBracket) {
   // simulate circuit
   const auto counts = tbs.simulate(4096);
 
-  const auto target = targetValue.to_ullong() | (1ULL << 4);
+  const auto target = targetValue.to_ullong() | (1ULL << 4U);
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
@@ -198,7 +198,7 @@ TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
   // simulate circuit
   const auto counts = tbs.simulate(4096);
 
-  const auto target = targetValue.to_ullong() | (1ULL << 4);
+  const auto target = targetValue.to_ullong() | (1ULL << 4U);
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
@@ -223,7 +223,7 @@ TEST(TaskBasedSimTest, GroverCircuitPairwiseGrouping) {
   // simulate circuit
   const auto counts = tbs.simulate(4096);
 
-  const auto target = targetValue.to_ullong() | (1ULL << 4);
+  const auto target = targetValue.to_ullong() | (1ULL << 4U);
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 

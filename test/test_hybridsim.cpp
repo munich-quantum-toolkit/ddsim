@@ -13,7 +13,6 @@
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/OpType.hpp"
 
-#include <cstdlib>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <memory>

@@ -191,24 +191,20 @@ dCachedEdge DensityDDPackage::multiply2(const dEdge& x, const dEdge& y,
   const auto xWeight = static_cast<dd::ComplexValue>(x.w);
   const auto yWeight = static_cast<dd::ComplexValue>(y.w);
   const auto rWeight = xWeight * yWeight;
-  if (x.isIdentity()) {
-    if (y.isIdentity() ||
-        (dNode::isDensityMatrixTempFlagSet(y.p->flags) &&
-         generateDensityMatrix) ||
-        (!dNode::isDensityMatrixTempFlagSet(y.p->flags) &&
-         !generateDensityMatrix)) {
-      return {y.p, rWeight};
-    }
+  if (x.isIdentity() && (y.isIdentity() ||
+                         (dNode::isDensityMatrixTempFlagSet(y.p->flags) &&
+                          generateDensityMatrix) ||
+                         (!dNode::isDensityMatrixTempFlagSet(y.p->flags) &&
+                          !generateDensityMatrix))) {
+    return {y.p, rWeight};
   }
 
-  if (y.isIdentity()) {
-    if (x.isIdentity() ||
-        (dNode::isDensityMatrixTempFlagSet(x.p->flags) &&
-         generateDensityMatrix) ||
-        (!dNode::isDensityMatrixTempFlagSet(x.p->flags) &&
-         !generateDensityMatrix)) {
-      return {x.p, rWeight};
-    }
+  if (y.isIdentity() && (x.isIdentity() ||
+                         (dNode::isDensityMatrixTempFlagSet(x.p->flags) &&
+                          generateDensityMatrix) ||
+                         (!dNode::isDensityMatrixTempFlagSet(x.p->flags) &&
+                          !generateDensityMatrix))) {
+    return {x.p, rWeight};
   }
 
   if (const auto* r =
@@ -451,10 +447,9 @@ void DensityDDPackage::incRef(const dEdge& e) {
 
 void DensityDDPackage::decRef(const dEdge& e) {
   if (dEdge::trackingRequired(e)) {
-    if (const auto it = dRoots.find(e); it != dRoots.end()) {
-      if (--it->second == 0U) {
-        dRoots.erase(it);
-      }
+    if (const auto it = dRoots.find(e);
+        it != dRoots.end() && --it->second == 0U) {
+      dRoots.erase(it);
     }
   }
   pkg->decRef(matrixFromDensityEdge(e));

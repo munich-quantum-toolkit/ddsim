@@ -216,7 +216,7 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          const auto control = [actualValue, expectedValue, comparisonKind]() {
+          const auto control = [actualValue, expectedValue, comparisonKind] {
             switch (comparisonKind) {
             case qc::ComparisonKind::Eq:
               return actualValue == expectedValue;
