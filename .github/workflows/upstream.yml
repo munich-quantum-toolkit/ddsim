@@ -16,7 +16,6 @@ permissions: {}
 
 jobs:
   qiskit-upstream-tests:
-    if: false
     name: 🐍⚛️
     strategy:
       fail-fast: false
@@ -31,7 +30,7 @@ jobs:
   create-issue-on-failure:
     name: Create issue on failure
     needs: qiskit-upstream-tests
-    if: false
+    if: ${{ always() }}
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-issue.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
     with:
       tests-result: ${{ needs.qiskit-upstream-tests.result }}

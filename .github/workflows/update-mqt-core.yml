@@ -16,7 +16,6 @@ permissions: {}
 
 jobs:
   update-mqt-core:
-    if: false
     name: ⬆️ Update MQT Core
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-mqt-core-update.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
     with:
