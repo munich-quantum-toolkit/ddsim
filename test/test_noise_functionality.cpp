@@ -30,6 +30,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace {
+
 class DDNoiseFunctionalityTest : public ::testing::Test {
 protected:
   void SetUp() override {
@@ -322,3 +324,5 @@ TEST_F(DDNoiseFunctionalityTest, invalidNoiseProbabilities) {
                                                        0.3, 0.6, 2, "APD"),
                std::runtime_error);
 }
+
+} // namespace
