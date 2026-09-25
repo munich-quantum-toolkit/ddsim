@@ -340,7 +340,7 @@ TEST(DeterministicNoiseSimTest, TestFunctionsOptimized) {
   auto quantumComputation = detGetAdder4Circuit();
   auto ddsim = std::make_unique<DeterministicNoiseSimulator>(
       std::move(quantumComputation), std::string("APD"), 0.01, 0.02, 1);
-  auto m = ddsim->simulate(1000);
+  const auto m = ddsim->simulate(1000);
 
   EXPECT_EQ(ddsim->getNumberOfQubits(), 4);
   EXPECT_EQ(ddsim->getActiveNodeCount(), 22);

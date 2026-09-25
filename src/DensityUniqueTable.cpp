@@ -111,7 +111,7 @@ std::size_t DensityUniqueTable::getNumEntries() const noexcept {
 std::size_t DensityUniqueTable::countMarkedEntries() const noexcept {
   std::size_t count = 0U;
   for (const auto& table : tables) {
-    for (auto* bucket : table) {
+    for (const auto* bucket : table) {
       const auto* p = bucket;
       while (p != nullptr) {
         if (p->isMarked()) {

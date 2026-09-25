@@ -29,6 +29,8 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <nlohmann/adl_serializer.hpp>
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
