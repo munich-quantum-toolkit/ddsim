@@ -72,9 +72,9 @@ TEST(UnitarySimTest, ConstructSimpleCircuitSequential) {
   const auto& e = ddsim.getConstructedDD();
   EXPECT_TRUE(e.p->e[0].isIdentity());
   EXPECT_TRUE(e.p->e[1].isIdentity());
-  auto finalNodes = ddsim.getFinalNodeCount();
+  const auto finalNodes = ddsim.getFinalNodeCount();
   EXPECT_EQ(finalNodes, 4);
-  auto constructionTime = ddsim.getConstructionTime();
+  const auto constructionTime = ddsim.getConstructionTime();
   std::cout << "Construction took " << constructionTime << "s\n";
 }
 
@@ -89,9 +89,9 @@ TEST(UnitarySimTest, ConstructSimpleCircuitRecursive) {
   const auto& e = ddsim.getConstructedDD();
   EXPECT_TRUE(e.p->e[0].isIdentity());
   EXPECT_TRUE(e.p->e[1].isIdentity());
-  auto finalNodes = ddsim.getFinalNodeCount();
+  const auto finalNodes = ddsim.getFinalNodeCount();
   EXPECT_EQ(finalNodes, 4);
-  auto constructionTime = ddsim.getConstructionTime();
+  const auto constructionTime = ddsim.getConstructionTime();
   std::cout << "Construction took " << constructionTime << "s\n";
 }
 

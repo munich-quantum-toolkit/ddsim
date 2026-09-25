@@ -57,15 +57,15 @@ std::map<std::string, std::size_t> Simulator::sampleFromAmplitudeVectorInPlace(
   std::map<std::string, std::size_t> results;
   std::uniform_real_distribution<dd::fp> dist(0.0L, 1.0L);
   for (unsigned int i = 0; i < shots; ++i) {
-    auto p = dist(mt);
+    const auto p = dist(mt);
     // use binary search to find the first entry >= p
-    auto mit = std::ranges::upper_bound(
+    const auto mit = std::ranges::upper_bound(
         amplitudes, p, std::less<>{},
         [](const std::complex<dd::fp>& c) { return c.real(); });
-    auto m = std::distance(amplitudes.begin(), mit);
+    const auto m = std::distance(amplitudes.begin(), mit);
 
     // construct basis state string
-    auto basisState =
+    const auto basisState =
         dd::intToBinaryString(static_cast<std::size_t>(m), getNumberOfQubits());
     results[basisState]++;
   }
@@ -101,8 +101,8 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
         q.push(ptr->e.at(0).p);
         probsMone[ptr->e.at(0).p] = 0;
       }
-      probsMone[ptr->e.at(0).p] =
-          probsMone.at(ptr->e.at(0).p) + parentProb * CN::mag2(ptr->e.at(0).w);
+      probsMone[ptr->e.at(0).p] = probsMone.at(ptr->e.at(0).p) +
+                                  (parentProb * CN::mag2(ptr->e.at(0).w));
     }
 
     if (ptr->e.at(1).p != nullptr && !ptr->e.at(1).w.exactlyZero()) {
@@ -110,8 +110,8 @@ Simulator::getNodeContributions(const dd::vEdge& edge) const {
         q.push(ptr->e.at(1).p);
         probsMone[ptr->e.at(1).p] = 0;
       }
-      probsMone[ptr->e.at(1).p] =
-          probsMone.at(ptr->e.at(1).p) + parentProb * CN::mag2(ptr->e.at(1).w);
+      probsMone[ptr->e.at(1).p] = probsMone.at(ptr->e.at(1).p) +
+                                  (parentProb * CN::mag2(ptr->e.at(1).w));
     }
   }
 
@@ -270,7 +270,7 @@ double Simulator::approximateBySampling(std::unique_ptr<dd::Package>& localDD,
     }
   }
 
-  for (auto& visitedNode : visitedNodes) {
+  for (const auto& visitedNode : visitedNodes) {
     if (visitedNode.second > threshold) {
       visitedNodes2.erase(visitedNode.first);
     }
@@ -330,7 +330,8 @@ dd::vEdge Simulator::removeNodes(std::unique_ptr<dd::Package>& localDD,
 
   const std::array<dd::vEdge, dd::RADIX> edges{
       removeNodes(localDD, e.p->e.at(0), dagEdges),
-      removeNodes(localDD, e.p->e.at(1), dagEdges)};
+      removeNodes(localDD, e.p->e.at(1), dagEdges),
+  };
 
   dd::vEdge r = localDD->makeDDNode(e.p->v, edges);
   dagEdges[e.p] = r;

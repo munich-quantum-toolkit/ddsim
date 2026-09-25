@@ -28,7 +28,8 @@
 
 namespace nl = nlohmann;
 
-int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape, misc-const-correctness)
+int main(int argc, char** argv) {
   cxxopts::Options options(
       "MQT DDSIM", "see for more information https://www.cda.cit.tum.de/");
   // clang-format off
@@ -51,7 +52,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
 
     ; // end arguments list
   // clang-format on
-  auto vm = options.parse(argc, argv);
+  const auto vm = options.parse(argc, argv);
 
   if (vm.count("help") > 0) {
     std::cout << options.help();
@@ -92,11 +93,11 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         vm["noise_effects"].as<std::string>(), vm["noise_prob"].as<double>(),
         noiseProbT1, vm["noise_prob_multi"].as<double>());
 
-    auto t1 = std::chrono::steady_clock::now();
+    const auto t1 = std::chrono::steady_clock::now();
 
     const auto measurementResults = ddsim->simulate(vm["shots"].as<size_t>());
 
-    auto t2 = std::chrono::steady_clock::now();
+    const auto t2 = std::chrono::steady_clock::now();
 
     const std::chrono::duration<float> durationSimulation = t2 - t1;
 
@@ -130,11 +131,11 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         vm["noise_prob"].as<double>(), noiseProbT1,
         vm["noise_prob_multi"].as<double>());
 
-    auto t1 = std::chrono::steady_clock::now();
+    const auto t1 = std::chrono::steady_clock::now();
 
     const auto measurementResults = ddsim->simulate(vm["shots"].as<size_t>());
 
-    auto t2 = std::chrono::steady_clock::now();
+    const auto t2 = std::chrono::steady_clock::now();
 
     const std::chrono::duration<float> durationSimulation = t2 - t1;
 

@@ -13,7 +13,6 @@
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/OpType.hpp"
 
-#include <cstdlib>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <memory>
@@ -23,7 +22,7 @@
 using namespace qc::literals;
 
 TEST(HybridSimTest, TrivialParallelDD) {
-  auto quantumComputation = [] {
+  const auto quantumComputation = [] {
     auto qc = std::make_unique<qc::QuantumComputation>(4);
     qc->h(2);
     qc->h(1);
@@ -58,7 +57,7 @@ TEST(HybridSimTest, TrivialParallelDD) {
 }
 
 TEST(HybridSimTest, TrivialParallelAmplitude) {
-  auto quantumComputation = [] {
+  const auto quantumComputation = [] {
     auto qc = std::make_unique<qc::QuantumComputation>(4);
     qc->h(2);
     qc->h(1);
@@ -97,7 +96,9 @@ TEST(HybridSimTest, TooManyQubitsForVectorTest) {
       std::move(qc), ApproximationInfo{},
       HybridSchrodingerFeynmanSimulator::Mode::Amplitude);
   EXPECT_THROW(
-      { [[maybe_unused]] auto _ = ddsim.getVectorFromHybridSimulation(); },
+      {
+        [[maybe_unused]] const auto _ = ddsim.getVectorFromHybridSimulation();
+      },
       std::range_error);
 }
 

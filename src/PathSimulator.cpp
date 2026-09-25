@@ -189,7 +189,7 @@ void PathSimulator::generatePairwiseRecursiveGroupingSimulationPath() {
   components.reserve(qc->getNops());
 
   const std::size_t nleaves = qc->getNops() + 1;
-  auto depth = static_cast<std::size_t>(std::ceil(std::log2(nleaves)));
+  const auto depth = static_cast<std::size_t>(std::ceil(std::log2(nleaves)));
 
   std::size_t id = nleaves;
   std::size_t offset = 0;
@@ -224,7 +224,7 @@ void PathSimulator::generatePairwiseRecursiveGroupingSimulationPath() {
     }
 
     offset = id;
-    elements >>= 1;
+    elements >>= 1U;
     id += elements;
   }
   // Adding the remaining element
@@ -267,19 +267,19 @@ void PathSimulator::generateBracketSimulationPath(std::size_t bracketSize) {
         opMemory++;
         if (startElemBracket + 1 == qc->getNops()) {
           strayElem = qc->getNops() + bracketSize + 1 +
-                      (bracketSize * bracketMemory - bracketMemory);
+                      ((bracketSize * bracketMemory) - bracketMemory);
           rightSingle = true;
           break;
         }
       } else {
         components.emplace_back(
             qc->getNops() + bracketSize + i +
-                (bracketSize * bracketMemory - bracketMemory),
+                ((bracketSize * bracketMemory) - bracketMemory),
             startElemBracket + 1 + i);
         opMemory++;
         if (startElemBracket + 1 + i >= qc->getNops()) {
           strayElem = qc->getNops() + bracketSize + i +
-                      (bracketSize * bracketMemory - bracketMemory) + 1;
+                      ((bracketSize * bracketMemory) - bracketMemory) + 1;
           rightSingle = true;
           break;
         }
@@ -458,26 +458,28 @@ void PathSimulator::constructTaskGraph() {
     // create dependencies
     if (leftID >= nleaves) {
       auto& leftTask = tasks.at(leftID);
-      auto& resultTask = tasks.at(resultStep.id);
+      const auto& resultTask = tasks.at(resultStep.id);
       leftTask.precede(resultTask);
     }
 
     if (rightID >= nleaves) {
       auto& rightTask = tasks.at(rightID);
-      auto& resultTask = tasks.at(resultStep.id);
+      const auto& resultTask = tasks.at(resultStep.id);
       rightTask.precede(resultTask);
     }
 
     // add final task for storing the result
     if (i == path.size() - 1) {
-      const auto runner = [this, resultStep]() {
-        if (auto* res = std::get_if<dd::VectorDD>(&results.at(resultStep.id))) {
+      const auto runner = [this, resultStep] {
+        if (const auto* res =
+                std::get_if<dd::VectorDD>(&results.at(resultStep.id))) {
           rootEdge = *res;
         } else {
           throw std::runtime_error("Expected vector DD as result.");
         }
       };
-      auto storeResultTask = taskflow.emplace(runner).name("store result");
+      const auto storeResultTask =
+          taskflow.emplace(runner).name("store result");
       auto precedingTask = tasks.at(resultStep.id);
       precedingTask.precede(storeResultTask);
     }
@@ -486,7 +488,7 @@ void PathSimulator::constructTaskGraph() {
 
 void PathSimulator::addSimulationTask(std::size_t leftID, std::size_t rightID,
                                       std::size_t resultID) {
-  const auto runner = [this, leftID, rightID, resultID]() {
+  const auto runner = [this, leftID, rightID, resultID] {
     /// Enable the following statement for printing execution order
     //            std::cout << "Executing " << leftID << " " << rightID << " ->
     //            " << resultID << std::endl;

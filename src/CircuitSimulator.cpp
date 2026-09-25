@@ -178,7 +178,7 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
               classic.size()); // this should not happen do to check in Simulate
 
           for (std::size_t i = 0; i < quantum.size(); ++i) {
-            auto result = measure(static_cast<dd::Qubit>(quantum.at(i)));
+            const auto result = measure(static_cast<dd::Qubit>(quantum.at(i)));
             assert(result == '0' || result == '1');
             classicValues[classic.at(i)] = (result == '1');
           }
@@ -194,7 +194,8 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
       dd->garbageCollect();
     } else {
       if (op->isIfElseOperation()) {
-        if (auto* ifElseOp = dynamic_cast<qc::IfElseOperation*>(op.get())) {
+        if (const auto* ifElseOp =
+                dynamic_cast<qc::IfElseOperation*>(op.get())) {
           const auto& comparisonKind = ifElseOp->getComparisonKind();
 
           std::size_t startIndex = 0;
@@ -215,7 +216,7 @@ CircuitSimulator::singleShot(const bool ignoreNonUnitaries) {
             actualValue |= (classicValues[startIndex + i] ? 1U : 0U) << i;
           }
 
-          const auto control = [actualValue, expectedValue, comparisonKind]() {
+          const auto control = [actualValue, expectedValue, comparisonKind] {
             switch (comparisonKind) {
             case qc::ComparisonKind::Eq:
               return actualValue == expectedValue;

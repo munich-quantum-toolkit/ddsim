@@ -216,7 +216,7 @@ TEST(StochNoiseSimTest, SimulateAdder4WithDecoherenceError) {
   StochasticNoiseSimulator ddsim(std::move(quantumComputation), {}, 42U,
                                  std::string("AP"), 0.01);
 
-  auto m = ddsim.simulate(1000);
+  const auto m = ddsim.simulate(1000);
   double const tolerance = 50;
 
   EXPECT_NEAR(static_cast<double>(m.find("0000")->second), 84, tolerance);

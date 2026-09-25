@@ -29,27 +29,30 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <nlohmann/adl_serializer.hpp>
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
 
 namespace nl = nlohmann;
 
-namespace std {
-template <class T>
-// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
-void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
-  j = nl::basic_json<>{p.real(), p.imag()};
-}
-template <class T>
-// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
-void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
-  p.real(j.at(0));
-  p.imag(j.at(1));
-}
-} // namespace std
+NLOHMANN_JSON_NAMESPACE_BEGIN
+template <class T> struct adl_serializer<std::complex<T>> {
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  static void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
+    j = nl::basic_json<>{p.real(), p.imag()};
+  }
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  static void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
+    p.real(j.at(0));
+    p.imag(j.at(1));
+  }
+};
+NLOHMANN_JSON_NAMESPACE_END
 
-int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape, misc-const-correctness)
+int main(int argc, char** argv) {
   cxxopts::Options options(
       "MQT DDSIM", "for more information see https://www.cda.cit.tum.de/");
   // clang-format off
@@ -82,7 +85,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         ("simulate_fast_shor_coprime","coprime number to use with Shor's algorithm (zero randomly generates a coprime)", cxxopts::value<unsigned int>()->default_value("0"));
   // clang-format on
 
-  auto vm = options.parse(argc, argv);
+  const auto vm = options.parse(argc, argv);
   if (vm.count("help") > 0) {
     std::cout << options.help();
     return 0;
@@ -188,9 +191,9 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
                  "You're jumping into the deep end.\n";
   }
 
-  auto t1 = std::chrono::high_resolution_clock::now();
-  auto m = ddsim->simulate(shots);
-  auto t2 = std::chrono::high_resolution_clock::now();
+  const auto t1 = std::chrono::high_resolution_clock::now();
+  const auto m = ddsim->simulate(shots);
+  const auto t2 = std::chrono::high_resolution_clock::now();
 
   const std::chrono::duration<float> durationSimulation = t2 - t1;
 
@@ -264,7 +267,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   }
 
   if (vm.count("pv") > 0) {
-    if (auto* hsfSim =
+    if (const auto* hsfSim =
             dynamic_cast<HybridSchrodingerFeynmanSimulator*>(ddsim.get())) {
       outputObj["state_vector"] = hsfSim->getVectorFromHybridSimulation();
     } else {
@@ -293,7 +296,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   }
 
   if (vm.count("dump_complex") > 0) {
-    auto filename = vm["dump_complex"].as<std::string>();
+    const auto filename = vm["dump_complex"].as<std::string>();
     auto ostream = std::fstream(filename, std::fstream::out);
     dd::exportEdgeWeights(ddsim->rootEdge, ostream);
   }

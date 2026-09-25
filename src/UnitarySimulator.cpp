@@ -77,13 +77,13 @@ dd::MatrixDD buildFunctionalityPairwise(const qc::QuantumComputation& qc,
 
 void UnitarySimulator::construct() {
   // carry out actual computation
-  auto start = std::chrono::steady_clock::now();
+  const auto start = std::chrono::steady_clock::now();
   if (mode == Mode::Sequential) {
     e = dd::buildFunctionality(*qc, *dd);
   } else if (mode == Mode::Recursive) {
     e = buildFunctionalityPairwise(*qc, *dd);
   }
-  auto end = std::chrono::steady_clock::now();
+  const auto end = std::chrono::steady_clock::now();
   constructionTime = std::chrono::duration<double>(end - start).count();
 }
 
