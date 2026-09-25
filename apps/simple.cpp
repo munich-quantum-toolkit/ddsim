@@ -35,21 +35,22 @@
 
 namespace nl = nlohmann;
 
-namespace std {
-template <class T>
-// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
-void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
-  j = nl::basic_json<>{p.real(), p.imag()};
-}
-template <class T>
-// NOLINTNEXTLINE(misc-use-internal-linkage, readability-identifier-naming)
-void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
-  p.real(j.at(0));
-  p.imag(j.at(1));
-}
-} // namespace std
+NLOHMANN_JSON_NAMESPACE_BEGIN
+template <class T> struct adl_serializer<std::complex<T>> {
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  static void to_json(nl::basic_json<>& j, const std::complex<T>& p) {
+    j = nl::basic_json<>{p.real(), p.imag()};
+  }
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  static void from_json(const nl::basic_json<>& j, std::complex<T>& p) {
+    p.real(j.at(0));
+    p.imag(j.at(1));
+  }
+};
+NLOHMANN_JSON_NAMESPACE_END
 
-int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape, misc-const-correctness)
+int main(int argc, char** argv) {
   cxxopts::Options options(
       "MQT DDSIM", "for more information see https://www.cda.cit.tum.de/");
   // clang-format off

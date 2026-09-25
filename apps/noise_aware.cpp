@@ -28,7 +28,8 @@
 
 namespace nl = nlohmann;
 
-int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape, misc-const-correctness)
+int main(int argc, char** argv) {
   cxxopts::Options options(
       "MQT DDSIM", "see for more information https://www.cda.cit.tum.de/");
   // clang-format off

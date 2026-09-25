@@ -23,3 +23,9 @@ package_add_test(
   test_dd_minimizer.cpp)
 
 target_include_directories(mqt-ddsim-test PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
+if(BUILD_MQT_DDSIM_CLI)
+  add_test(NAME mqt-ddsim-cli-json
+           COMMAND ${CMAKE_COMMAND} "-DDDSIM_CLI=$<TARGET_FILE:mqt-ddsim-simple>" -P
+                   ${CMAKE_CURRENT_SOURCE_DIR}/test_cli_json.cmake)
+endif()
