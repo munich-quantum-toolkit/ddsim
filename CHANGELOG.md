@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- ⬆️ Update `clang-tidy` to version 23 ([#1019]) ([**@denialhaag**])
+
 ## [2.6.0] - 2026-09-12
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#260)._
@@ -200,6 +204,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019
 [#1004]: https://github.com/munich-quantum-toolkit/ddsim/pull/1004
 [#998]: https://github.com/munich-quantum-toolkit/ddsim/pull/998
 [#995]: https://github.com/munich-quantum-toolkit/ddsim/pull/995
