@@ -245,8 +245,12 @@ ShorFastSimulator::postProcessing(const std::string& sample) const {
 }
 
 dd::mEdge ShorFastSimulator::limitTo(std::uint64_t a) {
-  std::array<dd::mEdge, 4> edges{dd::mEdge::zero(), dd::mEdge::zero(),
-                                 dd::mEdge::zero(), dd::mEdge::zero()};
+  std::array<dd::mEdge, 4> edges{
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+  };
 
   if ((a & 1U) > 0) {
     edges[0] = edges[3] = dd::mEdge::one();
@@ -273,8 +277,12 @@ dd::mEdge ShorFastSimulator::limitTo(std::uint64_t a) {
 
 dd::mEdge ShorFastSimulator::addConst(std::uint64_t a) {
   dd::Edge f = dd::mEdge::one();
-  std::array<dd::mEdge, 4> edges{dd::mEdge::zero(), dd::mEdge::zero(),
-                                 dd::mEdge::zero(), dd::mEdge::zero()};
+  std::array<dd::mEdge, 4> edges{
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+  };
 
   std::uint32_t p = 0;
   while (((a >> p) & 1U) == 0) {

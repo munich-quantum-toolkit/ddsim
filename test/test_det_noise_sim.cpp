@@ -125,12 +125,14 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPDWithSimulate) {
 
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
-  const auto expectedEntries =
-      std::array{"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
-                 "1000", "1001", "1010", "1011", "1101", "1110", "1111"};
-  const auto expectedValues =
-      std::array{969, 1731, 238, 242, 141, 138, 244, 239,
-                 907, 4145, 235, 262, 184, 116, 110};
+  const auto expectedEntries = std::array{
+      "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+      "1000", "1001", "1010", "1011", "1101", "1110", "1111",
+  };
+  const auto expectedValues = std::array{
+      969, 1731, 238, 242, 141, 138, 244, 239,
+      907, 4145, 235, 262, 184, 116, 110,
+  };
   const auto tolerance = 100;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
     if (!m.contains(expectedEntries.at(i))) {
@@ -155,13 +157,15 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackD) {
 
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
-  const auto expectedEntries =
-      std::array{"0000", "0001", "0011", "0100", "0101",
-                 "0111", "1000", "1001", "1011", "1101"};
+  const auto expectedEntries = std::array{
+      "0000", "0001", "0011", "0100", "0101",
+      "0111", "1000", "1001", "1011", "1101",
+  };
   const auto expectedValues = std::array{
       0.0332328704931, 0.0683938280189, 0.0117061689898, 0.0129643065735,
       0.0107812802908, 0.0160082331009, 0.0328434857577, 0.7370101351171,
-      0.0186346925411, 0.0275086747656};
+      0.0186346925411, 0.0275086747656,
+  };
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
     if (!m.contains(expectedEntries.at(i))) {
@@ -185,14 +189,16 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPD) {
 
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
-  const auto expectedEntries =
-      std::array{"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
-                 "1000", "1001", "1010", "1011", "1101", "1110", "1111"};
+  const auto expectedEntries = std::array{
+      "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+      "1000", "1001", "1010", "1011", "1101", "1110", "1111",
+  };
   const auto expectedValues = std::array{
       0.0969332192741, 0.1731941264570, 0.0238203475524, 0.0242454336917,
       0.0141409660985, 0.0138062113213, 0.0244576087400, 0.0239296920989,
       0.0907888041538, 0.4145855071998, 0.0235097990017, 0.0262779844799,
-      0.0184033482066, 0.0116282811276, 0.0110373166627};
+      0.0184033482066, 0.0116282811276, 0.0110373166627,
+  };
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
     if (!m.contains(expectedEntries.at(i))) {
@@ -252,13 +258,15 @@ TEST(DeterministicNoiseSimTest, SimulateAdder4TrackAPDCustomProb) {
 
   std::cout << std::setw(2) << nlohmann::basic_json(m) << "\n";
 
-  const auto expectedEntries =
-      std::array{"0000", "0001", "0010", "0011", "0110", "0111",
-                 "1000", "1001", "1010", "1011", "1101"};
+  const auto expectedEntries = std::array{
+      "0000", "0001", "0010", "0011", "0110", "0111",
+      "1000", "1001", "1010", "1011", "1101",
+  };
   const auto expectedValues = std::array{
       0.0616548044047, 0.1487734834937, 0.0155601736851, 0.0166178042857,
       0.0301651684817, 0.0301853251959, 0.0570878674208, 0.5519250213313,
-      0.0157508473593, 0.0187340765889, 0.0132640682125};
+      0.0157508473593, 0.0187340765889, 0.0132640682125,
+  };
   const auto tolerance = 1e-10;
   for (std::size_t i = 0; i < expectedEntries.size(); ++i) {
     if (!m.contains(expectedEntries.at(i))) {

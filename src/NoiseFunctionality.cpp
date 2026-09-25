@@ -276,8 +276,10 @@ void DeterministicNoiseFunctionality::applyNoiseEffects(
   nodeAfterNoise = applyNoiseEffects(originalEdge, usedQubits, false,
                                      static_cast<dd::Qubit>(nQubits));
   dEdge::revertDmChangesToEdge(originalEdge);
-  const auto r = dEdge{.p = nodeAfterNoise.p,
-                       .w = package->package().cn.lookup(nodeAfterNoise.w)};
+  const auto r = dEdge{
+      .p = nodeAfterNoise.p,
+      .w = package->package().cn.lookup(nodeAfterNoise.w),
+  };
   package->incRef(r);
   dEdge::alignDensityEdge(originalEdge);
   package->decRef(originalEdge);
@@ -378,10 +380,12 @@ void DeterministicNoiseFunctionality::applyAmplitudeDampingToEdges(
   // e[0] = e[0] + p*e[3]
   if (!e[3].w.exactlyZero()) {
     if (!e[0].w.exactlyZero()) {
-      const auto var = static_cast<dd::Qubit>(std::max(
-          {e[0].p != nullptr ? e[0].p->v : 0, e[1].p != nullptr ? e[1].p->v : 0,
-           e[2].p != nullptr ? e[2].p->v : 0,
-           e[3].p != nullptr ? e[3].p->v : 0}));
+      const auto var = static_cast<dd::Qubit>(std::max({
+          e[0].p != nullptr ? e[0].p->v : 0,
+          e[1].p != nullptr ? e[1].p->v : 0,
+          e[2].p != nullptr ? e[2].p->v : 0,
+          e[3].p != nullptr ? e[3].p->v : 0,
+      }));
       e[0] = package->add2(e[0], {e[3].p, e[3].w * probability}, var);
     } else {
       e[0] = {e[3].p, e[3].w * probability};
@@ -408,9 +412,12 @@ void DeterministicNoiseFunctionality::applyDepolarisationToEdges(
     ArrayOfEdges& e, const double probability) const {
   std::array<dCachedEdge, 2> helperEdge{};
 
-  const auto var = static_cast<dd::Qubit>(std::max(
-      {e[0].p != nullptr ? e[0].p->v : 0, e[1].p != nullptr ? e[1].p->v : 0,
-       e[2].p != nullptr ? e[2].p->v : 0, e[3].p != nullptr ? e[3].p->v : 0}));
+  const auto var = static_cast<dd::Qubit>(std::max({
+      e[0].p != nullptr ? e[0].p->v : 0,
+      e[1].p != nullptr ? e[1].p->v : 0,
+      e[2].p != nullptr ? e[2].p->v : 0,
+      e[3].p != nullptr ? e[3].p->v : 0,
+  }));
 
   const auto oldE0Edge = e[0];
 

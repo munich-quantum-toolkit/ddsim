@@ -330,7 +330,8 @@ dd::vEdge Simulator::removeNodes(std::unique_ptr<dd::Package>& localDD,
 
   const std::array<dd::vEdge, dd::RADIX> edges{
       removeNodes(localDD, e.p->e.at(0), dagEdges),
-      removeNodes(localDD, e.p->e.at(1), dagEdges)};
+      removeNodes(localDD, e.p->e.at(1), dagEdges),
+  };
 
   dd::vEdge r = localDD->makeDDNode(e.p->v, edges);
   dagEdges[e.p] = r;

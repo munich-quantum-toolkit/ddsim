@@ -76,7 +76,8 @@ TEST_F(DDNoiseFunctionalityTest, DetSimulateAdder4TrackAPD) {
       {"0001", 0.1731941264570}, {"1001", 0.4145855071998},
       {"0101", 0.0138062113213}, {"1101", 0.0184033482066},
       {"0011", 0.0242454336917}, {"1011", 0.0262779844799},
-      {"0111", 0.0239296920989}, {"1111", 0.0110373166627}};
+      {"0111", 0.0239296920989}, {"1111", 0.0110373166627},
+  };
 
   auto dd = std::make_unique<dd::Package>(
       qc.getNqubits(), dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG);
@@ -110,7 +111,8 @@ TEST_F(DDNoiseFunctionalityTest, DetSimulateAdder4TrackD) {
       {"0011", 0.0117061689898}, {"0100", 0.0129643065735},
       {"0101", 0.0107812802908}, {"0111", 0.0160082331009},
       {"1000", 0.0328434857577}, {"1001", 0.7370101351171},
-      {"1011", 0.0186346925411}, {"1101", 0.0275086747656}};
+      {"1011", 0.0186346925411}, {"1101", 0.0275086747656},
+  };
 
   auto dd = std::make_unique<dd::Package>(
       qc.getNqubits(), dd::ddsim::DENSITY_MATRIX_SIMULATOR_DD_PACKAGE_CONFIG);
@@ -211,7 +213,8 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4TrackAPD) {
   std::map<std::string, double, std::less<>> measSummary = {
       {"0000", 0.}, {"0001", 0.}, {"0010", 0.}, {"0011", 0.}, {"0100", 0.},
       {"0101", 0.}, {"0110", 0.}, {"0111", 0.}, {"1000", 0.}, {"1001", 0.},
-      {"1010", 0.}, {"1011", 0.}, {"1100", 0.}, {"1101", 0.}};
+      {"1010", 0.}, {"1011", 0.}, {"1100", 0.}, {"1101", 0.},
+  };
 
   const auto* const noiseEffects = "APDI";
 
@@ -264,7 +267,8 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4IdentityError) {
   std::map<std::string, double, std::less<>> measSummary = {
       {"0000", 0.}, {"0001", 0.}, {"0010", 0.}, {"0011", 0.}, {"0100", 0.},
       {"0101", 0.}, {"0110", 0.}, {"0111", 0.}, {"1000", 0.}, {"1001", 0.},
-      {"1010", 0.}, {"1011", 0.}, {"1100", 0.}, {"1101", 0.}};
+      {"1010", 0.}, {"1011", 0.}, {"1100", 0.}, {"1101", 0.},
+  };
 
   const auto* const noiseEffects = "I";
 

@@ -175,18 +175,24 @@ void dEdge::unmark() const noexcept {
 auto dEdge::normalize(dNode* p, const std::array<dEdge, dd::NEDGE>& e,
                       dd::MemoryManager& mm, dd::ComplexNumbers& cn) -> dEdge {
   assert(p != nullptr && "Node pointer passed to normalize is null.");
-  const auto zero = std::array{e[0].w.exactlyZero(), e[1].w.exactlyZero(),
-                               e[2].w.exactlyZero(), e[3].w.exactlyZero()};
+  const auto zero = std::array{
+      e[0].w.exactlyZero(),
+      e[1].w.exactlyZero(),
+      e[2].w.exactlyZero(),
+      e[3].w.exactlyZero(),
+  };
 
   if (std::ranges::all_of(zero, [](auto b) { return b; })) {
     mm.returnEntry(*p);
     return dEdge::zero();
   }
 
-  const auto weights = std::array{static_cast<dd::ComplexValue>(e[0].w),
-                                  static_cast<dd::ComplexValue>(e[1].w),
-                                  static_cast<dd::ComplexValue>(e[2].w),
-                                  static_cast<dd::ComplexValue>(e[3].w)};
+  const auto weights = std::array{
+      static_cast<dd::ComplexValue>(e[0].w),
+      static_cast<dd::ComplexValue>(e[1].w),
+      static_cast<dd::ComplexValue>(e[2].w),
+      static_cast<dd::ComplexValue>(e[3].w),
+  };
 
   std::optional<std::size_t> argMax = std::nullopt;
   dd::fp maxMag2 = 0.;
@@ -297,9 +303,12 @@ auto dCachedEdge::normalize(dNode* p,
                             dd::MemoryManager& mm, dd::ComplexNumbers& cn)
     -> dCachedEdge {
   assert(p != nullptr && "Node pointer passed to normalize is null.");
-  const auto zero =
-      std::array{e[0].w.approximatelyZero(), e[1].w.approximatelyZero(),
-                 e[2].w.approximatelyZero(), e[3].w.approximatelyZero()};
+  const auto zero = std::array{
+      e[0].w.approximatelyZero(),
+      e[1].w.approximatelyZero(),
+      e[2].w.approximatelyZero(),
+      e[3].w.approximatelyZero(),
+  };
 
   if (std::ranges::all_of(zero, [](auto b) { return b; })) {
     mm.returnEntry(*p);

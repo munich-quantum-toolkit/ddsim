@@ -287,8 +287,12 @@ ShorSimulator::postProcessing(const std::string& sample) const {
 }
 
 dd::mEdge ShorSimulator::limitTo(std::uint64_t a) {
-  std::array<dd::mEdge, 4> edges{dd::mEdge::zero(), dd::mEdge::zero(),
-                                 dd::mEdge::zero(), dd::mEdge::zero()};
+  std::array<dd::mEdge, 4> edges{
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+  };
 
   if ((a & 1U) > 0) {
     edges[0] = edges[3] = dd::mEdge::one();
@@ -315,8 +319,12 @@ dd::mEdge ShorSimulator::limitTo(std::uint64_t a) {
 
 dd::mEdge ShorSimulator::addConst(std::uint64_t a) {
   dd::mEdge f = dd::mEdge::one();
-  std::array<dd::mEdge, 4> edges{dd::mEdge::zero(), dd::mEdge::zero(),
-                                 dd::mEdge::zero(), dd::mEdge::zero()};
+  std::array<dd::mEdge, 4> edges{
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+  };
 
   std::uint32_t p = 0;
   while (((a >> p) & 1U) == 0U) {
@@ -394,8 +402,12 @@ void ShorSimulator::uAEmulate(std::uint64_t a, std::int32_t q) {
   const dd::mEdge limit = dd::Package::makeIdent();
 
   dd::mEdge f = dd::mEdge::one();
-  std::array<dd::mEdge, 4> edges{dd::mEdge::zero(), dd::mEdge::zero(),
-                                 dd::mEdge::zero(), dd::mEdge::zero()};
+  std::array<dd::mEdge, 4> edges{
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+      dd::mEdge::zero(),
+  };
 
   for (std::uint32_t p = 0; p < requiredBits; ++p) {
     edges[0] = f;
