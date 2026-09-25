@@ -57,15 +57,15 @@ std::map<std::string, std::size_t> Simulator::sampleFromAmplitudeVectorInPlace(
   std::map<std::string, std::size_t> results;
   std::uniform_real_distribution<dd::fp> dist(0.0L, 1.0L);
   for (unsigned int i = 0; i < shots; ++i) {
-    auto p = dist(mt);
+    const auto p = dist(mt);
     // use binary search to find the first entry >= p
-    auto mit = std::ranges::upper_bound(
+    const auto mit = std::ranges::upper_bound(
         amplitudes, p, std::less<>{},
         [](const std::complex<dd::fp>& c) { return c.real(); });
-    auto m = std::distance(amplitudes.begin(), mit);
+    const auto m = std::distance(amplitudes.begin(), mit);
 
     // construct basis state string
-    auto basisState =
+    const auto basisState =
         dd::intToBinaryString(static_cast<std::size_t>(m), getNumberOfQubits());
     results[basisState]++;
   }
@@ -270,7 +270,7 @@ double Simulator::approximateBySampling(std::unique_ptr<dd::Package>& localDD,
     }
   }
 
-  for (auto& visitedNode : visitedNodes) {
+  for (const auto& visitedNode : visitedNodes) {
     if (visitedNode.second > threshold) {
       visitedNodes2.erase(visitedNode.first);
     }

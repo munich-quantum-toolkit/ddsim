@@ -280,10 +280,10 @@ void dEdge::traverseDiagonal(const dd::fp& prob, const std::size_t i,
     return;
   }
 
-  if (auto& e = p->e[0]; !e.w.exactlyZero()) {
+  if (const auto& e = p->e[0]; !e.w.exactlyZero()) {
     e.traverseDiagonal(val, i, f, nextLevel, threshold);
   }
-  if (auto& e = p->e[3]; !e.w.exactlyZero()) {
+  if (const auto& e = p->e[3]; !e.w.exactlyZero()) {
     e.traverseDiagonal(val, i | (1ULL << nextLevel), f, nextLevel, threshold);
   }
 }

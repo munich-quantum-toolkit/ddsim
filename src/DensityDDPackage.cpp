@@ -44,7 +44,7 @@ dEdge DensityDDPackage::makeDDNode(const dd::Qubit var,
   p->flags = 0;
   p->setDensityMatrixNodeFlag(generateDensityMatrix);
 
-  auto e = dEdge::normalize(p, edges, mm, pkg->cn);
+  const auto e = dEdge::normalize(p, edges, mm, pkg->cn);
   if (!e.isTerminal()) {
     const auto& es = e.p->e;
     // Check if node resembles the identity. If so, skip it.
@@ -71,7 +71,7 @@ DensityDDPackage::makeDDNode(const dd::Qubit var,
   p->flags = 0;
   p->setDensityMatrixNodeFlag(generateDensityMatrix);
 
-  auto e = dCachedEdge::normalize(p, edges, mm, pkg->cn);
+  const auto e = dCachedEdge::normalize(p, edges, mm, pkg->cn);
   if (!e.isTerminal()) {
     const auto& es = e.p->e;
     if ((es[0].p == es[3].p) &&
@@ -123,7 +123,7 @@ dCachedEdge DensityDDPackage::add2(const dCachedEdge& x, const dCachedEdge& y,
         e1 = x;
       }
     } else {
-      auto& xSuccessor = x.p->e[i];
+      const auto& xSuccessor = x.p->e[i];
       e1 = {xSuccessor.p, 0};
       if (!xSuccessor.w.exactlyZero()) {
         e1.w = x.w * xSuccessor.w;
@@ -138,7 +138,7 @@ dCachedEdge DensityDDPackage::add2(const dCachedEdge& x, const dCachedEdge& y,
         e2 = y;
       }
     } else {
-      auto& ySuccessor = y.p->e[i];
+      const auto& ySuccessor = y.p->e[i];
       e2 = {ySuccessor.p, 0};
       if (!ySuccessor.w.exactlyZero()) {
         e2.w = y.w * ySuccessor.w;
@@ -224,7 +224,7 @@ dCachedEdge DensityDDPackage::multiply2(const dEdge& x, const dEdge& y,
   std::array<ResultEdge, n> edge{};
   for (auto i = 0U; i < rows; i++) {
     for (auto j = 0U; j < cols; j++) {
-      auto idx = (cols * i) + j;
+      const auto idx = (cols * i) + j;
       edge[idx] = ResultEdge::zero();
       for (auto k = 0U; k < rows; k++) {
         const auto xIdx = (rows * i) + k;
@@ -451,7 +451,7 @@ void DensityDDPackage::incRef(const dEdge& e) {
 
 void DensityDDPackage::decRef(const dEdge& e) {
   if (dEdge::trackingRequired(e)) {
-    if (auto it = dRoots.find(e); it != dRoots.end()) {
+    if (const auto it = dRoots.find(e); it != dRoots.end()) {
       if (--it->second == 0U) {
         dRoots.erase(it);
       }

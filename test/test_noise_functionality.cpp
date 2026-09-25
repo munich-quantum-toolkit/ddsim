@@ -183,7 +183,7 @@ TEST_F(DDNoiseFunctionalityTest, testingMeasure) {
 
   densityDD.measureOneCollapsing(rootEdge, 1, rng);
 
-  auto tmp1 = rootEdge.getSparseProbabilityVectorStrKeys(qc.getNqubits());
+  const auto tmp1 = rootEdge.getSparseProbabilityVectorStrKeys(qc.getNqubits());
   prob = 0.5;
   EXPECT_TRUE(std::fabs(tmp0["000"] + tmp0["001"] + tmp0["010"] + tmp0["011"] -
                         prob) < tolerance);
@@ -221,8 +221,8 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4TrackAPD) {
     dd->incRef(rootEdge);
 
     for (auto const& op : qc) {
-      auto operation = dd::getDD(*op, *dd);
-      auto usedQubits = op->getUsedQubits();
+      const auto operation = dd::getDD(*op, *dd);
+      const auto usedQubits = op->getUsedQubits();
       stochasticNoiseFunctionality.applyNoiseOperation(usedQubits, operation,
                                                        rootEdge, rng);
     }
@@ -274,7 +274,7 @@ TEST_F(DDNoiseFunctionalityTest, StochSimulateAdder4IdentityError) {
     dd->incRef(rootEdge);
 
     for (auto const& op : qc) {
-      auto operation = dd::getDD(*op, *dd);
+      const auto operation = dd::getDD(*op, *dd);
       stochasticNoiseFunctionality.applyNoiseOperation(
           op->getUsedQubits(), operation, rootEdge, rng);
     }

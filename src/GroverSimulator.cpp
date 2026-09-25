@@ -87,7 +87,7 @@ GroverSimulator::simulate(std::size_t shots) {
   std::size_t jPre = 0;
 
   while ((iterations - jPre) % 8 != 0) {
-    auto tmp = dd->multiply(fullIteration, rootEdge);
+    const auto tmp = dd->multiply(fullIteration, rootEdge);
     dd->incRef(tmp);
     dd->decRef(rootEdge);
     rootEdge = tmp;

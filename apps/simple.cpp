@@ -82,7 +82,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
         ("simulate_fast_shor_coprime","coprime number to use with Shor's algorithm (zero randomly generates a coprime)", cxxopts::value<unsigned int>()->default_value("0"));
   // clang-format on
 
-  auto vm = options.parse(argc, argv);
+  const auto vm = options.parse(argc, argv);
   if (vm.count("help") > 0) {
     std::cout << options.help();
     return 0;
@@ -188,9 +188,9 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
                  "You're jumping into the deep end.\n";
   }
 
-  auto t1 = std::chrono::high_resolution_clock::now();
-  auto m = ddsim->simulate(shots);
-  auto t2 = std::chrono::high_resolution_clock::now();
+  const auto t1 = std::chrono::high_resolution_clock::now();
+  const auto m = ddsim->simulate(shots);
+  const auto t2 = std::chrono::high_resolution_clock::now();
 
   const std::chrono::duration<float> durationSimulation = t2 - t1;
 
@@ -264,7 +264,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   }
 
   if (vm.count("pv") > 0) {
-    if (auto* hsfSim =
+    if (const auto* hsfSim =
             dynamic_cast<HybridSchrodingerFeynmanSimulator*>(ddsim.get())) {
       outputObj["state_vector"] = hsfSim->getVectorFromHybridSimulation();
     } else {
@@ -293,7 +293,7 @@ int main(int argc, char** argv) { // NOLINT(bugprone-exception-escape)
   }
 
   if (vm.count("dump_complex") > 0) {
-    auto filename = vm["dump_complex"].as<std::string>();
+    const auto filename = vm["dump_complex"].as<std::string>();
     auto ostream = std::fstream(filename, std::fstream::out);
     dd::exportEdgeWeights(ddsim->rootEdge, ostream);
   }

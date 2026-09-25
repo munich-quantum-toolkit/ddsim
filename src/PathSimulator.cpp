@@ -189,7 +189,7 @@ void PathSimulator::generatePairwiseRecursiveGroupingSimulationPath() {
   components.reserve(qc->getNops());
 
   const std::size_t nleaves = qc->getNops() + 1;
-  auto depth = static_cast<std::size_t>(std::ceil(std::log2(nleaves)));
+  const auto depth = static_cast<std::size_t>(std::ceil(std::log2(nleaves)));
 
   std::size_t id = nleaves;
   std::size_t offset = 0;
@@ -458,26 +458,28 @@ void PathSimulator::constructTaskGraph() {
     // create dependencies
     if (leftID >= nleaves) {
       auto& leftTask = tasks.at(leftID);
-      auto& resultTask = tasks.at(resultStep.id);
+      const auto& resultTask = tasks.at(resultStep.id);
       leftTask.precede(resultTask);
     }
 
     if (rightID >= nleaves) {
       auto& rightTask = tasks.at(rightID);
-      auto& resultTask = tasks.at(resultStep.id);
+      const auto& resultTask = tasks.at(resultStep.id);
       rightTask.precede(resultTask);
     }
 
     // add final task for storing the result
     if (i == path.size() - 1) {
       const auto runner = [this, resultStep]() {
-        if (auto* res = std::get_if<dd::VectorDD>(&results.at(resultStep.id))) {
+        if (const auto* res =
+                std::get_if<dd::VectorDD>(&results.at(resultStep.id))) {
           rootEdge = *res;
         } else {
           throw std::runtime_error("Expected vector DD as result.");
         }
       };
-      auto storeResultTask = taskflow.emplace(runner).name("store result");
+      const auto storeResultTask =
+          taskflow.emplace(runner).name("store result");
       auto precedingTask = tasks.at(resultStep.id);
       precedingTask.precede(storeResultTask);
     }

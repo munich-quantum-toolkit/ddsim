@@ -37,7 +37,7 @@ void DeterministicNoiseSimulator::initializeSimulation(
 
 void DeterministicNoiseSimulator::applyOperationToState(
     std::unique_ptr<qc::Operation>& op) {
-  auto operation = dd::getDD(*op, *Simulator::dd);
+  const auto operation = dd::getDD(*op, *Simulator::dd);
   densityDD.applyOperationToDensity(DeterministicNoiseSimulator::rootEdge,
                                     operation);
   deterministicNoiseFunctionality.applyNoiseEffects(

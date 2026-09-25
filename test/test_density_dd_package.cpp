@@ -117,7 +117,7 @@ TEST(DensityDDPackageTest, ReferenceCountingKeepsNodesAliveDuringCollection) {
   EXPECT_EQ(densityDD.computeActiveNodeCount(), 0U);
 
   // `makeZeroDensityOperator` returns a referenced DD with one node per qubit.
-  auto state = densityDD.makeZeroDensityOperator(nrQubits);
+  const auto state = densityDD.makeZeroDensityOperator(nrQubits);
   EXPECT_EQ(densityDD.computeActiveNodeCount(), nrQubits);
 
   // A referenced DD survives garbage collection.

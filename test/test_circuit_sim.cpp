@@ -118,7 +118,7 @@ TEST(CircuitSimTest, IfElseOpBitEq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("11", m);
 }
@@ -136,7 +136,7 @@ TEST(CircuitSimTest, IfElseOpBitNeq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
 }
@@ -155,7 +155,7 @@ TEST(CircuitSimTest, IfElseOpRegisterEq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("11", m);
 }
@@ -174,7 +174,7 @@ TEST(CircuitSimTest, IfElseOpRegisterNeq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
 }
@@ -193,7 +193,7 @@ TEST(CircuitSimTest, IfElseOpRegisterLt) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
 }
@@ -212,7 +212,7 @@ TEST(CircuitSimTest, IfElseOpRegisterLeq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("11", m);
 }
@@ -231,7 +231,7 @@ TEST(CircuitSimTest, IfElseOpRegisterGt) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("01", m);
 }
@@ -250,7 +250,7 @@ TEST(CircuitSimTest, IfElseOpRegisterGeq) {
       ApproximationInfo(1, 1, ApproximationInfo::FidelityDriven));
   ddsim.simulate(1);
 
-  auto m = ddsim.measureAll(false);
+  const auto m = ddsim.measureAll(false);
 
   ASSERT_EQ("11", m);
 }

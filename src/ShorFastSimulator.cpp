@@ -82,7 +82,7 @@ ShorFastSimulator::simulate([[maybe_unused]] std::size_t shots) {
     as[static_cast<std::size_t>(i)] = newA;
   }
 
-  auto t1 = std::chrono::steady_clock::now();
+  const auto t1 = std::chrono::steady_clock::now();
   std::string measurements(2 * requiredBits, '0');
 
   for (std::size_t i = 0; i < 2 * requiredBits; i++) {
@@ -112,7 +112,7 @@ ShorFastSimulator::simulate([[maybe_unused]] std::size_t shots) {
         double qR = cosine(1, -q);
         double qI = sine(1, -q);
         const dd::GateMatrix qm{1, 0, 0, {qR, qI}};
-        auto gate = dd->makeGateDD(qm, target);
+        const auto gate = dd->makeGateDD(qm, target);
         rootEdge = dd->applyOperation(gate, rootEdge);
       }
       q *= 2;
@@ -400,7 +400,7 @@ void ShorFastSimulator::uAEmulate2(const std::uint64_t a) {
 
     auto right = dd::vCachedEdge::zero();
     if (!entry.first->e[1].w.exactlyZero()) {
-      auto tmp = dd->multiply(
+      const auto tmp = dd->multiply(
           addConstMod(ts[static_cast<std::size_t>(entry.first->v)]), f);
       right = {tmp.p, tmp.w * entry.first->e[1].w};
     }
@@ -420,10 +420,11 @@ void ShorFastSimulator::uAEmulate2(const std::uint64_t a) {
 
       auto right = dd::vCachedEdge::zero();
       if (!it->first->e.at(1).w.exactlyZero()) {
-        auto node0 = addConstMod(ts.at(static_cast<std::size_t>(it->first->v)));
-        auto& node1 = nodesOnLevel.at(i - 1)[it->first->e.at(1).p];
-        auto node2 = dd::vEdge{node1.p, dd->cn.lookup(node1.w)};
-        auto res = dd->multiply(node0, node2);
+        const auto node0 =
+            addConstMod(ts.at(static_cast<std::size_t>(it->first->v)));
+        const auto& node1 = nodesOnLevel.at(i - 1)[it->first->e.at(1).p];
+        const auto node2 = dd::vEdge{node1.p, dd->cn.lookup(node1.w)};
+        const auto res = dd->multiply(node0, node2);
         right = {res.p, res.w * it->first->e.at(1).w};
       }
 
@@ -447,11 +448,11 @@ void ShorFastSimulator::uAEmulate2(const std::uint64_t a) {
 
   auto result = nodesOnLevel.at(nQubits - 2)[rootEdge.p->e[0].p];
   result.w = result.w * rootEdge.p->e[0].w;
-  auto tmp = dd::vCachedEdge{rootEdge.p->e[0].p, rootEdge.p->e[0].w};
+  const auto tmp = dd::vCachedEdge{rootEdge.p->e[0].p, rootEdge.p->e[0].w};
   result = dd->makeDDNode(rootEdge.p->v, std::array{tmp, result});
 
   result.w = result.w * rootEdge.w;
-  auto res = dd::vEdge{result.p, dd->cn.lookup(result.w)};
+  const auto res = dd::vEdge{result.p, dd->cn.lookup(result.w)};
   dd->incRef(res);
   dd->decRef(rootEdge);
   rootEdge = res;

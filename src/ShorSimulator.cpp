@@ -122,7 +122,7 @@ ShorSimulator::simulate([[maybe_unused]] std::size_t shots) {
       double qR = cosine(1, -q);
       double qI = sine(1, -q);
       const dd::GateMatrix qm{1, 0, 0, {qR, qI}};
-      auto gate = dd->makeGateDD(
+      const auto gate = dd->makeGateDD(
           qm,
           qc::Control{static_cast<dd::Qubit>(nQubits - 1 -
                                              static_cast<std::size_t>(j))},
