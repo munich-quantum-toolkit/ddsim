@@ -1646,14 +1646,14 @@ requires-dist = [
 build = [
     { name = "cmake", specifier = ">=4.4.1" },
     { name = "mqt-core", specifier = "~=3.10.0" },
-    { name = "nanobind", specifier = "~=3.0.1" },
+    { name = "nanobind", specifier = "~=3.1.0" },
     { name = "scikit-build-core", specifier = ">=1.0.3" },
     { name = "vcs-versioning", specifier = ">=2.3" },
 ]
 dev = [
     { name = "cmake", specifier = ">=4.4.1" },
     { name = "mqt-core", specifier = "~=3.10.0" },
-    { name = "nanobind", specifier = "~=3.0.1" },
+    { name = "nanobind", specifier = "~=3.1.0" },
     { name = "nox", specifier = ">=2025.11.12" },
     { name = "numpy", specifier = ">=1.24" },
     { name = "numpy", marker = "python_full_version >= '3.12'", specifier = ">=1.26" },
@@ -1735,11 +1735,11 @@ wheels = [
 
 [[package]]
 name = "nanobind"
-version = "3.0.1"
+version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/07/11/69cf231c4f3ac4fa724a0b1933c3650fb65aff6b9d7a4c2573b9e4e40077/nanobind-3.0.1.tar.gz", hash = "sha256:f7f0a889c8fb80deaacb95e918d88e05148850a32d2b8eda28446291b2bf7c35", size = 1142340, upload-time = "2026-08-27T22:45:21.806Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/1f/e28fae715401e8f57400e72aeaff4fde12046d31828164f34f61f0816da8/nanobind-3.1.0.tar.gz", hash = "sha256:6661e3dc1434d78781ccf7913442d90361dab395c3424efadb63bbb6ddea7ea3", size = 1145390, upload-time = "2026-09-18T15:59:42.726Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1c/cf/261b8281d410d99b22ce47559ce56f98c7548dccf8c25ed70a51fbf42d1f/nanobind-3.0.1-py3-none-any.whl", hash = "sha256:4b49491fe8bf483a5e0342125b8fe56237e490ba642c7e296170b8cd256a7764", size = 316363, upload-time = "2026-08-27T22:45:20.155Z" },
+    { url = "https://files.pythonhosted.org/packages/36/c1/6fd56f7a02a478d54a1a3e6000eccd34b446b1c45cbf0d002fe5d2937126/nanobind-3.1.0-py3-none-any.whl", hash = "sha256:96984dbe8154ffb86e653b1b60aaeed6985c710c5e75ad0279eb87943c66292d", size = 316917, upload-time = "2026-09-18T15:59:37.796Z" },
 ]
 
 [[package]]
