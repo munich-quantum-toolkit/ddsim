@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- 👷 Enable testing on Python 3.15 ([#1030]) ([**@denialhaag**])
+
 ### Changed
 
 - ⬆️ Update `clang-tidy` to version 23 ([#1019]) ([**@denialhaag**])
@@ -204,6 +208,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
 [#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019
 [#1004]: https://github.com/munich-quantum-toolkit/ddsim/pull/1004
 [#998]: https://github.com/munich-quantum-toolkit/ddsim/pull/998
