@@ -17,7 +17,7 @@ permissions: {}
 jobs:
   change-detection:
     name: 🔍 Change
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-change-detection.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-change-detection.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     permissions:
       contents: read
 
@@ -37,7 +37,7 @@ jobs:
             compiler: gcc
             preset: debug
             run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
@@ -62,7 +62,7 @@ jobs:
             compiler: clang
             preset: debug
             run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-macos.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-macos.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
@@ -87,7 +87,7 @@ jobs:
             compiler: msvc
             preset: debug
             run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-windows.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-windows.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       runs-on: ${{ matrix.runs-on }}
       compiler: ${{ matrix.compiler }}
@@ -100,7 +100,7 @@ jobs:
     name: 🇨 Coverage
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-coverage.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-coverage.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     permissions:
       contents: read
       id-token: write
@@ -109,7 +109,7 @@ jobs:
     name: 🇨 Lint
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-cpp-linter)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-linter.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-linter.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       clang-version: 23
       files-changed-only: true
@@ -128,7 +128,7 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [ubuntu-26.04, ubuntu-26.04-arm, macos-26, windows-2025]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       runs-on: ${{ matrix.runs-on }}
     permissions:
@@ -138,7 +138,7 @@ jobs:
     name: 🐍 Coverage
     needs: [change-detection, python-tests]
     if: fromJSON(needs.change-detection.outputs.run-python-tests)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-coverage.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-coverage.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     permissions:
       contents: read
       id-token: write
@@ -147,7 +147,7 @@ jobs:
     name: 🐍 Lint
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-python-linter)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-linter.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-linter.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       check-stubs: true
       enable-mypy: false
@@ -162,7 +162,7 @@ jobs:
     name: 🚀 CD
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-cd)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-sdist.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     permissions:
       contents: read
 
@@ -181,7 +181,7 @@ jobs:
             windows-2025,
             windows-11-arm,
           ]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@17f5c58e46c51027501e7d8d38dc182654ed035c # v2.5.0
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@fd3d75dece69c363989347869529a5e99cdcfffc # v2.5.1
     with:
       runs-on: ${{ matrix.runs-on }}
     permissions:
