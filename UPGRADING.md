@@ -6,6 +6,10 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+This release updates the minimum required `mqt-core` version to 3.11.0. Rebuild
+C++ libraries and Python extensions against the MQT Core 3.11 shared-library
+ABI.
+
 ## [2.6.0]
 
 This release updates the minimum required `mqt-core` version to 3.10.0.

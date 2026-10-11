@@ -195,8 +195,8 @@ test-command = 'python -c "from mqt import ddsim"'
 environment = { DEPLOY = "ON" }
 # The SOVERSION needs to be updated when the shared libraries are updated.
 repair-wheel-command = """\
-  auditwheel repair -w {dest_dir} {wheel} --exclude libmqt-core-ir.so.3.10 --exclude libmqt-core-qasm.so.3.10 \
-  --exclude libmqt-core-dd.so.3.10\
+  auditwheel repair -w {dest_dir} {wheel} --exclude libmqt-core-ir.so.3.11 --exclude libmqt-core-qasm.so.3.11 \
+  --exclude libmqt-core-dd.so.3.11\
   """
 
 [tool.cibuildwheel.macos]
