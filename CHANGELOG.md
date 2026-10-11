@@ -16,6 +16,7 @@ releases may include breaking changes.
 
 ### Changed
 
+- ⬆️ Update `mqt-core` to version 3.11.0 ([#1033]) ([**@denialhaag**])
 - ⬆️ Update `clang-tidy` to version 23 ([#1019]) ([**@denialhaag**])
 
 ## [2.6.0] - 2026-09-12
@@ -208,6 +209,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1033]: https://github.com/munich-quantum-toolkit/ddsim/pull/1033
 [#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
 [#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019
 [#1004]: https://github.com/munich-quantum-toolkit/ddsim/pull/1004
