@@ -6,6 +6,8 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
+## [2.7.0]
+
 This release updates the minimum required `mqt-core` version to 3.11.0. Rebuild
 C++ libraries and Python extensions against the MQT Core 3.11 shared-library
 ABI.
@@ -206,7 +208,8 @@ standard.
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.6.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.3.0...v2.4.0
