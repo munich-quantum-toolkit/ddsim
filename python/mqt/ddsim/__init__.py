@@ -12,15 +12,13 @@ from __future__ import annotations
 
 import sys
 
-# under Windows, make sure to add the appropriate DLL directory to the PATH
+# On Windows, add MQT Core's DLL directory to the search path.
 if sys.platform == "win32":  # ruff:ignore[non-empty-init-module] This is actually required on Windows
+    import os
+    import sysconfig
+    from pathlib import Path
 
     def _dll_patch() -> None:
-        """Add the DLL directory to the PATH."""
-        import os  # ruff:ignore[import-outside-top-level] because only needed on Windows
-        import sysconfig  # ruff:ignore[import-outside-top-level] because only needed on Windows
-        from pathlib import Path  # ruff:ignore[import-outside-top-level] because only needed on Windows
-
         site_packages = Path(sysconfig.get_paths()["purelib"])
         bin_dir = site_packages / "mqt" / "core" / "bin"
         os.add_dll_directory(str(bin_dir))
