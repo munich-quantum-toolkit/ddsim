@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-10-12
+
+_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#270)._
+
 ### Added
 
 - 👷 Enable testing on Python 3.15 ([#1030]) ([**@denialhaag**])
@@ -197,7 +201,8 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- Version links -->
 
-[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.6.0...HEAD
+[unreleased]: https://github.com/munich-quantum-toolkit/ddsim/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.7.0
 [2.6.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.6.0
 [2.5.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.5.0
 [2.4.0]: https://github.com/munich-quantum-toolkit/ddsim/releases/tag/v2.4.0
