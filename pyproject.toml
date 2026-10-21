@@ -169,7 +169,7 @@ wheel.py-api = "cp315t"
 
 
 [tool.uv]
-required-version = ">=0.5.20"
+required-version = ">=0.13.4"
 cache-keys = [
   { file = "pyproject.toml" },
   { git = { commit = true, tags = true } },
@@ -185,6 +185,10 @@ build = "cp3*"
 skip = [ "*-musllinux_*", "cp314t-*" ]
 archs = "auto64"
 build-frontend = "uv"
+
+# Keep the glibc targets while using the patched uv trust store (2026.10.21-1).
+manylinux-x86_64-image = "quay.io/pypa/manylinux_2_28_x86_64@sha256:b74a5b6f1705ecff17be8bd792589bef9b3b039766d12205720ecd2a9e919192"
+manylinux-aarch64-image = "quay.io/pypa/manylinux_2_28_aarch64@sha256:0333f44c4eb759ec8f47b27bc9dc27b1c929932a267cf13ce0cff1a4b758cccb"
 test-command = 'python -c "from mqt import ddsim"'
 
 # The mqt-core shared libraries are provided by the mqt-core Python package.
