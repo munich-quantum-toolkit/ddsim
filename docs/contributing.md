@@ -194,13 +194,13 @@ instructions on how to set up your development environment.
 
 Building the project requires a C++20-capable
 [C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.28 or newer. As of August 2025, our CI
+and [CMake](https://cmake.org/) 3.28 or newer. As of September 2026, our CI
 pipeline on GitHub continuously tests the library across the following matrix of
 systems and compilers:
 
-- {code}`ubuntu-24.04`: {code}`Release` and {code}`Debug` builds using
+- {code}`ubuntu-26.04`: {code}`Release` and {code}`Debug` builds using
   {code}`gcc`
-- {code}`ubuntu-24.04-arm`: {code}`Release` build using {code}`gcc`
+- {code}`ubuntu-26.04-arm`: {code}`Release` build using {code}`gcc`
 - {code}`macos-26`: {code}`Release` and {code}`Debug` builds using
   {code}`AppleClang`
 - {code}`windows-2025`: {code}`Release` and {code}`Debug` builds using
@@ -395,9 +395,8 @@ For some tips on how to write good Doxygen comments, see the
 
 The C++ API documentation is integrated into the overall documentation that we
 host on ReadTheDocs using the
-[breathe](https://breathe.readthedocs.io/en/latest/) extension for Sphinx.
-
-See {ref}`working-on-documentation` for more information on how to build the
+[breathe](https://breathe.readthedocs.io/en/latest/) extension for Sphinx. See
+{ref}`working-on-documentation` for more information on how to build the
 documentation.
 
 ## Working on the Python Package
@@ -573,8 +572,7 @@ uvx nox --non-interactive -s docs
 ```
 
 Install the project's native build requirements first. C++ API generation needs
-Doxygen; DD visualizations also need the Graphviz `dot` executable. The session
-manages Python packages, not these system tools.
+Doxygen. The session manages Python packages, not these system tools.
 
 Omit `--non-interactive` to serve the documentation while editing. To check
 external links, run:
