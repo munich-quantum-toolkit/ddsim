@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [ubuntu-26.04, macos-26, windows-2025]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-tests.yml@b69ae7ac0c39d2ab3300dbf87fa608654c9f3b9a # v2.5.4
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-tests.yml@a4b4977405c7685f95e127cdb6db396bbadce787 # v2.5.5
     with:
       runs-on: ${{ matrix.runs-on }}
     permissions:
@@ -31,7 +31,7 @@ jobs:
     name: Create issue on failure
     needs: qiskit-upstream-tests
     if: ${{ always() }}
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-issue.yml@b69ae7ac0c39d2ab3300dbf87fa608654c9f3b9a # v2.5.4
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-qiskit-upstream-issue.yml@a4b4977405c7685f95e127cdb6db396bbadce787 # v2.5.5
     with:
       tests-result: ${{ needs.qiskit-upstream-tests.result }}
     permissions:
