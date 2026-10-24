@@ -70,6 +70,8 @@
 
 ### General
 
+- MUST use the full project name, MQT DDSIM, in documentation, code comments,
+  and public text.
 - MUST read and follow `docs/ai_usage.md`. A human must review and understand
   all AI-assisted work. AI assistance must not be used for contributions to
   issues labeled `good first issue`.
