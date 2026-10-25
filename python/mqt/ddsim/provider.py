@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Provider for DDSIM backends."""
+"""Provider for MQT DDSIM backends."""
 
 from __future__ import annotations
 
@@ -15,14 +15,8 @@ from typing import TYPE_CHECKING, Any
 from qiskit.providers.exceptions import QiskitBackendNotFoundError
 from qiskit.providers.providerutils import filter_backends
 
-from .deterministic_noise_simulator_backend import DeterministicNoiseSimulatorBackend
-from .hybrid_qam_simulator_backend import HybridQasmSimulatorBackend
-from .hybrid_statevector_simulator_backend import HybridStatevectorSimulatorBackend
-from .path_qasm_simulator_backend import PathQasmSimulatorBackend
-from .path_statevector_simulator_backend import PathStatevectorSimulatorBackend
 from .qasm_simulator_backend import QasmSimulatorBackend
 from .statevector_simulator_backend import StatevectorSimulatorBackend
-from .stochastic_noise_simulator_backend import StochasticNoiseSimulatorBackend
 from .unitary_simulator_backend import UnitarySimulatorBackend
 
 if TYPE_CHECKING:
@@ -32,18 +26,12 @@ if TYPE_CHECKING:
 
 
 class DDSIMProvider:
-    """Provider for DDSIM backends."""
+    """Provider for MQT DDSIM backends."""
 
     _BACKENDS: tuple[tuple[str, type[BackendV2]], ...] = (
         ("qasm_simulator", QasmSimulatorBackend),
         ("statevector_simulator", StatevectorSimulatorBackend),
-        ("hybrid_qasm_simulator", HybridQasmSimulatorBackend),
-        ("hybrid_statevector_simulator", HybridStatevectorSimulatorBackend),
-        ("path_qasm_simulator", PathQasmSimulatorBackend),
-        ("path_statevector_simulator", PathStatevectorSimulatorBackend),
         ("unitary_simulator", UnitarySimulatorBackend),
-        ("stochastic_noise_simulator", StochasticNoiseSimulatorBackend),
-        ("deterministic_noise_simulator", DeterministicNoiseSimulatorBackend),
     )
 
     def get_backend(self, name: str | None = None, **kwargs: Any) -> BackendV2:
@@ -58,7 +46,10 @@ class DDSIMProvider:
             msg = "More than one backend matches the criteria"
             raise QiskitBackendNotFoundError(msg)
         if not backends:
-            msg = "No backend matches the criteria"
+            msg = (
+                f"No backend matches {name!r}. MQT DDSIM provides qasm_simulator, statevector_simulator, "
+                "and unitary_simulator. HSF, path, and noise backends were removed; use MQT DDSIM 2.x for them."
+            )
             raise QiskitBackendNotFoundError(msg)
 
         return backends[0]

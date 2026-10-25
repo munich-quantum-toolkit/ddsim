@@ -15,7 +15,7 @@
   </a>
 </p>
 
-# MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++
+# MQT DDSIM — quantum simulation powered by MQT Core
 
 A tool for classical quantum circuit simulation developed as part of the
 [_Munich Quantum Toolkit (MQT)_](https://mqt.readthedocs.io). It builds upon
@@ -30,52 +30,19 @@ backbone of the MQT.
 
 ## Key Features
 
-- Decision-diagram–based circuit simulation:
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)—strong
-  (statevector) and weak (sampling), incl. mid‑circuit measurements and resets;
-  Qiskit backends
-  ([qasm_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)
-  and
-  [statevector_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)).
-  [Quickstart](https://mqt.readthedocs.io/projects/ddsim/en/stable/quickstart.html)
-  •
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
-- Unitary simulation:
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html)
-  with an optional
-  [alternative recursive construction](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html#alternative-construction-sequence)
-  for improved intermediate compactness.
-- Hybrid Schrödinger–Feynman simulation:
-  [Hybrid simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/HybridSchrodingerFeynman.html)
-  trading memory for runtime with DD and amplitude modes plus multithreading;
-  also available as a statevector backend.
-- Simulation Path Framework:
-  [Path-based simulation](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html)
-  with strategies
-  [sequential](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#simulating-a-simple-circuit),
-  [pairwise_recursive](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
-  [bracket](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
-  and
-  [alternating](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration).
-- Noise-aware simulation:
-  [Stochastic and deterministic noise](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/NoiseAwareSimulator.html)
-  (amplitude damping, depolarization, phase flip; density-matrix mode) for
-  global decoherence and gate errors.
-- Qiskit-native API: Provider backends and Primitives
-  ([Sampler](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#sampler)
-  and
-  [Estimator](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#estimator))
-  for algorithm-friendly workflows.
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
-- Decision-diagram visualization: inspect states/unitaries via Graphviz export;
-  see
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)
-  and
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html).
-- Standalone CLI: fast C++ executables with JSON output; e.g.,
-  [ddsim_simple](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-standalone-c-executable).
-- Efficient and portable: C++20 core with DD engines; prebuilt wheels for
-  Linux/macOS/Windows via [PyPI](https://pypi.org/project/mqt.ddsim/).
+- Qiskit and OpenQASM 2/3 input, plus QIR Base/Adaptive text and bitcode.
+- Sampling, uncollapsed statevectors and full unitary matrices using MQT Core's
+  decision-diagram engine. QIR supports sampling and eligible state extraction;
+  QIR unitary simulation is unsupported.
+- Familiar `DDSIMProvider` entry point and `qasm_simulator`,
+  `statevector_simulator`, and `unitary_simulator` backends.
+- V2 Sampler, exact native DD Estimator, and an explicit sampled Estimator.
+  Exact expectations stay in compact DDs without extracting dense amplitudes.
+- An installed `mqt-ddsim-simple` command with versioned JSON output.
+
+MQT DDSIM 3 is a Python integration package. MQT Core owns the native engine,
+QIR runtime and QDMI device. HSF, path, noise, approximation and specialized
+algorithm simulators are removed; see [the migration guide](UPGRADING.md).
 
 If you have any questions, feel free to create a
 [discussion](https://github.com/munich-quantum-toolkit/ddsim/discussions) or an
@@ -163,13 +130,21 @@ print(counts)
 
 ## System Requirements and Building
 
-Building the project requires a C++ compiler with support for C++20 and CMake
-3.28 or newer. For details on how to build the project, please refer to the
-[documentation](https://mqt.readthedocs.io/projects/ddsim). Building (and
-running) is continuously tested under Linux, macOS, and Windows using the
-[latest available system versions for GitHub Actions](https://github.com/actions/runner-images).
-MQT DDSIM is compatible with all
-[officially supported Python versions](https://devguide.python.org/versions/).
+Use Python 3.11 or newer, Qiskit 2.5 or 2.6, and NumPy 2. MQT Core provides
+platform runtime libraries and the bundled `mqt.ddsim.default` device. Building
+MQT DDSIM itself needs no C++ compiler:
+
+```console
+uv build
+```
+
+This development branch pins an exact MQT Core Git commit containing the
+required simulation APIs. Installing that dependency builds MQT Core from source
+and needs a C++20 toolchain and LLVM/MLIR 23.1. MQT Core downloads a compatible
+LLVM/MLIR SDK on supported hosts if none is available; see the
+[MQT Core build instructions](https://mqt.readthedocs.io/projects/core/en/latest/installation.html#building-from-source).
+Before publishing MQT DDSIM 3, replace the Git pin with the first released MQT
+Core version that provides these APIs and validate the supported wheel matrix.
 
 ## Cite This
 

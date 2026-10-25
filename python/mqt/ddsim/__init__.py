@@ -6,52 +6,32 @@
 #
 # Licensed under the MIT License
 
-"""MQT DDSIM Python Package."""
+"""MQT DDSIM simulation, powered by MQT Core."""
 
-from __future__ import annotations
+from importlib.metadata import version
+from typing import NoReturn
 
-import sys
-
-# On Windows, add MQT Core's DLL directory to the search path.
-if sys.platform == "win32":  # ruff:ignore[non-empty-init-module] This is actually required on Windows
-    import os
-    import sysconfig
-    from pathlib import Path
-
-    def _dll_patch() -> None:
-        site_packages = Path(sysconfig.get_paths()["purelib"])
-        bin_dir = site_packages / "mqt" / "core" / "bin"
-        os.add_dll_directory(str(bin_dir))
-
-    _dll_patch()
-    del _dll_patch
-
-from ._version import version as __version__
 from .provider import DDSIMProvider
-from .pyddsim import (
-    CircuitSimulator,
-    DeterministicNoiseSimulator,
-    HybridSimulator,
-    HybridSimulatorMode,
-    PathSimulator,
-    PathSimulatorConfiguration,
-    PathSimulatorMode,
-    StochasticNoiseSimulator,
-    UnitarySimulator,
-    UnitarySimulatorMode,
-)
+from .simulation import build_functionality, sample, simulate
 
-__all__ = [
-    "CircuitSimulator",
-    "DDSIMProvider",
-    "DeterministicNoiseSimulator",
-    "HybridSimulator",
-    "HybridSimulatorMode",
-    "PathSimulator",
-    "PathSimulatorConfiguration",
-    "PathSimulatorMode",
-    "StochasticNoiseSimulator",
-    "UnitarySimulator",
-    "UnitarySimulatorMode",
-    "__version__",
-]
+__version__ = version("mqt-ddsim")
+__all__ = ["DDSIMProvider", "__version__", "build_functionality", "sample", "simulate"]
+
+
+def __getattr__(name: str) -> NoReturn:
+    """Explain replacements for removed low-level simulator classes."""
+    if name in {"CircuitSimulator", "UnitarySimulator", "UnitarySimulatorMode"}:
+        msg = f"{name} was removed in MQT DDSIM 3. Use simulate(), sample(), or build_functionality(); use mqt.core.dd for DD operations."
+    elif name in {
+        "DeterministicNoiseSimulator",
+        "HybridSimulator",
+        "HybridSimulatorMode",
+        "PathSimulator",
+        "PathSimulatorConfiguration",
+        "PathSimulatorMode",
+        "StochasticNoiseSimulator",
+    }:
+        msg = f"{name} was removed in MQT DDSIM 3. HSF, path, and noise simulation are available only in MQT DDSIM 2.x."
+    else:
+        msg = f"module {__name__!r} has no attribute {name!r}"
+    raise AttributeError(msg)

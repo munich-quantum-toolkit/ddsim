@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 from qiskit.circuit import QuantumCircuit
-from qiskit.circuit.library import RealAmplitudes
+from qiskit.circuit.library import real_amplitudes
 from qiskit.primitives import DataBin, PrimitiveResult, PubResult
 from qiskit.quantum_info import Operator, Pauli, SparsePauliOp
 
@@ -32,14 +32,14 @@ def estimator() -> Estimator:
 @pytest.fixture
 def circuit_0() -> QuantumCircuit:
     """The circuit fixture for the tests in this file."""
-    return RealAmplitudes(num_qubits=2, reps=2)
+    return real_amplitudes(num_qubits=2, reps=2)
 
 
 @pytest.fixture
 def circuits_1() -> tuple[QuantumCircuit, QuantumCircuit]:
     """The circuit fixture for the tests in this file."""
-    param_qc_1 = RealAmplitudes(num_qubits=2, reps=2)
-    param_qc_2 = RealAmplitudes(num_qubits=2, reps=3)
+    param_qc_1 = real_amplitudes(num_qubits=2, reps=2)
+    param_qc_2 = real_amplitudes(num_qubits=2, reps=3)
     return param_qc_1, param_qc_2
 
 

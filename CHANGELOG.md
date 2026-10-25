@@ -10,6 +10,23 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- MQT DDSIM 3 delegates simulation to modern MQT Core and ships a pure Python
+  wheel. Retained backends, V2 primitives and the CLI use Core execution
+  ([#1060]) ([**@burgholzer**]).
+- Exact estimation uses Core's native batched DD estimator; sampled estimation
+  remains an explicit alternative ([#1060]) ([**@burgholzer**]).
+- QIR Base/Adaptive text and bitcode support sampling and eligible state
+  extraction. See [the upgrade guide](UPGRADING.md#unreleased) for contracts
+  ([#1060]) ([**@burgholzer**]).
+
+### Removed
+
+- Core 3 IR, native simulator classes/ABI, HSF, path, noise/density and
+  specialized algorithm simulation implementations and their tuning options
+  ([#1060]) ([**@burgholzer**]).
+
 ## [2.7.0] - 2026-10-12
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#270)._
@@ -268,3 +285,5 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [munich-quantum-toolkit]: https://github.com/munich-quantum-toolkit
 [CMake presets]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 [munich-quantum-toolkit/workflows]: https://github.com/munich-quantum-toolkit/workflows
+
+[#1060]: https://github.com/munich-quantum-toolkit/ddsim/pull/1060

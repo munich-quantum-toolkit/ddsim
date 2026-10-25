@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+from mqt.core.plugins.qiskit import CircuitValidationError
 from qiskit import (
     ClassicalRegister,
     QuantumCircuit,
@@ -97,20 +98,20 @@ def test_qasm_simulator_support_parametrized_gates(backend: QasmSimulatorBackend
     bare_circuit.h(0)
 
     with pytest.raises(
-        ValueError,
-        match=r"Mismatching number of values and parameters.*",
+        CircuitValidationError,
+        match="parameters",
     ):
         backend.run([bare_circuit], parameter_values=[[np.pi]], shots=shots).result()
 
     with pytest.raises(
-        ValueError,
-        match=r"No parameter values provided although at least one parameterized circuit was supplied.",
+        CircuitValidationError,
+        match="parameters",
     ):
         backend.run([circuit_1, circuit_2], shots=shots).result()
 
     with pytest.raises(
-        ValueError,
-        match=r"The number of circuits \(2\) does not match the number of provided parameter sets \(1\)\.",
+        CircuitValidationError,
+        match="parameter_values",
     ):
         backend.run([circuit_1, circuit_2], parameter_values=[[np.pi / 2]], shots=shots).result()
 
@@ -130,10 +131,8 @@ def test_qasm_simulator_approximation(backend: QasmSimulatorBackend, shots: int)
     circuit = QuantumCircuit(2)
     circuit.h(0)
     circuit.cx(0, 1)
-    result = backend.run(circuit, shots=shots, approximation_step_fidelity=0.4, approximation_steps=3).result()
-    assert result.success
-    counts = result.get_counts()
-    assert len(counts) == 1
+    with pytest.raises(CircuitValidationError, match=r"[Uu]nsupported"):
+        backend.run(circuit, shots=shots, approximation_step_fidelity=0.4, approximation_steps=3)
 
 
 def test_qasm_simulator_access(backend: QasmSimulatorBackend, shots: int) -> None:
@@ -149,7 +148,7 @@ def test_qasm_simulator_access(backend: QasmSimulatorBackend, shots: int) -> Non
     counts_1 = result.get_counts(circuit_1.name)
     counts_2 = result.get_counts(circuit_2.name)
 
-    assert counts_1 == {"0": shots}
+    assert counts_1 == {"00": shots}
     assert counts_2 == {"11": shots}
 
 
@@ -203,8 +202,6 @@ def test_qasm_simulator_mcx_no_ancilla(backend: QasmSimulatorBackend, num_contro
     circuit.x(controls)
     circuit.mcx(controls, q[0])
     circuit.measure(q, c)
-
-    print(backend.target.operation_names)
 
     result = backend.run(circuit, shots=shots).result()
     assert result.success

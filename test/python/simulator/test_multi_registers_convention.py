@@ -13,6 +13,7 @@ import math
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.quantum_info import Statevector, state_fidelity
 
+from mqt.ddsim.qasm_simulator_backend import QasmSimulatorBackend
 from mqt.ddsim.statevector_simulator_backend import StatevectorSimulatorBackend
 
 
@@ -38,7 +39,7 @@ def test_circuit_multi() -> None:
     backend_sim = StatevectorSimulatorBackend()
 
     result = backend_sim.run(qc).result()
-    counts = result.get_counts(qc)
+    counts = QasmSimulatorBackend().run(qc).result().get_counts(qc)
     state = result.get_statevector()
 
     assert counts == {"01 10": 1024}

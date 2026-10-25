@@ -12,7 +12,7 @@ from typing import TypeVar
 
 import pytest
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
-from qiskit.circuit.library import RealAmplitudes
+from qiskit.circuit.library import real_amplitudes
 from qiskit.primitives import BitArray, PrimitiveResult
 
 from mqt.ddsim.primitives import Sampler
@@ -46,10 +46,10 @@ def circuits() -> list[QuantumCircuit]:
     bell_2.x(1)
     bell_2.measure_all()
 
-    param_qc_1 = RealAmplitudes(num_qubits=2, reps=2)
+    param_qc_1 = real_amplitudes(num_qubits=2, reps=2)
     param_qc_1.measure_all()
 
-    param_qc_2 = RealAmplitudes(num_qubits=2, reps=3)
+    param_qc_2 = real_amplitudes(num_qubits=2, reps=3)
     param_qc_2.measure_all()
 
     return [bell_1, bell_2, param_qc_1, param_qc_2]

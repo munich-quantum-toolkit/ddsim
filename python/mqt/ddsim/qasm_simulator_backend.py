@@ -6,218 +6,74 @@
 #
 # Licensed under the MIT License
 
-"""Qiskit backend for MQT DDSIM QASM simulators."""
+"""MQT DDSIM sampling backend using MQT Core's QDMI device."""
 
 from __future__ import annotations
 
-import time
-import uuid
-from typing import TYPE_CHECKING, Any, cast
+from importlib.metadata import version
+from numbers import Integral
+from typing import TYPE_CHECKING
 
-import numpy as np
-from mqt.core import load
-from qiskit import QuantumCircuit
-from qiskit.providers import BackendV2, Options
-from qiskit.result import Result
-from qiskit.result.models import ExperimentResult, ExperimentResultData
-from qiskit.transpiler import Target
+from qiskit.providers import Options
 
-from . import __version__
-from .experiment_header import DDSIMExperimentHeader
-from .job import DDSIMJob
-from .pyddsim import CircuitSimulator
-from .target import DDSIMTargetBuilder
+from mqt.core.plugins.qiskit import QDMIBackend
+from mqt.core.qdmi import open_device
+
+from .simulation import _seed, _shots
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Iterable, Mapping, Sequence
 
+    from qiskit import QuantumCircuit
     from qiskit.circuit import Parameter
     from qiskit.circuit.parameterexpression import ParameterValueType
 
-    Parameters = Mapping[Parameter, ParameterValueType] | Sequence[ParameterValueType]
+    from mqt.core.plugins.qiskit import QDMIJob
+    from mqt.core.typing import QDMIJobParameters
 
 
-class QasmSimulatorBackend(BackendV2):
-    """Qiskit backend for MQT DDSIM QASM simulators."""
+class QasmSimulatorBackend(QDMIBackend):
+    """Sample circuits on the MQT Core DD simulator.
 
-    _SHOW_STATE_VECTOR = False
-    _TARGET = Target(
-        description="Target for the MQT DDSIM QASM simulator",
-        num_qubits=128,
-    )
+    Circuits without classical bits are measured on a copy for legacy backend.run
+    compatibility. Native sampler PUBs retain their declared classical registers.
+    seed_simulator accepts None, -1, or a positive signed 32-bit integer.
+    max_workers=0 selects automatic concurrency; use 1 for serial sampling.
+    """
 
-    @staticmethod
-    def _add_operations_to_target(target: Target) -> None:
-        DDSIMTargetBuilder.add_0q_gates(target)
-        DDSIMTargetBuilder.add_1q_gates(target)
-        DDSIMTargetBuilder.add_2q_gates(target)
-        DDSIMTargetBuilder.add_3q_gates(target)
-        DDSIMTargetBuilder.add_multi_qubit_gates(target)
-        DDSIMTargetBuilder.add_non_unitary_operations(target)
-        DDSIMTargetBuilder.add_barrier(target)
-
-    def _initialize_target(self) -> None:
-        if len(self.target.operations) > 0:
-            return
-        self._add_operations_to_target(self.target)
-
-    def __init__(
-        self,
-        name: str = "qasm_simulator",
-        description: str = "MQT DDSIM QASM simulator",
-    ) -> None:
-        """Constructor for the MQT DDSIM QASM simulator backend."""
-        super().__init__(name=name, description=description, backend_version=__version__)
-        self._initialize_target()
+    def __init__(self) -> None:
+        """Create a sampling backend with its own QDMI session."""
+        super().__init__(open_device("mqt.ddsim.default"), device_id="mqt.ddsim.default")
+        self.name = "qasm_simulator"
+        self.description = "MQT DDSIM sampling simulator"
+        self.backend_version = version("mqt-ddsim")
 
     @classmethod
     def _default_options(cls) -> Options:
-        return Options(
-            shots=1024,
-            memory=False,
-            parameter_binds=None,
-            seed_simulator=None,
-            approximation_step_fidelity=1.0,
-            approximation_steps=1,
-            approximation_strategy="fidelity",
-        )
-
-    @property
-    def target(self) -> Target:
-        """The target of the backend."""
-        return self._TARGET
-
-    @property
-    def max_circuits(self) -> int | None:
-        """The maximum number of circuits that can be run in a single job."""
-        return None
+        return Options(shots=1024, memory=False, max_retries=0, seed_simulator=None, max_workers=0)
 
     @staticmethod
-    def assign_parameters(
-        quantum_circuits: Sequence[QuantumCircuit],
-        parameter_values: Sequence[Parameters] | None,
-    ) -> list[QuantumCircuit]:
-        """Assign parameter values to the circuits.
-
-        Args:
-            quantum_circuits: The quantum circuits to assign parameters to.
-            parameter_values: The parameter values to bind to the circuits.
-
-        Returns:
-            The bound circuits.
-
-        Raises:
-            ValueError: If the number of circuits does not match the number of provided parameter sets.
-        """
-        if not any(qc.parameters for qc in quantum_circuits) and not parameter_values:
-            return list(quantum_circuits)
-
-        if parameter_values is None:
-            msg = "No parameter values provided although at least one parameterized circuit was supplied."
+    def _job_parameters(options: Mapping[str, object]) -> QDMIJobParameters:
+        seed = _seed(options["seed_simulator"])
+        workers = options["max_workers"]
+        if isinstance(workers, bool) or not isinstance(workers, Integral) or int(workers) not in range(2**31):
+            msg = "max_workers must be an integer from 0 to 2147483647 (0 selects automatic concurrency)"
             raise ValueError(msg)
+        return {"custom1": seed, "custom3": int(workers)}
 
-        if len(quantum_circuits) != len(parameter_values):
-            msg = f"The number of circuits ({len(quantum_circuits)}) does not match the number of provided parameter sets ({len(parameter_values)})."
-            raise ValueError(msg)
-
-        bound_circuits = [
-            qc.assign_parameters(parameters=values)
-            for qc, values in zip(quantum_circuits, parameter_values, strict=False)
-        ]
-
-        # fix the circuit names
-        for qcb, qc in zip(bound_circuits, quantum_circuits, strict=False):
-            qcb.name = qc.name
-
-        return bound_circuits
+    @staticmethod
+    def _preprocess_circuit(circuit: QuantumCircuit) -> QuantumCircuit:
+        if not circuit.num_clbits:
+            circuit = circuit.copy()
+            circuit.measure_all()
+        return circuit
 
     def run(
         self,
         run_input: QuantumCircuit | Sequence[QuantumCircuit],
-        **options: Any,
-    ) -> DDSIMJob:
-        """Run a quantum circuit or list of quantum circuits on the DDSIM backend.
-
-        Args:
-            run_input: The quantum circuit(s) to run.
-            options: Additional run options.
-                Supports `parameter_values` to bind parameter values to the circuits.
-
-        Returns:
-            The DDSIM job
-        """
-        if isinstance(run_input, QuantumCircuit):
-            run_input = [run_input]
-
-        parameter_values: Sequence[Parameters] | None = None
-        if "parameter_values" in options:
-            parameter_values = options.pop("parameter_values")
-
-        job_id = str(uuid.uuid4())
-        local_job = DDSIMJob(self, job_id, self._run_job, run_input, parameter_values, **options)
-        local_job.submit()
-        return local_job
-
-    def _validate(self, quantum_circuits: Sequence[QuantumCircuit]) -> None:
-        pass
-
-    def _run_job(
-        self,
-        job_id: int,
-        quantum_circuits: Sequence[QuantumCircuit],
-        parameter_values: Sequence[Parameters] | None,
-        **options: Any,
-    ) -> Result:
-        self._validate(quantum_circuits)
-        start = time.time()
-
-        bound_circuits = self.assign_parameters(quantum_circuits, parameter_values)
-        result_list = [self._run_experiment(q_circ, **options) for q_circ in bound_circuits]
-
-        end = time.time()
-
-        return Result(
-            backend_name=self.name,
-            backend_version=self.backend_version,
-            qobj_id=None,
-            job_id=job_id,
-            success=all(res.success for res in result_list),
-            results=result_list,
-            status="COMPLETED",
-            time_taken=end - start,
-        )
-
-    def _run_experiment(self, qc: QuantumCircuit, **options: Any) -> ExperimentResult:
-        start_time = time.time()
-        approximation_step_fidelity = cast("float", options.get("approximation_step_fidelity", 1.0))
-        approximation_steps = cast("int", options.get("approximation_steps", 1))
-        approximation_strategy = str(options.get("approximation_strategy", "fidelity"))
-        seed = cast("int", options.get("seed_simulator", -1))
-        shots = cast("int", options.get("shots", 1024))
-
-        circuit = load(qc)
-        sim = CircuitSimulator(
-            circuit,
-            approximation_step_fidelity=approximation_step_fidelity,
-            approximation_steps=approximation_steps,
-            approximation_strategy=approximation_strategy,
-            seed=seed,
-        )
-        counts = sim.simulate(shots=shots)
-        end_time = time.time()
-
-        data = ExperimentResultData(
-            counts={hex(int(result, 2)): count for result, count in counts.items()},
-            statevector=None if not self._SHOW_STATE_VECTOR else np.array(sim.get_constructed_dd().get_vector()),
-            time_taken=end_time - start_time,
-        )
-
-        return ExperimentResult(
-            shots=shots,
-            success=True,
-            status="DONE",
-            seed=seed,
-            data=data,
-            metadata=qc.metadata,
-            header=DDSIMExperimentHeader.from_quantum_circuit(qc).get_compatible_version(),
-        )
+        parameter_values: Sequence[Mapping[Parameter, ParameterValueType] | Iterable[ParameterValueType]] | None = None,
+        **options: object,
+    ) -> QDMIJob:
+        """Sample bound circuits; parameters follow circuit.parameters order."""
+        _shots(options.get("shots", self.options.shots))
+        return super().run(run_input, parameter_values=parameter_values, **options)

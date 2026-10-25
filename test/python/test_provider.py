@@ -10,6 +10,9 @@ from __future__ import annotations
 
 import unittest
 
+import pytest
+
+import mqt.ddsim
 from mqt.ddsim import DDSIMProvider
 
 
@@ -27,3 +30,11 @@ class DDSIMProviderTestCase(unittest.TestCase):
         """Test getting a backend from the provider."""
         backend = self.provider.get_backend(name=self.backend_name)
         assert backend.name == self.backend_name
+
+
+@pytest.mark.parametrize(
+    "name", ["CircuitSimulator", "UnitarySimulator", "HybridSimulator", "PathSimulator", "StochasticNoiseSimulator"]
+)
+def test_removed_low_level_classes(name: str) -> None:
+    with pytest.raises(AttributeError, match="removed in MQT DDSIM 3"):
+        getattr(mqt.ddsim, name)

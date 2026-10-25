@@ -6,33 +6,14 @@
 #
 # Licensed under the MIT License
 
-"""Qiskit backend for MQT DDSIM statevector simulators."""
+"""MQT DDSIM uncollapsed statevector backend."""
 
-from __future__ import annotations
-
-from qiskit.transpiler import Target
-
-from .qasm_simulator_backend import QasmSimulatorBackend
+from ._dense_backend import _DenseSimulatorBackend
 
 
-class StatevectorSimulatorBackend(QasmSimulatorBackend):
-    """Qiskit backend for MQT DDSIM statevector simulators."""
+class StatevectorSimulatorBackend(_DenseSimulatorBackend):
+    """Return the exact statevector, retaining source global phase and qubit width."""
 
-    _SHOW_STATE_VECTOR = True
-    _SV_TARGET = Target(
-        description="Target for the MQT DDSIM statevector simulator",
-        num_qubits=30,  # corresponds to 16GiB memory for storing the full statevector
-    )
-
-    def __init__(
-        self,
-        name: str = "statevector_simulator",
-        description: str = "MQT DDSIM statevector simulator",
-    ) -> None:
-        """Constructor for the MQT DDSIM statevector simulator backend."""
-        super().__init__(name=name, description=description)
-
-    @property
-    def target(self) -> Target:
-        """The target of the backend."""
-        return self._SV_TARGET
+    def __init__(self) -> None:
+        """Create a statevector backend."""
+        super().__init__()
