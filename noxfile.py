@@ -63,7 +63,7 @@ def _run_tests(
     session: nox.Session,
     *,
     install_args: Sequence[str] = (),
-    uv_run_args: Sequence[str] = (),
+    qiskit_main: bool = False,
     run_args: Sequence[str] = (),
 ) -> None:
     env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
@@ -84,14 +84,22 @@ def _run_tests(
         *install_args,
         env=env,
     )
+    if qiskit_main:
+        session.run("uv", "sync", "--inexact", "--no-dev", "--no-build-isolation-package", "mqt-ddsim", env=env)
+        session.run(
+            "uv",
+            "pip",
+            "install",
+            "--python",
+            session.virtualenv.location,
+            "qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git",
+            env=env,
+        )
     session.run(
         "uv",
         "run",
-        "--no-dev",  # do not auto-install dev dependencies
-        "--no-build-isolation-package",
-        "mqt-ddsim",  # build the project without isolation
+        *(["--no-sync"] if qiskit_main else ["--no-dev", "--no-build-isolation-package", "mqt-ddsim"]),
         *install_args,
-        *uv_run_args,
         "pytest",
         *run_args,
         *session.posargs,
@@ -121,11 +129,8 @@ def minimums(session: nox.Session) -> None:
 
 @nox.session(reuse_venv=True, venv_backend="uv", python=PYTHON_ALL_VERSIONS)
 def qiskit(session: nox.Session) -> None:
-    """Test Qiskit main in a uv overlay without changing the project lock."""
-    _run_tests(
-        session,
-        uv_run_args=["--with", "qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git"],
-    )
+    """Test Qiskit main in the nox environment without changing the project lock."""
+    _run_tests(session, qiskit_main=True)
 
 
 @nox.session(python="3.14", reuse_venv=True)
