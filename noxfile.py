@@ -95,7 +95,8 @@ def _run_tests(
         env=env,
     )
     if extra_deps:
-        session.install(*extra_deps)
+        # use uv pip install on every run to override the versions restored by uv sync
+        session.run("uv", "pip", "install", "--python", session.virtualenv.location, *extra_deps, env=env)
     session.run(
         "pytest",
         *run_args,
