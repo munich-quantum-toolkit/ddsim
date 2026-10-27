@@ -23,7 +23,3 @@ primitive factories from
 [MQT Core's QDMI integration](https://mqt.readthedocs.io/projects/core/en/latest/qdmi/qdmi_backend.html).
 See {doc}`primitives` for `sampler()`, `estimator()`, and the directly
 re-exported `mqt.ddsim.primitives.DDEstimator`.
-
-```{autoclass} mqt.ddsim.DDSIMProvider
-:members: get_backend, backends
-```

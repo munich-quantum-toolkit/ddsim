@@ -14,7 +14,7 @@ use qubit zero as the least-significant bit in result strings.
 ```{code-cell} python
 from qiskit import QuantumCircuit
 from qiskit.visualization import plot_histogram
-from mqt.ddsim import DDSIMProvider
+from mqt.ddsim import SamplingSimulatorBackend
 
 circuit = QuantumCircuit(3)
 circuit.h(0)
@@ -24,7 +24,7 @@ circuit.draw("mpl")
 ```
 
 ```{code-cell} python
-backend = DDSIMProvider().get_backend("sampling_simulator")
+backend = SamplingSimulatorBackend()
 counts = backend.run(circuit, shots=1024, seed_simulator=17).result().get_counts()
 plot_histogram(counts, title="Bell pair on qubits 0 and 2")
 ```

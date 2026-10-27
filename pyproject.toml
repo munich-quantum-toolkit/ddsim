@@ -66,6 +66,7 @@ Discussions = "https://github.com/munich-quantum-toolkit/ddsim/discussions"
 dev = [
   { include-group = "test" },
   "nox>=2025.11.12",
+  "prek>=0.2.27",
 ]
 test = [
   "pytest>=9.0.3",
@@ -96,7 +97,7 @@ mqt-ddsim = { workspace = true }
 module-name = "mqt.ddsim"
 module-root = "python"
 source-include = [ "test/**", "docs/**", "scripts/**", "UPGRADING.md", "CHANGELOG.md", "noxfile.py" ]
-source-exclude = [ "docs/_build/**", "docs/api/**", "python/**/_version.py" ]
+source-exclude = [ "docs/_build/**" ]
 
 
 [tool.ruff]

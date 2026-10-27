@@ -10,9 +10,8 @@
 
 from importlib.metadata import version
 
-from .provider import DDSIMProvider
 from .sampling_simulator_backend import SamplingSimulatorBackend
 from .simulation import build_functionality, sample, simulate
 
 __version__ = version("mqt-ddsim")
-__all__ = ["DDSIMProvider", "SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]
+__all__ = ["SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]

@@ -14,6 +14,7 @@ native runtime dependencies.
 
 | MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `DDSIMProvider().get_backend(...)`                                    | Construct `SamplingSimulatorBackend()` directly                                                       |
 | `qasm_simulator`, `QasmSimulatorBackend`                              | `sampling_simulator`, `SamplingSimulatorBackend`                                                      |
 | Statevector and unitary Qiskit backends                               | `simulate(circuit)` and `build_functionality(circuit)` return NumPy arrays                            |
 | `primitives.Sampler`                                                  | `backend.sampler()` returns Sampler V2                                                                |
@@ -28,7 +29,7 @@ native runtime dependencies.
 
 ```python
 from qiskit import QuantumCircuit
-from mqt.ddsim import DDSIMProvider, simulate, build_functionality
+from mqt.ddsim import SamplingSimulatorBackend, simulate, build_functionality
 from mqt.ddsim.primitives import DDEstimator
 
 circuit = QuantumCircuit(2)
@@ -38,7 +39,7 @@ state = simulate(circuit)
 unitary = build_functionality(circuit)
 exact = DDEstimator().run([(circuit, "ZZ")]).result()
 
-backend = DDSIMProvider().get_backend("sampling_simulator")
+backend = SamplingSimulatorBackend()
 sampled = backend.estimator(default_precision=0.05).run([(circuit, "ZZ")]).result()
 circuit.measure_all()
 counts = backend.run(circuit, shots=1024).result().get_counts()
@@ -67,14 +68,6 @@ QIR input requires an explicit `ProgramFormat`: text for `QIR_BASE_STRING` or
 `QIR_ADAPTIVE_STRING`, bitcode bytes for their `MODULE` counterparts. Profile
 declarations do not validate arbitrary LLVM. QIR full-unitary extraction is
 unsupported.
-
-#### Development dependency and release gate
-
-The development branch pins an exact MQT Core Git revision. Installing that
-revision builds Core with a C++20 toolchain and LLVM/MLIR 23.1; Core can
-download a compatible SDK on supported hosts. Before publishing MQT DDSIM 3,
-replace the Git pin with a suitable released Core version, validate installed
-wheels, and run the supported CI matrix on the release candidate.
 
 ## [2.7.0]
 

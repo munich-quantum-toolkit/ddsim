@@ -21,7 +21,7 @@ from mqt.core.qdmi import ProgramFormat, device_ids
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Operator, SparsePauliOp, Statevector
 
-from mqt.ddsim import DDSIMProvider, build_functionality, sample, simulate
+from mqt.ddsim import SamplingSimulatorBackend, build_functionality, sample, simulate
 from mqt.ddsim.primitives import DDEstimator
 
 
@@ -44,7 +44,7 @@ def main() -> None:
     measured = QuantumCircuit(2)
     measured.x(0)
     measured.measure_all()
-    backend = DDSIMProvider().get_backend("sampling_simulator")
+    backend = SamplingSimulatorBackend()
     assert isinstance(backend, QDMIBackend)
     assert backend.device_id == "mqt.ddsim.default"
     assert backend.run(measured, shots=16, memory=True).result().get_counts() == {"01": 16}

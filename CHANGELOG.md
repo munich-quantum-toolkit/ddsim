@@ -32,6 +32,8 @@ releases may include breaking changes.
 
 ### Removed
 
+- 🔥 Remove `DDSIMProvider`; construct `SamplingSimulatorBackend` directly
+  ([#1060]) ([**@burgholzer**])
 - 🔥 Remove the Core 3 IR dependency, native simulator classes and C++ library,
   HSF, path, noise, and specialized algorithm simulators ([#1060])
   ([**@burgholzer**])

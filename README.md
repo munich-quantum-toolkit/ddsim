@@ -15,7 +15,7 @@
   </a>
 </p>
 
-# MQT DDSIM — quantum simulation powered by MQT Core
+# MQT DDSIM — A quantum circuit simulator based on decision diagrams powered by MQT Core
 
 A tool for classical quantum circuit simulation developed as part of the
 [_Munich Quantum Toolkit (MQT)_](https://mqt.readthedocs.io). It builds upon
@@ -28,15 +28,13 @@ backbone of the MQT.
   </a>
 </p>
 
-A quantum circuit simulator based on decision diagrams powered by MQT Core
-
 ## Key Features
 
 - Qiskit and OpenQASM 2/3 input, plus QIR Base/Adaptive text and bitcode.
 - Sampling, uncollapsed statevectors and full unitary matrices using MQT Core's
   decision-diagram engine. QIR supports sampling and eligible state extraction;
   QIR unitary simulation is unsupported.
-- `DDSIMProvider` and `SamplingSimulatorBackend` for Qiskit counts and memory.
+- `SamplingSimulatorBackend` for Qiskit counts and memory.
 - Sampler V2, native exact `DDEstimator`, and sampled Estimator V2 for broader
   circuit support, including dynamic preparation. Exact expectations stay in
   compact DDs without extracting dense amplitudes.
@@ -120,7 +118,7 @@ circ.measure_all()
 
 print(circ.draw(fold=-1))
 
-backend = ddsim.DDSIMProvider().get_backend("sampling_simulator")
+backend = ddsim.SamplingSimulatorBackend()
 
 job = backend.run(circ, shots=10000)
 counts = job.result().get_counts(circ)
@@ -130,23 +128,14 @@ print(counts)
 **Detailed documentation and examples are available at
 [ReadTheDocs](https://mqt.readthedocs.io/projects/ddsim).**
 
-## System Requirements and Building
+## System Requirements
 
-Use Python 3.11 or newer and Qiskit `>=2.5,<3`. MQT Core provides platform
-runtime libraries and the bundled `mqt.ddsim.default` device. Building MQT DDSIM
-itself needs no C++ compiler:
-
-```console
-uv build
-```
-
-This development branch pins an exact MQT Core Git commit containing the
-required simulation APIs. Installing that dependency builds MQT Core from source
-and needs a C++20 toolchain and LLVM/MLIR 23.1. MQT Core downloads a compatible
-LLVM/MLIR SDK on supported hosts if none is available; see the
-[MQT Core build instructions](https://mqt.readthedocs.io/projects/core/en/latest/installation.html#building-from-source).
-Before publishing MQT DDSIM 3, replace the Git pin with the first released MQT
-Core version that provides these APIs and validate the supported wheel matrix.
+MQT DDSIM supports Python 3.11 or newer and Qiskit `>=2.5,<3` on Linux, macOS,
+and Windows. Building and running are continuously tested with
+[GitHub Actions](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
+See the
+[installation guide](https://mqt.readthedocs.io/projects/ddsim/en/latest/installation.html)
+for installation and development setup.
 
 ## Cite This
 
