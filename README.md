@@ -28,21 +28,22 @@ backbone of the MQT.
   </a>
 </p>
 
+A quantum circuit simulator based on decision diagrams powered by MQT Core
+
 ## Key Features
 
 - Qiskit and OpenQASM 2/3 input, plus QIR Base/Adaptive text and bitcode.
 - Sampling, uncollapsed statevectors and full unitary matrices using MQT Core's
   decision-diagram engine. QIR supports sampling and eligible state extraction;
   QIR unitary simulation is unsupported.
-- Familiar `DDSIMProvider` entry point and `qasm_simulator`,
-  `statevector_simulator`, and `unitary_simulator` backends.
-- V2 Sampler, exact native DD Estimator, and an explicit sampled Estimator.
-  Exact expectations stay in compact DDs without extracting dense amplitudes.
-- An installed `mqt-ddsim-simple` command with versioned JSON output.
+- `DDSIMProvider` and `SamplingSimulatorBackend` for Qiskit counts and memory.
+- Sampler V2, native exact `DDEstimator`, and sampled Estimator V2 for broader
+  circuit support, including dynamic preparation. Exact expectations stay in
+  compact DDs without extracting dense amplitudes.
 
-MQT DDSIM 3 is a Python integration package. MQT Core owns the native engine,
-QIR runtime and QDMI device. HSF, path, noise, approximation and specialized
-algorithm simulators are removed; see [the migration guide](UPGRADING.md).
+MQT DDSIM is a Python package powered by MQT Core's native engine, QIR runtime,
+and QDMI device. Hybrid, path, noise, and specialized algorithm simulators
+remain available in the MQT DDSIM v2 release series.
 
 If you have any questions, feel free to create a
 [discussion](https://github.com/munich-quantum-toolkit/ddsim/discussions) or an
@@ -115,10 +116,11 @@ circ = QuantumCircuit(3)
 circ.h(0)
 circ.cx(0, 1)
 circ.cx(0, 2)
+circ.measure_all()
 
 print(circ.draw(fold=-1))
 
-backend = ddsim.DDSIMProvider().get_backend("qasm_simulator")
+backend = ddsim.DDSIMProvider().get_backend("sampling_simulator")
 
 job = backend.run(circ, shots=10000)
 counts = job.result().get_counts(circ)
@@ -130,9 +132,9 @@ print(counts)
 
 ## System Requirements and Building
 
-Use Python 3.11 or newer, Qiskit 2.5 or 2.6, and NumPy 2. MQT Core provides
-platform runtime libraries and the bundled `mqt.ddsim.default` device. Building
-MQT DDSIM itself needs no C++ compiler:
+Use Python 3.11 or newer and Qiskit `>=2.5,<3`. MQT Core provides platform
+runtime libraries and the bundled `mqt.ddsim.default` device. Building MQT DDSIM
+itself needs no C++ compiler:
 
 ```console
 uv build

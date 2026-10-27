@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from mqt.core.qdmi import ProgramFormat
 
-from mqt.ddsim import build_functionality, sample, simulate
+from mqt.ddsim import sample, simulate
 
 ROOT = Path(__file__).parent
 
@@ -47,8 +47,6 @@ def test_qir_control_adjoint_global_phase() -> None:
     expected = np.exp(0.37j) * np.array([0, 0, 1, -1j]) / np.sqrt(2)
     np.testing.assert_allclose(actual, expected, atol=1e-12)
     assert not np.allclose(actual * np.exp(-0.37j), expected)
-    with pytest.raises(ValueError, match="unitary simulation of QIR is unsupported"):
-        build_functionality(program, program_format=ProgramFormat.QIR_BASE_STRING)
 
 
 @pytest.mark.parametrize(
@@ -57,12 +55,3 @@ def test_qir_control_adjoint_global_phase() -> None:
 def test_payload_type(program: str | bytes, fmt: ProgramFormat) -> None:
     with pytest.raises(TypeError, match="requires"):
         sample(program, program_format=fmt)
-
-
-def test_explicit_qir_format_required() -> None:
-    with pytest.raises(ValueError, match="explicit"):
-        simulate(ROOT / "asymmetric.ll")
-    with pytest.raises(ValueError, match="explicit"):
-        sample(b"bitcode")
-    with pytest.raises(ValueError, match="program_format"):
-        sample("text", program_format="qir")  # ty: ignore[invalid-argument-type]

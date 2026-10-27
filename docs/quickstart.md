@@ -8,61 +8,45 @@ mystnb:
 
 # Quickstart
 
-Use the familiar provider for Qiskit counts:
+Create a Bell pair, measure it, and inspect the correlations. Qiskit circuits
+use qubit zero as the least-significant bit in result strings.
 
 ```{code-cell} python
 from qiskit import QuantumCircuit
-from mqt.ddsim import DDSIMProvider, simulate, build_functionality
+from qiskit.visualization import plot_histogram
+from mqt.ddsim import DDSIMProvider
 
 circuit = QuantumCircuit(3)
 circuit.h(0)
 circuit.cx(0, 2)
-backend = DDSIMProvider().get_backend("qasm_simulator")
-counts = backend.run(circuit, shots=1024, seed_simulator=17).result().get_counts()
-assert set(counts) == {"000", "101"}
-assert sum(counts.values()) == 1024
-state = simulate(circuit)
-unitary = build_functionality(circuit)
-assert state.shape == (8,)
-assert unitary.shape == (8, 8)
+circuit.measure_all()
+circuit.draw("mpl")
 ```
 
-The sampling backend measures all qubits on a copy when a legacy circuit has no
-classical bits. V2 Sampler reports only registers in its original PUB; add
-measurements explicitly for Sampler results.
+```{code-cell} python
+backend = DDSIMProvider().get_backend("sampling_simulator")
+counts = backend.run(circuit, shots=1024, seed_simulator=17).result().get_counts()
+plot_histogram(counts, title="Bell pair on qubits 0 and 2")
+```
 
-For OpenQASM, pass a file path or a source string beginning with its version:
+Measurements are explicit: only the circuit's classical outputs appear in the
+result. For per-register shot arrays and parameter sweeps, use
+{doc}`Sampler V2 <primitives>`.
+
+OpenQASM source strings and file paths work with the direct sampling function:
 
 ```{code-cell} python
 from mqt.ddsim import sample
 
-source = '''OPENQASM 3.0;
+source = '''OPENQASM 3;
 include "stdgates.inc";
 qubit[2] q;
 bit[2] c;
 x q[0];
 c = measure q;'''
-assert sample(source, shots=16) == {"01": 16}
+sample(source, shots=16)
 ```
 
-QIR requires an explicit profile and matching payload type:
-
-```python
-from pathlib import Path
-from mqt.core.qdmi import ProgramFormat
-from mqt.ddsim import sample
-
-counts = sample(
-    Path("program.bc").read_bytes(),
-    program_format=ProgramFormat.QIR_ADAPTIVE_MODULE,
-    shots=1024,
-)
-```
-
-Use `QIR_BASE_STRING` or `QIR_ADAPTIVE_STRING` for LLVM text strings and the
-corresponding `MODULE` enum for bitcode bytes. QIR receives a fully bound
-program; arbitrary LLVM entry arguments are not DDSIM parameter bindings.
-
-An invalid or missing QIR format raises `ValueError`. A payload type that does
-not match its explicit format raises `TypeError`. Detected execution failures
-raise `RuntimeError`; a format declaration does not validate arbitrary LLVM.
+Continue with {doc}`simulators/sampling` for classical feedback and memory,
+{doc}`simulators/statevectors_and_unitaries` for dense results, or
+{doc}`primitives` for expectation values.

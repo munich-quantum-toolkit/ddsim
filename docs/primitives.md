@@ -8,69 +8,85 @@ mystnb:
 
 # Qiskit V2 primitives
 
-MQT DDSIM exposes Qiskit's native backend Sampler and Core's native exact DD
-Estimator. PUB binding columns follow `circuit.parameters`, not gate insertion
-order. Leading parameter axes and observables follow Qiskit broadcasting.
+MQT DDSIM offers two estimation methods and a Sampler V2 through MQT Core's
+Qiskit integration. All accept Qiskit PUBs and follow their parameter ordering
+and broadcasting rules.
 
-## Sampler
+| Primitive            | Construction          | Result                                                                        |
+| -------------------- | --------------------- | ----------------------------------------------------------------------------- |
+| Sampler V2           | `backend.sampler()`   | One shot array per classical register                                         |
+| Exact DD Estimator   | `DDEstimator()`       | Expectations from the DD state, without repeated sampling or dense extraction |
+| Sampled Estimator V2 | `backend.estimator()` | Finite-shot estimates, including dynamic state preparation                    |
+
+## Sampling parameter sweeps
+
+Parameters follow `tuple(circuit.parameters)` order. PUB-level shots override
+the run-level setting, which overrides `default_shots`. Register separation and
+PUB broadcast dimensions are preserved in the result.
 
 ```{code-cell} python
+import numpy as np
 from qiskit import QuantumCircuit
-from mqt.ddsim.primitives import Sampler
+from qiskit.circuit import Parameter
+from mqt.ddsim import SamplingSimulatorBackend
 
-circuit = QuantumCircuit(2)
-circuit.x(0)
-circuit.measure_all()
-result = Sampler().run([(circuit,)], shots=16).result()
-assert result[0].data.meas.get_counts() == {"01": 16}
+angle = Parameter("angle")
+circuit = QuantumCircuit(1)
+circuit.ry(angle, 0)
+measured = circuit.copy()
+measured.measure_all()
+angles = np.linspace(0, np.pi, 9).reshape(-1, 1)
+backend = SamplingSimulatorBackend()
+sampler = backend.sampler(default_shots=512, seed_simulator=71)
+result = sampler.run([(measured, angles)]).result()[0]
+result.data.meas.get_counts(4)
 ```
 
-Each classical register has a separate `BitArray`, preserving shot correlations
-and PUB shape. PUB shots override run shots, which override the constructor
-default. No classical registers means an empty `DataBin`; add measurements
-explicitly. Native metadata reports shots, circuit metadata and version 2.
+## Exact and sampled expectations
 
-## Exact and sampled estimation
+`DDEstimator` evaluates Pauli observables on a coherent DD state. It supports
+the same state preparations as Core's statevector simulation. It avoids dense
+statevector extraction, but the DD can still grow exponentially. Its `stds=0`
+means zero sampling uncertainty, not zero quantum variance or infinite numerical
+accuracy. Precision does not switch it to sampling.
+
+Sampled Estimator V2 requires positive precision and supports a broader class of
+circuits, including resets and classical feedback. It groups commuting
+observables and obtains expectations from measurement shots.
 
 ```{code-cell} python
-from qiskit.quantum_info import SparsePauliOp
-from mqt.ddsim import DDSIMProvider
-from mqt.ddsim.primitives import Estimator
+from mqt.ddsim.primitives import DDEstimator
 
-preparation = QuantumCircuit(2)
-preparation.h(0)
-preparation.cx(0, 1)
-observable = SparsePauliOp("ZZ")
-exact = Estimator().run([(preparation, observable)]).result()
-assert abs(float(exact[0].data.evs) - 1) < 1e-12
-backend = DDSIMProvider().get_backend("qasm_simulator")
-job = backend.estimator().run([(preparation, observable)], precision=0.05)
-sampled = job.result()
-assert abs(float(sampled[0].data.evs) - 1) < 1e-12
+exact = DDEstimator().run([(circuit, "Z", angles)]).result()[0]
+sampled = backend.estimator(default_precision=0.05, seed_simulator=71).run(
+    [(circuit, "Z", angles)]
+).result()[0]
 ```
 
-`Estimator` exposes Core's `DDEstimator`. It prepares one pure-state DD per
-binding point and evaluates all observables for that point in a native batch. It
-needs the complete state represented as a DD, not a dense amplitude array.
-Finite real Pauli sums are supported; invalid dimensions, coefficients and
-numerical overflow fail. Qiskit rejects zero or cancelled observable sums during
-normal PUB coercion; Core's program-level API accepts zero observables directly.
-Eligible terminal measurements are deferred; feedback and reset are rejected
-instead of returning one trajectory's expectation.
+```{code-cell} python
+import matplotlib.pyplot as plt
 
-The compatibility `seed` constructor argument and property are retained but have
-no effect on exact execution. Precision defaults to zero. Every finite
-nonnegative precision requests exact numerical evaluation; positive precision
-does not add noise or switch methods. PUB precision overrides run precision and
-then the default. `evs` and `stds` have the PUB broadcast shape. `stds=0` means
-zero sampling uncertainty, not zero quantum variance or numerical error.
-Metadata contains `method="exact"`, target precision and circuit metadata,
-without shots.
+fig, ax = plt.subplots(figsize=(7, 3.5), layout="constrained")
+ax.plot(angles[:, 0], exact.data.evs, label="Exact DD")
+ax.errorbar(angles[:, 0], sampled.data.evs, yerr=sampled.data.stds,
+            fmt="o", capsize=3, label="Sampled ± standard error")
+ax.set(xlabel="Rotation angle (radians)", ylabel="Expectation of Z")
+ax.legend()
+plt.show()
+```
 
-`backend.estimator()` remains Qiskit's sampled `BackendEstimatorV2`. It requires
-positive precision and uses `ceil(1 / precision**2)` shots per measurement
-circuit, with Pauli grouping. Its `stds` are statistical error estimates. This
-separate path retains finite-shot semantics and supported dynamic preparation.
-Sampling still represents quantum states and does not guarantee lower memory
-costs for a large DD. Methods never switch silently after a resource error.
-Arbitrary QIR is not a Qiskit PUB input.
+Inspect metadata for the selected method, precision, and sampling information:
+
+```{code-cell} python
+exact.metadata, sampled.metadata
+```
+
+A reset is a valid sampled preparation, but it does not define the coherent
+state required by the exact estimator:
+
+```{code-cell} python
+dynamic = QuantumCircuit(1)
+dynamic.h(0)
+dynamic.reset(0)
+backend.estimator(default_precision=0.1).run([(dynamic, "Z")]).result()[0].data.evs
+```

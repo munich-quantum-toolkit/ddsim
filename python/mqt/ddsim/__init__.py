@@ -6,32 +6,13 @@
 #
 # Licensed under the MIT License
 
-"""MQT DDSIM simulation, powered by MQT Core."""
+"""A quantum circuit simulator based on decision diagrams powered by MQT Core."""
 
 from importlib.metadata import version
-from typing import NoReturn
 
 from .provider import DDSIMProvider
+from .sampling_simulator_backend import SamplingSimulatorBackend
 from .simulation import build_functionality, sample, simulate
 
 __version__ = version("mqt-ddsim")
-__all__ = ["DDSIMProvider", "__version__", "build_functionality", "sample", "simulate"]
-
-
-def __getattr__(name: str) -> NoReturn:
-    """Explain replacements for removed low-level simulator classes."""
-    if name in {"CircuitSimulator", "UnitarySimulator", "UnitarySimulatorMode"}:
-        msg = f"{name} was removed in MQT DDSIM 3. Use simulate(), sample(), or build_functionality(); use mqt.core.dd for DD operations."
-    elif name in {
-        "DeterministicNoiseSimulator",
-        "HybridSimulator",
-        "HybridSimulatorMode",
-        "PathSimulator",
-        "PathSimulatorConfiguration",
-        "PathSimulatorMode",
-        "StochasticNoiseSimulator",
-    }:
-        msg = f"{name} was removed in MQT DDSIM 3. HSF, path, and noise simulation are available only in MQT DDSIM 2.x."
-    else:
-        msg = f"module {__name__!r} has no attribute {name!r}"
-    raise AttributeError(msg)
+__all__ = ["DDSIMProvider", "SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]

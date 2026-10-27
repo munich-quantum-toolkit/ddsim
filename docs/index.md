@@ -1,19 +1,41 @@
-# MQT DDSIM - A quantum circuit simulator based on Decision Diagrams
+# MQT DDSIM
 
-MQT DDSIM is a Python package for classical quantum circuit simulation using MQT
-Core's native decision-diagram engine developed as part of the
-_{doc}`Munich Quantum Toolkit (MQT) <mqt:index>`_.
+A quantum circuit simulator based on decision diagrams powered by MQT Core
 
-This documentation provides a comprehensive guide to the MQT DDSIM library,
-including {doc}`installation instructions <installation>`, a
-{doc}`quickstart guide <quickstart>`, and detailed
-{doc}`API documentation <api/mqt/ddsim/index>`. The source code of MQT DDSIM is
-publicly available on GitHub at
-[munich-quantum-toolkit/ddsim](https://github.com/munich-quantum-toolkit/ddsim),
-while pre-built binaries are available via
-[PyPI](https://pypi.org/project/mqt.ddsim/) for all major operating systems and
-all modern Python versions. This major release supports Qiskit 2.5 and 2.6 on
-Python 3.11 or newer.
+Explore quantum programs with compact decision diagrams: sample measurements,
+inspect statevectors and unitaries, or evaluate observables. MQT DDSIM connects
+Qiskit, OpenQASM, and QIR to MQT Core's native simulation engine as part of the
+{doc}`Munich Quantum Toolkit <mqt:index>`.
+
+MQT DDSIM supports Python 3.11 or newer and Qiskit `>=2.5,<3`.
+
+::::{grid} 1 2 2 2
+:gutter: 3
+
+:::{grid-item-card}
+
+{doc}`Start simulating <quickstart>`. Build a circuit, sample its measurements,
+and plot the results.
+:::
+
+:::{grid-item-card}
+
+{doc}`Choose an execution mode <simulators>`. Work with counts, amplitudes,
+matrices, or QIR programs.
+:::
+
+:::{grid-item-card}
+
+{doc}`Estimate observables <primitives>`. Use exact DD estimation or sampled
+Estimator V2 for dynamic circuits.
+:::
+
+:::{grid-item-card}
+
+{doc}`Python API <api>`. Find simulation functions and the Qiskit backend.
+:::
+
+::::
 
 ```{toctree}
 :hidden:
@@ -22,6 +44,7 @@ self
 ```
 
 ```{toctree}
+:hidden:
 :maxdepth: 1
 :caption: User Guide
 
@@ -35,6 +58,7 @@ UPGRADING
 ```
 
 ```{toctree}
+:hidden:
 :maxdepth: 2
 :titlesonly:
 :caption: Developers
@@ -47,10 +71,11 @@ support
 ```
 
 ```{toctree}
+:hidden:
 :caption: Python API Reference
 :maxdepth: 1
 
-api/mqt/ddsim/index
+api
 ```
 
 ## Contributors and Supporters

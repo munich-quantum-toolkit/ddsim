@@ -6,35 +6,11 @@
 #
 # Licensed under the MIT License
 
-from __future__ import annotations
-
-import unittest
-
-import pytest
-
-import mqt.ddsim
-from mqt.ddsim import DDSIMProvider
+from mqt.ddsim import DDSIMProvider, SamplingSimulatorBackend
 
 
-class DDSIMProviderTestCase(unittest.TestCase):
-    def setUp(self) -> None:
-        self.provider = DDSIMProvider()
-        self.backend_name = "qasm_simulator"
-
-    def test_backends(self) -> None:
-        """Test the provider has backends."""
-        backends = self.provider.backends()
-        assert len(backends) > 0
-
-    def test_get_backend(self) -> None:
-        """Test getting a backend from the provider."""
-        backend = self.provider.get_backend(name=self.backend_name)
-        assert backend.name == self.backend_name
-
-
-@pytest.mark.parametrize(
-    "name", ["CircuitSimulator", "UnitarySimulator", "HybridSimulator", "PathSimulator", "StochasticNoiseSimulator"]
-)
-def test_removed_low_level_classes(name: str) -> None:
-    with pytest.raises(AttributeError, match="removed in MQT DDSIM 3"):
-        getattr(mqt.ddsim, name)
+def test_provider() -> None:
+    provider = DDSIMProvider()
+    assert isinstance(provider.get_backend("sampling_simulator"), SamplingSimulatorBackend)
+    assert [backend.name for backend in provider.backends()] == ["sampling_simulator"]
+    assert provider.backends(name="unknown") == []

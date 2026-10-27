@@ -19,32 +19,26 @@ from qiskit.providers import Options
 from mqt.core.plugins.qiskit import QDMIBackend
 from mqt.core.qdmi import open_device
 
-from .simulation import _seed, _shots
+from .simulation import _seed
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping, Sequence
+    from collections.abc import Mapping
 
-    from qiskit import QuantumCircuit
-    from qiskit.circuit import Parameter
-    from qiskit.circuit.parameterexpression import ParameterValueType
-
-    from mqt.core.plugins.qiskit import QDMIJob
     from mqt.core.typing import QDMIJobParameters
 
 
-class QasmSimulatorBackend(QDMIBackend):
-    """Sample circuits on the MQT Core DD simulator.
+class SamplingSimulatorBackend(QDMIBackend):
+    """Sample circuits with explicit measurements on the MQT Core DD simulator.
 
-    Circuits without classical bits are measured on a copy for legacy backend.run
-    compatibility. Native sampler PUBs retain their declared classical registers.
-    seed_simulator accepts None, -1, or a positive signed 32-bit integer.
+    Use sampler() for Sampler V2 and estimator() for sampled Estimator V2.
+    seed_simulator accepts None or a positive signed 32-bit integer.
     max_workers=0 selects automatic concurrency; use 1 for serial sampling.
     """
 
     def __init__(self) -> None:
         """Create a sampling backend with its own QDMI session."""
         super().__init__(open_device("mqt.ddsim.default"), device_id="mqt.ddsim.default")
-        self.name = "qasm_simulator"
+        self.name = "sampling_simulator"
         self.description = "MQT DDSIM sampling simulator"
         self.backend_version = version("mqt-ddsim")
 
@@ -60,20 +54,3 @@ class QasmSimulatorBackend(QDMIBackend):
             msg = "max_workers must be an integer from 0 to 2147483647 (0 selects automatic concurrency)"
             raise ValueError(msg)
         return {"custom1": seed, "custom3": int(workers)}
-
-    @staticmethod
-    def _preprocess_circuit(circuit: QuantumCircuit) -> QuantumCircuit:
-        if not circuit.num_clbits:
-            circuit = circuit.copy()
-            circuit.measure_all()
-        return circuit
-
-    def run(
-        self,
-        run_input: QuantumCircuit | Sequence[QuantumCircuit],
-        parameter_values: Sequence[Mapping[Parameter, ParameterValueType] | Iterable[ParameterValueType]] | None = None,
-        **options: object,
-    ) -> QDMIJob:
-        """Sample bound circuits; parameters follow circuit.parameters order."""
-        _shots(options.get("shots", self.options.shots))
-        return super().run(run_input, parameter_values=parameter_values, **options)

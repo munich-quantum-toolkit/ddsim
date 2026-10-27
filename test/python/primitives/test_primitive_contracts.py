@@ -15,8 +15,8 @@ from qiskit.circuit import Parameter
 from qiskit.primitives import BackendEstimatorV2, BackendSamplerV2
 from qiskit.primitives.containers import BindingsArray, EstimatorPub, ObservablesArray, SamplerPub
 
-from mqt.ddsim.primitives import Estimator, Sampler
-from mqt.ddsim.qasm_simulator_backend import QasmSimulatorBackend
+from mqt.ddsim.primitives import DDEstimator
+from mqt.ddsim.sampling_simulator_backend import SamplingSimulatorBackend
 
 
 def test_sampler_broadcast_shots_and_registers() -> None:
@@ -29,7 +29,7 @@ def test_sampler_broadcast_shots_and_registers() -> None:
     circuit.measure(0, right)
     circuit.measure(1, left)
     parameters = np.array([[[0, 0], [0, np.pi]], [[np.pi, 0], [np.pi, np.pi]]])
-    sampler = Sampler(default_shots=19, seed=71)
+    sampler = SamplingSimulatorBackend().sampler(default_shots=19, seed_simulator=71)
     assert isinstance(sampler, BackendSamplerV2)
     result = sampler.run(
         [
@@ -48,23 +48,13 @@ def test_sampler_broadcast_shots_and_registers() -> None:
             assert result[0].data["right"].get_counts((i, j)) == {str(j): 7}
 
 
-def test_sampler_without_classical_registers() -> None:
-    circuit = QuantumCircuit(1)
-    circuit.h(0)
-    for sampler in [Sampler(), QasmSimulatorBackend().sampler()]:
-        with pytest.warns(UserWarning, match="no output classical registers"):
-            result = sampler.run([circuit], shots=3).result()
-        assert not list(result[0].data.keys())
-        assert circuit.num_clbits == 0
-
-
 def test_exact_estimator_and_sampled_factory() -> None:
     a, b = Parameter("a"), Parameter("b")
     circuit = QuantumCircuit(2)
     circuit.ry(b, 0)
     circuit.ry(a, 1)
     result = (
-        Estimator(default_precision=0.1, seed=71)
+        DDEstimator(default_precision=0.1)
         .run([
             EstimatorPub(
                 circuit,
@@ -79,4 +69,13 @@ def test_exact_estimator_and_sampled_factory() -> None:
     np.testing.assert_array_equal(result.data["stds"], np.zeros((2, 2)))
     assert result.metadata["method"] == "exact"
     assert result.metadata["target_precision"] == pytest.approx(0.2)
-    assert isinstance(QasmSimulatorBackend().estimator(), BackendEstimatorV2)
+    assert isinstance(SamplingSimulatorBackend().estimator(), BackendEstimatorV2)
+
+
+def test_sampled_estimator_with_reset() -> None:
+    circuit = QuantumCircuit(1)
+    circuit.h(0)
+    circuit.reset(0)
+    result = SamplingSimulatorBackend().estimator(default_precision=0.1).run([(circuit, "Z")]).result()[0]
+    np.testing.assert_allclose(result.data["evs"], 1)
+    assert result.metadata["shots"] == 100

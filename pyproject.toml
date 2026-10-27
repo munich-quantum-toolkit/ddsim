@@ -16,7 +16,7 @@ name = "mqt-ddsim"
 version = "3.0.0.dev0"
 import-names = [ "mqt.ddsim" ]
 import-namespaces = [ "mqt" ]
-description = "Decision-diagram quantum simulation powered by MQT Core"
+description = "A quantum circuit simulator based on decision diagrams powered by MQT Core"
 readme = "README.md"
 keywords = [ "design-automation", "MQT", "quantum-circuit-sim", "quantum-computing", "simulation" ]
 license = "MIT"
@@ -44,7 +44,6 @@ classifiers = [
 ]
 dependencies = [
   "mqt-core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@4f09df3267e5b293d13ae6f412d6c6bd178965a6",
-  "numpy>=2,<3",
   "qiskit>=2.5,<3",
 ]
 
@@ -62,9 +61,6 @@ Documentation = "https://mqt.readthedocs.io/projects/ddsim"
 Issues = "https://github.com/munich-quantum-toolkit/ddsim/issues"
 Discussions = "https://github.com/munich-quantum-toolkit/ddsim/discussions"
 
-[project.scripts]
-mqt-ddsim-simple = "mqt.ddsim.cli:main"
-
 
 [dependency-groups]
 dev = [
@@ -72,11 +68,6 @@ dev = [
   "nox>=2025.11.12",
 ]
 test = [
-  "numpy>=1.24",
-  "numpy>=1.26; python_version>='3.12'",
-  "numpy>=2.1; python_version>='3.13'",
-  "numpy>=2.3.2; python_version>='3.14'",
-  "numpy>=2.5.2; python_version>='3.15'",
   "pytest>=9.0.3",
   "pytest-cov>=7.1",
   "pytest-sugar>=1.1.1",
@@ -87,7 +78,6 @@ docs = [
   "myst-nb>=1.4",
   "qiskit[visualization]>=2.5,<3",
   "sphinx>=9",
-  "sphinx-autoapi>=3.6",
   "sphinx-copybutton>=0.5.2",
   "sphinx-design>=0.7",
   "sphinx-llm>=1",

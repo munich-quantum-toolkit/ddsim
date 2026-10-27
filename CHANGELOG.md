@@ -10,22 +10,33 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- ✨ Support QIR Base and Adaptive text and bitcode for sampling and eligible
+  statevector extraction ([#1060]) ([**@burgholzer**])
+- ✨ Expose Core's native exact `DDEstimator` and sampled Estimator V2 through
+  the backend factory ([#1060]) ([**@burgholzer**])
+
 ### Changed
 
-- MQT DDSIM 3 delegates simulation to modern MQT Core and ships a pure Python
-  wheel. Retained backends, V2 primitives and the CLI use Core execution
-  ([#1060]) ([**@burgholzer**]).
-- Exact estimation uses Core's native batched DD estimator; sampled estimation
-  remains an explicit alternative ([#1060]) ([**@burgholzer**]).
-- QIR Base/Adaptive text and bitcode support sampling and eligible state
-  extraction. See [the upgrade guide](UPGRADING.md#unreleased) for contracts
-  ([#1060]) ([**@burgholzer**]).
+- ♻️ Delegate simulation to MQT Core 4 and publish a pure Python package built
+  with uv ([#1060]) ([**@burgholzer**])
+- 💥 Require Qiskit `>=2.5,<3` ([#1060]) ([**@burgholzer**])
+- 💥 Rename the sampling backend to `sampling_simulator` and require explicit
+  measurements ([#1060]) ([**@burgholzer**])
+- 💥 Provide statevectors and unitaries through `simulate` and
+  `build_functionality` instead of dedicated Qiskit backends ([#1060])
+  ([**@burgholzer**])
+- 📚 Add executable guides for sampling, dense simulation, and V2 primitives
+  ([#1060]) ([**@burgholzer**])
 
 ### Removed
 
-- Core 3 IR, native simulator classes/ABI, HSF, path, noise/density and
-  specialized algorithm simulation implementations and their tuning options
-  ([#1060]) ([**@burgholzer**]).
+- 🔥 Remove the Core 3 IR dependency, native simulator classes and C++ library,
+  HSF, path, noise, and specialized algorithm simulators ([#1060])
+  ([**@burgholzer**])
+- 🔥 Remove command-line executables and legacy primitive wrappers; expose V2
+  sampling primitives through backend factories ([#1060]) ([**@burgholzer**])
 
 ## [2.7.0] - 2026-10-12
 
@@ -231,6 +242,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1060]: https://github.com/munich-quantum-toolkit/ddsim/pull/1060
 [#1033]: https://github.com/munich-quantum-toolkit/ddsim/pull/1033
 [#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
 [#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019
@@ -285,5 +297,3 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 [munich-quantum-toolkit]: https://github.com/munich-quantum-toolkit
 [CMake presets]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 [munich-quantum-toolkit/workflows]: https://github.com/munich-quantum-toolkit/workflows
-
-[#1060]: https://github.com/munich-quantum-toolkit/ddsim/pull/1060

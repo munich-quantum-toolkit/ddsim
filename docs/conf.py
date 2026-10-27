@@ -16,17 +16,10 @@ from typing import TYPE_CHECKING
 import pybtex.plugin
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import field, href
-from sphinx.ext.intersphinx import missing_reference
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
-    from docutils import nodes
     from pybtex.database import Entry
     from pybtex.richtext import HRef
-    from sphinx.addnodes import pending_xref
-    from sphinx.application import Sphinx
-    from sphinx.environment import BuildEnvironment
 
 
 try:
@@ -48,7 +41,6 @@ master_doc = "index"
 templates_path = ["_templates"]
 
 extensions = [
-    "autoapi.extension",
     "myst_nb",
     "sphinx_copybutton",
     "sphinx_design",
@@ -60,10 +52,6 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinxext.opengraph",
 ]
-
-# AutoAPI treats imports from the sibling mqt.core namespace as local modules.
-# Its import resolver cannot document dependencies; intersphinx owns those links.
-suppress_warnings = ["autoapi.python_import_resolution"]
 
 # The Markdown exporter omits these nodes; HTML renders them normally.
 llms_txt_suppress_unknown_node_warnings = ["abbreviation", "citation"]
@@ -85,14 +73,10 @@ pygments_style = "colorful"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "typing_extensions": ("https://typing-extensions.readthedocs.io/en/latest", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "qiskit": ("https://docs.quantum.ibm.com/api/qiskit", None),
     "mqt": ("https://mqt.readthedocs.io/en/stable", None),
     "core": ("https://mqt.readthedocs.io/projects/core/en/latest", None),
-    "qcec": ("https://mqt.readthedocs.io/projects/qcec/en/stable", None),
-    "qmap": ("https://mqt.readthedocs.io/projects/qmap/en/stable", None),
-    "syrec": ("https://mqt.readthedocs.io/projects/syrec/en/stable", None),
 }
 
 myst_enable_extensions = [
@@ -138,84 +122,10 @@ copybutton_line_continuation_character = "\\"
 
 modindex_common_prefix = ["mqt.ddsim."]
 
-autoapi_dirs = ["../python/mqt"]
-autoapi_python_use_implicit_namespaces = True
-autoapi_root = "api"
-autoapi_add_toctree_entry = False
-autoapi_ignore = []
-autoapi_options = [
-    "members",
-    "imported-members",
-    "show-inheritance",
-    "special-members",
-    "undoc-members",
-]
-autoapi_keep_files = True
 add_module_names = False
-toc_object_entries_show_parents = "hide"
-python_use_unqualified_type_names = True
+autodoc_typehints = "none"
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
-
-
-# These names remain visible as literals. Private implementation classes and
-# Qiskit union aliases have no public documentation inventory entries.
-nitpick_ignore = [
-    # Remove when Core publishes DDEstimator in its documentation inventory.
-    ("py:obj", "mqt.core.plugins.qiskit.DDEstimator"),
-    ("py:obj", "mqt.ddsim._dense_backend._DenseSimulatorBackend"),
-    ("py:class", "qiskit.circuit.parameterexpression.ParameterValueType"),
-    ("py:class", "qiskit.primitives.containers.EstimatorPubLike"),
-    ("py:class", "qiskit.primitives.containers.SamplerPubLike"),
-]
-
-# Dependency inventories use canonical locations and distinguish data from classes.
-_external_references = {
-    "numpy.typing.NDArray": ("data", "numpy.typing.NDArray"),
-    "numpy.complex128": ("attr", "numpy.complex128"),
-    "qiskit.primitives.containers.PrimitiveResult": ("class", "qiskit.primitives.PrimitiveResult"),
-    "qiskit.primitives.containers.PubResult": ("class", "qiskit.primitives.PubResult"),
-    "qiskit.primitives.containers.SamplerPubResult": ("class", "qiskit.primitives.SamplerPubResult"),
-    "qiskit.QuantumCircuit": ("class", "qiskit.circuit.QuantumCircuit"),
-    "BackendV2.version": ("attr", "qiskit.providers.BackendV2.version"),
-    "providers.Backend": ("class", "qiskit.providers.Backend"),
-    "mqt.core.plugins.qiskit.DDEstimator": ("class", "mqt.core.plugins.qiskit.estimator.DDEstimator"),
-    "mqt.core.plugins.qiskit.QDMIBackend": ("class", "mqt.core.plugins.qiskit.backend.QDMIBackend"),
-    "mqt.core.plugins.qiskit.QDMIJob": ("class", "mqt.core.plugins.qiskit.job.QDMIJob"),
-}
-
-
-def _resolve_external_reference(
-    app: Sphinx, env: BuildEnvironment, node: pending_xref, content: nodes.TextElement
-) -> nodes.reference | None:
-    """Link aliases to their dependency's documented public object."""
-    if node.get("refdomain") != "py" or node.get("reftarget") not in _external_references:
-        return None
-    target = node.copy()
-    target["reftype"], target["reftarget"] = _external_references[node["reftarget"]]
-    return missing_reference(app, env, target, content)
-
-
-def _show_inherited_contract(
-    _app: Sphinx, _what: str, name: str, obj: object, _skip: bool, _options: Sequence[str]
-) -> bool | None:
-    """Show inherited execution contracts on the retained public entry points."""
-    if getattr(obj, "inherited", False) and name.rsplit(".", 1)[-1] in {
-        "run",
-        "target",
-        "max_circuits",
-        "default_precision",
-        "sampler",
-        "estimator",
-    }:
-        return False
-    return None
-
-
-def setup(app: Sphinx) -> None:
-    """Configure API presentation without changing dependency implementations."""
-    app.connect("missing-reference", _resolve_external_reference)
-    app.connect("autoapi-skip-member", _show_inherited_contract)
 
 
 # -- Options for HTML output -------------------------------------------------
