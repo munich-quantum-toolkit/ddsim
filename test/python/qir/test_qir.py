@@ -11,7 +11,6 @@ from __future__ import annotations
 import numpy as np
 import pytest
 from mqt.core.mlir import OutputFormat, QIRProgram, compile_program
-from mqt.core.qdmi import ProgramFormat
 
 from mqt.ddsim import sample, simulate
 
@@ -23,5 +22,4 @@ def test_qir_program_and_payload(output: OutputFormat) -> None:
     assert isinstance(program, QIRProgram)
     assert sample(program, shots=17) == {"01": 17}
     np.testing.assert_array_equal(simulate(program), [0, 1, 0, 0])
-    fmt = ProgramFormat.QIR_BASE_MODULE if output == OutputFormat.QIR_BASE else ProgramFormat.QIR_ADAPTIVE_MODULE
-    assert sample(program.to_bitcode(), shots=17, program_format=fmt) == {"01": 17}
+    assert sample(program.to_bitcode(), shots=17) == {"01": 17}

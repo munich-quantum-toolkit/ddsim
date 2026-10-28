@@ -17,7 +17,7 @@ from importlib.metadata import distribution, version
 import numpy as np
 from mqt.core.mlir import OutputFormat, compile_program
 from mqt.core.plugins.qiskit import QDMIBackend
-from mqt.core.qdmi import ProgramFormat, device_ids
+from mqt.core.qdmi import device_ids
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Operator, SparsePauliOp, Statevector
 
@@ -57,8 +57,8 @@ def main() -> None:
     qir = compile_program(source, output=OutputFormat.QIR_BASE)
     assert "mqt.ddsim.default" in device_ids()
     payload = qir.to_bitcode()
-    assert sample(payload, shots=5, program_format=ProgramFormat.QIR_BASE_MODULE) == {"10": 5}
-    np.testing.assert_array_equal(simulate(payload, program_format=ProgramFormat.QIR_BASE_MODULE), [0, 1, 0, 0])
+    assert sample(payload, shots=5) == {"10": 5}
+    np.testing.assert_array_equal(simulate(payload), [0, 1, 0, 0])
 
     sys.stdout.write(
         json.dumps({"ddsim": version("mqt-ddsim"), "core": version("mqt-core"), "status": "passed"}) + "\n"
