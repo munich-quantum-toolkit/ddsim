@@ -1502,8 +1502,8 @@ wheels = [
 
 [[package]]
 name = "mqt-core"
-version = "4.1.2.dev117+g0b4e43a0c"
-source = { git = "https://github.com/munich-quantum-toolkit/core.git?rev=0b4e43a0c03cced8d35745442c4108a1460b78dd#0b4e43a0c03cced8d35745442c4108a1460b78dd" }
+version = "4.1.2.dev117+g11b4d3965"
+source = { git = "https://github.com/munich-quantum-toolkit/core.git?rev=11b4d3965ae8dfbf177a7ac525677ccf9449d9e2#11b4d3965ae8dfbf177a7ac525677ccf9449d9e2" }
 dependencies = [
     { name = "nanobind-backend" },
 ]
@@ -1553,7 +1553,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "mqt-core", extras = ["qiskit"], git = "https://github.com/munich-quantum-toolkit/core.git?rev=0b4e43a0c03cced8d35745442c4108a1460b78dd" },
+    { name = "mqt-core", extras = ["qiskit"], git = "https://github.com/munich-quantum-toolkit/core.git?rev=11b4d3965ae8dfbf177a7ac525677ccf9449d9e2" },
     { name = "qiskit", specifier = ">=2.5,<3" },
 ]
 

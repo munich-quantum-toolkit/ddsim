@@ -43,7 +43,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "mqt-core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@0b4e43a0c03cced8d35745442c4108a1460b78dd",
+  "mqt-core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@11b4d3965ae8dfbf177a7ac525677ccf9449d9e2",
   "qiskit>=2.5,<3",
 ]
 
