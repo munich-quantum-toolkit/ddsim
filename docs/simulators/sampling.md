@@ -51,3 +51,7 @@ simulation paths or releases.
 For parameterized circuits, `run(..., parameter_values=[values])` binds values
 in `tuple(circuit.parameters)` order. For broadcast parameter sweeps, use
 {doc}`Sampler V2 <../primitives>`.
+
+The direct `sample(program, shots=1024, seed=0)` function uses Core's sampling
+contract: zero selects random seeding, and zero shots returns an empty
+histogram.

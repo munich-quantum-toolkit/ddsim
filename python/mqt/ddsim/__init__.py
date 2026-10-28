@@ -10,8 +10,9 @@
 
 from importlib.metadata import version
 
+from mqt.core.mlir import build_functionality, sample, simulate
+
 from .sampling_simulator_backend import SamplingSimulatorBackend
-from .simulation import build_functionality, sample, simulate
 
 __version__ = version("mqt-ddsim")
 __all__ = ["SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]

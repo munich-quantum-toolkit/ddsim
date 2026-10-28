@@ -12,15 +12,16 @@ releases may include breaking changes.
 
 ### Added
 
-- ✨ Support QIR Base and Adaptive text and bitcode for sampling and eligible
-  statevector extraction ([#1060]) ([**@burgholzer**])
+- ✨ Support compiled QIR programs and Base/Adaptive text and bitcode for
+  sampling and eligible statevector extraction ([#1060]) ([**@burgholzer**])
 - ✨ Expose Core's native exact `DDEstimator` and sampled Estimator V2 through
   the backend factory ([#1060]) ([**@burgholzer**])
 
 ### Changed
 
 - ♻️ Delegate simulation to MQT Core 4 and publish a pure Python package built
-  with uv ([#1060]) ([**@burgholzer**])
+  with uv; re-export Core's simulation functions directly ([#1060])
+  ([**@burgholzer**])
 - 💥 Require Qiskit `>=2.5,<3` ([#1060]) ([**@burgholzer**])
 - 💥 Rename the sampling backend to `sampling_simulator` and require explicit
   measurements ([#1060]) ([**@burgholzer**])

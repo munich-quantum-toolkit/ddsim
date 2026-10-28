@@ -75,8 +75,6 @@ def test_bound_parameter_order() -> None:
 def test_invalid_sampling_seeds(seed: object) -> None:
     with pytest.raises(ValueError, match="seed"):
         SamplingSimulatorBackend().run(QuantumCircuit(1), seed_simulator=seed)
-    with pytest.raises(ValueError, match="seed"):
-        sample(QuantumCircuit(1), seed=seed)  # ty: ignore[invalid-argument-type]
 
 
 def test_serial_seed_reproducibility_and_statistics() -> None:
@@ -110,11 +108,6 @@ def test_named_openqasm_inputs() -> None:
 def test_invalid_worker_limit() -> None:
     with pytest.raises(ValueError, match="max_workers"):
         SamplingSimulatorBackend().run(QuantumCircuit(1), max_workers=-1)
-
-
-def test_invalid_shots() -> None:
-    with pytest.raises(ValueError, match="shots"):
-        sample(QuantumCircuit(1), shots=0)
 
 
 def test_compact_dd_sampling() -> None:

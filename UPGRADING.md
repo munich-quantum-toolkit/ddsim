@@ -20,7 +20,7 @@ native runtime dependencies.
 | `primitives.Sampler`                                                  | `backend.sampler()` returns Sampler V2                                                                |
 | `primitives.Estimator`                                                | `primitives.DDEstimator` for exact DD expectations, or `backend.estimator()` for sampled Estimator V2 |
 | Implicit measure-all                                                  | Add `circuit.measure_all()` or explicit measurements before sampling                                  |
-| `seed=-1`                                                             | Use `None`; fixed seeds must be positive signed 32-bit integers                                       |
+| `seed=-1`                                                             | Use `0` with `sample`, or `None` for backend `seed_simulator`                                         |
 | `parameter_binds`                                                     | Qiskit `assign_parameters`, or backend `parameter_values` in `tuple(circuit.parameters)` order        |
 | `mqt-ddsim-simple` and other executables                              | Use Python `sample`, `simulate`, and `build_functionality`                                            |
 | Native simulator classes, DD access, node statistics, visualization   | Use MQT Core's program and DD APIs                                                                    |

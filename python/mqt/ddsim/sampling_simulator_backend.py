@@ -19,8 +19,6 @@ from qiskit.providers import Options
 from mqt.core.plugins.qiskit import QDMIBackend
 from mqt.core.qdmi import open_device
 
-from .simulation import _seed
-
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
@@ -48,7 +46,12 @@ class SamplingSimulatorBackend(QDMIBackend):
 
     @staticmethod
     def _job_parameters(options: Mapping[str, object]) -> QDMIJobParameters:
-        seed = _seed(options["seed_simulator"])
+        seed = options["seed_simulator"]
+        if seed is not None:
+            if isinstance(seed, bool) or not isinstance(seed, Integral) or seed not in range(1, 2**31):
+                msg = "seed_simulator must be None or an integer from 1 to 2147483647"
+                raise ValueError(msg)
+            seed = int(seed)
         workers = options["max_workers"]
         if isinstance(workers, bool) or not isinstance(workers, Integral) or int(workers) not in range(2**31):
             msg = "max_workers must be an integer from 0 to 2147483647 (0 selects automatic concurrency)"
