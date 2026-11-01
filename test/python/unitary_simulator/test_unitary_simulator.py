@@ -8,32 +8,34 @@
 
 from __future__ import annotations
 
-import unittest
-
 import numpy as np
+import pytest
 from qiskit import QuantumCircuit
+from qiskit.quantum_info import Operator
 
-from mqt.ddsim.unitary_simulator_backend import UnitarySimulatorBackend
+from mqt.ddsim import build_functionality
 
 
-class MQTUnitarySimulatorTest(unittest.TestCase):
-    def setUp(self) -> None:
-        self.backend = UnitarySimulatorBackend()
-        circ = QuantumCircuit(3)
-        circ.h(0)
-        circ.cx(0, 1)
-        circ.cx(0, 2)
-        self.circuit = circ
-        self.circuit.name = "test"
-        self.non_zeros_in_bell_circuit = 16
+def test_unitary_phase_order_and_adjoint() -> None:
+    circuit = QuantumCircuit(3, global_phase=0.43)
+    circuit.h(2)
+    circuit.x(0)
+    circuit.sdg(1)
+    circuit.crx(0.72, 2, 0)
+    circuit.cx(0, 1)
+    actual = build_functionality(circuit)
+    expected = Operator(circuit).data
+    np.testing.assert_allclose(actual, expected, atol=1e-12)
+    assert not np.allclose(actual * np.exp(-0.43j), expected)
+    assert circuit.metadata == {}
 
-    def test_unitary_simulator_sequential_mode(self) -> None:
-        result = self.backend.run(self.circuit, mode="sequential").result()
-        assert result.success
-        print(result.get_unitary())
-        assert np.count_nonzero(result.get_unitary()) == self.non_zeros_in_bell_circuit
 
-    def test_unitary_simulator_recursive_mode(self) -> None:
-        result = self.backend.run(self.circuit, mode="recursive").result()
-        assert result.success
-        assert np.count_nonzero(result.get_unitary()) == self.non_zeros_in_bell_circuit
+@pytest.mark.parametrize("operation", ["measure", "reset"])
+def test_nonunitary_rejection(operation: str) -> None:
+    circuit = QuantumCircuit(1, 1)
+    if operation == "measure":
+        circuit.measure(0, 0)
+    else:
+        circuit.reset(0)
+    with pytest.raises(ValueError, match=r"[Mm]easure|[Rr]eset|unitary"):
+        build_functionality(circuit)

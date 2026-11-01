@@ -41,8 +41,6 @@ master_doc = "index"
 templates_path = ["_templates"]
 
 extensions = [
-    "autoapi.extension",
-    "breathe",
     "myst_nb",
     "sphinx_copybutton",
     "sphinx_design",
@@ -54,6 +52,9 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinxext.opengraph",
 ]
+
+# The Markdown exporter omits these nodes; HTML renders them normally.
+llms_txt_suppress_unknown_node_warnings = ["abbreviation", "citation"]
 
 source_suffix = [".rst", ".md"]
 
@@ -72,14 +73,10 @@ pygments_style = "colorful"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "typing_extensions": ("https://typing-extensions.readthedocs.io/en/latest", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "qiskit": ("https://docs.quantum.ibm.com/api/qiskit", None),
     "mqt": ("https://mqt.readthedocs.io/en/stable", None),
-    "core": ("https://mqt.readthedocs.io/projects/core/en/stable", None),
-    "qcec": ("https://mqt.readthedocs.io/projects/qcec/en/stable", None),
-    "qmap": ("https://mqt.readthedocs.io/projects/qmap/en/stable", None),
-    "syrec": ("https://mqt.readthedocs.io/projects/syrec/en/stable", None),
+    "core": ("https://mqt.readthedocs.io/projects/core/en/latest", None),
 }
 
 myst_enable_extensions = [
@@ -125,31 +122,11 @@ copybutton_line_continuation_character = "\\"
 
 modindex_common_prefix = ["mqt.ddsim."]
 
-autoapi_dirs = ["../python/mqt"]
-autoapi_python_use_implicit_namespaces = True
-autoapi_root = "api"
-autoapi_add_toctree_entry = False
-autoapi_ignore = [
-    "*/**/_version.py",
-    "*/mqt/ddsim/utils.py",
-]
-autoapi_options = [
-    "members",
-    "imported-members",
-    "show-inheritance",
-    "special-members",
-    "undoc-members",
-]
-autoapi_keep_files = True
 add_module_names = False
-toc_object_entries_show_parents = "hide"
-python_use_unqualified_type_names = True
+autodoc_typehints = "none"
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 
-
-breathe_projects = {"mqt.ddsim": "_build/doxygen/xml"}
-breathe_default_project = "mqt.ddsim"
 
 # -- Options for HTML output -------------------------------------------------
 

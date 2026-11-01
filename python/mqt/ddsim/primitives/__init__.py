@@ -6,11 +6,8 @@
 #
 # Licensed under the MIT License
 
-"""Module for Qiskit Primitives."""
+"""Exact DD estimation; sampling primitives are available from the backend factories."""
 
-from __future__ import annotations
+from mqt.core.plugins.qiskit import DDEstimator
 
-from .estimator import Estimator
-from .sampler import Sampler
-
-__all__ = ["Estimator", "Sampler"]
+__all__ = ["DDEstimator"]

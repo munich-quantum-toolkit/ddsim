@@ -190,239 +190,7 @@ perfect. We will guide you through the process.
 Check out our {ref}`installation guide for developers <development-setup>` for
 instructions on how to set up your development environment.
 
-## Working on the C++ Library
-
-Building the project requires a C++20-capable
-[C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.28 or newer. As of September 2026, our CI
-pipeline on GitHub continuously tests the library across the following matrix of
-systems and compilers:
-
-- {code}`ubuntu-26.04`: {code}`Release` and {code}`Debug` builds using
-  {code}`gcc`
-- {code}`ubuntu-26.04-arm`: {code}`Release` build using {code}`gcc`
-- {code}`macos-26`: {code}`Release` and {code}`Debug` builds using
-  {code}`AppleClang`
-- {code}`windows-2025`: {code}`Release` and {code}`Debug` builds using
-  {code}`msvc`
-- {code}`windows-11-arm`: {code}`Release` build using {code}`msvc`
-
-To access the latest build logs, visit the
-[GitHub Actions page](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
-
-We are not aware of any issues with other compilers or operating systems. If you
-encounter any problems, please [open an issue][issues] and let us know.
-
-### Configure and Build
-
-:::{tip}
-We recommend using an IDE like [CLion][clion] or [VS Code][vscode] for
-development. Both IDEs have excellent support for CMake projects and provide a
-convenient way to run CMake and build the project. If you prefer to work on the
-command line, the following instructions will guide you through the process.
-:::
-
-This project uses CMake as the main build configuration tool. To standardize the
-configuration, we provide
-[CMake presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
-
-Building a project using CMake is a two-stage process. First, CMake needs to be
-_configured_ by calling:
-
-```console
-cmake --preset release
-```
-
-Under the hood, this effectively calls
-`cmake -S . -B build/release -G Ninja -DCMAKE_BUILD_TYPE=Release` and configures
-a {code}`Release` build. A {code}`Debug` build can be requested by using the
-{code}`debug` preset. Both presets use Ninja on all platforms, including
-Windows. Make sure {code}`ninja` is installed and available on {code}`PATH`. On
-Windows with MSVC, run these commands from a Visual Studio developer shell.
-
-After configuring CMake, the project can be _built_ by calling:
-
-```console
-cmake --build --preset release
-```
-
-This command is equivalent to `cmake --build build/release`. The flag
-{code}`--parallel <NUMBER_OF_THREADS>` may be added to trigger a parallel build.
-
-Building the project this way generates
-
-- the main project libraries in the {code}`build/release/src` directory and
-- some test executables in the {code}`build/release/test` directory.
-
-:::{note}
-
-This project uses CMake's
-[{code}`FetchContent`](https://cmake.org/cmake/help/latest/module/FetchContent.html)
-module to download and build its dependencies. Because of this, the first time
-you configure the project, you will need an active internet connection to fetch
-the required libraries.
-
-However, there are several ways to bypass these downloads:
-
-- **Use system-installed dependencies**: If the dependencies are already
-  installed on your system and Find-modules exist for them, {code}`FetchContent`
-  will use those versions instead of downloading them.
-- **Provide a local copy**: If you have local copies of the dependencies (from a
-  previous build or another project), you can point {code}`FetchContent` to them
-  by passing the
-  [{code}`-DFETCHCONTENT_SOURCE_DIR_<uppercaseName>`](https://cmake.org/cmake/help/latest/module/FetchContent.html#variable:FETCHCONTENT_SOURCE_DIR_%3CuppercaseName%3E)
-  flag to your CMake configure step. The {code}`<uppercaseName>` should be
-  replaced with the name of the dependency as specified in the project's CMake
-  files.
-- **Use project-specific options**: Some projects provide specific CMake options
-  to use a system-wide dependency instead of downloading it. Check the project's
-  documentation or CMake files for these types of flags.
-
-:::
-
-### Running the C++ Tests and Code Coverage
-
-We use the [GoogleTest](https://google.github.io/googletest/primer.html)
-framework for unit testing of the C++ library. All tests are contained in the
-{code}`test` directory, which is further divided into subdirectories for
-different parts of the library. You are expected to write tests for any new
-features you implement and ensure that all tests pass. Our CI pipeline on GitHub
-will also run the tests and check for any failures.
-
-Most IDEs like [CLion][clion] or [VS Code][vscode] provide a convenient way to
-run the tests directly from the IDE. If you prefer to run the tests from the
-command line, you can use CMake's test runner
-[CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html). To run the
-tests, run the following command from the main project directory after building
-the project as described above:
-
-```console
-ctest --preset release
-```
-
-:::{tip}
-If you want to disable configuring and building the C++ tests, you can pass
-{code}`-DBUILD_MQT_DDSIM_TESTS=OFF` to the CMake configure step.
-:::
-
-Our CI pipeline on GitHub also collects code coverage information and uploads it
-to [Codecov](https://codecov.io/gh/munich-quantum-toolkit/ddsim). Our goal is to
-have new contributions at least maintain the current code coverage level, while
-striving for covering as much of the code as possible. Try to write meaningful
-tests that actually test the correctness of the code and not just exercise the
-code paths.
-
-If you want to enable coverage locally, you can use the `coverage` preset:
-
-```console
-cmake --preset coverage
-cmake --build --preset coverage
-ctest --preset coverage
-```
-
-### C++ Code Formatting and Linting
-
-This project mostly follows the
-[LLVM Coding Standard](https://llvm.org/docs/CodingStandards.html), which is a
-set of guidelines for writing C++ code. To ensure the quality of the code and
-that it conforms to these guidelines, we use:
-
-- [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/), a static analysis
-  tool that checks for common mistakes in C++ code, and
-- [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html), a tool that
-  automatically formats C++ code according to a given style guide.
-
-Common IDEs like [CLion][clion] or [VS Code][vscode] have plugins that can
-automatically run {code}`clang-tidy` on the code and automatically format it
-with {code}`clang-format`.
-
-- If you are using CLion, you can configure the project to use the
-  {code}`.clang-tidy` and {code}`.clang-format` files in the project root
-  directory.
-- If you are using [VS Code][vscode], you can install the
-  [clangd extension](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd).
-
-They will automatically execute {code}`clang-tidy` on your code and highlight
-any issues. In many cases, they also provide quick-fixes for these issues.
-Furthermore, they provide a command to automatically format your code according
-to the given style.
-
-:::{note}
-
-After configuring CMake with the `lint` preset, you can run {code}`clang-tidy`
-on a file by calling the following command:
-
-```console
-clang-tidy <FILE> -- -I <PATH_TO_INCLUDE_DIRECTORY>
-```
-
-Here, {code}`<FILE>` is the file you want to analyze and
-{code}`<PATH_TO_INCLUDE_DIRECTORY>` is the path to the {code}`include` directory
-of the project.
-
-:::
-
-Our [{code}`prek`][prek] configuration also includes {code}`clang-format`. If
-you have installed {code}`prek`, it will automatically run {code}`clang-format`
-on your code before each commit. If you do not have {code}`prek` set up, the
-[pre-commit.ci](https://pre-commit.ci) bot will run {code}`clang-format` on your
-code and automatically format it according to the style guide.
-
-:::{tip}
-Remember to pull the changes back into your local repository after the bot has
-formatted your code to avoid merge conflicts.
-:::
-
-Our CI pipeline will also run {code}`clang-tidy` over the changes in your PR and
-report any issues it finds. Due to technical limitations, the workflow can only
-post PR comments if the changes are not coming from a fork. If you are working
-on a fork, you can still see the {code}`clang-tidy` results either in the GitHub
-Actions logs, on the workflow summary page, or in the "Files changed" tab of the
-PR.
-
-### C++ Documentation
-
-Historically, the C++ part of the code base has not been sufficiently
-documented. Given the substantial size of the code base, we have set ourselves
-the goal to improve the documentation over time. We expect any new additions to
-the code base to be documented using
-[Doxygen](https://www.doxygen.nl/index.html) comments. When touching existing
-code, we encourage you to add Doxygen comments to the code you touch or
-refactor.
-
-For some tips on how to write good Doxygen comments, see the
-[Doxygen Manual](https://www.doxygen.nl/manual/docblocks.html).
-
-The C++ API documentation is integrated into the overall documentation that we
-host on ReadTheDocs using the
-[breathe](https://breathe.readthedocs.io/en/latest/) extension for Sphinx. See
-{ref}`working-on-documentation` for more information on how to build the
-documentation.
-
-## Working on the Python Package
-
-We use [{code}`nanobind`](https://nanobind.readthedocs.io/) to expose large
-parts of the C++ core library to Python. This allows us to keep the
-performance-critical parts of the code in C++ while providing a convenient
-interface for Python users. All code related to C++-Python bindings is contained
-in the {code}`bindings` directory.
-
-:::{tip}
-
-To build only the Python bindings, pass {code}`-DBUILD_MQT_DDSIM_BINDINGS=ON` to
-the CMake configure step. CMake will then try to find Python and the necessary
-dependencies ({code}`nanobind`) on your system and configure the respective
-targets. In [CLion][clion], you can enable an option to pass the current Python
-interpreter to CMake. Go to {code}`Preferences` ->
-{code}`Build, Execution, Deployment` -> {code}`CMake` ->
-{code}`Python Integration` and check the box
-{code}`Pass Python Interpreter to CMake`. Alternatively, you can pass
-{code}`-DPython_ROOT_DIR=<PATH_TO_PYTHON>` to the configure step to point CMake
-to a specific Python installation.
-
-:::
-
-The Python package itself lives in the {code}`python/mqt/ddsim` directory.
+## Working on the Package
 
 The package lives in the {code}`src/mqt/ddsim` directory.
 
@@ -437,15 +205,14 @@ We define some convenient {code}`nox` sessions in our {code}`noxfile.py`:
 - {code}`minimums` to run the Python tests with the minimum dependencies
 - {code}`lint` to run the Python code formatting and linting
 - {code}`docs` to build the documentation
-- {code}`stubs` to regenerate the type stub files for the Python bindings
 
 These are explained in more detail in the following sections.
 
-## Running the Python Tests
+## Running the Tests
 
 The Python code is tested by unit tests using the
 [{code}`pytest`](https://docs.pytest.org/en/latest/) framework. The
-corresponding test files can be found in the {code}`test/python` directory. A
+corresponding test files can be found in the {code}`tests` directory. A
 {code}`nox` session is provided to conveniently run the Python tests.
 
 ```console
@@ -488,7 +255,7 @@ dependencies.
 nox -s minimums
 ```
 
-## Python Code Formatting and Linting
+## Code Formatting and Linting
 
 The Python code is formatted and linted using a collection of pre-commit hooks.
 This collection includes
@@ -524,7 +291,7 @@ prek run --all-files
 
 :::
 
-## Python Documentation
+## Documentation
 
 The Python code is documented using
 [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings).
@@ -533,15 +300,7 @@ what it does and how to use it. {code}`ruff` will check for missing docstrings
 and will explicitly warn you if you forget to add one.
 
 We heavily rely on [type hints](https://docs.python.org/3/library/typing.html)
-to document the expected types of function arguments and return values. For the
-compiled parts of the code base, we provide type hints in the form of stub files
-in the {code}`python/mqt/ddsim` directory. These stub files are auto-generated.
-Do not edit them directly. Instead, you can use the {code}`nox` session
-{code}`stubs` to regenerate them automatically.
-
-```console
-nox -s stubs
-```
+to document the expected types of function arguments and return values.
 
 The Python API documentation is integrated into the overall documentation that
 we host on ReadTheDocs using the
@@ -586,25 +345,14 @@ uvx nox --non-interactive -s docs -- -b linkcheck
 If something goes wrong, the CI pipeline will notify you. Here are some tips for
 finding the cause of certain failures:
 
-- If any of the {code}`CI / 🇨 Test` checks fail, this indicates build errors or
-  test failures in the C++ part of the code base. Look through the respective
-  logs on GitHub for any error or failure messages.
-
 - If any of the {code}`CI / 🐍 Test` checks fail, this indicates build errors or
-  test failures in the Python part of the code base. Look through the respective
-  logs on GitHub for any error or failure messages.
+  test failures. Look through the respective logs on GitHub for any error or
+  failure messages.
 
 - If any of the {code}`codecov/\*` checks fail, this means that your changes are
   not appropriately covered by tests or that the overall project coverage
   decreased too much. Ensure that you include tests for all your changes in the
   PR.
-
-- If {code}`cpp-linter` comments on your PR with a list of warnings, these have
-  been raised by {code}`clang-tidy` when checking the C++ part of your changes
-  for warnings or style guideline violations. The individual messages frequently
-  provide helpful suggestions on how to fix the warnings. If you don't see any
-  messages, but the {code}`🇨 Lint / 🚨 Lint` check is red, click on the
-  {code}`Details` link to see the full log of the check and a step summary.
 
 - If the {code}`pre-commit.ci` check fails, some of the {code}`prek` checks
   failed and could not be fixed automatically by the
@@ -701,8 +449,6 @@ Afterward, navigate to the
 GitHub, edit the release draft if necessary, and publish the release.
 
 <!--- Links --->
-[clion]: https://www.jetbrains.com/clion/
-[vscode]: https://code.visualstudio.com/
 [nox]: https://nox.thea.codes/en/stable/
 [prek]: https://prek.j178.dev
 [ruff]: https://docs.astral.sh/ruff/
