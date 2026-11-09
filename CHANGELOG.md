@@ -10,6 +10,10 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- ⬆️ Update `mqt-core` to version 3.12.0 ([#1069]) ([**@denialhaag**])
+
 ## [2.7.0] - 2026-10-12
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md#270)._
@@ -214,6 +218,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1069]: https://github.com/munich-quantum-toolkit/ddsim/pull/1069
 [#1033]: https://github.com/munich-quantum-toolkit/ddsim/pull/1033
 [#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
 [#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019

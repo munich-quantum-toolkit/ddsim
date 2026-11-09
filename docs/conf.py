@@ -131,7 +131,6 @@ autoapi_root = "api"
 autoapi_add_toctree_entry = False
 autoapi_ignore = [
     "*/**/_version.py",
-    "*/mqt/ddsim/utils.py",
 ]
 autoapi_options = [
     "members",
