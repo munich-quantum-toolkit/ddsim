@@ -61,7 +61,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -72,7 +71,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -108,7 +107,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -119,7 +117,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -149,7 +147,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -160,7 +157,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -194,7 +191,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -205,7 +201,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -240,7 +236,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -251,7 +246,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -293,7 +288,6 @@ from IPython.display import SVG
 from mqt.core import load
 
 from mqt.ddsim import UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 # Create the simulator
 circ = load(qc)
@@ -304,7 +298,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```
@@ -372,7 +366,6 @@ from mqt.core import load
 from qiskit import QuantumCircuit
 
 from mqt.ddsim import UnitarySimulatorMode, UnitarySimulator
-from mqt.ddsim.utils import to_svg
 
 qc = QuantumCircuit(3)
 qc.h(2)
@@ -389,7 +382,7 @@ sim.construct()
 
 # Get the decision diagram representation of the unitary
 dd = sim.get_constructed_dd()
-to_svg(dd, "unitary.svg", colored=True, edge_labels=True, classic=False)
+dd.to_svg("unitary.svg", colored=True, edge_labels=True, classic=False)
 
 SVG(filename="unitary.svg")
 ```

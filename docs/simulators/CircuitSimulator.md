@@ -106,9 +106,7 @@ resulting file in a notebook.
 ```{code-cell} ipython3
 from IPython.display import SVG
 
-from mqt.ddsim.utils import to_svg
-
-to_svg(dd, "bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
+dd.to_svg("bell_state.svg", colored=True, edge_labels=False, classic=False, memory=False, format_as_polar=True)
 
 SVG(filename="bell_state.svg")
 ```
