@@ -177,7 +177,7 @@ TEST(TaskBasedSimTest, GroverCircuitBracket) {
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
-  dd::export2Dot(tbs.rootEdge, "result_grover.dot", true, true);
+  dd::exportToDot(tbs.rootEdge, "result_grover.dot", true, true);
 
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << "\n";
@@ -202,7 +202,7 @@ TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
-  dd::export2Dot(tbs.rootEdge, "result_grover.dot", true, true);
+  dd::exportToDot(tbs.rootEdge, "result_grover.dot", true, true);
 
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << '\n';
@@ -227,7 +227,7 @@ TEST(TaskBasedSimTest, GroverCircuitPairwiseGrouping) {
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
-  dd::export2Dot(tbs.rootEdge, "result_grouping.dot", true, true);
+  dd::exportToDot(tbs.rootEdge, "result_grouping.dot", true, true);
 
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << "\n";
