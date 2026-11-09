@@ -11,7 +11,6 @@
 #include "CircuitGenerators.hpp"
 #include "PathSimulator.hpp"
 #include "dd/DDDefinitions.hpp"
-#include "dd/Export.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/OpType.hpp"
 
@@ -177,8 +176,6 @@ TEST(TaskBasedSimTest, GroverCircuitBracket) {
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
-  dd::exportToDot(tbs.rootEdge, "result_grover.dot", true, true);
-
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << "\n";
   }
@@ -202,8 +199,6 @@ TEST(TaskBasedSimTest, GroverCircuitAlternatingMiddle) {
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
 
-  dd::exportToDot(tbs.rootEdge, "result_grover.dot", true, true);
-
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << '\n';
   }
@@ -226,8 +221,6 @@ TEST(TaskBasedSimTest, GroverCircuitPairwiseGrouping) {
   const auto target = targetValue.to_ullong() | (1ULL << 4U);
   const auto c = tbs.rootEdge.getValueByIndex(target);
   EXPECT_GT(std::norm(c), 0.9);
-
-  dd::exportToDot(tbs.rootEdge, "result_grouping.dot", true, true);
 
   for (const auto& [state, count] : counts) {
     std::cout << state << ": " << count << "\n";
