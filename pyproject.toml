@@ -43,7 +43,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "mqt-core[qiskit]>=4.2,<5",
+  "mqt-core[qiskit] @ git+https://github.com/munich-quantum-toolkit/core.git@37009bdefa4fcc768cb235b28f3f5c60b92eb4e9",
   "qiskit>=2.5,<3",
 ]
 
@@ -97,7 +97,7 @@ mqt-ddsim = { workspace = true }
 [tool.uv.build-backend]
 module-name = "mqt.ddsim"
 module-root = "python"
-source-include = [ "test/**", "docs/**", "scripts/**", "UPGRADING.md", "CHANGELOG.md", "noxfile.py" ]
+source-include = [ "test/**", "docs/**", "UPGRADING.md", "CHANGELOG.md", "noxfile.py" ]
 source-exclude = [ "docs/_build/**" ]
 
 

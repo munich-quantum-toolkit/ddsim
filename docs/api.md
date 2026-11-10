@@ -2,7 +2,7 @@
 
 ## Simulation functions
 
-MQT DDSIM directly exposes these MQT Core functions:
+Choose a simulation function by the result you need:
 
 | Function                                                                                                                                            | Result                                |
 | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
@@ -17,11 +17,10 @@ text/bitcode. See {doc}`simulators` for examples and input limits.
 ## Qiskit integration
 
 ```{eval-rst}
-.. autoclass:: mqt.ddsim.SamplingSimulatorBackend
+.. autoclass:: mqt.core.plugins.qiskit.backend.DDSIMBackend
 ```
 
-The backend inherits compilation, execution, target validation, result
-reconstruction, and V2 primitive factories from
-[MQT Core's QDMI integration](https://mqt.readthedocs.io/projects/core/en/latest/qdmi/qdmi_backend.html).
-See {doc}`primitives` for `sampler()`, `estimator()`, and the directly
-re-exported `mqt.ddsim.primitives.DDEstimator`.
+`SamplingSimulatorBackend` is an alias for MQT Core's `DDSIMBackend`. Use
+`compile()` to prepare a program for the device and `run()` to submit it. See
+{doc}`primitives` for `sampler()`, `estimator()`, and
+`mqt.ddsim.primitives.DDEstimator`.

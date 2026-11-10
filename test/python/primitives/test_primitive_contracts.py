@@ -15,8 +15,8 @@ from qiskit.circuit import Parameter
 from qiskit.primitives import BackendEstimatorV2, BackendSamplerV2
 from qiskit.primitives.containers import BindingsArray, EstimatorPub, ObservablesArray, SamplerPub
 
+from mqt.ddsim import SamplingSimulatorBackend
 from mqt.ddsim.primitives import DDEstimator
-from mqt.ddsim.sampling_simulator_backend import SamplingSimulatorBackend
 
 
 def test_sampler_broadcast_shots_and_registers() -> None:

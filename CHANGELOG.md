@@ -19,12 +19,12 @@ releases may include breaking changes.
 
 ### Changed
 
-- ♻️ Delegate simulation to published MQT Core 4.2 and publish a pure Python
-  package built with uv; re-export Core's simulation functions directly
-  ([#1060]) ([**@burgholzer**])
+- ♻️ Delegate simulation to MQT Core and publish a pure Python package built
+  with uv; re-export Core's simulation functions directly ([#1060])
+  ([**@burgholzer**])
 - 💥 Require Qiskit `>=2.5,<3` ([#1060]) ([**@burgholzer**])
-- 💥 Rename the sampling backend to `sampling_simulator` and require explicit
-  measurements ([#1060]) ([**@burgholzer**])
+- 💥 Expose Core's `DDSIMBackend` as `SamplingSimulatorBackend` and require
+  explicit measurements ([#1060]) ([**@burgholzer**])
 - 💥 Provide statevectors and unitaries through `simulate` and
   `build_functionality` instead of dedicated Qiskit backends ([#1060])
   ([**@burgholzer**])

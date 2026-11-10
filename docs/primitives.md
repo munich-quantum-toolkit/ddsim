@@ -46,9 +46,9 @@ result.data.meas.get_counts(4)
 
 `DDEstimator` evaluates Pauli observables on a coherent DD state. It supports
 the same state preparations as Core's statevector simulation. It avoids dense
-statevector extraction, but the DD can still grow exponentially. Its `stds=0`
-means zero sampling uncertainty, not zero quantum variance or infinite numerical
-accuracy. Precision does not switch it to sampling.
+statevector extraction, but the DD can still grow exponentially. Results have
+zero sampling uncertainty (`stds=0`) and are independent of the requested
+precision. Floating-point rounding still applies.
 
 Sampled Estimator V2 requires positive precision and supports a broader class of
 circuits, including resets and classical feedback. It groups commuting
