@@ -32,6 +32,7 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
     with:
       runs-on: ${{ matrix.runs-on }}
+      use-sccache-gha: false # MQT DDSIM installs native code from MQT Core wheels.
     permissions:
       contents: read
 
