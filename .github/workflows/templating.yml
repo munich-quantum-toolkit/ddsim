@@ -29,5 +29,5 @@ jobs:
           token: ${{ steps.create-token.outputs.token }}
           name: DDSIM
           organization: ${{ github.repository_owner }}
-          project-type: c++-python
+          project-type: pure-python
           repository: ${{ github.event.repository.name }}

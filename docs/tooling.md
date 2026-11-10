@@ -7,33 +7,6 @@ This page summarizes the main tools, software, and standards used in MQT DDSIM.
 It serves as a quick reference for new contributors and users who want to
 understand the project's ecosystem.
 
-## C++
-
-| Tool             | Description                          | Links / Notes                                                                                                 |
-| ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **CMake**        | Build system.                        | [Documentation](https://cmake.org/).                                                                          |
-| **clang-format** | Code formatter (LLVM style).         | [Documentation](https://clang.llvm.org/docs/ClangFormat.html). Config: {code}`.clang-format` in project root. |
-| **clang-tidy**   | Static analysis and linting for C++. | [Documentation](https://clang.llvm.org/extra/clang-tidy/). Config: {code}`.clang-tidy` in project root.       |
-| **Doxygen**      | C++ API documentation (comments).    | [Documentation](https://www.doxygen.nl/). Rendered in Sphinx via [breathe](https://breathe.readthedocs.io/).  |
-| **GoogleTest**   | C++ unit testing.                    | [Primer](https://google.github.io/googletest/primer.html). Tests in {code}`test/`; run via CTest.             |
-
-## C++/Python Bindings and Packaging
-
-| Tool                  | Description                                                    | Links / Notes                                                                                                                             |
-| --------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **nanobind**          | C++/Python bindings (exposes C++ library to Python).           | [Documentation](https://nanobind.readthedocs.io/). Bindings live in {code}`bindings`; stubs are auto-generated (see {doc}`contributing`). |
-| **scikit-build-core** | Build backend for Python package.                              | [Documentation](https://scikit-build-core.readthedocs.io/en/latest/).                                                                     |
-| **cibuildwheel**      | Builds wheels for all supported platforms and Python versions. | [Documentation](https://cibuildwheel.pypa.io/en/stable/). Configured in {code}`pyproject.toml`.                                           |
-
-Projects use `nanobind`'s split mode to build one `cp311-abi3` wheel per
-platform for GIL-enabled CPython 3.11 and newer. The `nanobind-backend` package
-supplies the interpreter-specific runtime.
-
-Free-threaded CPython uses the separate
-[Stable ABI for Free-Threaded Builds (`abi3t`)](https://peps.python.org/pep-0803/).
-One `cp315-abi3t` wheel per platform supports free-threaded CPython 3.15 and
-newer.
-
 ## Python
 
 | Tool       | Description                                                                              | Links / Notes                                                                                                                                          |
