@@ -6,52 +6,13 @@
 #
 # Licensed under the MIT License
 
-"""MQT DDSIM Python Package."""
+"""A quantum circuit simulator based on decision diagrams powered by MQT Core."""
 
-from __future__ import annotations
+from importlib.metadata import version
 
-import sys
+from mqt.core.mlir import build_functionality, sample, simulate
 
-# On Windows, add MQT Core's DLL directory to the search path.
-if sys.platform == "win32":  # ruff:ignore[non-empty-init-module] This is actually required on Windows
-    import os
-    import sysconfig
-    from pathlib import Path
+from .sampling_simulator_backend import SamplingSimulatorBackend
 
-    def _dll_patch() -> None:
-        site_packages = Path(sysconfig.get_paths()["purelib"])
-        bin_dir = site_packages / "mqt" / "core" / "bin"
-        os.add_dll_directory(str(bin_dir))
-
-    _dll_patch()
-    del _dll_patch
-
-from ._version import version as __version__
-from .provider import DDSIMProvider
-from .pyddsim import (
-    CircuitSimulator,
-    DeterministicNoiseSimulator,
-    HybridSimulator,
-    HybridSimulatorMode,
-    PathSimulator,
-    PathSimulatorConfiguration,
-    PathSimulatorMode,
-    StochasticNoiseSimulator,
-    UnitarySimulator,
-    UnitarySimulatorMode,
-)
-
-__all__ = [
-    "CircuitSimulator",
-    "DDSIMProvider",
-    "DeterministicNoiseSimulator",
-    "HybridSimulator",
-    "HybridSimulatorMode",
-    "PathSimulator",
-    "PathSimulatorConfiguration",
-    "PathSimulatorMode",
-    "StochasticNoiseSimulator",
-    "UnitarySimulator",
-    "UnitarySimulatorMode",
-    "__version__",
-]
+__version__ = version("mqt-ddsim")
+__all__ = ["SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]

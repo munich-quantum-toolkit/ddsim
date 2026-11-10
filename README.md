@@ -15,7 +15,7 @@
   </a>
 </p>
 
-# MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++
+# MQT DDSIM — A quantum circuit simulator based on decision diagrams powered by MQT Core
 
 A tool for classical quantum circuit simulation developed as part of the
 [_Munich Quantum Toolkit (MQT)_](https://mqt.readthedocs.io). It builds upon
@@ -30,52 +30,18 @@ backbone of the MQT.
 
 ## Key Features
 
-- Decision-diagram–based circuit simulation:
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)—strong
-  (statevector) and weak (sampling), incl. mid‑circuit measurements and resets;
-  Qiskit backends
-  ([qasm_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)
-  and
-  [statevector_simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-a-qiskit-backend)).
-  [Quickstart](https://mqt.readthedocs.io/projects/ddsim/en/stable/quickstart.html)
-  •
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
-- Unitary simulation:
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html)
-  with an optional
-  [alternative recursive construction](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html#alternative-construction-sequence)
-  for improved intermediate compactness.
-- Hybrid Schrödinger–Feynman simulation:
-  [Hybrid simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/HybridSchrodingerFeynman.html)
-  trading memory for runtime with DD and amplitude modes plus multithreading;
-  also available as a statevector backend.
-- Simulation Path Framework:
-  [Path-based simulation](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html)
-  with strategies
-  [sequential](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#simulating-a-simple-circuit),
-  [pairwise_recursive](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
-  [bracket](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration),
-  and
-  [alternating](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/SimulationPathFramework.html#configuration).
-- Noise-aware simulation:
-  [Stochastic and deterministic noise](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/NoiseAwareSimulator.html)
-  (amplitude damping, depolarization, phase flip; density-matrix mode) for
-  global decoherence and gate errors.
-- Qiskit-native API: Provider backends and Primitives
-  ([Sampler](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#sampler)
-  and
-  [Estimator](https://mqt.readthedocs.io/projects/ddsim/en/stable/primitives.html#estimator))
-  for algorithm-friendly workflows.
-  [API](https://mqt.readthedocs.io/projects/ddsim/en/stable/api/mqt/ddsim/index.html)
-- Decision-diagram visualization: inspect states/unitaries via Graphviz export;
-  see
-  [Circuit Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html)
-  and
-  [Unitary Simulator](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/UnitarySimulator.html).
-- Standalone CLI: fast C++ executables with JSON output; e.g.,
-  [ddsim_simple](https://mqt.readthedocs.io/projects/ddsim/en/stable/simulators/CircuitSimulator.html#usage-as-standalone-c-executable).
-- Efficient and portable: C++20 core with DD engines; prebuilt wheels for
-  Linux/macOS/Windows via [PyPI](https://pypi.org/project/mqt.ddsim/).
+- Qiskit and OpenQASM 2/3 input, plus QIR Base/Adaptive text and bitcode.
+- Sampling, uncollapsed statevectors and full unitary matrices using MQT Core's
+  decision-diagram engine. QIR supports sampling and eligible state extraction;
+  QIR unitary simulation is unsupported.
+- `SamplingSimulatorBackend` for Qiskit counts and memory.
+- Sampler V2, native exact `DDEstimator`, and sampled Estimator V2 for broader
+  circuit support, including dynamic preparation. Exact expectations stay in
+  compact DDs without extracting dense amplitudes.
+
+MQT DDSIM is a Python package powered by MQT Core's native engine, QIR runtime,
+and QDMI device. Hybrid, path, noise, and specialized algorithm simulators
+remain available in the MQT DDSIM v2 release series.
 
 If you have any questions, feel free to create a
 [discussion](https://github.com/munich-quantum-toolkit/ddsim/discussions) or an
@@ -148,10 +114,11 @@ circ = QuantumCircuit(3)
 circ.h(0)
 circ.cx(0, 1)
 circ.cx(0, 2)
+circ.measure_all()
 
 print(circ.draw(fold=-1))
 
-backend = ddsim.DDSIMProvider().get_backend("qasm_simulator")
+backend = ddsim.SamplingSimulatorBackend()
 
 job = backend.run(circ, shots=10000)
 counts = job.result().get_counts(circ)
@@ -161,15 +128,14 @@ print(counts)
 **Detailed documentation and examples are available at
 [ReadTheDocs](https://mqt.readthedocs.io/projects/ddsim).**
 
-## System Requirements and Building
+## System Requirements
 
-Building the project requires a C++ compiler with support for C++20 and CMake
-3.28 or newer. For details on how to build the project, please refer to the
-[documentation](https://mqt.readthedocs.io/projects/ddsim). Building (and
-running) is continuously tested under Linux, macOS, and Windows using the
-[latest available system versions for GitHub Actions](https://github.com/actions/runner-images).
-MQT DDSIM is compatible with all
-[officially supported Python versions](https://devguide.python.org/versions/).
+MQT DDSIM supports Python 3.11 or newer and Qiskit `>=2.5,<3` on Linux, macOS,
+and Windows. Building and running are continuously tested with
+[GitHub Actions](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
+See the
+[installation guide](https://mqt.readthedocs.io/projects/ddsim/en/latest/installation.html)
+for installation and development setup.
 
 ## Cite This
 
