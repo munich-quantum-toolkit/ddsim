@@ -8,14 +8,14 @@ of changes including minor and patch releases, please refer to the
 
 ### MQT DDSIM 3
 
-MQT DDSIM uses MQT Core 4.2 or newer for simulation and ships as a pure Python
-package. Use Python 3.11 or newer and Qiskit `>=2.5,<3`. MQT Core supplies NumPy
-and the native runtime dependencies.
+MQT DDSIM uses MQT Core for simulation and ships as a pure Python package. Use
+Python 3.11 or newer and Qiskit `>=2.5,<3`. MQT Core supplies NumPy and the
+native runtime dependencies.
 
 | MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `DDSIMProvider().get_backend(...)`                                    | Construct `SamplingSimulatorBackend()` directly                                                       |
-| `qasm_simulator`, `QasmSimulatorBackend`                              | `sampling_simulator`, `SamplingSimulatorBackend`                                                      |
+| `qasm_simulator`, `QasmSimulatorBackend`                              | `SamplingSimulatorBackend`                                                                            |
 | Statevector and unitary Qiskit backends                               | `simulate(circuit)` and `build_functionality(circuit)` return NumPy arrays                            |
 | `primitives.Sampler`                                                  | `backend.sampler()` returns Sampler V2                                                                |
 | `primitives.Estimator`                                                | `primitives.DDEstimator` for exact DD expectations, or `backend.estimator()` for sampled Estimator V2 |
@@ -46,9 +46,11 @@ counts = backend.run(circuit, shots=1024).result().get_counts()
 shots = backend.sampler().run([circuit], shots=1024).result()
 ```
 
-The backend accepts operations in its advertised target. Compile composite
-user-defined gates with `backend.compile(circuit)` and submit the returned
-program with `backend.run(program)`. Qiskit circuits can also be prepared with
+`SamplingSimulatorBackend` is an alias for Core's `DDSIMBackend`; its name and
+version identify the Core device. The backend accepts operations in its
+advertised target. Compile composite user-defined gates with
+`backend.compile(circuit)` and submit the returned program with
+`backend.run(program)`. Qiskit circuits can also be prepared with
 `transpile(circuit, backend)` before backend or Sampler submission. Direct
 simulation functions use Core's Qiskit importer. Bind OpenQASM inputs with
 Core's program `bind_parameters` method.

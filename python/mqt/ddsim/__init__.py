@@ -11,8 +11,7 @@
 from importlib.metadata import version
 
 from mqt.core.mlir import build_functionality, sample, simulate
-
-from .sampling_simulator_backend import SamplingSimulatorBackend
+from mqt.core.plugins.qiskit import DDSIMBackend as SamplingSimulatorBackend
 
 __version__ = version("mqt-ddsim")
 __all__ = ["SamplingSimulatorBackend", "__version__", "build_functionality", "sample", "simulate"]

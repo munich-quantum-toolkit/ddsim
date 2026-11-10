@@ -17,9 +17,11 @@ from mqt.ddsim import sample, simulate
 
 @pytest.mark.parametrize("output", [OutputFormat.QIR_BASE, OutputFormat.QIR_ADAPTIVE])
 def test_qir_program_and_payload(output: OutputFormat) -> None:
-    source = 'OPENQASM 3; include "stdgates.inc"; qubit[2] q; bit[2] c; x q[0]; c = measure q;'
+    source = (
+        'OPENQASM 3; include "stdgates.inc"; qubit[2] q; bit[2] c; x q[0]; c[0] = measure q[1]; c[1] = measure q[0];'
+    )
     program = compile_program(source, output=output)
     assert isinstance(program, QIRProgram)
-    assert sample(program, shots=17) == {"01": 17}
+    assert sample(program, shots=17) == {"10": 17}
     np.testing.assert_array_equal(simulate(program), [0, 1, 0, 0])
-    assert sample(program.to_bitcode(), shots=17) == {"01": 17}
+    assert sample(program.to_bitcode(), shots=17) == {"10": 17}

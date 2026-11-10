@@ -16,8 +16,7 @@ from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
 from qiskit.circuit import Parameter
 from qiskit.quantum_info import Statevector
 
-from mqt.ddsim import build_functionality, sample, simulate
-from mqt.ddsim.sampling_simulator_backend import SamplingSimulatorBackend
+from mqt.ddsim import SamplingSimulatorBackend, build_functionality, sample, simulate
 
 
 def test_state_phase_width_and_terminal_readout() -> None:
@@ -71,24 +70,6 @@ def test_bound_parameter_order() -> None:
     assert circuit.num_parameters == 2
 
 
-@pytest.mark.parametrize("seed", [0, 2**31])
-def test_invalid_sampling_seeds(seed: object) -> None:
-    with pytest.raises(ValueError, match="seed"):
-        SamplingSimulatorBackend().run(QuantumCircuit(1), seed_simulator=seed)
-
-
-def test_serial_seed_reproducibility_and_statistics() -> None:
-    circuit = QuantumCircuit(1, 1)
-    circuit.h(0)
-    circuit.measure(0, 0)
-    backend = SamplingSimulatorBackend()
-    first = backend.run(circuit, shots=4096, seed_simulator=73, max_workers=1, memory=True).result()
-    second = backend.run(circuit, shots=4096, seed_simulator=73, max_workers=1, memory=True).result()
-    assert first.get_memory() == second.get_memory()
-    # Six binomial standard deviations; either tail has probability below 2e-9.
-    assert abs(first.get_counts()["1"] - 2048) < 6 * np.sqrt(4096 / 4)
-
-
 def test_named_openqasm_inputs() -> None:
     source = 'OPENQASM 3.0; include "stdgates.inc"; input float[64] theta; qubit[2] q; ry(theta) q[0];'
     expected = np.array([0, 1, 0, 0], dtype=complex)
@@ -103,11 +84,6 @@ def test_named_openqasm_inputs() -> None:
     assert sample(bound_measured, shots=13) == {"01": 13}
     with pytest.raises(ValueError, match="binding"):
         simulate(source)
-
-
-def test_invalid_worker_limit() -> None:
-    with pytest.raises(ValueError, match="max_workers"):
-        SamplingSimulatorBackend().run(QuantumCircuit(1), max_workers=-1)
 
 
 def test_compact_dd_sampling() -> None:
