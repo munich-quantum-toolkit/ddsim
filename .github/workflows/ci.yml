@@ -21,105 +21,6 @@ jobs:
     permissions:
       contents: read
 
-  cpp-tests-ubuntu:
-    name: 🇨 Test 🐧
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [ubuntu-26.04, ubuntu-26.04-arm]
-        compiler: [gcc]
-        preset: [release]
-        run-on-draft: [false]
-        include:
-          - runs-on: ubuntu-26.04
-            compiler: gcc
-            preset: debug
-            run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-ubuntu.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-      run-on-draft: ${{ matrix.run-on-draft }}
-    permissions:
-      contents: read
-
-  cpp-tests-macos:
-    name: 🇨 Test 🍎
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [macos-26]
-        compiler: [clang]
-        preset: [release]
-        run-on-draft: [false]
-        include:
-          - runs-on: macos-26
-            compiler: clang
-            preset: debug
-            run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-macos.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-      run-on-draft: ${{ matrix.run-on-draft }}
-    permissions:
-      contents: read
-
-  cpp-tests-windows:
-    name: 🇨 Test 🏁
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [windows-2025, windows-11-arm]
-        compiler: [msvc]
-        preset: [release]
-        run-on-draft: [false]
-        include:
-          - runs-on: windows-2025
-            compiler: msvc
-            preset: debug
-            run-on-draft: true
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-tests-windows.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    with:
-      runs-on: ${{ matrix.runs-on }}
-      compiler: ${{ matrix.compiler }}
-      preset-name: ${{ matrix.preset }}
-      run-on-draft: ${{ matrix.run-on-draft }}
-    permissions:
-      contents: read
-
-  cpp-coverage:
-    name: 🇨 Coverage
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-tests)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-coverage.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    permissions:
-      contents: read
-      id-token: write
-
-  cpp-linter:
-    name: 🇨 Lint
-    needs: change-detection
-    if: fromJSON(needs.change-detection.outputs.run-cpp-linter)
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-cpp-linter.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    with:
-      clang-version: 23
-      files-changed-only: true
-      install-pkgs: "nanobind==3.1.0"
-      setup-python: true
-      cpp-linter-extra-args: "-std=c++20"
-    permissions:
-      contents: read
-      pull-requests: write # Needed to post review comments
-
   python-tests:
     name: 🐍 Test
     needs: change-detection
@@ -131,6 +32,7 @@ jobs:
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-tests.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
     with:
       runs-on: ${{ matrix.runs-on }}
+      use-sccache-gha: false # MQT DDSIM installs native code from MQT Core wheels.
     permissions:
       contents: read
 
@@ -149,7 +51,7 @@ jobs:
     if: fromJSON(needs.change-detection.outputs.run-python-linter)
     uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-linter.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
     with:
-      check-stubs: true
+      check-stubs: false
       enable-mypy: false
       enable-ty: true
     secrets:
@@ -170,20 +72,7 @@ jobs:
     name: 🚀 CD
     needs: change-detection
     if: fromJSON(needs.change-detection.outputs.run-cd)
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on:
-          [
-            ubuntu-26.04,
-            ubuntu-26.04-arm,
-            macos-26,
-            windows-2025,
-            windows-11-arm,
-          ]
-    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-cibuildwheel.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
-    with:
-      runs-on: ${{ matrix.runs-on }}
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-packaging-wheel-build.yml@d6345b25f19cb7223ac883e5333ae9d63ae9238b # v2.5.9
     permissions:
       contents: read
 
@@ -193,12 +82,8 @@ jobs:
     if: always()
     needs:
       - change-detection
-      - cpp-tests-ubuntu
-      - cpp-tests-macos
-      - cpp-tests-windows
-      - cpp-coverage
-      - cpp-linter
       - python-tests
+      - python-coverage
       - python-linter
       - build-sdist
       - build-wheel
@@ -208,18 +93,6 @@ jobs:
         uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
         with:
           allowed-skips: >-
-            ${{
-              !fromJSON(needs.change-detection.outputs.run-cpp-tests)
-              && 'cpp-tests-ubuntu,cpp-tests-macos,cpp-tests-windows,' || ''
-            }}
-            ${{
-              !fromJSON(needs.change-detection.outputs.run-cpp-tests)
-              && 'cpp-coverage,' || ''
-            }}
-            ${{
-              !fromJSON(needs.change-detection.outputs.run-cpp-linter)
-              && 'cpp-linter,' || ''
-            }}
             ${{
               !fromJSON(needs.change-detection.outputs.run-python-tests)
               && 'python-tests,python-coverage,' || ''
