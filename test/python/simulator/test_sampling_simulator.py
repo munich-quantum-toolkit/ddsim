@@ -49,6 +49,11 @@ def test_portfolio_qaoa() -> None:
     preparation.remove_final_measurements()
     probabilities = Statevector(preparation).probabilities_dict()
     shots = 8192
-    counts = SamplingSimulatorBackend().run(circuit, shots=shots, seed_simulator=1337).result().get_counts()
+    counts = (
+        SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
+        .run(circuit, shots=shots, seed_simulator=1337)
+        .result()
+        .get_counts()
+    )
     for bits, probability in probabilities.items():
         assert abs(counts.get(bits, 0) - shots * probability) < 6 * np.sqrt(shots * probability * (1 - probability))
