@@ -24,7 +24,7 @@ circuit.draw("mpl")
 ```
 
 ```{code-cell} python
-backend = SamplingSimulatorBackend()
+backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
 counts = backend.run(circuit, shots=1024, seed_simulator=17).result().get_counts()
 plot_histogram(counts, title="Bell pair on qubits 0 and 2")
 ```

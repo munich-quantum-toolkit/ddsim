@@ -36,7 +36,7 @@ circuit.ry(angle, 0)
 measured = circuit.copy()
 measured.measure_all()
 angles = np.linspace(0, np.pi, 9).reshape(-1, 1)
-backend = SamplingSimulatorBackend()
+backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
 sampler = backend.sampler(default_shots=512, seed_simulator=71)
 result = sampler.run([(measured, angles)]).result()[0]
 result.data.meas.get_counts(4)

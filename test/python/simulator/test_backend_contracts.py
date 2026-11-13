@@ -45,7 +45,7 @@ def test_partial_repeated_and_feedback() -> None:
         circuit.x(0)
     circuit.measure(0, b[0])
     circuit.measure(1, a[0])
-    result = SamplingSimulatorBackend().run(circuit, shots=11, memory=True).result()
+    result = SamplingSimulatorBackend(num_qubits=circuit.num_qubits).run(circuit, shots=11, memory=True).result()
     assert result.get_counts() == {"1 00": 11}
     assert result.get_memory() == ["1 00"] * 11
     with pytest.raises(ValueError, match="measurement"):
@@ -62,7 +62,11 @@ def test_bound_parameter_order() -> None:
     bound.measure_all()
     measured = circuit.copy()
     measured.measure_all()
-    result = SamplingSimulatorBackend().run(measured, parameter_values=[values], shots=9).result()
+    result = (
+        SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
+        .run(measured, parameter_values=[values], shots=9)
+        .result()
+    )
     assert result.get_counts() == {"01": 9}
     expected = np.array([0, 1, 0, 0], dtype=complex)
     np.testing.assert_allclose(simulate(bound), expected, atol=1e-12)
@@ -94,7 +98,10 @@ def test_compact_dd_sampling() -> None:
     circuit.measure(range(64), range(64))
     for counts in [
         sample(circuit, shots=32, seed=71),
-        SamplingSimulatorBackend().run(circuit, shots=32, seed_simulator=71, max_workers=1).result().get_counts(),
+        SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
+        .run(circuit, shots=32, seed_simulator=71, max_workers=1)
+        .result()
+        .get_counts(),
     ]:
         assert set(counts) <= {"0" * 64, "1" * 64}
         assert sum(counts.values()) == 32
@@ -109,7 +116,7 @@ def test_composite_controlled_adjoint_compilation(compiler: str) -> None:
     circuit.x(1)
     circuit.append(preparation.to_gate().control().inverse(), [1, 0])
     circuit.measure(range(2), range(2))
-    backend = SamplingSimulatorBackend()
+    backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
     with pytest.raises(UnsupportedOperationError, match="crotation_dg"):
         backend.run(circuit, shots=4096)
     native = backend.compile(circuit) if compiler == "core" else transpile(circuit, backend, optimization_level=0)

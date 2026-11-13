@@ -39,7 +39,7 @@ state = simulate(circuit)
 unitary = build_functionality(circuit)
 exact = DDEstimator().run([(circuit, "ZZ")]).result()
 
-backend = SamplingSimulatorBackend()
+backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
 sampled = backend.estimator(default_precision=0.05).run([(circuit, "ZZ")]).result()
 circuit.measure_all()
 counts = backend.run(circuit, shots=1024).result().get_counts()

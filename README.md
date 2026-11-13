@@ -118,7 +118,7 @@ circ.measure_all()
 
 print(circ.draw(fold=-1))
 
-backend = ddsim.SamplingSimulatorBackend()
+backend = ddsim.SamplingSimulatorBackend(num_qubits=circ.num_qubits)
 
 job = backend.run(circ, shots=10000)
 counts = job.result().get_counts(circ)

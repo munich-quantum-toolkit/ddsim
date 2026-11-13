@@ -29,7 +29,7 @@ def test_sampler_broadcast_shots_and_registers() -> None:
     circuit.measure(0, right)
     circuit.measure(1, left)
     parameters = np.array([[[0, 0], [0, np.pi]], [[np.pi, 0], [np.pi, np.pi]]])
-    sampler = SamplingSimulatorBackend().sampler(default_shots=19, seed_simulator=71)
+    sampler = SamplingSimulatorBackend(num_qubits=circuit.num_qubits).sampler(default_shots=19, seed_simulator=71)
     assert isinstance(sampler, BackendSamplerV2)
     result = sampler.run(
         [
@@ -69,13 +69,18 @@ def test_exact_estimator_and_sampled_factory() -> None:
     np.testing.assert_array_equal(result.data["stds"], np.zeros((2, 2)))
     assert result.metadata["method"] == "exact"
     assert result.metadata["target_precision"] == pytest.approx(0.2)
-    assert isinstance(SamplingSimulatorBackend().estimator(), BackendEstimatorV2)
+    assert isinstance(SamplingSimulatorBackend(num_qubits=circuit.num_qubits).estimator(), BackendEstimatorV2)
 
 
 def test_sampled_estimator_with_reset() -> None:
     circuit = QuantumCircuit(1)
     circuit.h(0)
     circuit.reset(0)
-    result = SamplingSimulatorBackend().estimator(default_precision=0.1).run([(circuit, "Z")]).result()[0]
+    result = (
+        SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
+        .estimator(default_precision=0.1)
+        .run([(circuit, "Z")])
+        .result()[0]
+    )
     np.testing.assert_allclose(result.data["evs"], 1)
     assert result.metadata["shots"] == 100

@@ -31,7 +31,7 @@ circuit.draw("mpl")
 ```{code-cell} python
 from qiskit.visualization import plot_histogram
 
-backend = SamplingSimulatorBackend()
+backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
 result = backend.run(
     circuit, shots=1024, memory=True, seed_simulator=71, max_workers=1
 ).result()
@@ -41,6 +41,9 @@ plot_histogram(result.get_counts(), title="Measurement-controlled preparation")
 ```{code-cell} python
 result.get_memory()[:10]
 ```
+
+Set `num_qubits` to the required circuit width to limit target construction and
+idle-qubit expansion during transpilation.
 
 `seed_simulator` accepts `None` for randomness or a positive signed 32-bit
 integer. `max_workers=0` selects automatic concurrency; `1` runs serially.
