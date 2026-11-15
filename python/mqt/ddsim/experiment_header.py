@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass
 from typing import TYPE_CHECKING, Any
 
 try:
-    from qiskit.result.models import QobjExperimentHeader  # ty: ignore[unresolved-import]
+    from qiskit.result.models import QobjExperimentHeader  # ty: ignore[import-not-found]
 
     QISKIT_PRE_2_0 = True
 except ImportError:
