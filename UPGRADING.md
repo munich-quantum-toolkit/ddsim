@@ -8,9 +8,9 @@ of changes including minor and patch releases, please refer to the
 
 ### MQT DDSIM 3
 
-MQT DDSIM uses MQT Core for simulation and ships as a pure Python package. Use
-Python 3.11 or newer and Qiskit `>=2.5,<3`. MQT Core supplies NumPy and the
-native runtime dependencies.
+MQT DDSIM uses MQT Core 4.2.1 or newer for simulation and ships as a pure Python
+package. Use Python 3.11.5 or newer and Qiskit `>=2.5,<3`. MQT Core supplies
+NumPy and the native runtime dependencies.
 
 | MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |

@@ -20,8 +20,8 @@ releases may include breaking changes.
 ### Changed
 
 - ⬆️ Require Python 3.11.5 or newer ([#1075]) ([**@denialhaag**])
-- ♻️ Delegate simulation to MQT Core and publish a pure Python package built
-  with uv; re-export Core's simulation functions directly ([#1060])
+- ♻️ Delegate simulation to MQT Core 4.2.1 and publish a pure Python package
+  built with uv; re-export Core's simulation functions directly ([#1060])
   ([**@burgholzer**])
 - 💥 Require Qiskit `>=2.5,<3` ([#1060]) ([**@burgholzer**])
 - 💥 Expose Core's `DDSIMBackend` as `SamplingSimulatorBackend` and require

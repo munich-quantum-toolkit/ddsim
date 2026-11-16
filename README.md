@@ -130,7 +130,7 @@ print(counts)
 
 ## System Requirements
 
-MQT DDSIM supports Python 3.11 or newer and Qiskit `>=2.5,<3` on Linux, macOS,
+MQT DDSIM supports Python 3.11.5 or newer and Qiskit `>=2.5,<3` on Linux, macOS,
 and Windows. Building and running are continuously tested with
 [GitHub Actions](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
 See the
