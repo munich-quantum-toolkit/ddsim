@@ -35,8 +35,8 @@ if(BUILD_MQT_DDSIM_BINDINGS)
       CACHE BOOL "Prevent multiple searches for Python and instead cache the results.")
 
   # top-level call to find Python
-  find_package(Python 3.11 REQUIRED COMPONENTS Interpreter Development.Module
-                                               ${SKBUILD_SABI_COMPONENT})
+  find_package(Python 3.11.5 REQUIRED COMPONENTS Interpreter Development.Module
+                                                 ${SKBUILD_SABI_COMPONENT})
 endif()
 
 # check if this is the master project or used via add_subdirectory

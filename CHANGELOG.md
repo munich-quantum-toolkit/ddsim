@@ -12,6 +12,7 @@ releases may include breaking changes.
 
 ### Changed
 
+- ⬆️ Require Python 3.11.5 or newer ([#1075]) ([**@denialhaag**])
 - ⬆️ Update `mqt-core` to version 3.12.0 ([#1069]) ([**@denialhaag**])
 
 ## [2.7.0] - 2026-10-12
@@ -218,6 +219,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 
 <!-- PR links -->
 
+[#1075]: https://github.com/munich-quantum-toolkit/ddsim/pull/1075
 [#1069]: https://github.com/munich-quantum-toolkit/ddsim/pull/1069
 [#1033]: https://github.com/munich-quantum-toolkit/ddsim/pull/1033
 [#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
