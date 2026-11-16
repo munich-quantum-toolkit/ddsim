@@ -37,6 +37,7 @@
     "uv\\.lock",
     "py\\.typed",
     ".*build.*",
-    "(^|/)LICENSE$"
+    "(^|/)LICENSE$",
+    "test/python/qir/.*\\.ll$"
   ]
 }
