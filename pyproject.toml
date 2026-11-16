@@ -23,7 +23,7 @@ readme = "README.md"
 keywords = [ "design-automation", "MQT", "quantum-circuit-sim", "quantum-computing", "simulation" ]
 license = "MIT"
 license-files = [ "LICENSE" ]
-requires-python = ">=3.11"
+requires-python = ">=3.11.5"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Information Technology",
