@@ -80,7 +80,7 @@ test = [
   "numpy>=2.3.2; python_version>='3.14'",
   "numpy>=2.5.2; python_version>='3.15'",
   # shortcut: pytest 9.2 breaks loadgroup with pytest-xdist 3.8; remove cap after a fixed xdist release.
-  "pytest>=9.0.3,<9.2",
+  "pytest>=9.2,<9.3",
   "pytest-cov>=7.1",
   "pytest-sugar>=1.1.1",
   "pytest-xdist>=3.8",
