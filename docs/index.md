@@ -5,8 +5,6 @@ inspect statevectors and unitaries, or evaluate observables. MQT DDSIM connects
 Qiskit, OpenQASM, and QIR to MQT Core's native simulation engine as part of the
 {doc}`Munich Quantum Toolkit <mqt:index>`.
 
-MQT DDSIM supports Python 3.11 or newer and Qiskit `>=2.5,<3`.
-
 ::::{grid} 1 2 2 2
 :gutter: 3
 
