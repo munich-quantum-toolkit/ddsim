@@ -13,8 +13,8 @@ from qiskit.quantum_info import Statevector
 from mqt.ddsim import SamplingSimulatorBackend
 
 
-def test_portfolio_qaoa() -> None:
-    """Check a three-qubit MQT Bench portfolio QAOA program against dense probabilities."""
+def test_qaoa() -> None:
+    """Check a three-qubit QAOA circuit against dense probabilities."""
     circuit = QuantumCircuit.from_qasm_str("""OPENQASM 2.0;
         include "qelib1.inc";
         qreg q[3];
