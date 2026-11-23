@@ -38,6 +38,6 @@
     "py\\.typed",
     ".*build.*",
     "(^|/)LICENSE$",
-    "test/python/qir/.*\\.ll$"
+    ".*\\.ll$"
   ]
 }
