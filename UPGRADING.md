@@ -9,7 +9,7 @@ of changes including minor and patch releases, please refer to the
 ### MQT DDSIM 3
 
 MQT DDSIM 3 delegates simulation to MQT Core 4.2.1 or newer and ships as a pure
-Python package. Update Qiskit to a version that satisfies `>=2.5,<3`.
+Python package. Update Qiskit to 2.5 or newer.
 
 | MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |

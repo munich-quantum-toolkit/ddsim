@@ -44,24 +44,37 @@ result.data.meas.get_counts(4)
 
 ## Estimator
 
+MQT DDSIM offers an exact estimator and a sampled estimator. Both implement
+Qiskit's Estimator V2 interface.
+
+### Exact estimator
+
 `DDEstimator` evaluates Pauli observables on a coherent DD state. It supports
 the same state preparations as MQT Core's statevector simulation. It avoids
 dense statevector extraction, but the DD can still grow exponentially. Results
 have zero sampling uncertainty (`stds=0`) and are independent of the requested
 precision. Floating-point rounding still applies.
 
-Sampled Estimator V2 requires positive precision and supports a broader class of
-circuits, including resets and classical feedback. It groups commuting
-observables and obtains expectations from measurement shots.
-
 ```{code-cell} python
 from mqt.ddsim.primitives import DDEstimator
 
 exact = DDEstimator().run([(circuit, "Z", angles)]).result()[0]
+```
+
+### Sampled estimator
+
+`backend.estimator()` returns Qiskit's `BackendEstimatorV2`. It requires
+positive precision and supports a broader class of circuits, including resets
+and classical feedback. It groups commuting observables and obtains expectations
+from measurement shots.
+
+```{code-cell} python
 sampled = backend.estimator(default_precision=0.05, seed_simulator=71).run(
     [(circuit, "Z", angles)]
 ).result()[0]
 ```
+
+### Comparing results
 
 ```{code-cell} python
 import matplotlib.pyplot as plt

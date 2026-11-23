@@ -14,33 +14,30 @@ releases may include breaking changes.
 
 - ✨ Support QIR Base Profile and Adaptive Profile programs in compiled form,
   LLVM text, or bitcode for sampling and eligible statevector extraction
-  ([#1060]) ([**@burgholzer**], [**@denialhaag**])
+  ([#1060]) ([**@burgholzer**])
 
 ### Changed
 
 - ♻️ Delegate simulation to MQT Core 4.2.1 and publish a pure Python package
-  ([#1060]) ([**@burgholzer**], [**@denialhaag**])
-- ⬆️ Require Python 3.11.5 or newer ([#1075]) ([**@denialhaag**])
-- ⬆️ Require Qiskit `>=2.5,<3` ([#1060]) ([**@burgholzer**], [**@denialhaag**])
+  ([#1060]) ([**@burgholzer**])
 - ♻️ Replace `DDSIMProvider` and Qiskit sampling backends with
   `SamplingSimulatorBackend`, an alias for MQT Core's `DDSIMBackend` that
-  requires explicit measurements ([#1060]) ([**@burgholzer**],
-  [**@denialhaag**])
+  requires explicit measurements ([#1060]) ([**@burgholzer**])
 - ♻️ Replace primitive wrappers with `backend.sampler()` for Sampler V2,
   `DDEstimator` for exact expectations, and `backend.estimator()` for sampled
-  Estimator V2 ([#1060]) ([**@burgholzer**], [**@denialhaag**])
+  Estimator V2 ([#1060]) ([**@burgholzer**])
 - ♻️ Provide statevectors and unitaries through `simulate` and
   `build_functionality` instead of dedicated Qiskit backends ([#1060])
-  ([**@burgholzer**], [**@denialhaag**])
+  ([**@burgholzer**])
+- ⬆️ Require Python 3.11.5 or newer ([#1075]) ([**@denialhaag**])
+- ⬆️ Require Qiskit 2.5 or newer ([#1060]) ([**@burgholzer**])
 
 ### Removed
 
 - 🔥 Remove native simulator classes, the C++ library, and the interface based
   on MQT Core 3's `QuantumComputation`, including HSF, path, noise, and
-  specialized algorithm simulators ([#1060]) ([**@burgholzer**],
-  [**@denialhaag**])
-- 🔥 Remove command-line executables ([#1060]) ([**@burgholzer**],
-  [**@denialhaag**])
+  specialized algorithm simulators ([#1060]) ([**@burgholzer**])
+- 🔥 Remove command-line executables ([#1060]) ([**@burgholzer**])
 
 ## [2.7.0] - 2026-10-12
 
