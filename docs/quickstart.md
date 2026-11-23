@@ -47,6 +47,6 @@ c = measure q;'''
 sample(source, shots=16)
 ```
 
-Continue with {doc}`simulators/sampling` for classical feedback and memory,
-{doc}`simulators/statevectors_and_unitaries` for dense results, or
+Continue with {doc}`simulation/sampling` for classical feedback and memory,
+{doc}`simulation/statevectors_and_unitaries` for dense results, or
 {doc}`primitives` for expectation values.

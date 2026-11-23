@@ -54,5 +54,5 @@ plt.show()
 Eligible terminal measurements are deferred by statevector simulation: the
 result is the uncollapsed state, not a randomly selected trajectory. Reset and
 measurement-dependent feedback are rejected. Full-unitary construction rejects
-all measurements and resets. These functions return NumPy arrays; for large
+all measurements and resets. These functions return NumPy arrays. For large
 compact DDs, use MQT Core's DD APIs without materializing dense results.

@@ -8,9 +8,8 @@ of changes including minor and patch releases, please refer to the
 
 ### MQT DDSIM 3
 
-MQT DDSIM uses MQT Core 4.2.1 or newer for simulation and ships as a pure Python
-package. Use Python 3.11.5 or newer and Qiskit `>=2.5,<3`. MQT Core supplies
-NumPy and the native runtime dependencies.
+MQT DDSIM 3 delegates simulation to MQT Core 4.2.1 or newer and ships as a pure
+Python package. Update Qiskit to a version that satisfies `>=2.5,<3`.
 
 | MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
 | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -25,7 +24,7 @@ NumPy and the native runtime dependencies.
 | `mqt-ddsim-simple` and other executables                              | Use Python `sample`, `simulate`, and `build_functionality`                                            |
 | Native simulator classes, DD access, node statistics, visualization   | Use MQT Core's program and DD APIs                                                                    |
 | C++ headers/library and `pyddsim`                                     | Use MQT Core's C++ program, QCO, DD, or QDMI APIs                                                     |
-| HSF, path, noise, approximation, and specialized algorithm simulators | Remain available in the MQT DDSIM v2 release series                                                   |
+| HSF, path, noise, approximation, and specialized algorithm simulators | Removed without replacement                                                                           |
 
 ```python
 from qiskit import QuantumCircuit
@@ -46,31 +45,28 @@ counts = backend.run(circuit, shots=1024).result().get_counts()
 shots = backend.sampler().run([circuit], shots=1024).result()
 ```
 
-`SamplingSimulatorBackend` is an alias for Core's `DDSIMBackend`; its name and
-version identify the Core device. The backend accepts operations in its
-advertised target. Compile composite user-defined gates with
+`SamplingSimulatorBackend` is an alias for MQT Core's `DDSIMBackend`, so its
+backend name and version identify the MQT Core device. The backend accepts
+operations in its advertised target. Compile composite user-defined gates with
 `backend.compile(circuit)` and submit the returned program with
 `backend.run(program)`. Qiskit circuits can also be prepared with
-`transpile(circuit, backend)` before backend or Sampler submission. Direct
-simulation functions use Core's Qiskit importer. Bind OpenQASM inputs with
-Core's program `bind_parameters` method.
+`transpile(circuit, backend)` before submitting them to the backend or Sampler.
+The direct simulation functions use MQT Core's Qiskit importer. To bind OpenQASM
+inputs, create an MQT Core program from the source and call its
+`bind_parameters` method with a mapping from input names to values.
 
-Statevectors describe an uncollapsed state; eligible terminal measurements are
-deferred. Reset and measurement-dependent feedback are rejected. Full-unitary
-construction rejects measurements and resets. Exact `DDEstimator` reports zero
-sampling uncertainty and does not use a seed. Positive precision does not switch
-it to sampling; use `backend.estimator()` for finite-shot estimation and dynamic
-preparation.
+Statevector simulation returns the uncollapsed state and defers eligible
+terminal measurements. It rejects resets and measurement-dependent feedback.
+Full-unitary construction rejects measurements and resets. Exact `DDEstimator`
+reports zero sampling uncertainty and does not use a seed. Positive precision
+does not switch it to sampling. Use `backend.estimator()` for finite-shot
+estimation and dynamic preparation.
 
 Sampling is asynchronous through QDMI. Use `max_workers=1` for serial execution
 or `0` for automatic concurrency. Fixed seeds reproduce samples only with the
-same program, build, execution path, shot count, and worker configuration.
-Legacy `result(timeout=...)` is not supported; native timed waits are available
-through Core's QDMI job API.
-
-Pass QIR as a compiled Core program, LLVM text (`str`), or bitcode (`bytes`).
-Core reads the Base or Adaptive profile from the module metadata. QIR
-full-unitary extraction is unsupported.
+same program, build, execution path, shot count, and worker configuration. The
+`result(timeout=...)` argument is no longer supported. If you need timed waits,
+use MQT Core's QDMI job API.
 
 ## [2.7.0]
 

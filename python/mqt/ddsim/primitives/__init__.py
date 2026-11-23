@@ -6,7 +6,7 @@
 #
 # Licensed under the MIT License
 
-"""Exact DD estimation; sampling primitives are available from the backend factories."""
+"""Exact expectation values of Pauli observables using decision diagrams."""
 
 from mqt.core.plugins.qiskit import DDEstimator
 

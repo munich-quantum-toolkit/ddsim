@@ -9,7 +9,7 @@ mystnb:
 # Sampling
 
 Use the Qiskit backend to retrieve counts and individual shots. Classical
-registers retain their names and order; separate registers are separated by
+registers retain their names and order. Separate registers are separated by
 spaces in Qiskit count strings.
 
 ```{code-cell} python
@@ -46,7 +46,7 @@ Set `num_qubits` to the required circuit width to limit target construction and
 idle-qubit expansion during transpilation.
 
 `seed_simulator` accepts `None` for randomness or a positive signed 32-bit
-integer. `max_workers=0` selects automatic concurrency; `1` runs serially.
+integer. `max_workers=0` selects automatic concurrency and `1` runs serially.
 Reproducibility requires the same program, build, execution path, shot count,
 and worker configuration. Seeds do not promise identical samples across
 simulation paths or releases.

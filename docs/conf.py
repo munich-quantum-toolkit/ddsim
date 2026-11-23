@@ -53,7 +53,7 @@ extensions = [
     "sphinxext.opengraph",
 ]
 
-# The Markdown exporter omits these nodes; HTML renders them normally.
+# The Markdown exporter omits these nodes
 llms_txt_suppress_unknown_node_warnings = ["abbreviation", "citation"]
 
 source_suffix = [".rst", ".md"]

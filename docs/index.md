@@ -1,6 +1,4 @@
-# MQT DDSIM
-
-A quantum circuit simulator based on decision diagrams powered by MQT Core
+# MQT DDSIM — A quantum circuit simulator based on decision diagrams powered by MQT Core
 
 Explore quantum programs with compact decision diagrams: sample measurements,
 inspect statevectors and unitaries, or evaluate observables. MQT DDSIM connects
@@ -20,7 +18,7 @@ and plot the results.
 
 :::{grid-item-card}
 
-{doc}`Choose an execution mode <simulators>`. Work with counts, amplitudes,
+{doc}`Choose an execution mode <simulation>`. Work with counts, amplitudes,
 matrices, or QIR programs.
 :::
 
@@ -32,7 +30,8 @@ Estimator V2 for dynamic circuits.
 
 :::{grid-item-card}
 
-{doc}`Python API <api>`. Find simulation functions and the Qiskit backend.
+{doc}`Python API <api/mqt/ddsim/index>`. Find simulation functions and the
+Qiskit backend.
 :::
 
 ::::
@@ -50,7 +49,7 @@ self
 
 installation
 quickstart
-simulators
+simulation
 primitives
 references
 CHANGELOG
@@ -75,7 +74,7 @@ support
 :caption: Python API Reference
 :maxdepth: 1
 
-api
+api/mqt/ddsim/index
 ```
 
 ## Contributors and Supporters

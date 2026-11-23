@@ -18,7 +18,7 @@ and broadcasting rules.
 | Exact DD Estimator   | `DDEstimator()`       | Expectations from the DD state, without repeated sampling or dense extraction |
 | Sampled Estimator V2 | `backend.estimator()` | Finite-shot estimates, including dynamic state preparation                    |
 
-## Sampling parameter sweeps
+## Sampler
 
 Parameters follow `tuple(circuit.parameters)` order. PUB-level shots override
 the run-level setting, which overrides `default_shots`. Register separation and
@@ -42,12 +42,12 @@ result = sampler.run([(measured, angles)]).result()[0]
 result.data.meas.get_counts(4)
 ```
 
-## Exact and sampled expectations
+## Estimator
 
 `DDEstimator` evaluates Pauli observables on a coherent DD state. It supports
-the same state preparations as Core's statevector simulation. It avoids dense
-statevector extraction, but the DD can still grow exponentially. Results have
-zero sampling uncertainty (`stds=0`) and are independent of the requested
+the same state preparations as MQT Core's statevector simulation. It avoids
+dense statevector extraction, but the DD can still grow exponentially. Results
+have zero sampling uncertainty (`stds=0`) and are independent of the requested
 precision. Floating-point rounding still applies.
 
 Sampled Estimator V2 requires positive precision and supports a broader class of

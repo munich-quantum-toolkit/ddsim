@@ -30,9 +30,10 @@ backbone of the MQT.
 
 ## Key Features
 
-- Qiskit and OpenQASM 2/3 input, plus QIR Base/Adaptive text and bitcode.
+- Qiskit and OpenQASM 2/3 input, plus QIR Base Profile and Adaptive Profile
+  programs in LLVM text or bitcode form.
 - Sampling, uncollapsed statevectors and full unitary matrices using MQT Core's
-  decision-diagram engine. QIR supports sampling and eligible state extraction;
+  decision-diagram engine. QIR supports sampling and eligible state extraction.
   QIR unitary simulation is unsupported.
 - `SamplingSimulatorBackend` for Qiskit counts and memory.
 - Sampler V2, native exact `DDEstimator`, and sampled Estimator V2 for broader
@@ -130,8 +131,9 @@ print(counts)
 
 ## System Requirements
 
-MQT DDSIM supports Python 3.11.5 or newer and Qiskit `>=2.5,<3` on Linux, macOS,
-and Windows. Building and running are continuously tested with
+MQT DDSIM can be installed on all major operating systems with all
+[officially supported Python versions](https://devguide.python.org/versions/).
+Building and running are continuously tested with
 [GitHub Actions](https://github.com/munich-quantum-toolkit/ddsim/actions/workflows/ci.yml).
 See the
 [installation guide](https://mqt.readthedocs.io/projects/ddsim/en/latest/installation.html)
