@@ -1,10 +1,3 @@
-ignore:
-  - "apps/*"
-  - "extern/**/*"
-  - "include/python/**/*"
-  - "bindings/*.cpp"
-  - "test/*.cpp"
-
 coverage:
   range: 60..90
   precision: 1
@@ -26,13 +19,9 @@ flag_management:
         target: 90%
         threshold: 1%
   individual_flags:
-    - name: cpp
-      paths:
-        - "include"
-        - "src"
     - name: python
       paths:
-        - "python/mqt/**/*.py"
+        - "src/mqt/**/*.py"
       statuses:
         - type: project
           threshold: 0.5%
@@ -40,12 +29,6 @@ flag_management:
         - type: patch
           target: 95%
           threshold: 1%
-
-parsers:
-  gcov:
-    branch_detection:
-      conditional: no
-      loop: no
 
 comment:
   layout: "reach, diff, flags, files"

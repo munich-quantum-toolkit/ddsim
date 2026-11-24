@@ -57,19 +57,6 @@ venv/
 python/**/_version.py
 src/**/_version.py
 
-# CMake
-.ccache/
-/build_*/
-/cmake-build-*/
-/out/build/
-test/**/build/
-CMakeCache.txt
-CMakeFiles/
-CMakeUserPresets.json
-CTestTestfile.cmake
-cmake_install.cmake
-compile_commands.json
-
 # Editors
 .idea/
 .vs/

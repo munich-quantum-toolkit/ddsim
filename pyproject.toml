@@ -95,15 +95,11 @@ mqt-ddsim = { workspace = true }
 
 [tool.uv.build-backend]
 module-name = "mqt.ddsim"
-module-root = "python"
-source-include = [ "test/**", "docs/**", "UPGRADING.md", "CHANGELOG.md", "noxfile.py" ]
-source-exclude = [ "docs/_build/**" ]
 
 
 [tool.ruff]
 line-length = 120
-namespace-packages = [ "python/mqt" ]
-src = [ "python" ]
+namespace-packages = [ "src/mqt" ]
 preview = true
 fix = true
 unsafe-fixes = true
@@ -114,7 +110,7 @@ preview = true
 docstring-code-format = true
 
 [tool.ruff.lint.per-file-ignores]
-"test/python/**" = [ "ANN", "D10", "T20" ]
+"tests/**" = [ "ANN", "D10", "T20" ]
 "docs/**" = [ "T20" ]
 "noxfile.py" = [ "T20", "TID251" ]
 "*.pyi" = [ "D301", "D418", "E501", "PYI021" ]
@@ -192,14 +188,15 @@ PC170 = "We do not use rST files anymore"
 
 [tool.check-sdist]
 git-only = [
-  ".agent/*",
-  ".github/*",
-  ".idea/*",
+  "docs/*",
+  "tests/*",
   ".git*",
   ".license-tools-config.json",
   ".readthedocs.yaml",
   ".rumdl.toml",
   "AGENTS.md",
+  "CHANGELOG.md",
+  "UPGRADING.md",
   "uv.lock",
   "sitecustomize.py",
 ]
@@ -257,7 +254,7 @@ filterwarnings = [
 log_level = "INFO"
 minversion = "9.0"
 strict = true
-testpaths = [ "test/python" ]
+testpaths = [ "tests" ]
 
 
 [tool.coverage]
