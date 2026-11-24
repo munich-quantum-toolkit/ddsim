@@ -68,8 +68,7 @@ dev = [
   "nox>=2025.11.12",
 ]
 test = [
-  # shortcut: pytest 9.2 breaks loadgroup with pytest-xdist 3.8; remove cap after a fixed xdist release.
-  "pytest>=9.2,<9.3",
+  "pytest>=9.0.3",
   "pytest-cov>=7.1",
   "pytest-sugar>=1.1.1",
   "pytest-xdist>=3.8",

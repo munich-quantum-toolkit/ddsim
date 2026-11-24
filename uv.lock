@@ -1610,7 +1610,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "nox", specifier = ">=2025.11.12" },
-    { name = "pytest", specifier = ">=9.2,<9.3" },
+    { name = "pytest", specifier = ">=9.0.3" },
     { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8" },
@@ -1627,7 +1627,7 @@ docs = [
     { name = "sphinxext-opengraph", specifier = ">=0.13" },
 ]
 test = [
-    { name = "pytest", specifier = ">=9.2,<9.3" },
+    { name = "pytest", specifier = ">=9.0.3" },
     { name = "pytest-cov", specifier = ">=7.1" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8" },
