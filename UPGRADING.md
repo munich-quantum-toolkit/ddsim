@@ -6,9 +6,67 @@ of changes including minor and patch releases, please refer to the
 
 ## [Unreleased]
 
-This release updates the minimum required `mqt-core` version to 3.12.0. Rebuild
-C++ libraries and Python extensions against the MQT Core 3.12 shared-library
-ABI.
+### MQT DDSIM 3
+
+MQT DDSIM 3 delegates simulation to MQT Core 4.2.1 or newer and ships as a pure
+Python package. Update Qiskit to 2.5 or newer.
+
+| MQT DDSIM 2                                                           | MQT DDSIM 3                                                                                           |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `DDSIMProvider().get_backend(...)`                                    | Construct `SamplingSimulatorBackend()` directly                                                       |
+| `qasm_simulator`, `QasmSimulatorBackend`                              | `SamplingSimulatorBackend`                                                                            |
+| Statevector and unitary Qiskit backends                               | `simulate(circuit)` and `build_functionality(circuit)` return NumPy arrays                            |
+| `primitives.Sampler`                                                  | `backend.sampler()` returns Sampler V2                                                                |
+| `primitives.Estimator`                                                | `primitives.DDEstimator` for exact DD expectations, or `backend.estimator()` for sampled Estimator V2 |
+| Implicit measure-all                                                  | Add `circuit.measure_all()` or explicit measurements before sampling                                  |
+| `seed=-1`                                                             | Use `0` with `sample`, or `None` for backend `seed_simulator`                                         |
+| `parameter_binds`                                                     | Qiskit `assign_parameters`, or backend `parameter_values` in `tuple(circuit.parameters)` order        |
+| `mqt-ddsim-simple` and other executables                              | Use Python `sample`, `simulate`, and `build_functionality`                                            |
+| Native simulator classes, DD access, node statistics, visualization   | Use MQT Core's program and DD APIs                                                                    |
+| C++ headers/library and `pyddsim`                                     | Use MQT Core's C++ program, QCO, DD, or QDMI APIs                                                     |
+| HSF, path, noise, approximation, and specialized algorithm simulators | Removed without replacement                                                                           |
+
+```python
+from qiskit import QuantumCircuit
+from mqt.ddsim import SamplingSimulatorBackend, simulate, build_functionality
+from mqt.ddsim.primitives import DDEstimator
+
+circuit = QuantumCircuit(2)
+circuit.h(0)
+circuit.cx(0, 1)
+state = simulate(circuit)
+unitary = build_functionality(circuit)
+exact = DDEstimator().run([(circuit, "ZZ")]).result()
+
+backend = SamplingSimulatorBackend(num_qubits=circuit.num_qubits)
+sampled = backend.estimator(default_precision=0.05).run([(circuit, "ZZ")]).result()
+circuit.measure_all()
+counts = backend.run(circuit, shots=1024).result().get_counts()
+shots = backend.sampler().run([circuit], shots=1024).result()
+```
+
+`SamplingSimulatorBackend` is an alias for MQT Core's `DDSIMBackend`, so its
+backend name and version identify the MQT Core device. The backend accepts
+operations in its advertised target. Compile composite user-defined gates with
+`backend.compile(circuit)` and submit the returned program with
+`backend.run(program)`. Qiskit circuits can also be prepared with
+`transpile(circuit, backend)` before submitting them to the backend or Sampler.
+The direct simulation functions use MQT Core's Qiskit importer. To bind OpenQASM
+inputs, create an MQT Core program from the source and call its
+`bind_parameters` method with a mapping from input names to values.
+
+Statevector simulation returns the uncollapsed state and defers eligible
+terminal measurements. It rejects resets and measurement-dependent feedback.
+Full-unitary construction rejects measurements and resets. Exact `DDEstimator`
+reports zero sampling uncertainty and does not use a seed. Positive precision
+does not switch it to sampling. Use `backend.estimator()` for finite-shot
+estimation and dynamic preparation.
+
+Sampling is asynchronous through QDMI. Use `max_workers=1` for serial execution
+or `0` for automatic concurrency. Fixed seeds reproduce samples only with the
+same program, build, execution path, shot count, and worker configuration. The
+`result(timeout=...)` argument is no longer supported. If you need timed waits,
+use MQT Core's QDMI job API.
 
 ## [2.7.0]
 

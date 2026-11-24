@@ -10,10 +10,34 @@ releases may include breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- ✨ Support QIR Base Profile and Adaptive Profile programs in compiled form,
+  LLVM text, or bitcode for sampling and eligible statevector extraction
+  ([#1060]) ([**@burgholzer**])
+
 ### Changed
 
+- ♻️ Delegate simulation to MQT Core 4.2.1 and publish a pure Python package
+  ([#1060]) ([**@burgholzer**])
+- ♻️ Replace `DDSIMProvider` and Qiskit sampling backends with
+  `SamplingSimulatorBackend`, an alias for MQT Core's `DDSIMBackend` that
+  requires explicit measurements ([#1060]) ([**@burgholzer**])
+- ♻️ Replace primitive wrappers with `backend.sampler()` for Sampler V2,
+  `DDEstimator` for exact expectations, and `backend.estimator()` for sampled
+  Estimator V2 ([#1060]) ([**@burgholzer**])
+- ♻️ Provide statevectors and unitaries through `simulate` and
+  `build_functionality` instead of dedicated Qiskit backends ([#1060])
+  ([**@burgholzer**])
 - ⬆️ Require Python 3.11.5 or newer ([#1075]) ([**@denialhaag**])
-- ⬆️ Update `mqt-core` to version 3.12.0 ([#1069]) ([**@denialhaag**])
+- ⬆️ Require Qiskit 2.5 or newer ([#1060]) ([**@burgholzer**])
+
+### Removed
+
+- 🔥 Remove native simulator classes, the C++ library, and the interface based
+  on MQT Core 3's `QuantumComputation`, including HSF, path, noise, and
+  specialized algorithm simulators ([#1060]) ([**@burgholzer**])
+- 🔥 Remove command-line executables ([#1060]) ([**@burgholzer**])
 
 ## [2.7.0] - 2026-10-12
 
@@ -220,7 +244,7 @@ _📚 Refer to the [GitHub Release Notes] for previous changelogs._
 <!-- PR links -->
 
 [#1075]: https://github.com/munich-quantum-toolkit/ddsim/pull/1075
-[#1069]: https://github.com/munich-quantum-toolkit/ddsim/pull/1069
+[#1060]: https://github.com/munich-quantum-toolkit/ddsim/pull/1060
 [#1033]: https://github.com/munich-quantum-toolkit/ddsim/pull/1033
 [#1030]: https://github.com/munich-quantum-toolkit/ddsim/pull/1030
 [#1019]: https://github.com/munich-quantum-toolkit/ddsim/pull/1019

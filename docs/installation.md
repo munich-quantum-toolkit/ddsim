@@ -3,9 +3,9 @@
 
 # Installation
 
-MQT DDSIM is primarily developed as a C++20 library with Python bindings. The
-Python package is available on [PyPI](https://pypi.org/project/mqt.ddsim/) and
-can be installed on all major operating systems with all
+MQT DDSIM is a Python package available on
+[PyPI](https://pypi.org/project/mqt.ddsim/). It can be installed on all major
+operating systems with all
 [officially supported Python versions](https://devguide.python.org/versions/).
 
 :::::{tip}
@@ -66,9 +66,6 @@ python -m pip install mqt.ddsim
 
 ::::
 
-In most cases, no compilation is required; a platform-specific prebuilt wheel is
-downloaded and installed.
-
 Verify the installation:
 
 ```console
@@ -76,38 +73,6 @@ python -c "import mqt.ddsim; print(mqt.ddsim.__version__)"
 ```
 
 This prints the installed package version.
-
-## Building from Source for Performance
-
-To get the best performance and enable platform-specific optimizations not
-available in portable wheels, we recommend building the library from source:
-
-::::{tab-set}
-:sync-group: installer
-
-:::{tab-item} {code}`uv` _(recommended)_
-:sync: uv
-
-```console
-uv pip install mqt.ddsim --no-binary mqt.ddsim
-```
-
-:::
-
-:::{tab-item} {code}`pip`
-:sync: pip
-
-```console
-pip install mqt.ddsim --no-binary mqt.ddsim
-```
-
-:::
-
-::::
-
-This requires a C++20-capable
-[C++ compiler](https://en.wikipedia.org/wiki/List_of_compilers#C++_compilers)
-and [CMake](https://cmake.org/) 3.28 or newer.
 
 ## Integrating MQT DDSIM into Your Project
 
@@ -146,95 +111,6 @@ setup(
     install_requires=["mqt.ddsim>=<version>"],
     # ...
 )
-```
-
-:::
-
-::::
-
-If you want to integrate the C++ library directly into your project, you can
-either
-
-- add it as a [{code}`git` submodule][git-submodule] and build it as part of
-  your project, or
-- install MQT DDSIM on your system and use CMake's {code}`find_package()`
-  command to locate it, or
-- use CMake's [{code}`FetchContent`][FetchContent] module to combine both
-  approaches.
-
-::::{tab-set}
-
-:::{tab-item} {code}`FetchContent`
-
-This is the recommended approach because it lets you detect installed versions
-of MQT DDSIM and only downloads the library if it is not available on the
-system. Furthermore, CMake's [{code}`FetchContent`][FetchContent] module
-provides flexibility in how the library is integrated into the project.
-
-```cmake
-include(FetchContent)
-set(FETCH_PACKAGES "")
-
-# cmake-format: off
-set(MQT_DDSIM_MINIMUM_VERSION "<minimum_version>"
-    CACHE STRING "MQT DDSIM minimum version")
-set(MQT_DDSIM_VERSION "<version>"
-    CACHE STRING "MQT DDSIM version")
-set(MQT_DDSIM_REV "<revision>"
-    CACHE STRING "MQT DDSIM identifier (tag, branch or commit hash)")
-set(MQT_DDSIM_REPO_OWNER "munich-quantum-toolkit"
-    CACHE STRING "MQT DDSIM repository owner (change when using a fork)")
-# cmake-format: on
-FetchContent_Declare(
-  mqt-ddsim
-  GIT_REPOSITORY https://github.com/${MQT_DDSIM_REPO_OWNER}/ddsim.git
-  GIT_TAG ${MQT_DDSIM_REV}
-  FIND_PACKAGE_ARGS ${MQT_DDSIM_MINIMUM_VERSION})
-list(APPEND FETCH_PACKAGES mqt-ddsim)
-
-# Make all declared dependencies available.
-FetchContent_MakeAvailable(${FETCH_PACKAGES})
-```
-
-:::
-
-:::{tab-item} {code}`git-submodule`
-
-Adding the library as a [{code}`git` submodule][git-submodule] is a simple
-approach. However, {code}`git` submodules can be cumbersome, especially when
-working with multiple branches or versions of the library. First, add the
-submodule to your project (e.g., in the {code}`external` directory):
-
-```console
-git submodule add https://github.com/munich-quantum-toolkit/ddsim.git external/mqt-ddsim
-```
-
-Then add the following line to your {code}`CMakeLists.txt` to make the library's
-targets available in your project:
-
-```cmake
-add_subdirectory(external/mqt-ddsim)
-```
-
-:::
-
-:::{tab-item} {code}`find_package()`
-
-You can install MQT DDSIM on your system after building it from source:
-
-```console
-git clone https://github.com/munich-quantum-toolkit/ddsim.git mqt-ddsim
-cd mqt-ddsim
-cmake -S . -B build
-cmake --build build
-cmake --install build
-```
-
-Then, in your project's {code}`CMakeLists.txt`, use {code}`find_package()` to
-locate the installed library:
-
-```cmake
-find_package(mqt-ddsim <version> REQUIRED)
 ```
 
 :::
@@ -384,8 +260,6 @@ guidelines and workflows, see {doc}`contributing`.
    ```
 
 <!-- Links -->
-[FetchContent]: https://cmake.org/cmake/help/latest/module/FetchContent.html
-[git-submodule]: https://git-scm.com/docs/git-submodule
 [nox]: https://nox.thea.codes/en/stable/
 [prek]: https://prek.j178.dev
 [uv]: https://docs.astral.sh/uv/

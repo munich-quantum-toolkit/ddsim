@@ -21,7 +21,6 @@ import contextlib
 import os
 import shutil
 import tempfile
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import nox
@@ -67,30 +66,13 @@ def _run_tests(
     run_args: Sequence[str] = (),
 ) -> None:
     env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    if shutil.which("cmake") is None:
-        session.install("cmake")
-    if shutil.which("ninja") is None:
-        session.install("ninja")
-
-    # install build and test dependencies on top of the existing environment
-    session.run(
-        "uv",
-        "sync",
-        "--inexact",
-        "--only-group",
-        "build",
-        "--only-group",
-        "test",
-        *install_args,
-        env=env,
-    )
     session.run(
         "uv",
         "sync",
         "--inexact",
         "--no-dev",  # do not auto-install dev dependencies
-        "--no-build-isolation-package",
-        "mqt-ddsim",  # build the project without isolation
+        "--group",
+        "test",
         *install_args,
         env=env,
     )
@@ -130,7 +112,7 @@ def qiskit(session: nox.Session) -> None:
     """Test Qiskit main in the nox environment without changing the project lock."""
     _run_tests(
         session,
-        extra_deps=["qiskit[qasm3-import] @ git+https://github.com/Qiskit/qiskit.git"],
+        extra_deps=["qiskit @ git+https://github.com/Qiskit/qiskit.git"],
     )
 
 
@@ -146,37 +128,16 @@ def docs(session: nox.Session) -> None:
         session.install("sphinx-autobuild")
 
     env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    # install build and docs dependencies on top of the existing environment
+    # Keep sphinx-autobuild when serving locally.
     session.run(
         "uv",
         "sync",
         "--inexact",
-        "--only-group",
-        "build",
-        "--only-group",
+        "--no-dev",
+        "--group",
         "docs",
         env=env,
     )
-
-    # build the C++ API docs using doxygen
-    with session.chdir("docs"):
-        if shutil.which("doxygen") is None:
-            session.error("doxygen is required to build the C++ API docs")
-
-        Path("_build/doxygen").mkdir(parents=True, exist_ok=True)
-        session.run("doxygen", "Doxyfile", external=True)
-        Path("api/cpp").mkdir(parents=True, exist_ok=True)
-        session.run(
-            "breathe-apidoc",
-            "-o",
-            "api/cpp",
-            "-m",
-            "-f",
-            "-g",
-            "file",
-            "_build/doxygen/xml/",
-            external=True,
-        )
 
     shared_args = (
         "-n",  # nitpicky mode
@@ -188,61 +149,10 @@ def docs(session: nox.Session) -> None:
     )
 
     session.run(
-        "uv",
-        "run",
-        "--no-dev",  # do not auto-install dev dependencies
-        "--no-build-isolation-package",
-        "mqt-ddsim",  # build the project without isolation
         "sphinx-autobuild" if serve else "sphinx-build",
         *shared_args,
         env=env,
     )
-
-
-@nox.session(reuse_venv=True, venv_backend="uv")
-def stubs(session: nox.Session) -> None:
-    """Generate type stubs for Python bindings using nanobind."""
-    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    session.run(
-        "uv",
-        "sync",
-        "--no-dev",
-        "--group",
-        "build",
-        env=env,
-    )
-
-    package_root = Path(__file__).parent / "python" / "mqt" / "ddsim"
-
-    session.run(
-        "python",
-        "-m",
-        "nanobind.stubgen",
-        "--recursive",
-        "--include-private",
-        "--output-dir",
-        package_root,
-        "--module",
-        "mqt.ddsim.pyddsim",
-    )
-
-    pyi_files = list(package_root.glob("**/*.pyi"))
-
-    if not pyi_files:
-        session.warn("No .pyi files found")
-        return
-
-    if shutil.which("prek") is None:
-        session.install("prek")
-
-    # Allow both 0 (no issues) and 1 as success codes for fixing up stubs
-    success_codes = [0, 1]
-    session.run("prek", "run", "license-tools", "--files", *pyi_files, external=True, success_codes=success_codes)
-    session.run("prek", "run", "ruff-check", "--files", *pyi_files, external=True, success_codes=success_codes)
-    session.run("prek", "run", "ruff-format", "--files", *pyi_files, external=True, success_codes=success_codes)
-
-    # Run ruff-check again to ensure everything is clean
-    session.run("prek", "run", "ruff-check", "--files", *pyi_files, external=True)
 
 
 if __name__ == "__main__":
